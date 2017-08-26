@@ -22,7 +22,7 @@ func (c *Cell) Type() types.CellType {
 	return c.ml.Type
 }
 
-//GetValue returns current value of cell
+//Value returns current value of cell
 func (c *Cell) Value() string {
 	var value string
 
