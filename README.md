@@ -78,3 +78,6 @@ For some cases this library is second, for other - is best, but in case of readi
 
 # Documentation and Examples
 For more detailed documentation and examples you can check [godoc.org](https://godoc.org/github.com/plandem/xlsx)
+
+# OOXML edition
+XML is compliant with part 1 of the [5th edition](http://www.ecma-international.org/publications/standards/Ecma-376.htm) of the ECMA-376 Standard for Office Open XML
