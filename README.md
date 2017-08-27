@@ -72,7 +72,18 @@ So what were the goals that time? It's a great pity, but I could not get a libra
 
 # Benchmarks
 It was not a goal to make best of the best, but the same time it's interesting to know pros/cons. 
-For some cases this library is second, for other - is best, but in case of reading huge files - **the only**. 
+For some cases this library is second, for other - best, but in case of reading huge files - **the only**. 
+
+|                | tealeg | excelize | xlsx |
+|----------------|:------:|:--------:|:----:|
+| RandomGet      |   1*   |     3    |   2  |
+| RandomSet      |   1*   |     3    |   2  |
+| RandomSetStyle |   1*   |     3    |   2  |
+| ReadBigFile    |    2   |     3    |   1  |
+| ReadHugeFile   |    -   |     -    |   1  |
+| UpdateBigFile  |    2   |     3    |   1  |
+
+* - does not mutate information directly, so faster get/set, but slower read/write files - sometimes it can take forever to open file.
 
 [Benchmarks report](BENCHMARKS.md) 
 
