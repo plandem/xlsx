@@ -92,5 +92,19 @@ For some cases this library is second, for other - best, but in case of reading 
 # Documentation and Examples
 For more detailed documentation and examples you can check [godoc.org](https://godoc.org/github.com/plandem/xlsx)
 
+# Roadmap
+- [ ] sheet: copy
+- [ ] row: copy
+- [ ] col: copy
+- [ ] cell: hyperlinks
+- [ ] cell: comments
+- [ ] cell: formulas
+- [ ] cell: get/set for time.Time and bool values
+- [ ] cell: add/delete merged cells
+- [ ] other: conditional formatting
+- [ ] other: rich texts
+- [ ] other: drawing
+- [ ] other: more tests
+
 ### OOXML edition
 XML is compliant with part 1 of the [5th edition](http://www.ecma-international.org/publications/standards/Ecma-376.htm) of the ECMA-376 Standard for Office Open XML
