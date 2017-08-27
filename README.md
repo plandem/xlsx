@@ -106,5 +106,11 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] other: drawing
 - [ ] other: more tests
 
+# Contribution 
+- To prevent mess, sources have strict separation of markup and functionality. Document that describes OOXML is quite huge (about 6K pages), but the same time - functionality is not.
+- All markup resides inside of 'ml' folders, only marshal/unmarshal is allowed here, no any functionality.
+- Not every 'ml object' has related 'functional object' and vice versa.
+- If you want some functionality, then wrap 'ml object' and do what you want.
+
 ### OOXML edition
 XML is compliant with part 1 of the [5th edition](http://www.ecma-international.org/publications/standards/Ecma-376.htm) of the ECMA-376 Standard for Office Open XML
