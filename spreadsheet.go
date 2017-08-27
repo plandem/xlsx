@@ -13,17 +13,17 @@ import (
 
 //Spreadsheet is a higher level object that wraps OOXML package with XLSX functionality
 type Spreadsheet struct {
-	shared.Package
-	pkg           *shared.PackageInfo
+	ooxml.Package
+	pkg           *ooxml.PackageInfo
 	workbook      *Workbook
 	sheets        []*Sheet
-	relationships *shared.Relationships
+	relationships *ooxml.Relationships
 	sharedStrings *SharedStrings
 	styleSheet    *StyleSheet
 }
 
 //newSpreadsheet creates an object that implements XLSX functionality
-func newSpreadsheet(pkg *shared.PackageInfo) (interface{}, error) {
+func newSpreadsheet(pkg *ooxml.PackageInfo) (interface{}, error) {
 	xlDoc := &Spreadsheet{
 		pkg:     pkg,
 		Package: pkg,
@@ -153,7 +153,7 @@ func (xl *Spreadsheet) readSpreadsheet() {
 			case f.Name == "xl/workbook.xml":
 				xl.workbook = newWorkbook(f, xl)
 			case f.Name == "xl/_rels/workbook.xml.rels":
-				xl.relationships = shared.NewRelationships(f, xl.pkg)
+				xl.relationships = ooxml.NewRelationships(f, xl.pkg)
 			case f.Name == "xl/sharedStrings.xml":
 				xl.sharedStrings = newSharedStrings(f, xl)
 			case f.Name == "xl/styles.xml":
@@ -175,7 +175,7 @@ func (xl *Spreadsheet) readSpreadsheet() {
 
 //createSpreadsheet initialize a new XLSX document
 func (xl *Spreadsheet) createSpreadsheet() {
-	xl.relationships = shared.NewRelationships("xl/_rels/workbook.xml.rels", xl.pkg)
+	xl.relationships = ooxml.NewRelationships("xl/_rels/workbook.xml.rels", xl.pkg)
 	xl.workbook = newWorkbook("xl/workbook.xml", xl)
 	xl.sharedStrings = newSharedStrings("xl/sharedStrings.xml", xl)
 	xl.styleSheet = newStyleSheet("xl/styles.xml", xl)

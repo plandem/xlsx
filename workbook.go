@@ -10,7 +10,7 @@ import (
 type Workbook struct {
 	ml   ml.Workbook
 	doc  *Spreadsheet
-	file *shared.PackageFile
+	file *ooxml.PackageFile
 }
 
 func newWorkbook(f interface{}, doc *Spreadsheet) *Workbook {
@@ -20,7 +20,7 @@ func newWorkbook(f interface{}, doc *Spreadsheet) *Workbook {
 
 	doc.workbook = wb
 
-	wb.file = shared.NewPackageFile(doc.pkg, f, &wb.ml, nil)
+	wb.file = ooxml.NewPackageFile(doc.pkg, f, &wb.ml, nil)
 	wb.file.LoadIfRequired(nil)
 
 	if wb.file.IsNew() {

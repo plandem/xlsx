@@ -14,7 +14,7 @@ type StyleSheet struct {
 	xfIndex  map[string]int
 	dxfIndex map[string]int
 	doc      *Spreadsheet
-	file     *shared.PackageFile
+	file     *ooxml.PackageFile
 }
 
 func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
@@ -24,7 +24,7 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 		dxfIndex: make(map[string]int),
 	}
 
-	ss.file = shared.NewPackageFile(doc.pkg, f, &ss.ml, nil)
+	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
 
 	//TODO: research about default items for a new XLSX
 	if ss.file.IsNew() {

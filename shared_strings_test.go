@@ -7,11 +7,11 @@ import (
 )
 
 func TestSharedStrings(t *testing.T) {
-	pkg := shared.NewPackage(nil)
+	pkg := ooxml.NewPackage(nil)
 	doc := &Spreadsheet{
 		pkg:           pkg,
 		Package:       pkg,
-		relationships: shared.NewRelationships("not matter the name", pkg),
+		relationships: ooxml.NewRelationships("not matter the name", pkg),
 	}
 
 	ss := newSharedStrings("xl/sharedStrings.xml", doc)

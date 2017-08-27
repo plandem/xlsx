@@ -22,7 +22,7 @@ tealeg is fastest here, although this library took **second place**
 
 
 ### results for settings style to random cell 
-purpose - set a style to a random cell at  at random column and row. It can be outside of current dimension of sheet or inside of it
+purpose - set a style to a random cell at random column and row. It can be outside of current dimension of sheet or inside of it
 ```
 BenchmarkRandomSetStyle/excelize-4           200           7758241 ns/op         1276697 B/op     135760 allocs/op
 BenchmarkRandomSetStyle/tealeg-4        10000000               120 ns/op               0 B/op          0 allocs/op

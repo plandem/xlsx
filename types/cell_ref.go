@@ -13,8 +13,8 @@ type CellRef string
 
 //ToIndexes returns 0-based indexes of reference
 func (cr CellRef) ToIndexes() (int, int) {
-	colPart := strings.Map(shared.GetLettersFn, string(cr))
-	rowPart := strings.Map(shared.GetNumbersFn, string(cr))
+	colPart := strings.Map(ooxml.GetLettersFn, string(cr))
+	rowPart := strings.Map(ooxml.GetNumbersFn, string(cr))
 
 	var colIndex, rowIndex int
 	for i, j := len(colPart)-1, 0; i >= 0; i, j = i-1, j+1 {

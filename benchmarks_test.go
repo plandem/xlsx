@@ -4,9 +4,9 @@ import (
 	"github.com/tealeg/xlsx"
 	"github.com/xuri/excelize"
 	"math/rand"
+	"strconv"
 	"testing"
 	"time"
-	"strconv"
 
 	ooxml "github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format"
@@ -290,4 +290,3 @@ func BenchmarkReadHugeFile(b *testing.B) {
 		})
 	}
 }
-

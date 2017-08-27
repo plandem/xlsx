@@ -12,7 +12,7 @@ type SharedStrings struct {
 	ml    ml.SharedStrings
 	index map[string]int //TODO: need optimization, currently we holds 2 version in memory ('slice' at ml + 'map' for indexes)
 	doc   *Spreadsheet
-	file  *shared.PackageFile
+	file  *ooxml.PackageFile
 }
 
 func newSharedStrings(f interface{}, doc *Spreadsheet) *SharedStrings {
@@ -21,7 +21,7 @@ func newSharedStrings(f interface{}, doc *Spreadsheet) *SharedStrings {
 		index: make(map[string]int),
 	}
 
-	ss.file = shared.NewPackageFile(doc.pkg, f, &ss.ml, nil)
+	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
 
 	if ss.file.IsNew() {
 		ss.doc.pkg.ContentTypes().RegisterContent(ss.file.FileName(), internal.ContentTypeSharedStrings)

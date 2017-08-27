@@ -32,7 +32,7 @@ var (
 
 //Open opens a XLSX file with name
 func Open(fileName string) (*Spreadsheet, error) {
-	doc, err := shared.OpenFile(fileName, newSpreadsheet)
+	doc, err := ooxml.OpenFile(fileName, newSpreadsheet)
 	if err != nil {
 		return nil, err
 	}
@@ -41,12 +41,12 @@ func Open(fileName string) (*Spreadsheet, error) {
 		return xlDoc, nil
 	}
 
-	return nil, shared.ErrorUnknownPackage(Spreadsheet{})
+	return nil, ooxml.ErrorUnknownPackage(Spreadsheet{})
 }
 
 //OpenStream opens a XLSX stream
 func OpenStream(stream io.Reader) (*Spreadsheet, error) {
-	doc, err := shared.OpenStream(stream, newSpreadsheet)
+	doc, err := ooxml.OpenStream(stream, newSpreadsheet)
 	if err != nil {
 		return nil, err
 	}
@@ -55,12 +55,12 @@ func OpenStream(stream io.Reader) (*Spreadsheet, error) {
 		return xlDoc, nil
 	}
 
-	return nil, shared.ErrorUnknownPackage(Spreadsheet{})
+	return nil, ooxml.ErrorUnknownPackage(Spreadsheet{})
 }
 
 //New creates and returns a new XLSX document
 func New() *Spreadsheet {
-	if doc, err := newSpreadsheet(shared.NewPackage(nil)); err == nil {
+	if doc, err := newSpreadsheet(ooxml.NewPackage(nil)); err == nil {
 		if xlDoc, ok := doc.(*Spreadsheet); ok {
 			return xlDoc
 		}

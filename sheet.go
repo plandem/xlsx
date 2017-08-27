@@ -22,7 +22,7 @@ type Sheet struct {
 	mergedRanges  []*rangeInfo
 	isInitialized bool
 	index         int
-	file          *shared.PackageFile
+	file          *ooxml.PackageFile
 }
 
 //newSheet creates a new sheet and link it with workbook
@@ -81,7 +81,7 @@ func newSheet(f interface{}, doc *Spreadsheet) *Sheet {
 			doc.sheets[index] = sheet
 		}
 
-		sheet.file = shared.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
+		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
 	}
 
 	return sheet
@@ -94,7 +94,7 @@ func (s *Sheet) Name() string {
 
 //SetName sets a name for sheet
 func (s *Sheet) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = shared.UniqueName(name, s.workbook.doc.GetSheetNames(), sheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), sheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
@@ -204,7 +204,7 @@ func (s *Sheet) DeleteRow(index int) {
 	//update dimension for a new size
 	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
 	curWidth, curHeight := currRef.ToIndexes()
-	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(curWidth, curHeight - 1))
+	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(curWidth, curHeight-1))
 }
 
 //Col returns a col for 0-based index
@@ -285,7 +285,7 @@ func (s *Sheet) DeleteCol(index int) {
 	//update dimension for a new size
 	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
 	curWidth, curHeight := currRef.ToIndexes()
-	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(curWidth - 1, curHeight))
+	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(curWidth-1, curHeight))
 }
 
 //Range returns a range for ref
