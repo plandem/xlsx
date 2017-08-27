@@ -307,7 +307,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*excelize.File)
-			xl.SaveAs("saved_excelize.xlsx")
+			xl.SaveAs("saved_big_excelize.xlsx")
 		}},
 		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*xlsx.Sheet)
@@ -316,7 +316,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*xlsx.File)
-			xl.Save("saved_tealeg.xlsx")
+			xl.Save("saved_big_tealeg.xlsx")
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*ooxml.Sheet)
@@ -325,7 +325,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*ooxml.Spreadsheet)
-			xl.SaveAs("saved_xlsx.xlsx")
+			xl.SaveAs("saved_big_xlsx.xlsx")
 		}},
 	}
 
@@ -334,6 +334,56 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 		b.Run(bm.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
 				f, s := bm.open(bigFile)
+				bm.callback(f, s, &value)
+				bm.close(f)
+			}
+		})
+	}
+}
+
+func BenchmarkUpdateHugeFile(b *testing.B) {
+	benchmarks := []struct {
+		name     string
+		open     openFileFn
+		callback func(f interface{}, s interface{}, value *string)
+		close    func(f interface{})
+	}{
+		//{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string) {
+		//	xl := f.(*excelize.File)
+		//	rows := xl.GetRows("Sheet1")
+		//
+		//	for _, row := range rows {
+		//		*value = row[0]
+		//	}
+		//}, func(f interface{}) {
+		//	xl := f.(*excelize.File)
+		//	xl.SaveAs("saved_huge_excelize.xlsx")
+		//}},
+		//{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
+		//	sheet := s.(*xlsx.Sheet)
+		//	for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
+		//		*value = sheet.Cell(0, row_i).Value
+		//	}
+		//}, func(f interface{}) {
+		//	xl := f.(*xlsx.File)
+		//	xl.Save("saved_huge_tealeg.xlsx")
+		//}},
+		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
+			sheet := s.(*ooxml.Sheet)
+			for row_i, row_max := 0, sheet.TotalRows(); row_i < row_max; row_i++ {
+				*value = sheet.Cell(0, row_i).Value()
+			}
+		}, func(f interface{}) {
+			xl := f.(*ooxml.Spreadsheet)
+			xl.SaveAs("saved_huge_xlsx.xlsx")
+		}},
+	}
+
+	var value string
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				f, s := bm.open(hugeFile)
 				bm.callback(f, s, &value)
 				bm.close(f)
 			}

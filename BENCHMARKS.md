@@ -62,3 +62,12 @@ purpose - reading value for each row. [Download](https://www.dropbox.com/s/7zpqf
 BenchmarkReadHugeFile/xlsx-4                   1        106438125232 ns/op      13631668472 B/op        408849745 allocs/op
 ```
 It's a great pity, but **only** this library could open and read this file
+
+
+
+### results for updating quite huge file - 73mb xlsx with about 1m rows
+purpose - reading value for each row and save file. [Download](https://www.dropbox.com/s/7zpqf0qw1yawviv/example_huge.xlsx?dl=0)
+```
+BenchmarkUpdateHugeFile/xlsx-4                 1        226916121547 ns/op      20354324704 B/op        526517282 allocs/op
+```
+It's a great pity, but **only** this library could open, read and save this file
