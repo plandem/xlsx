@@ -34,7 +34,7 @@ func TestOpening(t *testing.T) {
 	//non zip
 	nonZipFile, err := os.Open("./xlsx.go")
 	assert.Nil(t, err)
-	xl, err = xlsx.OpenStream(nonZipFile)
+	xl, err = xlsx.Open(nonZipFile)
 	assert.NotNil(t, err)
 	assert.Nil(t, xl)
 
@@ -44,7 +44,7 @@ func TestOpening(t *testing.T) {
 	assert.Nil(t, err)
 
 	//ok
-	xl, err = xlsx.OpenStream(zipFile)
+	xl, err = xlsx.Open(zipFile)
 	assert.NotNil(t, xl)
 	assert.Nil(t, err)
 	assert.IsType(t, &xlsx.Spreadsheet{}, xl)

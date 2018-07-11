@@ -318,16 +318,16 @@ func (s *Sheet) resolveDimension(force bool) {
 
 	var (
 		maxWidth float64
-		minWidth float64 = math.MaxFloat64
+		minWidth = math.MaxFloat64
 
 		maxHeight float64
-		minHeight float64 = math.MaxFloat64
+		minHeight = math.MaxFloat64
 	)
 
 	//supposed that grid holds rows/cells with valid refs
 	for _, row := range s.ml.SheetData {
-		maxHeight = math.Max(maxHeight, float64(row.Ref))
-		minHeight = math.Min(minHeight, float64(row.Ref))
+		maxHeight = math.Max(maxHeight, float64(row.Ref) - 1)
+		minHeight = math.Min(minHeight, float64(row.Ref) - 1)
 
 		for _, cell := range row.Cells {
 			colIndex, _ := types.CellRef(cell.Ref).ToIndexes()

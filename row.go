@@ -36,8 +36,8 @@ func (r *Row) Cells() []*Cell {
 	_, toRef := r.sheet.ml.Dimension.Ref.ToCellRefs()
 	maxWidth, _ := toRef.ToIndexes()
 
-	cells := make([]*Cell, maxWidth)
-	for cid := 0; cid < maxWidth; cid++ {
+	cells := make([]*Cell, maxWidth + 1)
+	for cid := 0; cid <= maxWidth; cid++ {
 		cells[cid] = r.sheet.Cell(cid, r.ml.Ref-1)
 	}
 

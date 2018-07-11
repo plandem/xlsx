@@ -33,7 +33,7 @@ func ExampleOpenStream() {
 		log.Fatal(err)
 	}
 
-	xl, err := xlsx.OpenStream(zipFile)
+	xl, err := xlsx.Open(zipFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -272,8 +272,8 @@ func Example_access() {
 	//Output:
 	// last cell
 	// last cell
-	// ,,,1,2,3,4,5,,,,,
-	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,
+	// ,,,1,2,3,4,5,,,,,,
+	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
 	// 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
 }
 
@@ -320,10 +320,10 @@ func Example_update() {
 	//Output:
 	// last cell
 	// new value
-	// ,,,1,2,3,4,5,,,,,
-	// 0,1,2,3,4,5,6,7,8,9,10,11,12
-	// ,,,,,,,,,3,6,11,16,,,,,,,,,,,,,,
-	// 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
+	// ,,,1,2,3,4,5,,,,,,
+	// 0,1,2,3,4,5,6,7,8,9,10,11,12,13
+	// ,,,,,,,,,3,6,11,16,,,,,,,,,,,,,,,
+	// 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
 	// 9,4,5,6,7,10,7,8,9,10,11,12,13,14,15,12,17,18,19,20
 	// 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
 }
@@ -449,14 +449,14 @@ func Example_insert() {
 
 	//Output:
 	// 14 x 28
-	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,
+	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
 	// 15 x 28
-	// ,,,,,,,,,,,,,,,,,,,,,,,,,,
-	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,
-	// ,,,,1,2,3,4,5,,,,,
+	// ,,,,,,,,,,,,,,,,,,,,,,,,,,,
+	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
+	// ,,,,1,2,3,4,5,,,,,,
 	// 15 x 29
-	// ,,,,,,,,,,,,,
-	// ,,,,1,2,3,4,5,,,,,
+	// ,,,,,,,,,,,,,,
+	// ,,,,1,2,3,4,5,,,,,,
 }
 
 func Example_delete() {
@@ -489,12 +489,86 @@ func Example_delete() {
 	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
 	//Output:
 	// 14 x 28
-	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,
+	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
 	// 13 x 28
-	// ,merged cols,,merged rows+cols,,,,,,2,7,12,17,,,,,,,,,,,,,,
-	// ,,merged rows,merged rows+cols,,,,,,,,
+	// ,merged cols,,merged rows+cols,,,,,,2,7,12,17,,,,,,,,,,,,,,,
+	// ,,merged rows,merged rows+cols,,,,,,,,,
 	// 13 x 27
-	// with trailing space   ,,merged rows,,,,,,,,,
+	// with trailing space   ,,merged rows,,,,,,,,,,
 	// Sheet1
 	//
+}
+
+func Example_iterationByCells() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	sheet := xl.Sheet(0)
+	for cIdx := 0; cIdx < sheet.TotalCols(); cIdx++ {
+		for rIdx := 0; rIdx < sheet.TotalRows(); rIdx++ {
+			c := sheet.Cell(cIdx, rIdx)
+			fmt.Println(c.Value())
+		}
+	}
+
+	//Output:
+	//Header 1
+	//Value 1-1
+	//Value 1-2
+	//Header 2
+	//Value 2-1
+	//Value 2-2
+}
+func Example_iterationByRows() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	sheet := xl.Sheet(0)
+	for rIdx := 0; rIdx < sheet.TotalRows(); rIdx++ {
+		row := sheet.Row(rIdx)
+
+		for _, c := range row.Cells() {
+			fmt.Println(c.Value())
+		}
+	}
+	//Output:
+	//Header 1
+	//Header 2
+	//Value 1-1
+	//Value 2-1
+	//Value 1-2
+	//Value 2-2
+}
+func Example_iterationByCols() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	sheet := xl.Sheet(0)
+	for cIdx := 0; cIdx < sheet.TotalCols(); cIdx++ {
+		col := sheet.Col(cIdx)
+
+		for _, c := range col.Cells() {
+			fmt.Println(c.Value())
+		}
+	}
+
+	//Output:
+	//Header 1
+	//Value 1-1
+	//Value 1-2
+	//Header 2
+	//Value 2-1
+	//Value 2-2
 }

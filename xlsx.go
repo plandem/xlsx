@@ -3,7 +3,6 @@ package xlsx
 import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/internal"
-	"io"
 )
 
 var (
@@ -30,23 +29,9 @@ var (
 	RowOption internal.RowOption
 )
 
-//Open opens a XLSX file with name
-func Open(fileName string) (*Spreadsheet, error) {
-	doc, err := ooxml.OpenFile(fileName, newSpreadsheet)
-	if err != nil {
-		return nil, err
-	}
-
-	if xlDoc, ok := doc.(*Spreadsheet); ok {
-		return xlDoc, nil
-	}
-
-	return nil, ooxml.ErrorUnknownPackage(Spreadsheet{})
-}
-
-//OpenStream opens a XLSX stream
-func OpenStream(stream io.Reader) (*Spreadsheet, error) {
-	doc, err := ooxml.OpenStream(stream, newSpreadsheet)
+//Open opens a XLSX file with name or io.Reader
+func Open(f interface{}) (*Spreadsheet, error) {
+	doc, err := ooxml.Open(f, newSpreadsheet)
 	if err != nil {
 		return nil, err
 	}
