@@ -1,34 +1,35 @@
 package xlsx
 
 import (
+	"github.com/plandem/xlsx/column_option"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestColumnOptions(t *testing.T) {
 	options := NewColumnOptions(
-		ColumnOption.OutlineLevel(5),
-		ColumnOption.Hidden(true),
-		ColumnOption.Phonetic(true),
-		ColumnOption.Formatting(12345),
-		ColumnOption.Width(45.5),
+		columnOption.OutlineLevel(5),
+		columnOption.Hidden(true),
+		columnOption.Phonetic(true),
+		columnOption.Formatting(12345),
+		columnOption.Width(45.5),
 	)
 
-	require.IsType(t, &columnOptions{}, options)
-	require.Equal(t, &columnOptions{
-		outlineLevel: 5,
-		hidden:       true,
-		phonetic:     true,
-		styleID:      12345,
-		width:        45.5,
+	require.IsType(t, &columnOption.ColumnOptions{}, options)
+	require.Equal(t, &columnOption.ColumnOptions{
+		OutlineLevel: 5,
+		Hidden:       true,
+		Phonetic:     true,
+		StyleID:      12345,
+		Width:        45.5,
 	}, options)
 
-	options.Set(ColumnOption.Width(50))
-	require.Equal(t, &columnOptions{
-		outlineLevel: 5,
-		hidden:       true,
-		phonetic:     true,
-		styleID:      12345,
-		width:        50,
+	options.Set(columnOption.Width(50))
+	require.Equal(t, &columnOption.ColumnOptions{
+		OutlineLevel: 5,
+		Hidden:       true,
+		Phonetic:     true,
+		StyleID:      12345,
+		Width:        50,
 	}, options)
 }

@@ -3,6 +3,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/column_option"
 )
 
 //Col is a higher level object that wraps ml.Col with functionality
@@ -12,16 +13,16 @@ type Col struct {
 }
 
 //Set sets options for column
-func (c *Col) Set(options *columnOptions) {
-	if options.width > 0 {
-		c.ml.Width = options.width
+func (c *Col) Set(options *columnOption.ColumnOptions) {
+	if options.Width > 0 {
+		c.ml.Width = options.Width
 		c.ml.CustomWidth = true
 	}
 
-	c.ml.OutlineLevel = options.outlineLevel
-	c.ml.Hidden = options.hidden
-	c.ml.Collapsed = options.collapsed
-	c.ml.Phonetic = options.phonetic
+	c.ml.OutlineLevel = options.OutlineLevel
+	c.ml.Hidden = options.Hidden
+	c.ml.Collapsed = options.Collapsed
+	c.ml.Phonetic = options.Phonetic
 }
 
 //SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.

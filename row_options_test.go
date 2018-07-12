@@ -1,34 +1,35 @@
 package xlsx
 
 import (
+	"github.com/plandem/xlsx/row_option"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestRowOptions(t *testing.T) {
 	options := NewRowOptions(
-		RowOption.OutlineLevel(5),
-		RowOption.Hidden(true),
-		RowOption.Phonetic(true),
-		RowOption.Formatting(12345),
-		RowOption.Height(45.5),
+		rowOption.OutlineLevel(5),
+		rowOption.Hidden(true),
+		rowOption.Phonetic(true),
+		rowOption.Formatting(12345),
+		rowOption.Height(45.5),
 	)
 
-	require.IsType(t, &rowOptions{}, options)
-	require.Equal(t, &rowOptions{
-		outlineLevel: 5,
-		hidden:       true,
-		phonetic:     true,
-		styleID:      12345,
-		height:       45.5,
+	require.IsType(t, &rowOption.RowOptions{}, options)
+	require.Equal(t, &rowOption.RowOptions{
+		OutlineLevel: 5,
+		Hidden:       true,
+		Phonetic:     true,
+		StyleID:      12345,
+		Height:       45.5,
 	}, options)
 
-	options.Set(RowOption.Height(50))
-	require.Equal(t, &rowOptions{
-		outlineLevel: 5,
-		hidden:       true,
-		phonetic:     true,
-		styleID:      12345,
-		height:       50,
+	options.Set(rowOption.Height(50))
+	require.Equal(t, &rowOption.RowOptions{
+		OutlineLevel: 5,
+		Hidden:       true,
+		Phonetic:     true,
+		StyleID:      12345,
+		Height:       50,
 	}, options)
 }
