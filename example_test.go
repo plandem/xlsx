@@ -588,7 +588,7 @@ func ExampleSheet_Rows() {
 
 	//iterate rows via iterator
 	for rows := sheet.Rows(); rows.HasNext(); {
-		row, _ := rows.Next()
+		_, row := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))
 	}
 
@@ -611,7 +611,7 @@ func ExampleSheet_Cols() {
 
 	//iterate cols via iterator
 	for cols := sheet.Cols(); cols.HasNext(); {
-		col, _ := cols.Next()
+		_, col := cols.Next()
 		fmt.Println(strings.Join(col.Values(), ","))
 	}
 
@@ -632,7 +632,7 @@ func ExampleSheet_Range() {
 	sheet := xl.Sheet(0)
 	r := sheet.Range("A1:B3")
 	for cells := r.Iterator(); cells.HasNext(); {
-		cell, _, _ := cells.Next()
+		_, _, cell := cells.Next()
 		fmt.Println(cell.Value())
 	}
 	//Output:
@@ -657,7 +657,7 @@ func ExampleSpreadsheet_Sheets() {
 
 	//iterate sheets via iterator
 	for sheets := xl.Sheets(); sheets.HasNext(); {
-		sheet, _ := sheets.Next()
+		_, sheet := sheets.Next()
 		fmt.Println(sheet.Name())
 	}
 

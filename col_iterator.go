@@ -3,7 +3,7 @@ package xlsx
 //ColIterator is a interface for iterating cols inside of sheet
 type ColIterator interface {
 	//Next returns next Col in sheet and corresponding index
-	Next() (*Col, int)
+	Next() (idx int, col *Col)
 
 	//HasNext returns true if there are cols to iterate or false in other case
 	HasNext() bool
@@ -27,9 +27,9 @@ func newColIterator(sheet *Sheet) ColIterator {
 }
 
 //Next returns next Col in sheet and corresponding index
-func (i *colIterator) Next() (*Col, int) {
+func (i *colIterator) Next() (int, *Col) {
 	i.idx++
-	return i.sheet.Col(i.idx), i.idx
+	return i.idx, i.sheet.Col(i.idx)
 }
 
 //HasNext returns true if there are cols to iterate or false in other case

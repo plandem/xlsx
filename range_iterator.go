@@ -3,7 +3,7 @@ package xlsx
 //RangeIterator is a interface for iterating cells inside of range
 type RangeIterator interface {
 	//Next returns next Cell in range and corresponding indexes
-	Next() (*Cell, int, int)
+	Next() (cIdx int, rIdx int, cell *Cell)
 
 	//HasNext returns true if there are cells to iterate or false in other case
 	HasNext() bool
@@ -27,7 +27,7 @@ func newRangeIterator(r *Range) RangeIterator {
 }
 
 //Next returns next Cell in range and corresponding indexes
-func (i *rangeIterator) Next() (*Cell, int, int) {
+func (i *rangeIterator) Next() (int, int, *Cell) {
 	c := i.r.sheet.Cell(i.cIdx, i.rIdx)
 
 	i.cIdx++
@@ -36,7 +36,7 @@ func (i *rangeIterator) Next() (*Cell, int, int) {
 		i.rIdx++
 	}
 
-	return c, i.cIdx, i.rIdx
+	return i.cIdx, i.rIdx, c
 }
 
 //HasNext returns true if there are cells to iterate or false in other case

@@ -46,7 +46,7 @@ func main() {
 
 	//iterating via iterators
 	for rows := sheet.Rows(); rows.HasNext(); {
-		row, iRow := rows.Next()
+		iRow, row := rows.Next()
 		
 		for iCol, cell := range row.Cells() {
 			if iRow % 2 == 0 && iCol % 2 == 0 {

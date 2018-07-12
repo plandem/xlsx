@@ -3,7 +3,7 @@ package xlsx
 //RowIterator is a interface for iterating rows inside of sheet
 type RowIterator interface {
 	//Next returns next Row in sheet and corresponding index
-	Next() (*Row, int)
+	Next() (idx int, row *Row)
 
 	//HasNext returns true if there are rows to iterate or false in other case
 	HasNext() bool
@@ -27,9 +27,9 @@ func newRowIterator(sheet *Sheet) RowIterator {
 }
 
 //Next returns next Row in sheet and corresponding index
-func (i *rowIterator) Next() (*Row, int) {
+func (i *rowIterator) Next() (int, *Row) {
 	i.idx++
-	return i.sheet.Row(i.idx), i.idx
+	return i.idx, i.sheet.Row(i.idx)
 }
 
 //HasNext returns true if there are rows to iterate or false in other case

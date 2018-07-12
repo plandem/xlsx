@@ -71,7 +71,7 @@ func (r *Range) SetFormatting(styleRef format.StyleRefID) {
 //Walk calls callback cb for each Cell in range
 func (r *Range) Walk(cb func(c *Cell)) {
 	for cells := r.Iterator(); cells.HasNext(); {
-		cell, _, _ := cells.Next()
+		_, _, cell := cells.Next()
 		cb(cell)
 	}
 }
