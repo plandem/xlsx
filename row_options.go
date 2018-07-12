@@ -5,8 +5,8 @@ import (
 )
 
 //NewRowOptions create and returns option set for row
-func NewRowOptions(options ...rowOption.RowOption) *rowOption.RowOptions {
-	s := &rowOption.RowOptions{}
+func NewRowOptions(options ...rowOption.Option) *rowOption.Options {
+	s := &rowOption.Options{}
 	s.Set(options...)
 	return s
 }

@@ -15,8 +15,8 @@ func TestColumnOptions(t *testing.T) {
 		columnOption.Width(45.5),
 	)
 
-	require.IsType(t, &columnOption.ColumnOptions{}, options)
-	require.Equal(t, &columnOption.ColumnOptions{
+	require.IsType(t, &columnOption.Options{}, options)
+	require.Equal(t, &columnOption.Options{
 		OutlineLevel: 5,
 		Hidden:       true,
 		Phonetic:     true,
@@ -25,7 +25,7 @@ func TestColumnOptions(t *testing.T) {
 	}, options)
 
 	options.Set(columnOption.Width(50))
-	require.Equal(t, &columnOption.ColumnOptions{
+	require.Equal(t, &columnOption.Options{
 		OutlineLevel: 5,
 		Hidden:       true,
 		Phonetic:     true,

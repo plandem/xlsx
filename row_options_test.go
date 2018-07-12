@@ -15,8 +15,8 @@ func TestRowOptions(t *testing.T) {
 		rowOption.Height(45.5),
 	)
 
-	require.IsType(t, &rowOption.RowOptions{}, options)
-	require.Equal(t, &rowOption.RowOptions{
+	require.IsType(t, &rowOption.Options{}, options)
+	require.Equal(t, &rowOption.Options{
 		OutlineLevel: 5,
 		Hidden:       true,
 		Phonetic:     true,
@@ -25,7 +25,7 @@ func TestRowOptions(t *testing.T) {
 	}, options)
 
 	options.Set(rowOption.Height(50))
-	require.Equal(t, &rowOption.RowOptions{
+	require.Equal(t, &rowOption.Options{
 		OutlineLevel: 5,
 		Hidden:       true,
 		Phonetic:     true,

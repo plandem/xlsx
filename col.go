@@ -13,7 +13,7 @@ type Col struct {
 }
 
 //Set sets options for column
-func (c *Col) Set(options *columnOption.ColumnOptions) {
+func (c *Col) Set(options *columnOption.Options) {
 	if options.Width > 0 {
 		c.ml.Width = options.Width
 		c.ml.CustomWidth = true

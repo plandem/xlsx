@@ -13,7 +13,7 @@ type Row struct {
 }
 
 //Set sets options for row
-func (r *Row) Set(options *rowOption.RowOptions) {
+func (r *Row) Set(options *rowOption.Options) {
 	if options.Height > 0 {
 		r.ml.Height = options.Height
 		r.ml.CustomHeight = true

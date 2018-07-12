@@ -4,10 +4,10 @@ import (
 	"github.com/plandem/xlsx/format"
 )
 
-type ColumnOption func(co *ColumnOptions)
+type Option func(co *Options)
 
-//ColumnOptions is a helper type to simplify process of settings options for column
-type ColumnOptions struct {
+//Options is a helper type to simplify process of settings options for column
+type Options struct {
 	OutlineLevel uint8
 	Collapsed    bool
 	Phonetic     bool
@@ -17,7 +17,7 @@ type ColumnOptions struct {
 }
 
 //Set sets new options for option set
-func (co *ColumnOptions) Set(options ...ColumnOption) {
+func (co *Options) Set(options ...Option) {
 	for _, o := range options {
 		o(co)
 	}
