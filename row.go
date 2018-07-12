@@ -2,7 +2,6 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 )
 
@@ -13,16 +12,16 @@ type Row struct {
 }
 
 //Set sets options for row
-func (r *Row) Set(options *internal.RowOptions) {
-	if options.Height > 0 {
-		r.ml.Height = options.Height
+func (r *Row) Set(options *rowOptions) {
+	if options.height > 0 {
+		r.ml.Height = options.height
 		r.ml.CustomHeight = true
 	}
 
-	r.ml.OutlineLevel = options.OutlineLevel
-	r.ml.Hidden = options.Hidden
-	r.ml.Collapsed = options.Collapsed
-	r.ml.Phonetic = options.Phonetic
+	r.ml.OutlineLevel = options.outlineLevel
+	r.ml.Hidden = options.hidden
+	r.ml.Collapsed = options.collapsed
+	r.ml.Phonetic = options.phonetic
 }
 
 //SetFormatting sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.
