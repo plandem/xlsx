@@ -4,8 +4,8 @@ import (
 	"github.com/plandem/xlsx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
+	"os"
 )
 
 func TestNew(t *testing.T) {
@@ -94,3 +94,4 @@ func TestSaving(t *testing.T) {
 	require.IsType(t, &xlsx.Spreadsheet{}, xl)
 	require.Equal(t, []string{"Sheet1", "new sheet"}, xl.GetSheetNames())
 }
+

@@ -1,13 +1,13 @@
 package xlsx_test
 
 import (
-	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/types"
 	"log"
-	"os"
+	"fmt"
 	"strings"
+	"os"
 )
 
 func ExampleNew() {
@@ -18,7 +18,7 @@ func ExampleNew() {
 	xl.SaveAs("new_file.xlsx")
 }
 
-func ExampleOpen() {
+func ExampleOpen_filename() {
 	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +27,7 @@ func ExampleOpen() {
 	defer xl.Close()
 }
 
-func ExampleOpenStream() {
+func ExampleOpen_stream() {
 	zipFile, err := os.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -523,6 +523,7 @@ func Example_iterationByCells() {
 	//Value 2-1
 	//Value 2-2
 }
+
 func Example_iterationByRows() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
@@ -539,6 +540,7 @@ func Example_iterationByRows() {
 			fmt.Println(c.Value())
 		}
 	}
+
 	//Output:
 	//Header 1
 	//Header 2
@@ -547,6 +549,7 @@ func Example_iterationByRows() {
 	//Value 1-2
 	//Value 2-2
 }
+
 func Example_iterationByCols() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
@@ -571,4 +574,97 @@ func Example_iterationByCols() {
 	//Header 2
 	//Value 2-1
 	//Value 2-2
+}
+
+func ExampleSheet_Rows() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	//get sheet by 0-based index
+	sheet := xl.Sheet(0)
+
+	//iterate rows via iterator
+	for rows := sheet.Rows(); rows.HasNext(); {
+		row,_ := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+
+	//Output:
+	//Header 1,Header 2
+	//Value 1-1,Value 2-1
+	//Value 1-2,Value 2-2
+}
+
+func ExampleSheet_Cols() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	//get sheet by 0-based index
+	sheet := xl.Sheet(0)
+
+	//iterate cols via iterator
+	for cols := sheet.Cols(); cols.HasNext(); {
+		col,_ := cols.Next()
+		fmt.Println(strings.Join(col.Values(), ","))
+	}
+
+	//Output:
+	//Header 1,Value 1-1,Value 1-2
+	//Header 2,Value 2-1,Value 2-2
+}
+
+func ExampleSheet_Range() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	//get sheet by 0-based index
+	sheet := xl.Sheet(0)
+	r := sheet.Range("A1:B3")
+	for cells := r.Iterator(); cells.HasNext(); {
+		cell, _, _ := cells.Next()
+		fmt.Println(cell.Value())
+	}
+	//Output:
+	//Header 1
+	//Header 2
+	//Value 1-1
+	//Value 2-1
+	//Value 1-2
+	//Value 2-2
+}
+
+func ExampleSpreadsheet_Sheets() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	//output names of sheets
+	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+
+	//iterate sheets via iterator
+	for sheets := xl.Sheets(); sheets.HasNext(); {
+		sheet, _ := sheets.Next()
+		fmt.Println(sheet.Name())
+	}
+
+	//Output:
+	//First Sheet,Second Sheet,Last Sheet
+	//First Sheet
+	//Second Sheet
+	//Last Sheet
 }

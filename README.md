@@ -32,6 +32,7 @@ func main() {
 		),
 	)
 
+	//common way for iterating
 	sheet := xl.Sheet(0)
 	for iRow, iMax := 0, sheet.TotalRows(); iRow < iMax; iRow++ {
 		row := sheet.Row(iRow)
@@ -43,6 +44,17 @@ func main() {
 		}
 	}
 
+	//iterating via iterators
+	for rows := sheet.Rows(); rows.HasNext(); {
+		row, iRow := rows.Next()
+		
+		for iCol, cell := range row.Cells() {
+			if iRow % 2 == 0 && iCol % 2 == 0 {
+				cell.SetFormatting(redBoldYellow)
+			}
+		}
+	}
+    	
 	xl.SaveAs("test1.xlsx")
 }
 ```

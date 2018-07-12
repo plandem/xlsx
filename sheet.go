@@ -19,7 +19,7 @@ const sheetNameLimit = 31
 type Sheet struct {
 	ml            ml.Worksheet
 	workbook      *Workbook
-	mergedRanges  []*rangeInfo
+	mergedRanges  []*bounds
 	isInitialized bool
 	index         int
 	file          *ooxml.PackageFile
@@ -142,7 +142,10 @@ func (s *Sheet) Row(index int) *Row {
 	s.expandIfRequired(0, index)
 
 	data := s.ml.SheetData[index]
-	return &Row{ml: data, sheet: s}
+	return &Row{
+		data,
+		newRange(s, 0, len(data.Cells)-1, index, index),
+	}
 }
 
 //refreshRefs update refs for all rows/cells starting from row with 0-based index
@@ -236,7 +239,14 @@ func (s *Sheet) Col(index int) *Col {
 		*s.ml.Cols = append(*s.ml.Cols, data)
 	}
 
-	return &Col{ml: data, sheet: s, index: index - 1}
+	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
+	_, curHeight := currRef.ToIndexes()
+
+	index--
+	return &Col{
+		data,
+		newRange(s, index, index, 0, curHeight),
+	}
 }
 
 //InsertCol inserts a col at 0-based index and returns it. Using to insert a col between other cols.
@@ -290,10 +300,25 @@ func (s *Sheet) DeleteCol(index int) {
 
 //Range returns a range for ref
 func (s *Sheet) Range(ref types.Ref) *Range {
-	return &Range{
-		newRangeInfo(ref),
-		s,
-	}
+	return newRangeFromRef(s, ref)
+}
+
+//Cols returns iterator for all cols of sheet
+func (s *Sheet) Cols() ColIterator {
+	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
+	curWidth, curHeight := currRef.ToIndexes()
+	s.expandIfRequired(curWidth, curHeight)
+
+	return newColIterator(s)
+}
+
+//Rows returns iterator for all rows of sheet
+func (s *Sheet) Rows() RowIterator {
+	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
+	curWidth, curHeight := currRef.ToIndexes()
+	s.expandIfRequired(curWidth, curHeight)
+
+	return newRowIterator(s)
 }
 
 //TotalCols returns total number of cols in grid
@@ -489,13 +514,13 @@ func (s *Sheet) isRowEmpty(r *ml.Row) bool {
 	return r == nil || (len(r.Cells) == 0 && reflect.DeepEqual(r, &ml.Row{}))
 }
 
-//resolveMergedIfRequired transforms merged cells into rangeInfo
+//resolveMergedIfRequired transforms merged cells into bounds
 func (s *Sheet) resolveMergedIfRequired(force bool) {
 	if force || (s.ml.MergeCells != nil && (len(*s.ml.MergeCells) != len(s.mergedRanges))) {
-		s.mergedRanges = make([]*rangeInfo, len(*s.ml.MergeCells))
+		s.mergedRanges = make([]*bounds, len(*s.ml.MergeCells))
 
 		for i, mergedRef := range *s.ml.MergeCells {
-			s.mergedRanges[i] = newRangeInfo(mergedRef.Ref)
+			s.mergedRanges[i] = newBoundsFromRef(mergedRef.Ref)
 		}
 	}
 }
@@ -506,3 +531,4 @@ func (s *Sheet) BeforeMarshalXML() interface{} {
 	s.isInitialized = false
 	return &s.ml
 }
+

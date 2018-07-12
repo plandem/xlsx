@@ -24,23 +24,6 @@ func (r Ref) ToCellRefs() (CellRef, CellRef) {
 	return from, to
 }
 
-//ReboundIfRequired fix ref if required. E.g.: C1:B3 to B1:C3.
-func (r Ref) ReboundIfRequired() Ref {
-	fromCellRef, toCellRef := r.ToCellRefs()
-	fromCol, fromRow := fromCellRef.ToIndexes()
-	toCol, toRow := toCellRef.ToIndexes()
-
-	if fromCol > toCol {
-		toCol, fromCol = fromCol, toCol
-	}
-
-	if fromRow > toRow {
-		toRow, fromRow = fromRow, toRow
-	}
-
-	return RefFromCellRefs(CellRefFromIndexes(fromCol, fromRow), CellRefFromIndexes(toCol, toRow))
-}
-
 //RefFromCellRefs returns Ref for from/to CellRefs
 func RefFromCellRefs(from CellRef, to CellRef) Ref {
 	return Ref(string(from) + ":" + string(to))

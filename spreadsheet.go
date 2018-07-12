@@ -43,6 +43,7 @@ func newSpreadsheet(pkg *ooxml.PackageInfo) (interface{}, error) {
 //GetSheetNames returns a names of all sheets
 func (xl *Spreadsheet) GetSheetNames() []string {
 	sheetNames := make([]string, len(xl.sheets))
+
 	for id := range xl.sheets {
 		sheetNames[id] = xl.workbook.ml.Sheets[id].Name
 	}
@@ -61,6 +62,11 @@ func (xl *Spreadsheet) Sheet(i int) *Sheet {
 	}
 
 	return sheet
+}
+
+//Sheets returns iterator for all sheets of Spreadsheet
+func (xl *Spreadsheet) Sheets() SheetIterator {
+	return newSheetIterator(xl)
 }
 
 //DeleteSheet deletes the sheet with required 0-based index

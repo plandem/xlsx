@@ -138,6 +138,11 @@ func (c *Cell) Reset() {
 	c.ml = &ml.Cell{}
 }
 
+//Clear clears cell's value
+func (c *Cell) Clear() {
+	c.ml.Value = ""
+}
+
 //HasFormula returns true if cell has formula
 func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
