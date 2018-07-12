@@ -3,7 +3,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/row_option"
+	"github.com/plandem/xlsx/options"
 )
 
 //Row is a higher level object that wraps ml.Row with functionality
@@ -13,7 +13,7 @@ type Row struct {
 }
 
 //Set sets options for row
-func (r *Row) Set(options *rowOption.Options) {
+func (r *Row) Set(options *options.RowOptions) {
 	if options.Height > 0 {
 		r.ml.Height = options.Height
 		r.ml.CustomHeight = true

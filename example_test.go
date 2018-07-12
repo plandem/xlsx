@@ -1,15 +1,14 @@
 package xlsx_test
 
 import (
+	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
-	"github.com/plandem/xlsx/column_option"
-	"github.com/plandem/xlsx/row_option"
 	"log"
-	"fmt"
-	"strings"
 	"os"
+	"strings"
 )
 
 func ExampleNew() {
@@ -76,27 +75,25 @@ func ExampleSaveAs() {
 }
 
 func ExampleNewColumnOptions() {
-	options := xlsx.NewColumnOptions(
-		columnOption.OutlineLevel(5),
-		columnOption.Hidden(true),
-		columnOption.Phonetic(true),
-		columnOption.Formatting(12345),
-		columnOption.Width(45.5),
+	o := options.NewColumnOptions(
+		options.Column.OutlineLevel(5),
+		options.Column.Hidden(true),
+		options.Column.Phonetic(true),
+		options.Column.Width(45.5),
 	)
 
-	_ = options
+	_ = o
 }
 
 func ExampleNewRowOptions() {
-	options := xlsx.NewRowOptions(
-		rowOption.OutlineLevel(5),
-		rowOption.Hidden(true),
-		rowOption.Phonetic(true),
-		rowOption.Formatting(12345),
-		rowOption.Height(45.5),
+	o := options.NewRowOptions(
+		options.Row.OutlineLevel(5),
+		options.Row.Hidden(true),
+		options.Row.Phonetic(true),
+		options.Row.Height(45.5),
 	)
 
-	_ = options
+	_ = o
 }
 
 func ExampleSpreadsheet_GetSheetNames() {
@@ -356,11 +353,11 @@ func Example_formatting() {
 
 	//set DEFAULT formatting for row. Affects cells not yet allocated in the row.
 	//In other words, this style applies to new cells.
-	sheet.Row(9).Set(xlsx.NewRowOptions(rowOption.Formatting(styleId)))
+	sheet.Row(9).SetFormatting(styleId)
 
 	//set DEFAULT formatting for col. Affects cells not yet allocated in the col.
 	//In other words, this style applies to new cells.
-	sheet.Col(3).Set(xlsx.NewColumnOptions(columnOption.Formatting(styleId)))
+	sheet.Col(3).SetFormatting(styleId)
 
 	//set formatting for all cells in range
 	sheet.Range("D10:H13").SetFormatting(styleId)
@@ -377,10 +374,10 @@ func Example_visibility() {
 	sheet := xl.Sheet(0)
 
 	//hide row
-	sheet.Row(9).Set(xlsx.NewRowOptions(rowOption.Hidden(true)))
+	sheet.Row(9).Set(options.NewRowOptions(options.Row.Hidden(true)))
 
 	//hide col
-	sheet.Col(3).Set(xlsx.NewColumnOptions(columnOption.Hidden(true)))
+	sheet.Col(3).Set(options.NewColumnOptions(options.Column.Hidden(true)))
 
 	//hide sheet
 	sheet.SetState(types.VisibilityTypeHidden)
@@ -591,7 +588,7 @@ func ExampleSheet_Rows() {
 
 	//iterate rows via iterator
 	for rows := sheet.Rows(); rows.HasNext(); {
-		row,_ := rows.Next()
+		row, _ := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))
 	}
 
@@ -614,7 +611,7 @@ func ExampleSheet_Cols() {
 
 	//iterate cols via iterator
 	for cols := sheet.Cols(); cols.HasNext(); {
-		col,_ := cols.Next()
+		col, _ := cols.Next()
 		fmt.Println(strings.Join(col.Values(), ","))
 	}
 

@@ -3,7 +3,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/column_option"
+	"github.com/plandem/xlsx/options"
 )
 
 //Col is a higher level object that wraps ml.Col with functionality
@@ -13,7 +13,7 @@ type Col struct {
 }
 
 //Set sets options for column
-func (c *Col) Set(options *columnOption.Options) {
+func (c *Col) Set(options *options.ColumnOptions) {
 	if options.Width > 0 {
 		c.ml.Width = options.Width
 		c.ml.CustomWidth = true
