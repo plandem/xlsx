@@ -40,7 +40,7 @@ func BenchmarkSpreadsheet_SheetReader(b *testing.B) {
 	}
 
 	for i := 0; i < b.N; i++ {
-		sheet := xl.SheetReader(0)
+		sheet := xl.SheetReader(0, false)
 		readSheet(sheet)
 		sheet.Close()
 	}

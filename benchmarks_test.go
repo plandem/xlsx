@@ -55,7 +55,7 @@ func xlsxReadStream(fileName string) (interface{}, interface{}) {
 		panic(err)
 	}
 
-	return xl, xl.SheetReader(0)
+	return xl, xl.SheetReader(0, false)
 }
 
 func BenchmarkRandomGet(b *testing.B) {

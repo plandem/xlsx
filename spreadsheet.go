@@ -57,7 +57,7 @@ func (xl *Spreadsheet) Sheet(i int) Sheet {
 
 	si := xl.sheets[i]
 
-	sheet := &sheetReadWrite{si}
+	sheet := &SheetReadWrite{si}
 	si.sheet = sheet
 	sheet.afterOpen()
 	return sheet
@@ -65,13 +65,14 @@ func (xl *Spreadsheet) Sheet(i int) Sheet {
 
 //SheetReader returns a sheet by 0-based index that opened in stream reading mode
 //In stream reading mode only forward reading is allowed and no updates will be applied
-func (xl *Spreadsheet) SheetReader(i int) Sheet {
+//For multi phase mode sheet will be iterated two times: first one to load meta information (e.g. merged cells) and another one for sheet data
+func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
 	if i >= len(xl.sheets) {
 		return nil
 	}
 
 	si := xl.sheets[i]
-	sheet := &sheetReadStream{sheetInfo: &(*si)}
+	sheet := &SheetReadStream{sheetInfo: &(*si), multiPhase: multiPhase}
 	sheet.afterOpen()
 	return sheet
 }
@@ -107,7 +108,7 @@ func (xl *Spreadsheet) DeleteSheet(i int) {
 //AddSheet adds a new sheet with name to document
 func (xl *Spreadsheet) AddSheet(name string) Sheet {
 	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
-		sheet := &sheetReadWrite{si}
+		sheet := &SheetReadWrite{si}
 		si.sheet = sheet
 		sheet.afterCreate(name)
 		return sheet
