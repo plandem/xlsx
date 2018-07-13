@@ -59,6 +59,7 @@ func xlsxReadStream(fileName string) (interface{}, interface{}) {
 }
 
 func BenchmarkRandomGet(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -96,6 +97,7 @@ func BenchmarkRandomGet(b *testing.B) {
 }
 
 func BenchmarkRandomSet(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -133,6 +135,7 @@ func BenchmarkRandomSet(b *testing.B) {
 }
 
 func BenchmarkRandomSetStyle(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -223,6 +226,7 @@ func BenchmarkRandomSetStyle(b *testing.B) {
 }
 
 func BenchmarkReadBigFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -270,6 +274,7 @@ func BenchmarkReadBigFile(b *testing.B) {
 }
 
 func BenchmarkReadHugeFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -317,6 +322,7 @@ func BenchmarkReadHugeFile(b *testing.B) {
 }
 
 func BenchmarkUpdateBigFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -368,6 +374,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 }
 
 func BenchmarkUpdateHugeFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
