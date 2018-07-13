@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/ml"
 	"regexp"
 )
 
@@ -16,7 +14,7 @@ type Spreadsheet struct {
 	ooxml.Package
 	pkg           *ooxml.PackageInfo
 	workbook      *Workbook
-	sheets        []*Sheet
+	sheets        []*sheetInfo
 	relationships *ooxml.Relationships
 	sharedStrings *SharedStrings
 	styleSheet    *StyleSheet
@@ -52,15 +50,29 @@ func (xl *Spreadsheet) GetSheetNames() []string {
 }
 
 //Sheet returns a sheet by 0-based index
-func (xl *Spreadsheet) Sheet(i int) *Sheet {
-	var sheet *Sheet
-
-	if i < len(xl.sheets) {
-		sheet = xl.sheets[i]
-		sheet.file.LoadIfRequired(sheet.expandOnInit)
-		sheet.file.MarkAsUpdated()
+func (xl *Spreadsheet) Sheet(i int) Sheet {
+	if i >= len(xl.sheets) {
+		return nil
 	}
 
+	si := xl.sheets[i]
+
+	sheet := &sheetReadWrite{si}
+	si.sheet = sheet
+	sheet.afterOpen()
+	return sheet
+}
+
+//SheetReader returns a sheet by 0-based index that opened in stream reading mode
+//In stream reading mode only forward reading is allowed and no updates will be applied
+func (xl *Spreadsheet) SheetReader(i int) Sheet {
+	if i >= len(xl.sheets) {
+		return nil
+	}
+
+	si := xl.sheets[i]
+	sheet := &sheetReadStream{sheetInfo: &(*si)}
+	sheet.afterOpen()
 	return sheet
 }
 
@@ -93,47 +105,15 @@ func (xl *Spreadsheet) DeleteSheet(i int) {
 }
 
 //AddSheet adds a new sheet with name to document
-func (xl *Spreadsheet) AddSheet(name string) *Sheet {
-	var sheet *Sheet
-
-	if sheet = newSheet(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); sheet != nil {
-		if len(name) > 0 {
-			sheet.SetName(name)
-		}
-
-		sheet.file.MarkAsUpdated()
-		xl.workbook.file.MarkAsUpdated()
-		xl.pkg.ContentTypes().RegisterContent(sheet.file.FileName(), internal.ContentTypeWorksheet)
+func (xl *Spreadsheet) AddSheet(name string) Sheet {
+	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
+		sheet := &sheetReadWrite{si}
+		si.sheet = sheet
+		sheet.afterCreate(name)
+		return sheet
 	}
 
-	sheet.expandOnInit()
-	return sheet
-}
-
-//SetActive sets the sheet with 0-based index as active
-func (xl *Spreadsheet) SetActive(i int) {
-	if i >= len(xl.sheets) {
-		return
-	}
-
-	//set activate from workbook side
-	if xl.workbook.ml.BookViews == nil || len(*xl.workbook.ml.BookViews) == 0 {
-		xl.workbook.ml.BookViews = &[]*ml.BookView{{
-			ActiveTab: i,
-		}}
-	} else {
-		(*xl.workbook.ml.BookViews)[0].ActiveTab = i
-	}
-
-	//set active from worksheet side
-	for id := range xl.sheets {
-		sheet := xl.Sheet(id)
-		if sheet.ml.SheetViews != nil && len(sheet.ml.SheetViews.SheetView) > 0 {
-			sheet.ml.SheetViews.SheetView[0].TabSelected = i == id
-		}
-	}
-
-	xl.workbook.file.MarkAsUpdated()
+	return nil
 }
 
 //AddFormatting adds a new style formatting to document and return related ID that can be used lately
@@ -144,7 +124,7 @@ func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.StyleRefI
 //IsValid validates document and return error if there is any error. Using right before saving.
 func (xl *Spreadsheet) IsValid() error {
 	if len(xl.sheets) == 0 {
-		return errors.New("Spreadsheet requires at least one worksheet.")
+		return errors.New("spreadsheet requires at least one worksheet")
 	}
 
 	return nil
@@ -173,7 +153,7 @@ func (xl *Spreadsheet) readSpreadsheet() {
 	for _, file := range files {
 		if f, ok := file.(*zip.File); ok {
 			if reSheet.MatchString(f.Name) {
-				newSheet(f, xl)
+				newSheetInfo(f, xl)
 			}
 		}
 	}

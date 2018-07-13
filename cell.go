@@ -14,7 +14,7 @@ const cellStringValueLimit = 32767
 //Cell is a higher level object that wraps ml.Cell with functionality
 type Cell struct {
 	ml    *ml.Cell
-	sheet *Sheet
+	sheet *sheetInfo
 }
 
 //Type returns current type of cell
@@ -90,6 +90,9 @@ func (c *Cell) SetString(value string) {
 		return
 	}
 
+	//TODO: check if sheet is opened as read stream and panic about
+
+	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
 	sid := c.sheet.workbook.doc.sharedStrings.add(c.truncateIfRequired(value))
 	c.ml.Type = types.CellTypeSharedString
 	c.ml.Value = strconv.Itoa(sid)

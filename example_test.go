@@ -144,11 +144,16 @@ func ExampleSpreadsheet_AddSheet() {
 	//now you can use sheet as always
 	fmt.Println(sheet.Name())
 
+	err = xl.SaveAs("new_file.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	//Output:
 	// New sheet
 }
 
-func ExampleSpreadsheet_SetActive() {
+func ExampleSheet_SetActive() {
 	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -157,10 +162,10 @@ func ExampleSpreadsheet_SetActive() {
 	defer xl.Close()
 
 	//add a new sheet, next index is 1
-	xl.AddSheet("New sheet")
+	sheet := xl.AddSheet("New sheet")
 
-	//set sheet with index 1 as active
-	xl.SetActive(1)
+	//set sheet as active
+	sheet.SetActive()
 }
 
 func ExampleSpreadsheet_DeleteSheet() {

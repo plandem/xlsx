@@ -13,12 +13,12 @@ type ColIterator interface {
 type colIterator struct {
 	idx   int
 	max   int
-	sheet *Sheet
+	sheet Sheet
 }
 
 var _ ColIterator = (*colIterator)(nil)
 
-func newColIterator(sheet *Sheet) ColIterator {
+func newColIterator(sheet Sheet) ColIterator {
 	cols, _ := sheet.Dimension()
 	return &colIterator{
 		idx:   -1,
