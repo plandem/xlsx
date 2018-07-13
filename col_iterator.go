@@ -19,9 +19,10 @@ type colIterator struct {
 var _ ColIterator = (*colIterator)(nil)
 
 func newColIterator(sheet *Sheet) ColIterator {
+	cols, _ := sheet.Dimension()
 	return &colIterator{
 		idx:   -1,
-		max:   sheet.TotalCols() - 1,
+		max:   cols - 1,
 		sheet: sheet,
 	}
 }

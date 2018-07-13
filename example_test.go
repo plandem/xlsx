@@ -404,15 +404,15 @@ func Example_append() {
 
 	//to append a new col/row, simple request it - sheet will be auto expanded.
 	//E.g.: we have 14 cols, 28 rows
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 
 	//append 72 rows
 	sheet.Row(99)
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 
 	//append 36 cols
 	sheet.Col(49)
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 
 	//append 3 sheet
 	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
@@ -422,9 +422,9 @@ func Example_append() {
 	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
 
 	//Output:
-	// 14 x 28
-	// 14 x 100
-	// 50 x 100
+	// 14 28
+	// 14 100
+	// 50 100
 	// Sheet1
 	// Sheet1,new sheet,new sheet1,new sheet2
 }
@@ -439,30 +439,30 @@ func Example_insert() {
 
 	sheet := xl.Sheet(0)
 
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 	fmt.Println(strings.Join(sheet.Col(3).Values(), ","))
 
 	//insert a new col
 	sheet.InsertCol(3)
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 	fmt.Println(strings.Join(sheet.Col(3).Values(), ","))
 	fmt.Println(strings.Join(sheet.Col(4).Values(), ","))
 
 	//insert a new row
 	fmt.Println(strings.Join(sheet.Row(9).Values(), ","))
 	sheet.InsertRow(3)
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 	fmt.Println(strings.Join(sheet.Row(9).Values(), ","))
 	fmt.Println(strings.Join(sheet.Row(10).Values(), ","))
 
 	//Output:
-	// 14 x 28
+	// 14 28
 	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
-	// 15 x 28
+	// 15 28
 	// ,,,,,,,,,,,,,,,,,,,,,,,,,,,
 	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
 	// ,,,,1,2,3,4,5,,,,,,
-	// 15 x 29
+	// 15 29
 	// ,,,,,,,,,,,,,,
 	// ,,,,1,2,3,4,5,,,,,,
 }
@@ -477,18 +477,18 @@ func Example_delete() {
 
 	sheet := xl.Sheet(0)
 
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 
 	//delete col
 	fmt.Println(strings.Join(sheet.Col(3).Values(), ","))
 	sheet.DeleteCol(3)
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 	fmt.Println(strings.Join(sheet.Col(3).Values(), ","))
 
 	//delete row
 	fmt.Println(strings.Join(sheet.Row(3).Values(), ","))
 	sheet.DeleteRow(3)
-	fmt.Println(sheet.TotalCols(), "x", sheet.TotalRows())
+	fmt.Println(sheet.Dimension())
 	fmt.Println(strings.Join(sheet.Row(3).Values(), ","))
 
 	//delete sheet
@@ -496,12 +496,12 @@ func Example_delete() {
 	xl.DeleteSheet(0)
 	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
 	//Output:
-	// 14 x 28
+	// 14 28
 	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
-	// 13 x 28
+	// 13 28
 	// ,merged cols,,merged rows+cols,,,,,,2,7,12,17,,,,,,,,,,,,,,,
 	// ,,merged rows,merged rows+cols,,,,,,,,,
-	// 13 x 27
+	// 13 27
 	// with trailing space   ,,merged rows,,,,,,,,,,
 	// Sheet1
 	//
@@ -516,7 +516,8 @@ func ExampleSheet_Row() {
 	defer xl.Close()
 
 	sheet := xl.Sheet(0)
-	for rIdx := 0; rIdx < sheet.TotalRows(); rIdx++ {
+	_, totalRows := sheet.Dimension()
+	for rIdx := 0; rIdx < totalRows; rIdx++ {
 		row := sheet.Row(rIdx)
 		fmt.Println(strings.Join(row.Values(), ","))
 
@@ -547,7 +548,8 @@ func ExampleSheet_Col() {
 	defer xl.Close()
 
 	sheet := xl.Sheet(0)
-	for cIdx := 0; cIdx < sheet.TotalCols(); cIdx++ {
+	totalCols, _ := sheet.Dimension()
+	for cIdx := 0; cIdx < totalCols; cIdx++ {
 		col := sheet.Col(cIdx)
 		fmt.Println(strings.Join(col.Values(), ","))
 

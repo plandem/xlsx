@@ -174,12 +174,11 @@ func (s *Sheet) refreshColRefs(colIndex, rowIndex int) {
 
 //InsertRow inserts a row at 0-based index and returns it. Using to insert a row between other rows.
 func (s *Sheet) InsertRow(index int) *Row {
-	//getting a current height
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	_, curHeight := currRef.ToIndexes()
+	//getting current height
+	_, rows := s.Dimension()
 
 	//expand to a new height
-	s.expandIfRequired(0, curHeight+1)
+	s.expandIfRequired(0, rows)
 
 	//copy previous info
 	copy(s.ml.SheetData[index+1:], s.ml.SheetData[index:])
@@ -205,9 +204,8 @@ func (s *Sheet) DeleteRow(index int) {
 	s.refreshAllRefs(index)
 
 	//update dimension for a new size
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, curHeight := currRef.ToIndexes()
-	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(curWidth, curHeight-1))
+	cols, rows := s.Dimension()
+	s.SetDimension(cols, rows - 1)
 }
 
 //Col returns a col for 0-based index
@@ -239,24 +237,22 @@ func (s *Sheet) Col(index int) *Col {
 		*s.ml.Cols = append(*s.ml.Cols, data)
 	}
 
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	_, curHeight := currRef.ToIndexes()
+	_, rows := s.Dimension()
 
 	index--
 	return &Col{
 		data,
-		newRange(s, index, index, 0, curHeight),
+		newRange(s, index, index, 0, rows - 1),
 	}
 }
 
 //InsertCol inserts a col at 0-based index and returns it. Using to insert a col between other cols.
 func (s *Sheet) InsertCol(index int) *Col {
 	//getting current width
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, _ := currRef.ToIndexes()
+	cols, _ := s.Dimension()
 
 	//expand to a new width
-	s.expandIfRequired(curWidth+1, 0)
+	s.expandIfRequired(cols, 0)
 
 	for iRow, row := range s.ml.SheetData {
 		//copy previous info
@@ -293,9 +289,8 @@ func (s *Sheet) DeleteCol(index int) {
 	}
 
 	//update dimension for a new size
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, curHeight := currRef.ToIndexes()
-	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(curWidth-1, curHeight))
+	cols, rows := s.Dimension()
+	s.SetDimension(cols - 1, rows)
 }
 
 //Range returns a range for ref
@@ -305,34 +300,33 @@ func (s *Sheet) Range(ref types.Ref) *Range {
 
 //Cols returns iterator for all cols of sheet
 func (s *Sheet) Cols() ColIterator {
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, curHeight := currRef.ToIndexes()
-	s.expandIfRequired(curWidth, curHeight)
-
+	cols, rows := s.Dimension()
+	s.expandIfRequired(cols - 1, rows - 1)
 	return newColIterator(s)
 }
 
 //Rows returns iterator for all rows of sheet
 func (s *Sheet) Rows() RowIterator {
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, curHeight := currRef.ToIndexes()
-	s.expandIfRequired(curWidth, curHeight)
-
+	cols, rows := s.Dimension()
+	s.expandIfRequired(cols - 1, rows - 1)
 	return newRowIterator(s)
 }
 
-//TotalCols returns total number of cols in grid
-func (s *Sheet) TotalCols() int {
+//Dimension returns total number of cols and rows in sheet
+func (s *Sheet) Dimension() (cols int, rows int) {
+	if s.ml.Dimension == nil || s.ml.Dimension.Ref == "" {
+		return 0, 0
+	}
+
 	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, _ := currRef.ToIndexes()
-	return curWidth + 1
+	curWidth, curHeight := currRef.ToIndexes()
+	return curWidth + 1, curHeight + 1
 }
 
-//TotalRows returns total number of rows in grid
-func (s *Sheet) TotalRows() int {
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	_, curHeight := currRef.ToIndexes()
-	return curHeight + 1
+//SetDimension sets total number of cols and rows in sheet
+func (s *Sheet) SetDimension(cols, rows int) {
+	dimension := types.Ref(types.CellRefFromIndexes(cols - 1, rows - 1))
+	s.ml.Dimension = &ml.SheetDimension{Ref: dimension}
 }
 
 //resolveDimension check if there is a 'dimension' information(optional) and if there is no any, then calculate it from existing data
@@ -379,12 +373,7 @@ func (s *Sheet) expandOnInit() {
 	s.resolveDimension(false)
 
 	//during initialize phase we need to do hard work first time - expand grid to required size and copy it with existing data
-	_, nextRef := s.ml.Dimension.Ref.ToCellRefs()
-	nextWidth, nextHeight := nextRef.ToIndexes()
-
-	//convert indexes to size
-	nextWidth++
-	nextHeight++
+	nextWidth, nextHeight := s.Dimension()
 
 	//expand grid
 	grid := make([]*ml.Row, nextHeight)
@@ -413,8 +402,8 @@ func (s *Sheet) expandOnInit() {
 	}
 
 	s.ml.SheetData = grid
-	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(nextWidth-1, nextHeight-1))
 	s.isInitialized = true
+	s.SetDimension(nextWidth, nextHeight)
 }
 
 //expandIfRequired expands grid to required dimension
@@ -426,9 +415,8 @@ func (s *Sheet) expandIfRequired(colIndex, rowIndex int) {
 	s.resolveDimension(false)
 
 	//during expand phase we need to increase grid to new size only, without copying any info - it's already in place
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, curHeight := currRef.ToIndexes()
-	nextWidth, nextHeight := colIndex, rowIndex
+	curWidth, curHeight := s.Dimension()
+	nextWidth, nextHeight := colIndex + 1, rowIndex + 1
 
 	//shrink is not supported here, so fix for current size if required
 	if nextWidth < curWidth {
@@ -443,12 +431,6 @@ func (s *Sheet) expandIfRequired(colIndex, rowIndex int) {
 	if curWidth >= nextWidth && curHeight >= nextHeight {
 		return
 	}
-
-	//convert indexes to size
-	curWidth++
-	curHeight++
-	nextWidth++
-	nextHeight++
 
 	//TODO: think about optimizing - use incremental step to decrease number of allocations for +1 step case, e.g.: size = (size * 3) / 2 + 1
 	//step to expand width
@@ -472,7 +454,7 @@ func (s *Sheet) expandIfRequired(colIndex, rowIndex int) {
 	}
 
 	//update dimension for a new size
-	s.ml.Dimension.Ref = types.Ref(types.CellRefFromIndexes(nextWidth-1, nextHeight-1))
+	s.SetDimension(nextWidth, nextHeight)
 }
 
 //shrinkIfRequired shrinks grid to minimal size and set actual dimension. Called right before packing sheet data.

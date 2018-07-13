@@ -19,9 +19,10 @@ type rowIterator struct {
 var _ RowIterator = (*rowIterator)(nil)
 
 func newRowIterator(sheet *Sheet) RowIterator {
+	_, rows := sheet.Dimension()
 	return &rowIterator{
 		idx:  -1,
-		max: sheet.TotalRows() - 1,
+		max: rows - 1,
 		sheet:  sheet,
 	}
 }

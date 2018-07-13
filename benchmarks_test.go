@@ -235,7 +235,8 @@ func BenchmarkReadBigFile(b *testing.B) {
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*ooxml.Sheet)
-			for row_i, row_max := 0, sheet.TotalRows(); row_i < row_max; row_i++ {
+			_, row_max := sheet.Dimension()
+			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
 			}
 		}},
@@ -274,7 +275,8 @@ func BenchmarkReadHugeFile(b *testing.B) {
 		//}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*ooxml.Sheet)
-			for row_i, row_max := 0, sheet.TotalRows(); row_i < row_max; row_i++ {
+			_, row_max := sheet.Dimension()
+			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
 			}
 		}},
@@ -320,7 +322,8 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*ooxml.Sheet)
-			for row_i, row_max := 0, sheet.TotalRows(); row_i < row_max; row_i++ {
+			_, row_max := sheet.Dimension()
+			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
 			}
 		}, func(f interface{}) {
@@ -348,29 +351,30 @@ func BenchmarkUpdateHugeFile(b *testing.B) {
 		callback func(f interface{}, s interface{}, value *string)
 		close    func(f interface{})
 	}{
-		//{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string) {
-		//	xl := f.(*excelize.File)
-		//	rows := xl.GetRows("Sheet1")
-		//
-		//	for _, row := range rows {
-		//		*value = row[0]
-		//	}
-		//}, func(f interface{}) {
-		//	xl := f.(*excelize.File)
-		//	xl.SaveAs("saved_huge_excelize.xlsx")
-		//}},
-		//{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
-		//	sheet := s.(*xlsx.Sheet)
-		//	for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
-		//		*value = sheet.Cell(0, row_i).Value
-		//	}
-		//}, func(f interface{}) {
-		//	xl := f.(*xlsx.File)
-		//	xl.Save("saved_huge_tealeg.xlsx")
-		//}},
+		{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string) {
+			xl := f.(*excelize.File)
+			rows := xl.GetRows("Sheet1")
+
+			for _, row := range rows {
+				*value = row[0]
+			}
+		}, func(f interface{}) {
+			xl := f.(*excelize.File)
+			xl.SaveAs("saved_huge_excelize.xlsx")
+		}},
+		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
+			sheet := s.(*xlsx.Sheet)
+			for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
+				*value = sheet.Cell(0, row_i).Value
+			}
+		}, func(f interface{}) {
+			xl := f.(*xlsx.File)
+			xl.Save("saved_huge_tealeg.xlsx")
+		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*ooxml.Sheet)
-			for row_i, row_max := 0, sheet.TotalRows(); row_i < row_max; row_i++ {
+			_, row_max := sheet.Dimension()
+			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
 			}
 		}, func(f interface{}) {

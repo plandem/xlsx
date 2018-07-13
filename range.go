@@ -44,7 +44,7 @@ func (r *Range) Cells() RangeIterator {
 
 //Values returns values for all cells in range
 func (r *Range) Values() []string {
-	width, height := r.bounds.Size()
+	width, height := r.bounds.Dimension()
 	values := make([]string, 0, width*height)
 
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {

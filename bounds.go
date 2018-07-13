@@ -48,8 +48,8 @@ func (r *bounds) Contains(cellCol, cellRow int) bool {
 	return (cellCol >= r.fromCol && cellCol <= r.toCol) && (cellRow >= r.fromRow && cellRow <= r.toRow)
 }
 
-//Size returns total cols and rows
-func (r *bounds) Size() (width int, height int) {
+//Dimension returns total number of cols and rows
+func (r *bounds) Dimension() (width int, height int) {
 	width = r.toCol - r.fromCol
 	height = r.toRow - r.fromRow
 	return

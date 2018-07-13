@@ -34,8 +34,9 @@ func main() {
 
 	//iterating via indexes
 	sheet := xl.Sheet(0)
-	for iRow, iMaxRow := 0, sheet.TotalRows(); iRow < iMaxRow; iRow++ {
-		for iCol, iMaxCol := 0, sheet.TotalCols(); iCol < iMaxCol; iCol++ {
+	iMaxCol, iMaxRow := sheet.Dimension()
+	for iRow := 0; iRow < iMaxRow; iRow++ {
+		for iCol := 0; iCol < iMaxCol; iCol++ {
 			if iRow % 2 == 0 && iCol % 2 == 0 {
 				cell := sheet.Cell(iCol, iRow)
 				cell.SetFormatting(redBoldYellow)
