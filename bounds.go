@@ -38,17 +38,17 @@ func newBounds(fromCol, toCol, fromRow, toRow int) *bounds {
 	}
 }
 
-//Contains checks if celRef is inside of range
+//ContainsRef checks if celRef is inside of range
 func (r *bounds) ContainsRef(celRef types.CellRef) bool {
 	return r.Contains(celRef.ToIndexes())
 }
 
-//ContainsIndexes checks if is inside of range
-func (r *bounds) Contains(cellCol, cellRow int) bool {
-	return (cellCol >= r.fromCol && cellCol <= r.toCol) && (cellRow >= r.fromRow && cellRow <= r.toRow)
+//Contains checks if indexes cIdx and rIdx are inside of range
+func (r *bounds) Contains(cIdx, rIdx int) bool {
+	return (cIdx >= r.fromCol && cIdx <= r.toCol) && (rIdx >= r.fromRow && rIdx <= r.toRow)
 }
 
-//Dimension returns total number of cols and rows
+//Dimension returns total number of cols and rows in range
 func (r *bounds) Dimension() (width int, height int) {
 	width = r.toCol - r.fromCol
 	height = r.toRow - r.fromRow
