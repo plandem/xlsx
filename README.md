@@ -49,7 +49,7 @@ func main() {
 		_, row := rows.Next()
 		
 		for cells := row.Cells(); cells.HasNext(); {
-			iRow, iCol, cell := cells.Next()
+			iCol, iRow, cell := cells.Next()
 			if iRow % 2 == 0 && iCol % 2 == 0 {
 				cell.SetFormatting(redBoldYellow)
 			}
