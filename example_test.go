@@ -295,25 +295,34 @@ func Example_update() {
 	//update value of cells in row
 	row := sheet.Row(9)
 	fmt.Println(strings.Join(row.Values(), ","))
-	for i, c := range row.Cells() {
-		c.SetValue(i)
-	}
+	row.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
+		c.SetValue(idx)
+	})
+	//for i, c := range row.Cells() {
+	//	c.SetValue(i)
+	//}
 	fmt.Println(strings.Join(row.Values(), ","))
 
 	//update value of cells in col
 	col := sheet.Col(3)
 	fmt.Println(strings.Join(col.Values(), ","))
-	for i, c := range col.Cells() {
-		c.SetValue(i)
-	}
+	col.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
+		c.SetValue(idx)
+	})
+	//for i, c := range col.Cells() {
+	//	c.SetValue(i)
+	//}
 	fmt.Println(strings.Join(col.Values(), ","))
 
 	//update value of cells in range
 	area := sheet.Range("D10:H13")
 	fmt.Println(strings.Join(area.Values(), ","))
-	for i, c := range area.Cells() {
-		c.SetValue(i)
-	}
+	//for i, c := range area.Cells() {
+	//	c.SetValue(i)
+	//}
+	area.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
+		c.SetValue(idx)
+	})
 	fmt.Println(strings.Join(area.Values(), ","))
 
 	//Output:
@@ -498,32 +507,7 @@ func Example_delete() {
 	//
 }
 
-func Example_iterationByCells() {
-	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer xl.Close()
-
-	sheet := xl.Sheet(0)
-	for cIdx := 0; cIdx < sheet.TotalCols(); cIdx++ {
-		for rIdx := 0; rIdx < sheet.TotalRows(); rIdx++ {
-			c := sheet.Cell(cIdx, rIdx)
-			fmt.Println(c.Value())
-		}
-	}
-
-	//Output:
-	//Header 1
-	//Value 1-1
-	//Value 1-2
-	//Header 2
-	//Value 2-1
-	//Value 2-2
-}
-
-func Example_iterationByRows() {
+func ExampleSheet_Row() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -534,22 +518,27 @@ func Example_iterationByRows() {
 	sheet := xl.Sheet(0)
 	for rIdx := 0; rIdx < sheet.TotalRows(); rIdx++ {
 		row := sheet.Row(rIdx)
+		fmt.Println(strings.Join(row.Values(), ","))
 
-		for _, c := range row.Cells() {
-			fmt.Println(c.Value())
+		for cells := row.Cells(); cells.HasNext(); {
+			_, _, cell := cells.Next()
+			fmt.Println(cell.Value())
 		}
 	}
 
 	//Output:
+	//Header 1,Header 2
 	//Header 1
 	//Header 2
+	//Value 1-1,Value 2-1
 	//Value 1-1
 	//Value 2-1
+	//Value 1-2,Value 2-2
 	//Value 1-2
 	//Value 2-2
 }
 
-func Example_iterationByCols() {
+func ExampleSheet_Col() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -560,16 +549,20 @@ func Example_iterationByCols() {
 	sheet := xl.Sheet(0)
 	for cIdx := 0; cIdx < sheet.TotalCols(); cIdx++ {
 		col := sheet.Col(cIdx)
+		fmt.Println(strings.Join(col.Values(), ","))
 
-		for _, c := range col.Cells() {
-			fmt.Println(c.Value())
+		for cells := col.Cells(); cells.HasNext(); {
+			_, _, cell := cells.Next()
+			fmt.Println(cell.Value())
 		}
 	}
 
 	//Output:
+	//Header 1,Value 1-1,Value 1-2
 	//Header 1
 	//Value 1-1
 	//Value 1-2
+	//Header 2,Value 2-1,Value 2-2
 	//Header 2
 	//Value 2-1
 	//Value 2-2
@@ -590,12 +583,23 @@ func ExampleSheet_Rows() {
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))
+
+		for cells := row.Cells(); cells.HasNext(); {
+			_, _, cell := cells.Next()
+			fmt.Println(cell.Value())
+		}
 	}
 
 	//Output:
 	//Header 1,Header 2
+	//Header 1
+	//Header 2
 	//Value 1-1,Value 2-1
+	//Value 1-1
+	//Value 2-1
 	//Value 1-2,Value 2-2
+	//Value 1-2
+	//Value 2-2
 }
 
 func ExampleSheet_Cols() {
@@ -613,11 +617,22 @@ func ExampleSheet_Cols() {
 	for cols := sheet.Cols(); cols.HasNext(); {
 		_, col := cols.Next()
 		fmt.Println(strings.Join(col.Values(), ","))
+
+		for cells := col.Cells(); cells.HasNext(); {
+			_, _, cell := cells.Next()
+			fmt.Println(cell.Value())
+		}
 	}
 
 	//Output:
 	//Header 1,Value 1-1,Value 1-2
+	//Header 1
+	//Value 1-1
+	//Value 1-2
 	//Header 2,Value 2-1,Value 2-2
+	//Header 2
+	//Value 2-1
+	//Value 2-2
 }
 
 func ExampleSheet_Range() {
@@ -631,7 +646,7 @@ func ExampleSheet_Range() {
 	//get sheet by 0-based index
 	sheet := xl.Sheet(0)
 	r := sheet.Range("A1:B3")
-	for cells := r.Iterator(); cells.HasNext(); {
+	for cells := r.Cells(); cells.HasNext(); {
 		_, _, cell := cells.Next()
 		fmt.Println(cell.Value())
 	}
@@ -642,6 +657,26 @@ func ExampleSheet_Range() {
 	//Value 2-1
 	//Value 1-2
 	//Value 2-2
+}
+
+func ExampleRange_Walk() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	//get sheet by 0-based index
+	sheet := xl.Sheet(0)
+	r := sheet.Range("A1:B3")
+	r.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
+		c.SetValue(idx)
+	})
+
+	fmt.Println(strings.Join(r.Values(), ","))
+	//Output:
+	//0,1,2,3,4,5
 }
 
 func ExampleSpreadsheet_Sheets() {

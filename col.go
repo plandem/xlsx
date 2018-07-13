@@ -6,7 +6,7 @@ import (
 	"github.com/plandem/xlsx/options"
 )
 
-//Col is a higher level object that wraps ml.Col with functionality
+//Col is a higher level object that wraps ml.Col with functionality. Inherits functionality of Range
 type Col struct {
 	ml *ml.Col
 	*Range

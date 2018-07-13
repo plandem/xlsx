@@ -6,7 +6,7 @@ import (
 	"github.com/plandem/xlsx/options"
 )
 
-//Row is a higher level object that wraps ml.Row with functionality
+//Row is a higher level object that wraps ml.Row with functionality. Inherits functionality of Range
 type Row struct {
 	ml *ml.Row
 	*Range

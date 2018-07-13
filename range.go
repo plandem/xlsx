@@ -29,24 +29,17 @@ func newRange(sheet *Sheet, fromCol, toCol, fromRow, toRow int) *Range {
 
 //Reset resets each cell data into zero state
 func (r *Range) Reset() {
-	r.Walk(func(c *Cell) { c.Reset() })
+	r.Walk(func(idx, cIdx, rIdx int, c *Cell) { c.Reset() })
 }
 
 //Clear clears each cell value in range
 func (r *Range) Clear() {
-	r.Walk(func(c *Cell) { c.Clear() })
+	r.Walk(func(idx, cIdx, rIdx int, c *Cell) { c.Clear() })
 }
 
-//Cells returns all cells in range
-func (r *Range) Cells() []*Cell {
-	width, height := r.bounds.Size()
-	cells := make([]*Cell, 0, width*height)
-
-	r.Walk(func(c *Cell) {
-		cells = append(cells, c)
-	})
-
-	return cells
+//Cells returns iterator for all cells in range
+func (r *Range) Cells() RangeIterator {
+	return newRangeIterator(r)
 }
 
 //Values returns values for all cells in range
@@ -54,29 +47,24 @@ func (r *Range) Values() []string {
 	width, height := r.bounds.Size()
 	values := make([]string, 0, width*height)
 
-	r.Walk(func(c *Cell) {
+	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
 		values = append(values, c.Value())
 	})
 
 	return values
 }
 
-//SetFormatting sets style format to all cells in range
-func (r *Range) SetFormatting(styleRef format.StyleRefID) {
-	r.Walk(func(c *Cell) {
-		c.SetFormatting(styleRef)
-	})
-}
-
 //Walk calls callback cb for each Cell in range
-func (r *Range) Walk(cb func(c *Cell)) {
-	for cells := r.Iterator(); cells.HasNext(); {
-		_, _, cell := cells.Next()
-		cb(cell)
+func (r *Range) Walk(cb func(idx, cIdx, rIdx int, c *Cell)) {
+	for idx, cells := 0, r.Cells(); cells.HasNext(); idx++ {
+		iCol, iRow, cell := cells.Next()
+		cb(idx, iCol, iRow, cell)
 	}
 }
 
-//Iterator returns iterator for all cells in range
-func (r *Range) Iterator() RangeIterator {
-	return newRangeIterator(r)
+//SetFormatting sets style format to all cells in range
+func (r *Range) SetFormatting(styleRef format.StyleRefID) {
+	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
+		c.SetFormatting(styleRef)
+	})
 }

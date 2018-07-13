@@ -34,11 +34,10 @@ func main() {
 
 	//common way for iterating
 	sheet := xl.Sheet(0)
-	for iRow, iMax := 0, sheet.TotalRows(); iRow < iMax; iRow++ {
-		row := sheet.Row(iRow)
-
-		for iCol, cell := range row.Cells() {
+	for iRow, iMaxRow := 0, sheet.TotalRows(); iRow < iMaxRow; iRow++ {
+		for iCol, iMaxCol := 0, sheet.TotalCols(); iCol < iMaxCol; iCol++ {
 			if iRow % 2 == 0 && iCol % 2 == 0 {
+				cell := sheet.Cell(iCol, iRow)
 				cell.SetFormatting(redBoldYellow)
 			}
 		}
@@ -46,9 +45,10 @@ func main() {
 
 	//iterating via iterators
 	for rows := sheet.Rows(); rows.HasNext(); {
-		iRow, row := rows.Next()
+		_, row := rows.Next()
 		
-		for iCol, cell := range row.Cells() {
+		for cells := row.Cells(); cells.HasNext(); {
+			iRow, iCol, cell := cells.Next()
 			if iRow % 2 == 0 && iCol % 2 == 0 {
 				cell.SetFormatting(redBoldYellow)
 			}
