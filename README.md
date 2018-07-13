@@ -32,7 +32,7 @@ func main() {
 		),
 	)
 
-	//common way for iterating
+	//iterating via indexes
 	sheet := xl.Sheet(0)
 	for iRow, iMaxRow := 0, sheet.TotalRows(); iRow < iMaxRow; iRow++ {
 		for iCol, iMaxCol := 0, sheet.TotalCols(); iCol < iMaxCol; iCol++ {
@@ -55,6 +55,16 @@ func main() {
 		}
 	}
     	
+	//walk through the range's cells
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		row.Walk(func(idx, iCol, iRow int, cell *xlsx.Cell) {
+			if iRow % 2 == 0 && iCol % 2 == 0 {
+				cell.SetFormatting(redBoldYellow)
+			}
+		})
+ 	}
+    		
 	xl.SaveAs("test1.xlsx")
 }
 ```
