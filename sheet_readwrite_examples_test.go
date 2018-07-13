@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func ExampleSheetReadWrite_SetActive() {
+func ExampleSheet_SetActive() {
 	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +22,7 @@ func ExampleSheetReadWrite_SetActive() {
 	sheet.SetActive()
 }
 
-func ExampleSheetReadWrite_Cell() {
+func ExampleSheet_Cell() {
 	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -40,7 +40,7 @@ func ExampleSheetReadWrite_Cell() {
 	// last cell
 }
 
-func ExampleSheetReadWrite_CellByRef() {
+func ExampleSheet_CellByRef() {
 	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -58,7 +58,7 @@ func ExampleSheetReadWrite_CellByRef() {
 	// last cell
 }
 
-func ExampleSheetReadWrite_Row() {
+func ExampleSheet_Row() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -90,7 +90,7 @@ func ExampleSheetReadWrite_Row() {
 	//Value 2-2
 }
 
-func ExampleSheetReadWrite_Col() {
+func ExampleSheet_Col() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -121,7 +121,7 @@ func ExampleSheetReadWrite_Col() {
 	//Value 2-2
 }
 
-func ExampleSheetReadWrite_Rows() {
+func ExampleSheet_Rows() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -155,7 +155,7 @@ func ExampleSheetReadWrite_Rows() {
 	//Value 2-2
 }
 
-func ExampleSheetReadWrite_Cols() {
+func ExampleSheet_Cols() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -188,7 +188,7 @@ func ExampleSheetReadWrite_Cols() {
 	//Value 2-2
 }
 
-func ExampleSheetReadWrite_Range() {
+func ExampleSheet_Range() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -212,7 +212,7 @@ func ExampleSheetReadWrite_Range() {
 	//Value 2-2
 }
 
-func ExampleSheetReadWrite_Walk() {
+func ExampleSheet_Walk() {
 	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
 	if err != nil {
 		log.Fatal(err)
