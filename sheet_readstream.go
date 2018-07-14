@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-type SheetReadStream struct {
+type sheetReadStream struct {
 	*sheetInfo
 	stream     *ooxml.StreamFileReader
 	rowReader  ooxml.StreamReaderIterator
@@ -16,9 +16,9 @@ type SheetReadStream struct {
 	multiPhase bool
 }
 
-var _ Sheet = (*SheetReadStream)(nil)
+var _ Sheet = (*sheetReadStream)(nil)
 
-func (s *SheetReadStream) Cell(colIndex, rowIndex int) *Cell {
+func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	var data *ml.Cell
 
 	row := s.Row(rowIndex)
@@ -33,16 +33,16 @@ func (s *SheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	return &Cell{ml: data, sheet: s.sheetInfo}
 }
 
-func (s *SheetReadStream) CellByRef(cellRef types.CellRef) *Cell {
+func (s *sheetReadStream) CellByRef(cellRef types.CellRef) *Cell {
 	cid, rid := cellRef.ToIndexes()
 	return s.Cell(cid, rid)
 }
 
-func (s *SheetReadStream) Range(ref types.Ref) *Range {
+func (s *sheetReadStream) Range(ref types.Ref) *Range {
 	return newRangeFromRef(s, ref)
 }
 
-func (s *SheetReadStream) Row(index int) *Row {
+func (s *sheetReadStream) Row(index int) *Row {
 	if s.rowReader == nil {
 		return nil
 	}
@@ -78,7 +78,7 @@ func (s *SheetReadStream) Row(index int) *Row {
 	}
 }
 
-func (s *SheetReadStream) nextRow(decoder *xml.Decoder, start *xml.StartElement) bool {
+func (s *sheetReadStream) nextRow(decoder *xml.Decoder, start *xml.StartElement) bool {
 	if start != nil && start.Name.Local == "row" {
 		row := &ml.Row{}
 		decoder.DecodeElement(row, start)
@@ -103,16 +103,16 @@ func (s *SheetReadStream) nextRow(decoder *xml.Decoder, start *xml.StartElement)
 	return false
 }
 
-func (s *SheetReadStream) Rows() RowIterator {
+func (s *sheetReadStream) Rows() RowIterator {
 	return newRowIterator(s)
 }
 
 //Close frees allocated by sheet resources
-func (s *SheetReadStream) Close() {
+func (s *sheetReadStream) Close() {
 	s.stream.Close()
 }
 
-func (s *SheetReadStream) emptyDataRow(indexRef int) *ml.Row {
+func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 	width, _ := s.Dimension()
 	return &ml.Row{
 		Ref:   indexRef,
@@ -121,7 +121,7 @@ func (s *SheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 }
 
 //afterOpen loads worksheet data and initializes it if required
-func (s *SheetReadStream) afterOpen() {
+func (s *sheetReadStream) afterOpen() {
 	if s.currentRow == nil {
 		s.stream = s.file.ReadStream()
 
@@ -157,42 +157,42 @@ func (s *SheetReadStream) afterOpen() {
 }
 
 //not allowed methods for stream reading mode
-func (s *SheetReadStream) Col(index int) *Col {
+func (s *sheetReadStream) Col(index int) *Col {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) Cols() ColIterator {
+func (s *sheetReadStream) Cols() ColIterator {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) InsertCol(index int) *Col {
+func (s *sheetReadStream) InsertCol(index int) *Col {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) InsertRow(index int) *Row {
+func (s *sheetReadStream) InsertRow(index int) *Row {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) DeleteRow(index int) {
+func (s *sheetReadStream) DeleteRow(index int) {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) DeleteCol(index int) {
+func (s *sheetReadStream) DeleteCol(index int) {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) SetDimension(cols, rows int) {
+func (s *sheetReadStream) SetDimension(cols, rows int) {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) SetActive() {
+func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) SetState(state types.VisibilityType) {
+func (s *sheetReadStream) SetState(state types.VisibilityType) {
 	panic(errorNotSupported)
 }
 
-func (s *SheetReadStream) SetName(name string) {
+func (s *sheetReadStream) SetName(name string) {
 	panic(errorNotSupported)
 }

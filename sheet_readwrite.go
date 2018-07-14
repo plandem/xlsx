@@ -6,14 +6,14 @@ import (
 	"math"
 )
 
-type SheetReadWrite struct {
+type sheetReadWrite struct {
 	*sheetInfo
 }
 
-var _ Sheet = (*SheetReadWrite)(nil)
+var _ Sheet = (*sheetReadWrite)(nil)
 
 //Cell returns a cell for 0-based indexes
-func (s *SheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
+func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.expandIfRequired(colIndex, rowIndex)
 	s.resolveMergedIfRequired(false)
 
@@ -40,13 +40,13 @@ func (s *SheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 }
 
 //CellByRef returns a cell for ref
-func (s *SheetReadWrite) CellByRef(cellRef types.CellRef) *Cell {
+func (s *sheetReadWrite) CellByRef(cellRef types.CellRef) *Cell {
 	cid, rid := cellRef.ToIndexes()
 	return s.Cell(cid, rid)
 }
 
 //Row returns a row for 0-based index
-func (s *SheetReadWrite) Row(index int) *Row {
+func (s *sheetReadWrite) Row(index int) *Row {
 	s.expandIfRequired(0, index)
 
 	data := s.ml.SheetData[index]
@@ -57,7 +57,7 @@ func (s *SheetReadWrite) Row(index int) *Row {
 }
 
 //refreshRefs update refs for all rows/cells starting from row with 0-based index
-func (s *SheetReadWrite) refreshAllRefs(index int) {
+func (s *sheetReadWrite) refreshAllRefs(index int) {
 	for iRow, rowMax := index, len(s.ml.SheetData); iRow < rowMax; iRow++ {
 		row := s.ml.SheetData[iRow]
 		row.Ref = iRow + 1
@@ -71,7 +71,7 @@ func (s *SheetReadWrite) refreshAllRefs(index int) {
 }
 
 //refreshColRefs update refs only for cells at row 0-based index rowIndex and starting 0-based index colIndex
-func (s *SheetReadWrite) refreshColRefs(colIndex, rowIndex int) {
+func (s *sheetReadWrite) refreshColRefs(colIndex, rowIndex int) {
 	for iCol, colMax := colIndex, len(s.ml.SheetData[rowIndex].Cells); iCol < colMax; iCol++ {
 		cell := s.ml.SheetData[rowIndex].Cells[iCol]
 		if !s.isCellEmpty(cell) {
@@ -81,7 +81,7 @@ func (s *SheetReadWrite) refreshColRefs(colIndex, rowIndex int) {
 }
 
 //InsertRow inserts a row at 0-based index and returns it. Using to insert a row between other rows.
-func (s *SheetReadWrite) InsertRow(index int) *Row {
+func (s *sheetReadWrite) InsertRow(index int) *Row {
 	//getting current height
 	_, rows := s.Dimension()
 
@@ -103,7 +103,7 @@ func (s *SheetReadWrite) InsertRow(index int) *Row {
 }
 
 //DeleteRow deletes a row at 0-based index
-func (s *SheetReadWrite) DeleteRow(index int) {
+func (s *sheetReadWrite) DeleteRow(index int) {
 	s.expandIfRequired(0, index)
 
 	s.ml.SheetData = append(s.ml.SheetData[:index], s.ml.SheetData[index+1:]...)
@@ -117,7 +117,7 @@ func (s *SheetReadWrite) DeleteRow(index int) {
 }
 
 //Col returns a col for 0-based index
-func (s *SheetReadWrite) Col(index int) *Col {
+func (s *sheetReadWrite) Col(index int) *Col {
 	s.expandIfRequired(index, 0)
 
 	if s.ml.Cols == nil {
@@ -155,7 +155,7 @@ func (s *SheetReadWrite) Col(index int) *Col {
 }
 
 //InsertCol inserts a col at 0-based index and returns it. Using to insert a col between other cols.
-func (s *SheetReadWrite) InsertCol(index int) *Col {
+func (s *sheetReadWrite) InsertCol(index int) *Col {
 	//getting current width
 	cols, _ := s.Dimension()
 
@@ -177,7 +177,7 @@ func (s *SheetReadWrite) InsertCol(index int) *Col {
 }
 
 //DeleteCol deletes a col at 0-based index
-func (s *SheetReadWrite) DeleteCol(index int) {
+func (s *sheetReadWrite) DeleteCol(index int) {
 	s.expandIfRequired(index, 0)
 
 	if s.ml.Cols != nil {
@@ -202,26 +202,26 @@ func (s *SheetReadWrite) DeleteCol(index int) {
 }
 
 //Range returns a range for ref
-func (s *SheetReadWrite) Range(ref types.Ref) *Range {
+func (s *sheetReadWrite) Range(ref types.Ref) *Range {
 	return newRangeFromRef(s, ref)
 }
 
 //Cols returns iterator for all cols of sheet
-func (s *SheetReadWrite) Cols() ColIterator {
+func (s *sheetReadWrite) Cols() ColIterator {
 	cols, rows := s.Dimension()
 	s.expandIfRequired(cols-1, rows-1)
 	return newColIterator(s)
 }
 
 //Rows returns iterator for all rows of sheet
-func (s *SheetReadWrite) Rows() RowIterator {
+func (s *sheetReadWrite) Rows() RowIterator {
 	cols, rows := s.Dimension()
 	s.expandIfRequired(cols-1, rows-1)
 	return newRowIterator(s)
 }
 
 //resolveDimension check if there is a 'dimension' information(optional) and if there is no any, then calculate it from existing data
-func (s *SheetReadWrite) resolveDimension(force bool) {
+func (s *sheetReadWrite) resolveDimension(force bool) {
 	if !force && (s.ml.Dimension != nil && s.ml.Dimension.Ref != "") {
 		return
 	}
@@ -260,7 +260,7 @@ func (s *SheetReadWrite) resolveDimension(force bool) {
 }
 
 //expandOnInit expands grid to required dimension and copy existing data
-func (s *SheetReadWrite) expandOnInit() {
+func (s *sheetReadWrite) expandOnInit() {
 	s.resolveDimension(false)
 
 	//during initialize phase we need to do hard work first time - expand grid to required size and copy it with existing data
@@ -298,7 +298,7 @@ func (s *SheetReadWrite) expandOnInit() {
 }
 
 //expandIfRequired expands grid to required dimension
-func (s *SheetReadWrite) expandIfRequired(colIndex, rowIndex int) {
+func (s *sheetReadWrite) expandIfRequired(colIndex, rowIndex int) {
 	if !s.isInitialized {
 		s.expandOnInit()
 	}
@@ -349,7 +349,7 @@ func (s *SheetReadWrite) expandIfRequired(colIndex, rowIndex int) {
 }
 
 //shrinkIfRequired shrinks grid to minimal size and set actual dimension. Called right before packing sheet data.
-func (s *SheetReadWrite) shrinkIfRequired() {
+func (s *sheetReadWrite) shrinkIfRequired() {
 	grid := make([]*ml.Row, 0, len(s.ml.SheetData))
 
 	for _, row := range s.ml.SheetData {
@@ -374,7 +374,7 @@ func (s *SheetReadWrite) shrinkIfRequired() {
 }
 
 //resolveMergedIfRequired transforms merged cells into bounds
-func (s *SheetReadWrite) resolveMergedIfRequired(force bool) {
+func (s *sheetReadWrite) resolveMergedIfRequired(force bool) {
 	if force || (s.ml.MergeCells != nil && (len(*s.ml.MergeCells) != len(s.mergedRanges))) {
 		s.mergedRanges = make([]*bounds, len(*s.ml.MergeCells))
 
@@ -385,20 +385,20 @@ func (s *SheetReadWrite) resolveMergedIfRequired(force bool) {
 }
 
 //BeforeMarshalXML shrinks data to optimize output and returns related ML information for marshaling
-func (s *SheetReadWrite) BeforeMarshalXML() interface{} {
+func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
 	return &s.ml
 }
 
 //afterOpen is callback that will be called right after requesting an already existing sheet. By default, it does nothing
-func (s *SheetReadWrite) afterOpen() {
+func (s *sheetReadWrite) afterOpen() {
 	s.file.LoadIfRequired(s.expandOnInit)
 	s.file.MarkAsUpdated()
 }
 
 //afterCreate initializes a new sheet
-func (s *SheetReadWrite) afterCreate(name string) {
+func (s *sheetReadWrite) afterCreate(name string) {
 	//register file
 	s.sheetInfo.afterCreate(name)
 

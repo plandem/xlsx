@@ -57,7 +57,7 @@ func (xl *Spreadsheet) Sheet(i int) Sheet {
 
 	si := xl.sheets[i]
 
-	sheet := &SheetReadWrite{si}
+	sheet := &sheetReadWrite{si}
 	si.sheet = sheet
 	sheet.afterOpen()
 	return sheet
@@ -72,7 +72,7 @@ func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
 	}
 
 	si := xl.sheets[i]
-	sheet := &SheetReadStream{sheetInfo: &(*si), multiPhase: multiPhase}
+	sheet := &sheetReadStream{sheetInfo: &(*si), multiPhase: multiPhase}
 	sheet.afterOpen()
 	return sheet
 }
@@ -108,7 +108,7 @@ func (xl *Spreadsheet) DeleteSheet(i int) {
 //AddSheet adds a new sheet with name to document
 func (xl *Spreadsheet) AddSheet(name string) Sheet {
 	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
-		sheet := &SheetReadWrite{si}
+		sheet := &sheetReadWrite{si}
 		si.sheet = sheet
 		sheet.afterCreate(name)
 		return sheet
