@@ -453,3 +453,29 @@ func Example_delete() {
 	// Sheet1
 	//
 }
+
+// Demonstrates how to open sheet in streaming mode
+func Example_streams() {
+	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	// Open sheet in stream reading mode with single phase, some meta information is NOT available (e.g. merged cells)
+	sheet := xl.SheetReader(0, false)
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+	sheet.Close()
+
+	// Open sheet in stream reading mode with multi phases, meta information is available
+	sheet = xl.SheetReader(0, true)
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+	sheet.Close()
+}
