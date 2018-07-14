@@ -18,9 +18,9 @@ func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.resolveMergedIfRequired(false)
 
 	//is merged cell?
-	for _, mergedRange := range s.mergedRanges {
-		if mergedRange.Contains(colIndex, rowIndex) {
-			colIndex, rowIndex = mergedRange.fromCol, mergedRange.fromRow
+	for _, mergedBounds := range s.mergedBounds {
+		if mergedBounds.Contains(colIndex, rowIndex) {
+			colIndex, rowIndex = mergedBounds.fromCol, mergedBounds.fromRow
 			break
 		}
 	}
@@ -371,17 +371,6 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 
 	s.ml.SheetData = grid
 	s.resolveDimension(true)
-}
-
-//resolveMergedIfRequired transforms merged cells into bounds
-func (s *sheetReadWrite) resolveMergedIfRequired(force bool) {
-	if force || (s.ml.MergeCells != nil && (len(*s.ml.MergeCells) != len(s.mergedRanges))) {
-		s.mergedRanges = make([]*bounds, len(*s.ml.MergeCells))
-
-		for i, mergedRef := range *s.ml.MergeCells {
-			s.mergedRanges[i] = newBoundsFromRef(mergedRef.Ref)
-		}
-	}
 }
 
 //BeforeMarshalXML shrinks data to optimize output and returns related ML information for marshaling

@@ -30,3 +30,8 @@ func (r *Row) SetFormatting(styleRef format.StyleRefID) {
 	r.ml.CustomFormat = true
 	r.ml.Style = styleRef
 }
+
+//CopyTo copies row cells into another row with rIdx index
+func (r *Row) CopyTo(rIdx int) {
+	//TODO: check if sheet is opened as read stream and panic about
+}

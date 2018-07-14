@@ -29,3 +29,8 @@ func (c *Col) Set(o *options.ColumnOptions) {
 func (c *Col) SetFormatting(styleRef format.StyleRefID) {
 	c.ml.Style = styleRef
 }
+
+//CopyTo copies col cells into another col with cIdx index
+func (c *Col) CopyTo(cIdx int) {
+	//TODO: check if sheet is opened as read stream and panic about
+}

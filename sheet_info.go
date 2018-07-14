@@ -16,7 +16,7 @@ import (
 type sheetInfo struct {
 	ml            ml.Worksheet
 	workbook      *Workbook
-	mergedRanges  []*bounds
+	mergedBounds  []*bounds
 	isInitialized bool
 	index         int
 	file          *ooxml.PackageFile
@@ -172,6 +172,17 @@ func (s *sheetInfo) afterCreate(name string) {
 	s.file.MarkAsUpdated()
 	s.workbook.file.MarkAsUpdated()
 	s.workbook.doc.pkg.ContentTypes().RegisterContent(s.file.FileName(), internal.ContentTypeWorksheet)
+}
+
+//resolveMergedIfRequired transforms merged cells into bounds
+func (s *sheetInfo) resolveMergedIfRequired(force bool) {
+	if force || (s.ml.MergeCells != nil && (len(*s.ml.MergeCells) != len(s.mergedBounds))) {
+		s.mergedBounds = make([]*bounds, len(*s.ml.MergeCells))
+
+		for i, mergedRef := range *s.ml.MergeCells {
+			s.mergedBounds[i] = newBoundsFromRef(mergedRef.Ref)
+		}
+	}
 }
 
 func (s *sheetInfo) BeforeMarshalXML() interface{} {

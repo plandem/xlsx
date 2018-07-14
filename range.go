@@ -68,3 +68,8 @@ func (r *Range) SetFormatting(styleRef format.StyleRefID) {
 		c.SetFormatting(styleRef)
 	})
 }
+
+//CopyTo copies range cells into another range starting with ref
+func (r *Range) CopyTo(ref types.Ref) {
+	//TODO: check if sheet is opened as read stream and panic about
+}

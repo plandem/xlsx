@@ -5,13 +5,13 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
-	"log"
 )
 
 type sheetReadStream struct {
 	*sheetInfo
 	stream     *ooxml.StreamFileReader
 	rowReader  ooxml.StreamReaderIterator
+	mergedRows map[int]*Row
 	currentRow *ml.Row
 	multiPhase bool
 }
@@ -20,6 +20,15 @@ var _ Sheet = (*sheetReadStream)(nil)
 
 func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	var data *ml.Cell
+
+	if len(s.mergedRows) > 0 {
+		for _, mergedBounds := range s.mergedBounds {
+			if mergedBounds.Contains(colIndex, rowIndex) {
+				colIndex, rowIndex = mergedBounds.fromCol, mergedBounds.fromRow
+				break
+			}
+		}
+	}
 
 	row := s.Row(rowIndex)
 	data = row.ml.Cells[colIndex]
@@ -47,6 +56,12 @@ func (s *sheetReadStream) Row(index int) *Row {
 		return nil
 	}
 
+	//if index from cached merged rows, then use it
+	if row, ok :=  s.mergedRows[index]; ok {
+		return row
+	}
+
+	//skip rows till required index
 	indexRef := index + 1
 	var data *ml.Row
 
@@ -125,33 +140,78 @@ func (s *sheetReadStream) afterOpen() {
 	if s.currentRow == nil {
 		s.stream = s.file.ReadStream()
 
-		//first phase
+		//phase1
 		for next, hasNext := s.stream.StartIterator(nil); hasNext; {
 			hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
 				switch start.Name.Local {
 				case "dimension":
 					s.ml.Dimension = &ml.SheetDimension{}
 					decoder.DecodeElement(s.ml.Dimension, start)
-				case "sheetData":
-					log.Println("sheetData")
-					return true
-				case "mergeCell":
-					//log.Println("merged cells!")
+				case "mergeCells":
 					s.ml.MergeCells = &[]*ml.MergeCell{}
-					decoder.DecodeElement(s.ml.MergeCells, start)
+				case "mergeCell":
+					cell := &ml.MergeCell{}
+					decoder.DecodeElement(cell, start)
+					*s.ml.MergeCells = append(*s.ml.MergeCells, cell)
 				case "row":
+					if s.multiPhase {
+						//skip row data, because 'mergeCell' is going after row data
+						return true
+					}
+
 					//first row found, so stop pre-loading phase
 					s.rowReader, _ = s.stream.StartIterator(start)
-					return s.multiPhase
+					return false
 				}
 
 				return true
 			})
 		}
 
-		//second phase
-		if !s.multiPhase {
-			return
+		// multi phased?
+		if s.multiPhase {
+			//skip is func to skip any info till first row
+			skip := func() {
+				//close previous opened stream
+				s.stream.Close()
+
+				//re-open stream again and cache skip any info till first row
+				s.stream = s.file.ReadStream()
+				for next, hasNext := s.stream.StartIterator(nil); hasNext; {
+					hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
+						if start.Name.Local == "row" {
+							//first row found, so stop pre-loading phase
+							s.rowReader, _ = s.stream.StartIterator(start)
+							return false
+						}
+
+						return true
+					})
+				}
+			}
+
+			//transform merged cells into bounds
+			s.resolveMergedIfRequired(false)
+
+			//phase2 - reset pointer to rows
+			skip()
+
+			//cache merged rows
+			s.mergedRows = make(map[int]*Row)
+			for rows := s.Rows(); rows.HasNext(); {
+				rIdx, row := rows.Next()
+
+				for _, b := range s.mergedBounds {
+					if rIdx >= b.fromRow && rIdx <= b.toRow {
+						s.mergedRows[rIdx] = row
+						break
+					}
+				}
+			}
+
+			//phase3 - reset pointer to rows amd clear current row info
+			skip()
+			s.currentRow = nil
 		}
 	}
 }
