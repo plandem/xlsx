@@ -11,7 +11,7 @@ type RangeIterator interface {
 
 //rangeIterator is object that holds required information for range's iterator
 type rangeIterator struct {
-	r *Range
+	r    *Range
 	cIdx int
 	rIdx int
 }
@@ -19,10 +19,10 @@ type rangeIterator struct {
 var _ RangeIterator = (*rangeIterator)(nil)
 
 func newRangeIterator(r *Range) RangeIterator {
-	return &rangeIterator {
-		r:  r,
-		cIdx:  r.fromCol,
-		rIdx:  r.fromRow,
+	return &rangeIterator{
+		r:    r,
+		cIdx: r.fromCol,
+		rIdx: r.fromRow,
 	}
 }
 

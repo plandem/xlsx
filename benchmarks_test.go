@@ -49,7 +49,17 @@ func xlsxOpen(fileName string) (interface{}, interface{}) {
 	return xl, xl.Sheet(0)
 }
 
+func xlsxReadStream(fileName string) (interface{}, interface{}) {
+	xl, err := ooxml.Open(fileName)
+	if err != nil {
+		panic(err)
+	}
+
+	return xl, xl.SheetReader(0, false)
+}
+
 func BenchmarkRandomGet(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -67,7 +77,7 @@ func BenchmarkRandomGet(b *testing.B) {
 			*value = sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).Value
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string, maxCols, maxRows int) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
 			*value = sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).Value()
 		}},
 	}
@@ -87,6 +97,7 @@ func BenchmarkRandomGet(b *testing.B) {
 }
 
 func BenchmarkRandomSet(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -104,7 +115,7 @@ func BenchmarkRandomSet(b *testing.B) {
 			sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).SetValue(rand.Intn(100))
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string, maxCols, maxRows int) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
 			sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).SetValue(rand.Intn(100))
 		}},
 	}
@@ -124,6 +135,7 @@ func BenchmarkRandomSet(b *testing.B) {
 }
 
 func BenchmarkRandomSetStyle(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -193,7 +205,7 @@ func BenchmarkRandomSetStyle(b *testing.B) {
 
 			return xl.AddFormatting(style)
 		}, func(f interface{}, s interface{}, ss interface{}, maxCols, maxRows int) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
 			styleId := ss.(format.StyleRefID)
 			sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).SetFormatting(styleId)
 		}},
@@ -214,6 +226,7 @@ func BenchmarkRandomSetStyle(b *testing.B) {
 }
 
 func BenchmarkReadBigFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -234,7 +247,14 @@ func BenchmarkReadBigFile(b *testing.B) {
 			}
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
+			_, row_max := sheet.Dimension()
+			for row_i := 0; row_i < row_max; row_i++ {
+				*value = sheet.Cell(0, row_i).Value()
+			}
+		}},
+		{"xlsx-stream", xlsxReadStream, func(f interface{}, s interface{}, value *string) {
+			sheet := s.(ooxml.Sheet)
 			_, row_max := sheet.Dimension()
 			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
@@ -254,27 +274,35 @@ func BenchmarkReadBigFile(b *testing.B) {
 }
 
 func BenchmarkReadHugeFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
 		callback func(f interface{}, s interface{}, value *string)
 	}{
-		//{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string) {
-		//	xl := f.(*excelize.File)
-		//	rows := xl.GetRows("Sheet1")
-		//
-		//	for _, row := range rows {
-		//		*value = row[0]
-		//	}
-		//}},
-		//{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
-		//	sheet := s.(*xlsx.Sheet)
-		//	for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
-		//		*value = sheet.Cell(0, row_i).Value
-		//	}
-		//}},
+		{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string) {
+			xl := f.(*excelize.File)
+			rows := xl.GetRows("Sheet1")
+
+			for _, row := range rows {
+				*value = row[0]
+			}
+		}},
+		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
+			sheet := s.(*xlsx.Sheet)
+			for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
+				*value = sheet.Cell(0, row_i).Value
+			}
+		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
+			_, row_max := sheet.Dimension()
+			for row_i := 0; row_i < row_max; row_i++ {
+				*value = sheet.Cell(0, row_i).Value()
+			}
+		}},
+		{"xlsx-stream", xlsxReadStream, func(f interface{}, s interface{}, value *string) {
+			sheet := s.(ooxml.Sheet)
 			_, row_max := sheet.Dimension()
 			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
@@ -294,6 +322,7 @@ func BenchmarkReadHugeFile(b *testing.B) {
 }
 
 func BenchmarkUpdateBigFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -321,7 +350,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 			xl.Save("saved_big_tealeg.xlsx")
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
 			_, row_max := sheet.Dimension()
 			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()
@@ -345,6 +374,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 }
 
 func BenchmarkUpdateHugeFile(b *testing.B) {
+	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -372,7 +402,7 @@ func BenchmarkUpdateHugeFile(b *testing.B) {
 			xl.Save("saved_huge_tealeg.xlsx")
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
-			sheet := s.(*ooxml.Sheet)
+			sheet := s.(ooxml.Sheet)
 			_, row_max := sheet.Dimension()
 			for row_i := 0; row_i < row_max; row_i++ {
 				*value = sheet.Cell(0, row_i).Value()

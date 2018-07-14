@@ -8,11 +8,11 @@ import (
 //Range is a object that provides some functionality for cells inside of range. E.g.: A1:D12
 type Range struct {
 	*bounds
-	sheet *Sheet
+	sheet Sheet
 }
 
 //newRangeFromRef create and returns Range for requested ref
-func newRangeFromRef(sheet *Sheet, ref types.Ref) *Range {
+func newRangeFromRef(sheet Sheet, ref types.Ref) *Range {
 	return &Range{
 		newBoundsFromRef(ref),
 		sheet,
@@ -20,7 +20,7 @@ func newRangeFromRef(sheet *Sheet, ref types.Ref) *Range {
 }
 
 //newRange create and returns Range for requested 0-based indexes
-func newRange(sheet *Sheet, fromCol, toCol, fromRow, toRow int) *Range {
+func newRange(sheet Sheet, fromCol, toCol, fromRow, toRow int) *Range {
 	return &Range{
 		newBounds(fromCol, toCol, fromRow, toRow),
 		sheet,
@@ -67,4 +67,9 @@ func (r *Range) SetFormatting(styleRef format.StyleRefID) {
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
 		c.SetFormatting(styleRef)
 	})
+}
+
+//CopyTo copies range cells into another range starting with ref
+func (r *Range) CopyTo(ref types.Ref) {
+	//TODO: check if sheet is opened as read stream and panic about
 }

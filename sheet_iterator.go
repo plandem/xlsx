@@ -3,7 +3,7 @@ package xlsx
 //SheetIterator is a interface for iterating sheets inside of Spreadsheet
 type SheetIterator interface {
 	//Next returns next Sheet in Spreadsheet and corresponding index
-	Next() (idx int, sheet *Sheet)
+	Next() (idx int, sheet Sheet)
 
 	//HasNext returns true if there are sheets to iterate or false in other case
 	HasNext() bool
@@ -27,7 +27,7 @@ func newSheetIterator(xl *Spreadsheet) SheetIterator {
 }
 
 //Next returns next Sheet in Spreadsheet and corresponding index
-func (i *sheetIterator) Next() (int, *Sheet) {
+func (i *sheetIterator) Next() (int, Sheet) {
 	i.idx++
 	return i.idx, i.xl.Sheet(i.idx)
 }

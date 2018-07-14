@@ -13,17 +13,17 @@ type RowIterator interface {
 type rowIterator struct {
 	idx   int
 	max   int
-	sheet  *Sheet
+	sheet Sheet
 }
 
 var _ RowIterator = (*rowIterator)(nil)
 
-func newRowIterator(sheet *Sheet) RowIterator {
+func newRowIterator(sheet Sheet) RowIterator {
 	_, rows := sheet.Dimension()
 	return &rowIterator{
-		idx:  -1,
-		max: rows - 1,
-		sheet:  sheet,
+		idx:   -1,
+		max:   rows - 1,
+		sheet: sheet,
 	}
 }
 
