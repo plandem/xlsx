@@ -13,16 +13,16 @@ type Row struct {
 }
 
 //Set sets options for row
-func (r *Row) Set(options *options.RowOptions) {
-	if options.Height > 0 {
-		r.ml.Height = options.Height
+func (r *Row) Set(o *options.RowOptions) {
+	if o.Height > 0 {
+		r.ml.Height = o.Height
 		r.ml.CustomHeight = true
 	}
 
-	r.ml.OutlineLevel = options.OutlineLevel
-	r.ml.Hidden = options.Hidden
-	r.ml.Collapsed = options.Collapsed
-	r.ml.Phonetic = options.Phonetic
+	r.ml.OutlineLevel = o.OutlineLevel
+	r.ml.Hidden = o.Hidden
+	r.ml.Collapsed = o.Collapsed
+	r.ml.Phonetic = o.Phonetic
 }
 
 //SetFormatting sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.

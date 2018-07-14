@@ -2,6 +2,7 @@ package options_test
 
 import (
 	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types"
 )
 
 func ExampleNewColumnOptions() {
@@ -21,6 +22,14 @@ func ExampleNewRowOptions() {
 		options.Row.Hidden(true),
 		options.Row.Phonetic(true),
 		options.Row.Height(45.5),
+	)
+
+	_ = o
+}
+
+func ExampleNewSheetOptions() {
+	o := options.NewSheetOptions(
+		options.Sheet.Visibility(types.VisibilityTypeVisible),
 	)
 
 	_ = o

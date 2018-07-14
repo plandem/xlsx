@@ -2,6 +2,7 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/options"
 )
 
 //max length of excel's sheet name
@@ -40,8 +41,8 @@ type Sheet interface {
 	Name() string
 	//SetName sets a name for sheet
 	SetName(name string)
-	//SetState sets a visibility state for sheet
-	SetState(state types.VisibilityType)
+	//Set sets options for sheet
+	Set(o *options.SheetOptions)
 	//SetActive sets the sheet as active
 	SetActive()
 	//Close frees allocated by sheet resources

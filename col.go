@@ -13,16 +13,16 @@ type Col struct {
 }
 
 //Set sets options for column
-func (c *Col) Set(options *options.ColumnOptions) {
-	if options.Width > 0 {
-		c.ml.Width = options.Width
+func (c *Col) Set(o *options.ColumnOptions) {
+	if o.Width > 0 {
+		c.ml.Width = o.Width
 		c.ml.CustomWidth = true
 	}
 
-	c.ml.OutlineLevel = options.OutlineLevel
-	c.ml.Hidden = options.Hidden
-	c.ml.Collapsed = options.Collapsed
-	c.ml.Phonetic = options.Phonetic
+	c.ml.OutlineLevel = o.OutlineLevel
+	c.ml.Hidden = o.Hidden
+	c.ml.Collapsed = o.Collapsed
+	c.ml.Phonetic = o.Phonetic
 }
 
 //SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.

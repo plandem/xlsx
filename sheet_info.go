@@ -7,6 +7,7 @@ import (
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
 	"math"
 	"reflect"
@@ -109,10 +110,12 @@ func (s *sheetInfo) SetName(name string) {
 	s.workbook.file.MarkAsUpdated()
 }
 
-//SetState sets a visibility state for sheet
-func (s *sheetInfo) SetState(state types.VisibilityType) {
-	s.workbook.ml.Sheets[s.index].State = state
-	s.workbook.file.MarkAsUpdated()
+//Set sets options for sheet
+func (s *sheetInfo) Set(o *options.SheetOptions) {
+	if o.Visibility >= types.VisibilityTypeVisible && o.Visibility <= types.VisibilityTypeVeryHidden {
+		s.workbook.ml.Sheets[s.index].State = o.Visibility
+		s.workbook.file.MarkAsUpdated()
+	}
 }
 
 //SetActive sets the sheet as active

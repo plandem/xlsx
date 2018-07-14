@@ -302,8 +302,8 @@ func Example_formatting() {
 	sheet.Range("D10:H13").SetFormatting(styleId)
 }
 
-// Demonstrates how to change settings of rows/cols/sheets
-func Example_visibility() {
+// Demonstrates how to set options of rows/cols/sheets
+func Example_options() {
 	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
 	if err != nil {
 		log.Fatal(err)
@@ -313,14 +313,27 @@ func Example_visibility() {
 
 	sheet := xl.Sheet(0)
 
-	// Hide row
-	sheet.Row(9).Set(options.NewRowOptions(options.Row.Hidden(true)))
+	// set options for row
+	rowOptions := options.NewRowOptions(
+		options.Row.Hidden(true),
+		options.Row.Height(10.0),
+		options.Row.Collapsed(true),
+	)
+	sheet.Row(9).Set(rowOptions)
 
-	// Hide col
-	sheet.Col(3).Set(options.NewColumnOptions(options.Column.Hidden(true)))
+	// set options for col
+	colOptions := options.NewColumnOptions(
+		options.Column.Hidden(true),
+		options.Column.Width(10.0),
+		options.Column.Collapsed(true),
+	)
+	sheet.Col(3).Set(colOptions)
 
-	// Hide sheet
-	sheet.SetState(types.VisibilityTypeHidden)
+	// set options for sheet
+	sheetOptions := options.NewSheetOptions(
+		options.Sheet.Visibility(types.VisibilityTypeVeryHidden),
+	)
+	sheet.Set(sheetOptions)
 }
 
 // Demonstrates how to append cols/rows/sheets.
