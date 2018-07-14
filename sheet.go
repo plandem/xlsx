@@ -1,8 +1,8 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types"
 )
 
 //max length of excel's sheet name
