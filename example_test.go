@@ -513,7 +513,7 @@ func Example_copy() {
 
 	// Copy range to another range that started at indexes
 	r := sheet.Range("A1:B3")
-	r.CopyTo(3,0)
+	r.CopyTo(3, 0)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))
@@ -551,5 +551,4 @@ func Example_copy() {
 	//,,,,,,,,Header 1,Header 2
 	//Header 1,Header 2,,Header 1,,,,,Value 1-1,Value 2-1
 	//,,,,,,,,Value 1-2,Value 2-2
-
 }

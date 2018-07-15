@@ -74,7 +74,7 @@ func (r *Range) SetFormatting(styleRef format.StyleRefID) {
 func (r *Range) CopyToRef(ref types.Ref) {
 	_, targetRef := ref.ToCellRefs()
 	cIdx, rIdx := targetRef.ToIndexes()
-	r.CopyTo( cIdx, rIdx)
+	r.CopyTo(cIdx, rIdx)
 }
 
 //CopyTo copies range cells into another range starting indexes cIdx and rIdx

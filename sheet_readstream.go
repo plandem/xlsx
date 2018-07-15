@@ -57,7 +57,7 @@ func (s *sheetReadStream) Row(index int) *Row {
 	}
 
 	//if index from cached merged rows, then use it
-	if row, ok :=  s.mergedRows[index]; ok {
+	if row, ok := s.mergedRows[index]; ok {
 		return row
 	}
 
