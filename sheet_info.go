@@ -23,6 +23,20 @@ type sheetInfo struct {
 	sheet         Sheet
 }
 
+//isCellEmpty checks if cell is empty - has no value and any formatting
+func isCellEmpty(c *ml.Cell) bool {
+	if c != nil && (*c != ml.Cell{Ref: c.Ref}) {
+		return false
+	}
+
+	return true
+}
+
+//isRowEmpty checks if row is empty (supposed that only non empty cells here) - has no cells
+func isRowEmpty(r *ml.Row) bool {
+	return r == nil || (len(r.Cells) == 0 && reflect.DeepEqual(r, &ml.Row{}))
+}
+
 //newSheetInfo creates a new sheetInfo and link it with workbook
 func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 	index := -1
@@ -83,20 +97,6 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 	}
 
 	return sheet
-}
-
-//isCellEmpty checks if cell is empty - has no value and any formatting
-func (s *sheetInfo) isCellEmpty(c *ml.Cell) bool {
-	if c != nil && (*c != ml.Cell{Ref: c.Ref}) {
-		return false
-	}
-
-	return true
-}
-
-//isRowEmpty checks if row is empty (supposed that only non empty cells here) - has no cells
-func (s *sheetInfo) isRowEmpty(r *ml.Row) bool {
-	return r == nil || (len(r.Cells) == 0 && reflect.DeepEqual(r, &ml.Row{}))
 }
 
 //Name returns name of sheet

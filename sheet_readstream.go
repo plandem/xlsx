@@ -103,7 +103,7 @@ func (s *sheetReadStream) nextRow(decoder *xml.Decoder, start *xml.StartElement)
 		cells := make([]*ml.Cell, width)
 		for _, c := range row.Cells {
 			//add cell info
-			if !s.isCellEmpty(c) {
+			if !isCellEmpty(c) {
 				iCellCol, _ := c.Ref.ToIndexes()
 				cells[iCellCol] = c
 			}
