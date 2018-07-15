@@ -5,6 +5,7 @@ import "encoding/xml"
 //CellType is a type to encode XSD ST_CellType
 type CellType byte
 
+//List of all possible values for CellType
 const (
 	CellTypeBool         CellType = 'b'
 	CellTypeDate         CellType = 'd'

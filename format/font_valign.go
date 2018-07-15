@@ -3,6 +3,7 @@ package format
 //FontVAlignType is a type to encode XSD ST_VerticalAlignRun
 type FontVAlignType byte
 
+//List of all possible values for FontVAlignType
 const (
 	_ FontVAlignType = iota
 	FontVAlignBaseline

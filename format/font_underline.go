@@ -3,6 +3,7 @@ package format
 //UnderlineType is a type to encode XSD CT_UnderlineProperty
 type UnderlineType byte
 
+//List of all possible values for UnderlineType
 const (
 	_ UnderlineType = iota
 	UnderlineTypeSingle

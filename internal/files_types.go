@@ -2,6 +2,7 @@ package internal
 
 import "github.com/plandem/ooxml/ml"
 
+//List of all supported RelationType and ContentType
 const (
 	RelationTypeWorkbook      ml.RelationType = ml.NamespaceRelationships + "/officeDocument"
 	RelationTypeSharedStrings ml.RelationType = ml.NamespaceRelationships + "/sharedStrings"

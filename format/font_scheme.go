@@ -3,6 +3,7 @@ package format
 //FontSchemeType is a type to encode XSD ST_FontScheme
 type FontSchemeType byte
 
+//List of all possible values for FontSchemeType
 const (
 	_ FontSchemeType = iota
 	FontSchemeNone

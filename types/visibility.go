@@ -5,6 +5,7 @@ import "encoding/xml"
 //VisibilityType is a type to encode XSD ST_Visibility and ST_SheetState
 type VisibilityType byte
 
+//List of all possible values for VisibilityType
 const (
 	_ VisibilityType = iota
 	VisibilityTypeVisible

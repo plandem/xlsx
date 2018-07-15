@@ -5,6 +5,7 @@ import "encoding/xml"
 //HAlignType is a type to encode XSD ST_HorizontalAlignment
 type HAlignType byte
 
+//List of all possible values for HAlignType
 const (
 	_ HAlignType = iota
 	HAlignGeneral

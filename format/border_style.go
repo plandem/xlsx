@@ -5,6 +5,7 @@ import "encoding/xml"
 //BorderStyleType is a type to encode XSD BorderStyleType
 type BorderStyleType byte
 
+//List of all possible values for BorderStyleType
 const (
 	_ BorderStyleType = iota
 	BorderStyleNone

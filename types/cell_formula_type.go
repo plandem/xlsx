@@ -5,6 +5,7 @@ import "encoding/xml"
 //CellFormulaType is a type to encode XSD ST_CellFormulaType
 type CellFormulaType byte
 
+//List of all possible values for CellFormulaType
 const (
 	_ CellFormulaType = iota
 	CellFormulaTypeNormal

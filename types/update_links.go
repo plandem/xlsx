@@ -5,6 +5,7 @@ import "encoding/xml"
 //UpdateLinksType is a type to encode XSD ST_UpdateLinks
 type UpdateLinksType byte
 
+//List of all possible values for UpdateLinksType
 const (
 	_ UpdateLinksType = iota
 	UpdateLinksTypeUserSet

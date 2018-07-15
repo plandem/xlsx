@@ -5,6 +5,7 @@ import "encoding/xml"
 //PatternType is a type to encode XSD ST_PatternType
 type PatternType byte
 
+//List of all possible values for PatternType
 const (
 	_ PatternType = iota
 	PatternTypeNone

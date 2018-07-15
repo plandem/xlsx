@@ -5,6 +5,7 @@ import "encoding/xml"
 //ObjectsType is a type to encode XSD ST_Objects
 type ObjectsType byte
 
+//List of all possible values for ObjectsType
 const (
 	_ ObjectsType = iota
 	ObjectsTypeAll

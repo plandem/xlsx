@@ -5,6 +5,7 @@ import "encoding/xml"
 //VAlignType is a type to encode XSD ST_VerticalAlignment
 type VAlignType byte
 
+//List of all possible values for VAlignType
 const (
 	_ VAlignType = iota
 	VAlignTop
