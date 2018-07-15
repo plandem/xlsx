@@ -69,7 +69,38 @@ func (r *Range) SetFormatting(styleRef format.StyleRefID) {
 	})
 }
 
-//CopyTo copies range cells into another range starting with ref
-func (r *Range) CopyTo(ref types.Ref) {
+//CopyToRef copies range cells into another range starting with ref.
+//N.B.: Merged cells are not supported
+func (r *Range) CopyToRef(ref types.Ref) {
+	_, targetRef := ref.ToCellRefs()
+	cIdx, rIdx := targetRef.ToIndexes()
+	r.CopyTo(cIdx, rIdx)
+}
+
+//CopyTo copies range cells into another range starting indexes cIdx and rIdx
+//N.B.: Merged cells are not supported
+func (r *Range) CopyTo(cIdx, rIdx int) {
 	//TODO: check if sheet is opened as read stream and panic about
+
+	//ignore self-copying
+	if cIdx != r.fromCol || rIdx != r.fromRow {
+		cOffset, rOffset := cIdx-r.fromCol, rIdx-r.fromRow
+
+		r.Walk(func(idx, cIdxSource, rIdxSource int, source *Cell) {
+			//process only non empty cells
+			if !isCellEmpty(source.ml) {
+				//ignore target cells with negative indexes
+				cIdxTarget, rIdxTarget := cIdxSource+cOffset, rIdxSource+rOffset
+				if cIdxTarget >= 0 && rIdxTarget >= 0 {
+					target := r.sheet.Cell(cIdxTarget, rIdxTarget)
+
+					//copy data
+					*target.ml = *source.ml
+
+					//refresh ref
+					target.ml.Ref = types.CellRefFromIndexes(cIdxTarget, rIdxTarget)
+				}
+			}
+		})
+	}
 }

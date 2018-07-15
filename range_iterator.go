@@ -27,8 +27,8 @@ func newRangeIterator(r *Range) RangeIterator {
 }
 
 //Next returns next Cell in range and corresponding indexes
-func (i *rangeIterator) Next() (int, int, *Cell) {
-	c := i.r.sheet.Cell(i.cIdx, i.rIdx)
+func (i *rangeIterator) Next() (cIdx int, rIdx int, cell *Cell) {
+	cIdx, rIdx, cell = i.cIdx, i.rIdx, i.r.sheet.Cell(i.cIdx, i.rIdx)
 
 	i.cIdx++
 	if i.cIdx > i.r.toCol {
@@ -36,7 +36,7 @@ func (i *rangeIterator) Next() (int, int, *Cell) {
 		i.rIdx++
 	}
 
-	return i.cIdx, i.rIdx, c
+	return
 }
 
 //HasNext returns true if there are cells to iterate or false in other case

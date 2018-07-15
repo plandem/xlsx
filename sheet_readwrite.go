@@ -63,7 +63,7 @@ func (s *sheetReadWrite) refreshAllRefs(index int) {
 		row.Ref = iRow + 1
 
 		for iCol, cell := range row.Cells {
-			if !s.isCellEmpty(cell) {
+			if !isCellEmpty(cell) {
 				cell.Ref = types.CellRefFromIndexes(iCol, int(row.Ref-1))
 			}
 		}
@@ -74,7 +74,7 @@ func (s *sheetReadWrite) refreshAllRefs(index int) {
 func (s *sheetReadWrite) refreshColRefs(colIndex, rowIndex int) {
 	for iCol, colMax := colIndex, len(s.ml.SheetData[rowIndex].Cells); iCol < colMax; iCol++ {
 		cell := s.ml.SheetData[rowIndex].Cells[iCol]
-		if !s.isCellEmpty(cell) {
+		if !isCellEmpty(cell) {
 			cell.Ref = types.CellRefFromIndexes(iCol, rowIndex)
 		}
 	}
@@ -280,7 +280,7 @@ func (s *sheetReadWrite) expandOnInit() {
 		iRow := int(row.Ref - 1)
 		for _, cell := range row.Cells {
 			//add cell info
-			if !s.isCellEmpty(cell) {
+			if !isCellEmpty(cell) {
 				iCellCol, iCellRow := cell.Ref.ToIndexes()
 				grid[iCellRow].Cells[iCellCol] = cell
 			}
@@ -358,13 +358,13 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 		nextRow.Cells = make([]*ml.Cell, 0, len(row.Cells))
 
 		for iCol, cell := range row.Cells {
-			if !s.isCellEmpty(cell) {
+			if !isCellEmpty(cell) {
 				cell.Ref = types.CellRefFromIndexes(iCol, int(row.Ref-1))
 				nextRow.Cells = append(nextRow.Cells, cell)
 			}
 		}
 
-		if !s.isRowEmpty(nextRow) {
+		if !isRowEmpty(nextRow) {
 			grid = append(grid, nextRow)
 		}
 	}

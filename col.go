@@ -30,7 +30,15 @@ func (c *Col) SetFormatting(styleRef format.StyleRefID) {
 	c.ml.Style = styleRef
 }
 
-//CopyTo copies col cells into another col with cIdx index
-func (c *Col) CopyTo(cIdx int) {
+//CopyTo copies col cells into another col with cIdx index.
+//N.B.: Merged cells are not supported
+func (c *Col) CopyTo(cIdx int, withOptions bool) {
 	//TODO: check if sheet is opened as read stream and panic about
+
+	if withOptions {
+		//TODO: copy col options
+	}
+
+	//copy cell data
+	c.Range.CopyTo(cIdx, c.Range.fromRow)
 }

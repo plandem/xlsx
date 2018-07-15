@@ -479,3 +479,76 @@ func Example_streams() {
 	}
 	sheet.Close()
 }
+
+// Demonstrates how to copy information in sheet
+func Example_copy() {
+	xl, err := xlsx.Open("./test_files/example_iteration.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer xl.Close()
+
+	sheet := xl.Sheet(0)
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+
+	// Copy row to another row with index
+	row := sheet.Row(0)
+	row.CopyTo(4, false)
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+
+	// Copy col to another col with index
+	col := sheet.Col(0)
+	col.CopyTo(3, false)
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+
+	// Copy range to another range that started at indexes
+	r := sheet.Range("A1:B3")
+	r.CopyTo(3, 0)
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+
+	// Copy range to another range that started at ref
+	r.CopyToRef("I4")
+	for rows := sheet.Rows(); rows.HasNext(); {
+		_, row := rows.Next()
+		fmt.Println(strings.Join(row.Values(), ","))
+	}
+
+	//Output:
+	//Header 1,Header 2
+	//Value 1-1,Value 2-1
+	//Value 1-2,Value 2-2
+	//Header 1,Header 2
+	//Value 1-1,Value 2-1
+	//Value 1-2,Value 2-2
+	//,
+	//Header 1,Header 2
+	//Header 1,Header 2,,Header 1
+	//Value 1-1,Value 2-1,,Value 1-1
+	//Value 1-2,Value 2-2,,Value 1-2
+	//,,,
+	//Header 1,Header 2,,Header 1
+	//Header 1,Header 2,,Header 1,Header 2
+	//Value 1-1,Value 2-1,,Value 1-1,Value 2-1
+	//Value 1-2,Value 2-2,,Value 1-2,Value 2-2
+	//,,,,
+	//Header 1,Header 2,,Header 1,
+	//Header 1,Header 2,,Header 1,Header 2,,,,,
+	//Value 1-1,Value 2-1,,Value 1-1,Value 2-1,,,,,
+	//Value 1-2,Value 2-2,,Value 1-2,Value 2-2,,,,,
+	//,,,,,,,,Header 1,Header 2
+	//Header 1,Header 2,,Header 1,,,,,Value 1-1,Value 2-1
+	//,,,,,,,,Value 1-2,Value 2-2
+}
