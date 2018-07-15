@@ -347,7 +347,8 @@ func Example_append() {
 
 	sheet := xl.Sheet(0)
 
-	// To append a new col/row, simple request it - sheet will be auto expanded. E.g.: we have 14 cols, 28 rows.
+	// To append a new col/row, simple request it - sheet will be auto expanded.
+	// E.g.: we have 14 cols, 28 rows.
 	fmt.Println(sheet.Dimension())
 
 	// Append 72 rows
@@ -463,7 +464,8 @@ func Example_streams() {
 
 	defer xl.Close()
 
-	// Open sheet in stream reading mode with single phase, some meta information is NOT available (e.g. merged cells)
+	// Open sheet in stream reading mode with single phase.
+	// Some meta information is NOT available (e.g. merged cells).
 	sheet := xl.SheetReader(0, false)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
@@ -471,7 +473,8 @@ func Example_streams() {
 	}
 	sheet.Close()
 
-	// Open sheet in stream reading mode with multi phases, meta information is available
+	// Open sheet in stream reading mode with multi phases.
+	// Meta information is available.
 	sheet = xl.SheetReader(0, true)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
