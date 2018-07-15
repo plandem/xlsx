@@ -117,8 +117,9 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 
 # Roadmap
 - [ ] sheet: copy
-- [ ] row: copy
-- [ ] col: copy
+- [x] range: copy
+- [x] row: copy
+- [x] col: copy
 - [ ] cell: hyperlinks
 - [ ] cell: comments
 - [ ] cell: formulas
