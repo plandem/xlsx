@@ -1,6 +1,8 @@
 package format
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 //VAlignType is a type to encode XSD ST_VerticalAlignment
 type VAlignType byte

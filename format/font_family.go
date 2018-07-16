@@ -1,6 +1,8 @@
 package format
 
-import "strconv"
+import (
+	"strconv"
+)
 
 //FontFamilyType is a type to encode XSD ST_FontFamily
 type FontFamilyType byte

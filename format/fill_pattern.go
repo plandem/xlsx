@@ -1,6 +1,8 @@
 package format
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 //PatternType is a type to encode XSD ST_PatternType
 type PatternType byte

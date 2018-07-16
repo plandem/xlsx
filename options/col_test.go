@@ -27,7 +27,7 @@ func TestColumnOptions(t *testing.T) {
 		Column.Phonetic(true),
 	)
 	require.Equal(t, &ColumnOptions{
-		Hidden:       false,
-		Phonetic:     true,
+		Hidden:   false,
+		Phonetic: true,
 	}, o)
 }

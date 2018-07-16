@@ -1,6 +1,8 @@
 package format
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 //HAlignType is a type to encode XSD ST_HorizontalAlignment
 type HAlignType byte

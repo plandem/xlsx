@@ -21,14 +21,13 @@ func TestRowOptions(t *testing.T) {
 		Height:       45.5,
 	}, o)
 
-
 	o = NewRowOptions(
 		Row.OutlineLevel(10),
 		Row.Hidden(false),
 		Row.Phonetic(true),
 	)
 	require.Equal(t, &RowOptions{
-		Hidden:       false,
-		Phonetic:     true,
+		Hidden:   false,
+		Phonetic: true,
 	}, o)
 }

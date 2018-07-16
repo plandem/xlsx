@@ -1,6 +1,8 @@
 package format
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 //BorderStyleType is a type to encode XSD BorderStyleType
 type BorderStyleType byte
