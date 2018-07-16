@@ -11,6 +11,7 @@ func TestRowOptions(t *testing.T) {
 		Row.Hidden(true),
 		Row.Phonetic(true),
 		Row.Height(45.5),
+		Row.Collapsed(true),
 	)
 
 	require.IsType(t, &RowOptions{}, o)
@@ -19,6 +20,7 @@ func TestRowOptions(t *testing.T) {
 		Hidden:       true,
 		Phonetic:     true,
 		Height:       45.5,
+		Collapsed:    true,
 	}, o)
 
 	o = NewRowOptions(

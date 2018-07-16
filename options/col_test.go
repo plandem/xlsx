@@ -11,6 +11,7 @@ func TestColumnOptions(t *testing.T) {
 		Column.Hidden(true),
 		Column.Phonetic(true),
 		Column.Width(45.5),
+		Column.Collapsed(true),
 	)
 
 	require.IsType(t, &ColumnOptions{}, o)
@@ -19,6 +20,7 @@ func TestColumnOptions(t *testing.T) {
 		Hidden:       true,
 		Phonetic:     true,
 		Width:        45.5,
+		Collapsed:    true,
 	}, o)
 
 	o = NewColumnOptions(
