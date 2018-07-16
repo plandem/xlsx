@@ -62,6 +62,7 @@ func (b Bounds) String() string {
 	)
 }
 
+//IsEmpty return true if type was not initialized
 func (b Bounds) IsEmpty() bool {
 	return b == Bounds{}
 }
