@@ -16,10 +16,10 @@ import (
 type sheetInfo struct {
 	ml            ml.Worksheet
 	workbook      *Workbook
-	mergedBounds  []*bounds
 	isInitialized bool
 	index         int
 	file          *ooxml.PackageFile
+	mergedCells   *mergedCellManager
 	sheet         Sheet
 }
 
@@ -94,6 +94,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		}
 
 		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
+		sheet.mergedCells = newMergedCellManager(sheet)
 	}
 
 	return sheet
@@ -139,19 +140,18 @@ func (s *sheetInfo) SetActive() {
 
 //Dimension returns total number of cols and rows in sheet
 func (s *sheetInfo) Dimension() (cols int, rows int) {
-	if s.ml.Dimension == nil || s.ml.Dimension.Ref == "" {
+	if s.ml.Dimension == nil || s.ml.Dimension.Bounds.IsEmpty() {
 		return 0, 0
 	}
 
-	_, currRef := s.ml.Dimension.Ref.ToCellRefs()
-	curWidth, curHeight := currRef.ToIndexes()
-	return curWidth + 1, curHeight + 1
+	//we can't use dimension of bounds, because it depends on fromCol, fromRow, but in case of sheet we need maximum dimension to fit content
+	cols, rows = s.ml.Dimension.Bounds.ToCol+1, s.ml.Dimension.Bounds.ToRow+1
+	return
 }
 
 //SetDimension sets total number of cols and rows in sheet
 func (s *sheetInfo) SetDimension(cols, rows int) {
-	dimension := types.Ref(types.CellRefFromIndexes(cols-1, rows-1))
-	s.ml.Dimension = &ml.SheetDimension{Ref: dimension}
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, cols-1, rows-1)}
 }
 
 //Close frees allocated by sheet resources
@@ -172,17 +172,6 @@ func (s *sheetInfo) afterCreate(name string) {
 	s.file.MarkAsUpdated()
 	s.workbook.file.MarkAsUpdated()
 	s.workbook.doc.pkg.ContentTypes().RegisterContent(s.file.FileName(), internal.ContentTypeWorksheet)
-}
-
-//resolveMergedIfRequired transforms merged cells into bounds
-func (s *sheetInfo) resolveMergedIfRequired(force bool) {
-	if force || (s.ml.MergeCells != nil && (len(*s.ml.MergeCells) != len(s.mergedBounds))) {
-		s.mergedBounds = make([]*bounds, len(*s.ml.MergeCells))
-
-		for i, mergedRef := range *s.ml.MergeCells {
-			s.mergedBounds[i] = newBoundsFromRef(mergedRef.Ref)
-		}
-	}
 }
 
 func (s *sheetInfo) BeforeMarshalXML() interface{} {

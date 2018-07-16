@@ -58,8 +58,7 @@ func xlsxReadStream(fileName string) (interface{}, interface{}) {
 	return xl, xl.SheetReader(0, false)
 }
 
-func BenchmarkRandomGet(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkLibsRandomGet(b *testing.B) {
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -88,6 +87,7 @@ func BenchmarkRandomGet(b *testing.B) {
 
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			f, sheet := bm.open(simpleFile)
 			for i := 0; i < b.N; i++ {
 				bm.callback(f, sheet, &value, maxCols, maxRows)
@@ -96,8 +96,7 @@ func BenchmarkRandomGet(b *testing.B) {
 	}
 }
 
-func BenchmarkRandomSet(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkLibsRandomSet(b *testing.B) {
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -126,6 +125,7 @@ func BenchmarkRandomSet(b *testing.B) {
 
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			f, sheet := bm.open(simpleFile)
 			for i := 0; i < b.N; i++ {
 				bm.callback(f, sheet, &value, maxCols, maxRows)
@@ -134,8 +134,7 @@ func BenchmarkRandomSet(b *testing.B) {
 	}
 }
 
-func BenchmarkRandomSetStyle(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkLibsRandomSetStyle(b *testing.B) {
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -216,6 +215,7 @@ func BenchmarkRandomSetStyle(b *testing.B) {
 
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			f, sheet := bm.open(simpleFile)
 			style := bm.create(f)
 			for i := 0; i < b.N; i++ {
@@ -225,8 +225,7 @@ func BenchmarkRandomSetStyle(b *testing.B) {
 	}
 }
 
-func BenchmarkReadBigFile(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkLibsReadBigFile(b *testing.B) {
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -265,6 +264,7 @@ func BenchmarkReadBigFile(b *testing.B) {
 	var value string
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			for i := 0; i < b.N; i++ {
 				f, s := bm.open(bigFile)
 				bm.callback(f, s, &value)
@@ -273,7 +273,7 @@ func BenchmarkReadBigFile(b *testing.B) {
 	}
 }
 
-func BenchmarkReadHugeFile(b *testing.B) {
+func BenchmarkLibsReadHugeFile(b *testing.B) {
 	b.ReportAllocs()
 	benchmarks := []struct {
 		name     string
@@ -313,6 +313,7 @@ func BenchmarkReadHugeFile(b *testing.B) {
 	var value string
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			for i := 0; i < b.N; i++ {
 				f, s := bm.open(hugeFile)
 				bm.callback(f, s, &value)
@@ -321,8 +322,7 @@ func BenchmarkReadHugeFile(b *testing.B) {
 	}
 }
 
-func BenchmarkUpdateBigFile(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkLibsUpdateBigFile(b *testing.B) {
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -364,6 +364,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 	var value string
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			for i := 0; i < b.N; i++ {
 				f, s := bm.open(bigFile)
 				bm.callback(f, s, &value)
@@ -373,8 +374,7 @@ func BenchmarkUpdateBigFile(b *testing.B) {
 	}
 }
 
-func BenchmarkUpdateHugeFile(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkLibsUpdateHugeFile(b *testing.B) {
 	benchmarks := []struct {
 		name     string
 		open     openFileFn
@@ -392,15 +392,15 @@ func BenchmarkUpdateHugeFile(b *testing.B) {
 			xl := f.(*excelize.File)
 			xl.SaveAs("saved_huge_excelize.xlsx")
 		}},
-		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
-			sheet := s.(*xlsx.Sheet)
-			for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
-				*value = sheet.Cell(0, row_i).Value
-			}
-		}, func(f interface{}) {
-			xl := f.(*xlsx.File)
-			xl.Save("saved_huge_tealeg.xlsx")
-		}},
+		//{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
+		//	sheet := s.(*xlsx.Sheet)
+		//	for row_i, row_max := 0, len(sheet.Rows); row_i < row_max; row_i++ {
+		//		*value = sheet.Cell(0, row_i).Value
+		//	}
+		//}, func(f interface{}) {
+		//	xl := f.(*xlsx.File)
+		//	xl.Save("saved_huge_tealeg.xlsx")
+		//}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(ooxml.Sheet)
 			_, row_max := sheet.Dimension()
@@ -416,6 +416,7 @@ func BenchmarkUpdateHugeFile(b *testing.B) {
 	var value string
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
+			b.ReportAllocs()
 			for i := 0; i < b.N; i++ {
 				f, s := bm.open(hugeFile)
 				bm.callback(f, s, &value)

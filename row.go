@@ -41,5 +41,5 @@ func (r *Row) CopyTo(rIdx int, withOptions bool) {
 	}
 
 	//copy cell data
-	r.Range.CopyTo(r.Range.fromCol, rIdx)
+	r.Range.CopyTo(r.Range.FromCol, rIdx)
 }

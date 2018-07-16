@@ -8,10 +8,8 @@ import (
 type Ref string
 
 //ToCellRefs returns from/to CellRef of Ref
-func (r Ref) ToCellRefs() (CellRef, CellRef) {
+func (r Ref) ToCellRefs() (from CellRef, to CellRef) {
 	cellRefs := strings.Split(string(r), ":")
-
-	var from, to CellRef
 
 	if len(cellRefs) == 1 {
 		from = CellRef("A1")
@@ -21,7 +19,16 @@ func (r Ref) ToCellRefs() (CellRef, CellRef) {
 		to = CellRef(cellRefs[1])
 	}
 
-	return from, to
+	return
+}
+
+//ToBounds returns related bounds of Ref
+func (r Ref) ToBounds() Bounds {
+	from, to := r.ToCellRefs()
+	fromCol, fromRow := from.ToIndexes()
+	toCol, toRow := to.ToIndexes()
+
+	return BoundsFromIndexes(fromCol, fromRow, toCol, toRow)
 }
 
 //RefFromCellRefs returns Ref for from/to CellRefs

@@ -8,8 +8,8 @@ import (
 //Text is textual type that can have leading/trailing spaces that must be preserved
 type Text string
 
-func (r *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	value := string(*r)
+func (t *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	value := string(*t)
 
 	//need to preserve space?
 	if len(value) > 0 && (value[0] == 32 || value[len(value)-1] == 32) {

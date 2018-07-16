@@ -21,8 +21,8 @@ var _ RangeIterator = (*rangeIterator)(nil)
 func newRangeIterator(r *Range) RangeIterator {
 	return &rangeIterator{
 		r:    r,
-		cIdx: r.fromCol,
-		rIdx: r.fromRow,
+		cIdx: r.FromCol,
+		rIdx: r.FromRow,
 	}
 }
 
@@ -31,8 +31,8 @@ func (i *rangeIterator) Next() (cIdx int, rIdx int, cell *Cell) {
 	cIdx, rIdx, cell = i.cIdx, i.rIdx, i.r.sheet.Cell(i.cIdx, i.rIdx)
 
 	i.cIdx++
-	if i.cIdx > i.r.toCol {
-		i.cIdx = i.r.fromCol
+	if i.cIdx > i.r.ToCol {
+		i.cIdx = i.r.FromCol
 		i.rIdx++
 	}
 
@@ -41,5 +41,5 @@ func (i *rangeIterator) Next() (cIdx int, rIdx int, cell *Cell) {
 
 //HasNext returns true if there are cells to iterate or false in other case
 func (i *rangeIterator) HasNext() bool {
-	return i.rIdx <= i.r.toRow
+	return i.rIdx <= i.r.ToRow
 }

@@ -2,7 +2,6 @@ package xlsx_test
 
 import (
 	"github.com/plandem/xlsx"
-	"log"
 	"testing"
 )
 
@@ -14,7 +13,6 @@ func readSheet(sheet xlsx.Sheet) {
 		value = sheet.Cell(0, iRow).Value()
 	}
 
-	log.Println(value)
 	_ = value
 }
 

@@ -50,7 +50,7 @@ type Worksheet struct {
 
 //SheetDimension is a direct mapping of XSD CT_SheetDimension
 type SheetDimension struct {
-	Ref types.Ref `xml:"ref,attr"`
+	Bounds types.Bounds `xml:"ref,attr"`
 }
 
 //Col is a direct mapping of XSD CT_Col
@@ -104,7 +104,7 @@ type CellFormula struct {
 	Content string                `xml:",chardata"`
 	T       types.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
 	Aca     bool                  `xml:"aca,attr,omitempty"`
-	Ref     types.Ref             `xml:"ref,attr,omitempty"`
+	Bounds  types.Bounds          `xml:"ref,attr,omitempty"`
 	Dt2D    bool                  `xml:"dt2D,attr,omitempty"`
 	Dtr     bool                  `xml:"dtr,attr,omitempty"`
 	Del1    bool                  `xml:"del1,attr,omitempty"`
@@ -118,7 +118,7 @@ type CellFormula struct {
 
 //MergeCell is a direct mapping of XSD CT_MergeCell
 type MergeCell struct {
-	Ref types.Ref `xml:"ref,attr"`
+	Bounds types.Bounds `xml:"ref,attr"`
 }
 
 //SheetViews is a direct mapping of XSD CT_SheetViews

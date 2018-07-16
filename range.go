@@ -7,14 +7,14 @@ import (
 
 //Range is a object that provides some functionality for cells inside of range. E.g.: A1:D12
 type Range struct {
-	*bounds
+	types.Bounds
 	sheet Sheet
 }
 
 //newRangeFromRef create and returns Range for requested ref
 func newRangeFromRef(sheet Sheet, ref types.Ref) *Range {
 	return &Range{
-		newBoundsFromRef(ref),
+		ref.ToBounds(),
 		sheet,
 	}
 }
@@ -22,7 +22,7 @@ func newRangeFromRef(sheet Sheet, ref types.Ref) *Range {
 //newRange create and returns Range for requested 0-based indexes
 func newRange(sheet Sheet, fromCol, toCol, fromRow, toRow int) *Range {
 	return &Range{
-		newBounds(fromCol, toCol, fromRow, toRow),
+		types.BoundsFromIndexes(fromCol, fromRow, toCol, toRow),
 		sheet,
 	}
 }
@@ -44,7 +44,7 @@ func (r *Range) Cells() RangeIterator {
 
 //Values returns values for all cells in range
 func (r *Range) Values() []string {
-	width, height := r.bounds.Dimension()
+	width, height := r.Dimension()
 	values := make([]string, 0, width*height)
 
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
@@ -72,9 +72,8 @@ func (r *Range) SetFormatting(styleRef format.StyleRefID) {
 //CopyToRef copies range cells into another range starting with ref.
 //N.B.: Merged cells are not supported
 func (r *Range) CopyToRef(ref types.Ref) {
-	_, targetRef := ref.ToCellRefs()
-	cIdx, rIdx := targetRef.ToIndexes()
-	r.CopyTo(cIdx, rIdx)
+	target := ref.ToBounds()
+	r.CopyTo(target.ToCol, target.ToRow)
 }
 
 //CopyTo copies range cells into another range starting indexes cIdx and rIdx
@@ -83,8 +82,8 @@ func (r *Range) CopyTo(cIdx, rIdx int) {
 	//TODO: check if sheet is opened as read stream and panic about
 
 	//ignore self-copying
-	if cIdx != r.fromCol || rIdx != r.fromRow {
-		cOffset, rOffset := cIdx-r.fromCol, rIdx-r.fromRow
+	if cIdx != r.FromCol || rIdx != r.FromRow {
+		cOffset, rOffset := cIdx-r.FromCol, rIdx-r.FromRow
 
 		r.Walk(func(idx, cIdxSource, rIdxSource int, source *Cell) {
 			//process only non empty cells

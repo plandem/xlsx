@@ -15,16 +15,8 @@ var _ Sheet = (*sheetReadWrite)(nil)
 //Cell returns a cell for 0-based indexes
 func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.expandIfRequired(colIndex, rowIndex)
-	s.resolveMergedIfRequired(false)
 
-	//is merged cell?
-	for _, mergedBounds := range s.mergedBounds {
-		if mergedBounds.Contains(colIndex, rowIndex) {
-			colIndex, rowIndex = mergedBounds.fromCol, mergedBounds.fromRow
-			break
-		}
-	}
-
+	colIndex, rowIndex = s.mergedCells.Resolve(colIndex, rowIndex)
 	data := s.ml.SheetData[rowIndex].Cells[colIndex]
 
 	//if there is no any data for this cell, then create it
@@ -222,7 +214,7 @@ func (s *sheetReadWrite) Rows() RowIterator {
 
 //resolveDimension check if there is a 'dimension' information(optional) and if there is no any, then calculate it from existing data
 func (s *sheetReadWrite) resolveDimension(force bool) {
-	if !force && (s.ml.Dimension != nil && s.ml.Dimension.Ref != "") {
+	if !force && (s.ml.Dimension != nil && !s.ml.Dimension.Bounds.IsEmpty()) {
 		return
 	}
 
@@ -246,17 +238,10 @@ func (s *sheetReadWrite) resolveDimension(force bool) {
 		}
 	}
 
-	var dimension types.Ref
-	fromRef := types.CellRefFromIndexes(int(math.Min(minWidth, 0)), int(math.Min(minHeight, 0)))
-	toRef := types.CellRefFromIndexes(int(maxWidth), int(maxHeight))
-
-	if fromRef == toRef {
-		dimension = types.Ref(fromRef)
-	} else {
-		dimension = types.RefFromCellRefs(fromRef, toRef)
-	}
-
-	s.ml.Dimension = &ml.SheetDimension{Ref: dimension}
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(
+		int(math.Min(minWidth, 0)), int(math.Min(minHeight, 0)),
+		int(maxWidth), int(maxHeight),
+	)}
 }
 
 //expandOnInit expands grid to required dimension and copy existing data

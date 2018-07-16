@@ -21,15 +21,7 @@ var _ Sheet = (*sheetReadStream)(nil)
 func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	var data *ml.Cell
 
-	if len(s.mergedRows) > 0 {
-		for _, mergedBounds := range s.mergedBounds {
-			if mergedBounds.Contains(colIndex, rowIndex) {
-				colIndex, rowIndex = mergedBounds.fromCol, mergedBounds.fromRow
-				break
-			}
-		}
-	}
-
+	colIndex, rowIndex = s.mergedCells.Resolve(colIndex, rowIndex)
 	row := s.Row(rowIndex)
 	data = row.ml.Cells[colIndex]
 
@@ -190,9 +182,6 @@ func (s *sheetReadStream) afterOpen() {
 				}
 			}
 
-			//transform merged cells into bounds
-			s.resolveMergedIfRequired(false)
-
 			//phase2 - reset pointer to rows
 			skip()
 
@@ -201,8 +190,8 @@ func (s *sheetReadStream) afterOpen() {
 			for rows := s.Rows(); rows.HasNext(); {
 				rIdx, row := rows.Next()
 
-				for _, b := range s.mergedBounds {
-					if rIdx >= b.fromRow && rIdx <= b.toRow {
+				for _, mc := range *s.ml.MergeCells {
+					if rIdx >= mc.Bounds.FromRow && rIdx <= mc.Bounds.ToRow {
 						s.mergedRows[rIdx] = row
 						break
 					}
