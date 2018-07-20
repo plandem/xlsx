@@ -33,7 +33,6 @@ func TestBounds(t *testing.T) {
 
 	require.Equal(t, entity, decoded)
 
-
 	//methods
 	require.Equal(t, types.Ref("A1:K11"), decoded.Attribute.ToRef())
 
@@ -41,9 +40,9 @@ func TestBounds(t *testing.T) {
 	require.Equal(t, 11, w)
 	require.Equal(t, 11, h)
 
-	require.Equal(t, true, decoded.Attribute.Contains(0,0))
+	require.Equal(t, true, decoded.Attribute.Contains(0, 0))
 	require.Equal(t, true, decoded.Attribute.ContainsRef("A1"))
-	require.Equal(t, false, decoded.Attribute.Contains(12,12))
+	require.Equal(t, false, decoded.Attribute.Contains(12, 12))
 	require.Equal(t, false, decoded.Attribute.ContainsRef("L12"))
 
 	b1 := types.BoundsFromIndexes(10, 10, 0, 0)

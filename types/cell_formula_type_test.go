@@ -2,10 +2,10 @@ package types_test
 
 import (
 	"encoding/xml"
+	"fmt"
 	"github.com/plandem/xlsx/types"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"fmt"
 )
 
 func TestCellFormulaType(t *testing.T) {
@@ -13,20 +13,25 @@ func TestCellFormulaType(t *testing.T) {
 		Attribute types.CellFormulaType `xml:"attribute,attr"`
 	}
 
-	list := map[string] types.CellFormulaType{
-		"normal": types.CellFormulaTypeNormal,
-		"array": types.CellFormulaTypeArray,
+	list := map[string]types.CellFormulaType{
+		"_":         types.CellFormulaType(0),
+		"normal":    types.CellFormulaTypeNormal,
+		"array":     types.CellFormulaTypeArray,
 		"dataTable": types.CellFormulaTypeDataTable,
-		"shared": types.CellFormulaTypeShared,
+		"shared":    types.CellFormulaTypeShared,
 	}
 
 	for s, v := range list {
-		t.Run(s, func(tt *testing.T){
+		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
+			if s == "_" {
+				require.Equal(tt, `<Entity></Entity>`, string(encoded))
+			} else {
+				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
+			}
 
 			var decoded Entity
 			err = xml.Unmarshal(encoded, &decoded)

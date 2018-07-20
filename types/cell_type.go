@@ -1,6 +1,8 @@
 package types
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 //CellType is a type to encode XSD ST_CellType
 type CellType byte
