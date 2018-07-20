@@ -43,8 +43,6 @@ func (e *CellType) UnmarshalXMLAttr(attr xml.Attr) error {
 		*e = CellTypeInlineString
 	case "str":
 		*e = CellTypeFormula
-	case "":
-		*e = CellTypeGeneral
 	default:
 		*e = CellType(attr.Value[0])
 	}

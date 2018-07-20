@@ -31,7 +31,7 @@ func (cr CellRef) ToIndexes() (int, int) {
 
 //CellRefFromIndexes returns a CellRef for 0-based indexes
 func CellRefFromIndexes(colIndex, rowIndex int) CellRef {
-	if colIndex < 0 {
+	if colIndex < 0 || rowIndex < 0 {
 		return ""
 	}
 
