@@ -5,6 +5,7 @@ import (
 	"github.com/plandem/xlsx/types"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"fmt"
 )
 
 func TestCellFormulaType(t *testing.T) {
@@ -12,15 +13,26 @@ func TestCellFormulaType(t *testing.T) {
 		Attribute types.CellFormulaType `xml:"attribute,attr"`
 	}
 
-	entity := Entity{Attribute: types.CellFormulaTypeDataTable}
-	encoded, err := xml.Marshal(&entity)
+	list := map[string] types.CellFormulaType{
+		"normal": types.CellFormulaTypeNormal,
+		"array": types.CellFormulaTypeArray,
+		"dataTable": types.CellFormulaTypeDataTable,
+		"shared": types.CellFormulaTypeShared,
+	}
 
-	require.Empty(t, err)
-	require.Equal(t, `<Entity attribute="dataTable"></Entity>`, string(encoded))
+	for s, v := range list {
+		t.Run(s, func(tt *testing.T){
+			entity := Entity{Attribute: v}
+			encoded, err := xml.Marshal(&entity)
 
-	var decoded Entity
-	err = xml.Unmarshal(encoded, &decoded)
-	require.Empty(t, err)
+			require.Empty(tt, err)
+			require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
 
-	require.Equal(t, entity, decoded)
+			var decoded Entity
+			err = xml.Unmarshal(encoded, &decoded)
+			require.Empty(tt, err)
+
+			require.Equal(tt, entity, decoded)
+		})
+	}
 }

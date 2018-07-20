@@ -5,6 +5,7 @@ import (
 	"github.com/plandem/xlsx/types"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"fmt"
 )
 
 func TestVisibility(t *testing.T) {
@@ -12,15 +13,26 @@ func TestVisibility(t *testing.T) {
 		Attribute types.VisibilityType `xml:"attribute,attr"`
 	}
 
-	entity := Entity{Attribute: types.VisibilityTypeVeryHidden}
-	encoded, err := xml.Marshal(&entity)
 
-	require.Empty(t, err)
-	require.Equal(t, `<Entity attribute="veryHidden"></Entity>`, string(encoded))
+	list := map[string] types.VisibilityType{
+		"visible": types.VisibilityTypeVisible,
+		"hidden": types.VisibilityTypeHidden,
+		"veryHidden": types.VisibilityTypeVeryHidden,
+	}
 
-	var decoded Entity
-	err = xml.Unmarshal(encoded, &decoded)
-	require.Empty(t, err)
+	for s, v := range list {
+		t.Run(s, func(tt *testing.T){
+			entity := Entity{Attribute: v}
+			encoded, err := xml.Marshal(&entity)
 
-	require.Equal(t, entity, decoded)
+			require.Empty(tt, err)
+			require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
+
+			var decoded Entity
+			err = xml.Unmarshal(encoded, &decoded)
+			require.Empty(tt, err)
+
+			require.Equal(tt, entity, decoded)
+		})
+	}
 }
