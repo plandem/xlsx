@@ -17,7 +17,7 @@ const (
 
 	CellTypeFormula      CellType = 'f' //meta type for 'str'
 	CellTypeInlineString CellType = 'i' //meta type for 'inlineStr'
-	CellTypeGeneral      CellType = 'g' //meta type for general type
+	CellTypeGeneral      CellType = 0   //meta type for general type
 )
 
 func (e *CellType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
