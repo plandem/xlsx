@@ -5,6 +5,7 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/options"
 )
 
 type sheetReadStream struct {
@@ -238,7 +239,7 @@ func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) SetState(state types.VisibilityType) {
+func (s *sheetReadStream) Set(o *options.SheetOptions) {
 	panic(errorNotSupported)
 }
 

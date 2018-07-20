@@ -138,7 +138,7 @@ func (c *Cell) SetValue(value interface{}) {
 
 //Reset resets current current cell information
 func (c *Cell) Reset() {
-	c.ml = &ml.Cell{}
+	*c.ml = ml.Cell{}
 }
 
 //Clear clears cell's value
