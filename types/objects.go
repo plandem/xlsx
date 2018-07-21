@@ -13,17 +13,30 @@ const (
 	ObjectsTypeNone
 )
 
+var (
+	toObjectsType   map[string]ObjectsType
+	fromObjectsType map[ObjectsType]string
+)
+
+func init() {
+	fromObjectsType = map[ObjectsType]string{
+		ObjectsTypeAll:          "all",
+		ObjectsTypePlaceholders: "placeholders",
+		ObjectsTypeNone:         "none",
+	}
+
+	toObjectsType = make(map[string]ObjectsType, len(fromObjectsType))
+	for k, v := range fromObjectsType {
+		toObjectsType[v] = k
+	}
+}
+
 func (e *ObjectsType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case ObjectsTypeAll:
-		attr.Value = "all"
-	case ObjectsTypePlaceholders:
-		attr.Value = "placeholders"
-	case ObjectsTypeNone:
-		attr.Value = "none"
-	default:
+	if v, ok := fromObjectsType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
 	}
 
@@ -31,13 +44,8 @@ func (e *ObjectsType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func (e *ObjectsType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "all":
-		*e = ObjectsTypeAll
-	case "placeholders":
-		*e = ObjectsTypePlaceholders
-	case "none":
-		*e = ObjectsTypeNone
+	if v, ok := toObjectsType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil

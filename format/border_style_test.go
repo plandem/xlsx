@@ -2,6 +2,7 @@ package format_test
 
 import (
 	"encoding/xml"
+	"fmt"
 	"github.com/plandem/xlsx/format"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -12,15 +13,41 @@ func TestBorderStyle(t *testing.T) {
 		Attribute format.BorderStyleType `xml:"attribute,attr"`
 	}
 
-	entity := Entity{Attribute: format.BorderStyleMediumDashDot}
-	encoded, err := xml.Marshal(&entity)
+	list := map[string]format.BorderStyleType{
+		"_":                format.BorderStyleType(0),
+		"none":             format.BorderStyleNone,
+		"thin":             format.BorderStyleThin,
+		"medium":           format.BorderStyleMedium,
+		"dashed":           format.BorderStyleDashed,
+		"dotted":           format.BorderStyleDotted,
+		"thick":            format.BorderStyleThick,
+		"double":           format.BorderStyleDouble,
+		"hair":             format.BorderStyleHair,
+		"mediumDashed":     format.BorderStyleMediumDashed,
+		"dashDot":          format.BorderStyleDashDot,
+		"mediumDashDot":    format.BorderStyleMediumDashDot,
+		"dashDotDot":       format.BorderStyleDashDotDot,
+		"mediumDashDotDot": format.BorderStyleMediumDashDotDot,
+		"slantDashDot":     format.BorderStyleSlantDashDot,
+	}
 
-	require.Empty(t, err)
-	require.Equal(t, `<Entity attribute="mediumDashDot"></Entity>`, string(encoded))
+	for s, v := range list {
+		t.Run(s, func(tt *testing.T) {
+			entity := Entity{Attribute: v}
+			encoded, err := xml.Marshal(&entity)
 
-	var decoded Entity
-	err = xml.Unmarshal(encoded, &decoded)
-	require.Empty(t, err)
+			require.Empty(tt, err)
+			if s == "_" {
+				require.Equal(tt, `<Entity></Entity>`, string(encoded))
+			} else {
+				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
+			}
 
-	require.Equal(t, entity, decoded)
+			var decoded Entity
+			err = xml.Unmarshal(encoded, &decoded)
+			require.Empty(tt, err)
+
+			require.Equal(tt, entity, decoded)
+		})
+	}
 }

@@ -2,6 +2,7 @@ package format_test
 
 import (
 	"encoding/xml"
+	"fmt"
 	"github.com/plandem/xlsx/format"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -12,15 +13,46 @@ func TestFillPattern(t *testing.T) {
 		Attribute format.PatternType `xml:"attribute,attr"`
 	}
 
-	entity := Entity{Attribute: format.PatternTypeLightHorizontal}
-	encoded, err := xml.Marshal(&entity)
+	list := map[string]format.PatternType{
+		"_":               format.PatternType(0),
+		"none":            format.PatternTypeNone,
+		"solid":           format.PatternTypeSolid,
+		"mediumGray":      format.PatternTypeMediumGray,
+		"darkGray":        format.PatternTypeDarkGray,
+		"lightGray":       format.PatternTypeLightGray,
+		"darkHorizontal":  format.PatternTypeDarkHorizontal,
+		"darkVertical":    format.PatternTypeDarkVertical,
+		"darkDown":        format.PatternTypeDarkDown,
+		"darkUp":          format.PatternTypeDarkUp,
+		"darkGrid":        format.PatternTypeDarkGrid,
+		"darkTrellis":     format.PatternTypeDarkTrellis,
+		"lightHorizontal": format.PatternTypeLightHorizontal,
+		"lightVertical":   format.PatternTypeLightVertical,
+		"lightDown":       format.PatternTypeLightDown,
+		"lightUp":         format.PatternTypeLightUp,
+		"lightGrid":       format.PatternTypeLightGrid,
+		"lightTrellis":    format.PatternTypeLightTrellis,
+		"gray125":         format.PatternTypeGray125,
+		"gray0625":        format.PatternTypeGray0625,
+	}
 
-	require.Empty(t, err)
-	require.Equal(t, `<Entity attribute="lightHorizontal"></Entity>`, string(encoded))
+	for s, v := range list {
+		t.Run(s, func(tt *testing.T) {
+			entity := Entity{Attribute: v}
+			encoded, err := xml.Marshal(&entity)
 
-	var decoded Entity
-	err = xml.Unmarshal(encoded, &decoded)
-	require.Empty(t, err)
+			require.Empty(tt, err)
+			if s == "_" {
+				require.Equal(tt, `<Entity></Entity>`, string(encoded))
+			} else {
+				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
+			}
 
-	require.Equal(t, entity, decoded)
+			var decoded Entity
+			err = xml.Unmarshal(encoded, &decoded)
+			require.Empty(tt, err)
+
+			require.Equal(tt, entity, decoded)
+		})
+	}
 }

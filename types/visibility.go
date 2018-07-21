@@ -13,17 +13,30 @@ const (
 	VisibilityTypeVeryHidden
 )
 
+var (
+	toVisibilityType   map[string]VisibilityType
+	fromVisibilityType map[VisibilityType]string
+)
+
+func init() {
+	fromVisibilityType = map[VisibilityType]string{
+		VisibilityTypeVisible:    "visible",
+		VisibilityTypeHidden:     "hidden",
+		VisibilityTypeVeryHidden: "veryHidden",
+	}
+
+	toVisibilityType = make(map[string]VisibilityType, len(fromVisibilityType))
+	for k, v := range fromVisibilityType {
+		toVisibilityType[v] = k
+	}
+}
+
 func (e *VisibilityType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case VisibilityTypeVisible:
-		attr.Value = "visible"
-	case VisibilityTypeHidden:
-		attr.Value = "hidden"
-	case VisibilityTypeVeryHidden:
-		attr.Value = "veryHidden"
-	default:
+	if v, ok := fromVisibilityType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
 	}
 
@@ -31,13 +44,8 @@ func (e *VisibilityType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func (e *VisibilityType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "visible":
-		*e = VisibilityTypeVisible
-	case "hidden":
-		*e = VisibilityTypeHidden
-	case "veryHidden":
-		*e = VisibilityTypeVeryHidden
+	if v, ok := toVisibilityType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil

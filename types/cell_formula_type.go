@@ -14,19 +14,31 @@ const (
 	CellFormulaTypeShared
 )
 
+var (
+	toCellFormulaType   map[string]CellFormulaType
+	fromCellFormulaType map[CellFormulaType]string
+)
+
+func init() {
+	fromCellFormulaType = map[CellFormulaType]string{
+		CellFormulaTypeNormal:    "normal",
+		CellFormulaTypeArray:     "array",
+		CellFormulaTypeDataTable: "dataTable",
+		CellFormulaTypeShared:    "shared",
+	}
+
+	toCellFormulaType = make(map[string]CellFormulaType, len(fromCellFormulaType))
+	for k, v := range fromCellFormulaType {
+		toCellFormulaType[v] = k
+	}
+}
+
 func (e *CellFormulaType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case CellFormulaTypeNormal:
-		attr.Value = "normal"
-	case CellFormulaTypeArray:
-		attr.Value = "array"
-	case CellFormulaTypeDataTable:
-		attr.Value = "dataTable"
-	case CellFormulaTypeShared:
-		attr.Value = "shared"
-	default:
+	if v, ok := fromCellFormulaType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
 	}
 
@@ -34,15 +46,8 @@ func (e *CellFormulaType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func (e *CellFormulaType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "normal":
-		*e = CellFormulaTypeNormal
-	case "array":
-		*e = CellFormulaTypeArray
-	case "dataTable":
-		*e = CellFormulaTypeDataTable
-	case "shared":
-		*e = CellFormulaTypeShared
+	if v, ok := toCellFormulaType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil
