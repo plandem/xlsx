@@ -20,27 +20,35 @@ const (
 	HAlignDistributed
 )
 
+var (
+	toHAlignType   map[string]HAlignType
+	fromHAlignType map[HAlignType]string
+)
+
+func init() {
+	fromHAlignType = map[HAlignType]string{
+		HAlignGeneral:          "general",
+		HAlignLeft:             "left",
+		HAlignCenter:           "center",
+		HAlignRight:            "right",
+		HAlignFill:             "fill",
+		HAlignJustify:          "justify",
+		HAlignCenterContinuous: "centerContinuous",
+		HAlignDistributed:      "distributed",
+	}
+
+	toHAlignType = make(map[string]HAlignType, len(fromHAlignType))
+	for k, v := range fromHAlignType {
+		toHAlignType[v] = k
+	}
+}
+
 func (e *HAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case HAlignGeneral:
-		attr.Value = "general"
-	case HAlignLeft:
-		attr.Value = "left"
-	case HAlignCenter:
-		attr.Value = "center"
-	case HAlignRight:
-		attr.Value = "right"
-	case HAlignFill:
-		attr.Value = "fill"
-	case HAlignJustify:
-		attr.Value = "justify"
-	case HAlignCenterContinuous:
-		attr.Value = "centerContinuous"
-	case HAlignDistributed:
-		attr.Value = "distributed"
-	default:
+	if v, ok := fromHAlignType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
 	}
 
@@ -48,23 +56,8 @@ func (e *HAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func (e *HAlignType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "general":
-		*e = HAlignGeneral
-	case "left":
-		*e = HAlignLeft
-	case "center":
-		*e = HAlignCenter
-	case "right":
-		*e = HAlignRight
-	case "fill":
-		*e = HAlignFill
-	case "justify":
-		*e = HAlignJustify
-	case "centerContinuous":
-		*e = HAlignCenterContinuous
-	case "distributed":
-		*e = HAlignDistributed
+	if v, ok := toHAlignType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil

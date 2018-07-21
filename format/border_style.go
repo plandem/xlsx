@@ -26,39 +26,41 @@ const (
 	BorderStyleSlantDashDot
 )
 
+var (
+	toBorderStyleType   map[string]BorderStyleType
+	fromBorderStyleType map[BorderStyleType]string
+)
+
+func init() {
+	fromBorderStyleType = map[BorderStyleType]string{
+		BorderStyleNone:             "none",
+		BorderStyleThin:             "thin",
+		BorderStyleMedium:           "medium",
+		BorderStyleDashed:           "dashed",
+		BorderStyleDotted:           "dotted",
+		BorderStyleThick:            "thick",
+		BorderStyleDouble:           "double",
+		BorderStyleHair:             "hair",
+		BorderStyleMediumDashed:     "mediumDashed",
+		BorderStyleDashDot:          "dashDot",
+		BorderStyleMediumDashDot:    "mediumDashDot",
+		BorderStyleDashDotDot:       "dashDotDot",
+		BorderStyleMediumDashDotDot: "mediumDashDotDot",
+		BorderStyleSlantDashDot:     "slantDashDot",
+	}
+
+	toBorderStyleType = make(map[string]BorderStyleType, len(fromBorderStyleType))
+	for k, v := range fromBorderStyleType {
+		toBorderStyleType[v] = k
+	}
+}
+
 func (e *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case BorderStyleNone:
-		attr.Value = "none"
-	case BorderStyleThin:
-		attr.Value = "thin"
-	case BorderStyleMedium:
-		attr.Value = "medium"
-	case BorderStyleDashed:
-		attr.Value = "dashed"
-	case BorderStyleDotted:
-		attr.Value = "dotted"
-	case BorderStyleThick:
-		attr.Value = "thick"
-	case BorderStyleDouble:
-		attr.Value = "double"
-	case BorderStyleHair:
-		attr.Value = "hair"
-	case BorderStyleMediumDashed:
-		attr.Value = "mediumDashed"
-	case BorderStyleDashDot:
-		attr.Value = "dashDot"
-	case BorderStyleMediumDashDot:
-		attr.Value = "mediumDashDot"
-	case BorderStyleDashDotDot:
-		attr.Value = "dashDotDot"
-	case BorderStyleMediumDashDotDot:
-		attr.Value = "mediumDashDotDot"
-	case BorderStyleSlantDashDot:
-		attr.Value = "slantDashDot"
-	default:
+	if v, ok := fromBorderStyleType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
 	}
 
@@ -66,35 +68,8 @@ func (e *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func (e *BorderStyleType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "none":
-		*e = BorderStyleNone
-	case "thin":
-		*e = BorderStyleThin
-	case "medium":
-		*e = BorderStyleMedium
-	case "dashed":
-		*e = BorderStyleDashed
-	case "dotted":
-		*e = BorderStyleDotted
-	case "thick":
-		*e = BorderStyleThick
-	case "double":
-		*e = BorderStyleDouble
-	case "hair":
-		*e = BorderStyleHair
-	case "mediumDashed":
-		*e = BorderStyleMediumDashed
-	case "dashDot":
-		*e = BorderStyleDashDot
-	case "mediumDashDot":
-		*e = BorderStyleMediumDashDot
-	case "dashDotDot":
-		*e = BorderStyleDashDotDot
-	case "mediumDashDotDot":
-		*e = BorderStyleMediumDashDotDot
-	case "slantDashDot":
-		*e = BorderStyleSlantDashDot
+	if v, ok := toBorderStyleType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil

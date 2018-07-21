@@ -14,7 +14,6 @@ func TestRef(t *testing.T) {
 	require.Equal(t, types.CellRef("A10"), fromCel)
 	require.Equal(t, types.CellRef("B20"), toCel)
 
-
 	ref = types.Ref("B20")
 	require.Equal(t, types.Ref("B20"), ref)
 

@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types"
 )
 
 type sheetReadStream struct {

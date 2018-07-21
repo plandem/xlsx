@@ -17,21 +17,32 @@ const (
 	VAlignDistributed
 )
 
+var (
+	toVAlignType   map[string]VAlignType
+	fromVAlignType map[VAlignType]string
+)
+
+func init() {
+	fromVAlignType = map[VAlignType]string{
+		VAlignTop:         "top",
+		VAlignCenter:      "center",
+		VAlignBottom:      "bottom",
+		VAlignJustify:     "justify",
+		VAlignDistributed: "distributed",
+	}
+
+	toVAlignType = make(map[string]VAlignType, len(fromVAlignType))
+	for k, v := range fromVAlignType {
+		toVAlignType[v] = k
+	}
+}
+
 func (e *VAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case VAlignTop:
-		attr.Value = "top"
-	case VAlignCenter:
-		attr.Value = "center"
-	case VAlignBottom:
-		attr.Value = "bottom"
-	case VAlignJustify:
-		attr.Value = "justify"
-	case VAlignDistributed:
-		attr.Value = "distributed"
-	default:
+	if v, ok := fromVAlignType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
 	}
 
@@ -39,17 +50,8 @@ func (e *VAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func (e *VAlignType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "top":
-		*e = VAlignTop
-	case "center":
-		*e = VAlignCenter
-	case "bottom":
-		*e = VAlignBottom
-	case "justify":
-		*e = VAlignJustify
-	case "distributed":
-		*e = VAlignDistributed
+	if v, ok := toVAlignType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil

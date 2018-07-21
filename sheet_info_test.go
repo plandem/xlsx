@@ -1,11 +1,11 @@
 package xlsx
 
 import (
-	"testing"
-	"github.com/stretchr/testify/require"
+	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 func TestSheetInfo(t *testing.T) {
@@ -16,8 +16,8 @@ func TestSheetInfo(t *testing.T) {
 
 	require.Equal(t, true, isRowEmpty(nil))
 	require.Equal(t, true, isRowEmpty(&ml.Row{}))
-	require.Equal(t, false, isRowEmpty(&ml.Row{Cells:[]*ml.Cell{{}}}))
-	require.Equal(t, false, isRowEmpty(&ml.Row{CustomHeight:true}))
+	require.Equal(t, false, isRowEmpty(&ml.Row{Cells: []*ml.Cell{{}}}))
+	require.Equal(t, false, isRowEmpty(&ml.Row{CustomHeight: true}))
 
 	xl, err := Open("./test_files/example_simple.xlsx")
 	if err != nil {
@@ -35,7 +35,6 @@ func TestSheetInfo(t *testing.T) {
 	require.Equal(t, types.VisibilityType(0), xl.workbook.ml.Sheets[0].State)
 	sheet.Set(o)
 	require.Equal(t, types.VisibilityTypeVeryHidden, xl.workbook.ml.Sheets[0].State)
-
 
 	//test set active
 	require.Equal(t, 0, (*xl.workbook.ml.BookViews)[0].ActiveTab)

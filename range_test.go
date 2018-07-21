@@ -1,9 +1,9 @@
 package xlsx
 
 import (
-	"testing"
-	"github.com/stretchr/testify/require"
 	"github.com/plandem/xlsx/format"
+	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 func TestRange(t *testing.T) {

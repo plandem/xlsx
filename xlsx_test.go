@@ -74,6 +74,7 @@ func TestSaving(t *testing.T) {
 	require.Nil(t, err)
 	require.IsType(t, &xlsx.Spreadsheet{}, xl)
 	err = xl.SaveAs("./test_files/tmp.xlsx")
+	require.Nil(t, err)
 
 	//open saved
 	xl, err = xlsx.Open("./test_files/tmp.xlsx")

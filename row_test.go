@@ -1,10 +1,10 @@
 package xlsx
 
 import (
-	"testing"
-	"github.com/stretchr/testify/require"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/options"
+	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 func TestRow(t *testing.T) {
