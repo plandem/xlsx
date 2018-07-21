@@ -65,6 +65,10 @@ func init() {
 	}
 }
 
+func (e PatternType) String() string {
+	return fromPatternType[e]
+}
+
 func (e *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

@@ -14,7 +14,7 @@ func TestCellType(t *testing.T) {
 	}
 
 	list := map[string]types.CellType{
-		"g":         types.CellTypeGeneral,
+		"":          types.CellTypeGeneral,
 		"b":         types.CellTypeBool,
 		"d":         types.CellTypeDate,
 		"n":         types.CellTypeNumber,
@@ -30,7 +30,7 @@ func TestCellType(t *testing.T) {
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "g" {
+			if s == "" {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
@@ -40,11 +40,13 @@ func TestCellType(t *testing.T) {
 			err = xml.Unmarshal(encoded, &decoded)
 			require.Empty(tt, err)
 
-			if s == "g" {
+			if s == "" {
 				require.Equal(tt, Entity{}, decoded)
 			} else {
 				require.Equal(tt, entity, decoded)
 			}
+
+			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}
 }

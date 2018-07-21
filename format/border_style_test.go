@@ -14,7 +14,7 @@ func TestBorderStyle(t *testing.T) {
 	}
 
 	list := map[string]format.BorderStyleType{
-		"_":                format.BorderStyleType(0),
+		"":                 format.BorderStyleType(0),
 		"none":             format.BorderStyleNone,
 		"thin":             format.BorderStyleThin,
 		"medium":           format.BorderStyleMedium,
@@ -37,7 +37,7 @@ func TestBorderStyle(t *testing.T) {
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "_" {
+			if s == "" {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
@@ -48,6 +48,7 @@ func TestBorderStyle(t *testing.T) {
 			require.Empty(tt, err)
 
 			require.Equal(tt, entity, decoded)
+			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}
 }

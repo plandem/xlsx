@@ -55,6 +55,10 @@ func init() {
 	}
 }
 
+func (e BorderStyleType) String() string {
+	return fromBorderStyleType[e]
+}
+
 func (e *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

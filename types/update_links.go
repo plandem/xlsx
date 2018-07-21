@@ -31,6 +31,10 @@ func init() {
 	}
 }
 
+func (e UpdateLinksType) String() string {
+	return fromUpdateLinksType[e]
+}
+
 func (e *UpdateLinksType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

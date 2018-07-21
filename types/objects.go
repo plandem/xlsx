@@ -31,6 +31,10 @@ func init() {
 	}
 }
 
+func (e ObjectsType) String() string {
+	return fromObjectsType[e]
+}
+
 func (e *ObjectsType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

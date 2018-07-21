@@ -33,6 +33,10 @@ func init() {
 	}
 }
 
+func (e CellFormulaType) String() string {
+	return fromCellFormulaType[e]
+}
+
 func (e *CellFormulaType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

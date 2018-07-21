@@ -31,6 +31,10 @@ func init() {
 	}
 }
 
+func (e VisibilityType) String() string {
+	return fromVisibilityType[e]
+}
+
 func (e *VisibilityType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

@@ -37,6 +37,10 @@ func init() {
 	}
 }
 
+func (e VAlignType) String() string {
+	return fromVAlignType[e]
+}
+
 func (e *VAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 

@@ -14,7 +14,7 @@ func TestVisibility(t *testing.T) {
 	}
 
 	list := map[string]types.VisibilityType{
-		"_":          types.VisibilityType(0),
+		"":           types.VisibilityType(0),
 		"visible":    types.VisibilityTypeVisible,
 		"hidden":     types.VisibilityTypeHidden,
 		"veryHidden": types.VisibilityTypeVeryHidden,
@@ -26,7 +26,7 @@ func TestVisibility(t *testing.T) {
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "_" {
+			if s == "" {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
@@ -37,6 +37,7 @@ func TestVisibility(t *testing.T) {
 			require.Empty(tt, err)
 
 			require.Equal(tt, entity, decoded)
+			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}
 }

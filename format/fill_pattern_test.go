@@ -14,7 +14,7 @@ func TestFillPattern(t *testing.T) {
 	}
 
 	list := map[string]format.PatternType{
-		"_":               format.PatternType(0),
+		"":                format.PatternType(0),
 		"none":            format.PatternTypeNone,
 		"solid":           format.PatternTypeSolid,
 		"mediumGray":      format.PatternTypeMediumGray,
@@ -42,7 +42,7 @@ func TestFillPattern(t *testing.T) {
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "_" {
+			if s == "" {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
@@ -53,6 +53,7 @@ func TestFillPattern(t *testing.T) {
 			require.Empty(tt, err)
 
 			require.Equal(tt, entity, decoded)
+			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}
 }

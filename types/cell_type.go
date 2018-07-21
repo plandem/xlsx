@@ -9,42 +9,57 @@ type CellType byte
 
 //List of all possible values for CellType
 const (
-	CellTypeBool         CellType = 'b'
-	CellTypeDate         CellType = 'd'
-	CellTypeNumber       CellType = 'n'
-	CellTypeError        CellType = 'e'
-	CellTypeSharedString CellType = 's'
-
-	CellTypeFormula      CellType = 'f' //meta type for 'str'
-	CellTypeInlineString CellType = 'i' //meta type for 'inlineStr'
-	CellTypeGeneral      CellType = 0   //meta type for general type
+	CellTypeGeneral CellType = iota
+	CellTypeBool
+	CellTypeDate
+	CellTypeNumber
+	CellTypeError
+	CellTypeSharedString
+	CellTypeFormula
+	CellTypeInlineString
 )
+
+var (
+	toCellType   map[string]CellType
+	fromCellType map[CellType]string
+)
+
+func init() {
+	fromCellType = map[CellType]string{
+		CellTypeBool:         "b",
+		CellTypeDate:         "d",
+		CellTypeNumber:       "n",
+		CellTypeError:        "e",
+		CellTypeSharedString: "s",
+		CellTypeFormula:      "str",
+		CellTypeInlineString: "inlineStr",
+	}
+
+	toCellType = make(map[string]CellType, len(fromCellType))
+	for k, v := range fromCellType {
+		toCellType[v] = k
+	}
+}
+
+func (e CellType) String() string {
+	return fromCellType[e]
+}
 
 func (e *CellType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	switch *e {
-	case CellTypeInlineString:
-		attr.Value = "inlineStr"
-	case CellTypeFormula:
-		attr.Value = "str"
-	case CellTypeGeneral:
+	if v, ok := fromCellType[*e]; ok {
+		attr.Value = v
+	} else {
 		attr = xml.Attr{}
-	default:
-		attr.Value = string(*e)
 	}
 
 	return attr, nil
 }
 
 func (e *CellType) UnmarshalXMLAttr(attr xml.Attr) error {
-	switch attr.Value {
-	case "inlineStr":
-		*e = CellTypeInlineString
-	case "str":
-		*e = CellTypeFormula
-	default:
-		*e = CellType(attr.Value[0])
+	if v, ok := toCellType[attr.Value]; ok {
+		*e = v
 	}
 
 	return nil

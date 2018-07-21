@@ -14,7 +14,7 @@ func TestAlignH(t *testing.T) {
 	}
 
 	list := map[string]format.HAlignType{
-		"_":                format.HAlignType(0),
+		"":                 format.HAlignType(0),
 		"general":          format.HAlignGeneral,
 		"left":             format.HAlignLeft,
 		"center":           format.HAlignCenter,
@@ -31,7 +31,7 @@ func TestAlignH(t *testing.T) {
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "_" {
+			if s == "" {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
@@ -42,6 +42,7 @@ func TestAlignH(t *testing.T) {
 			require.Empty(tt, err)
 
 			require.Equal(tt, entity, decoded)
+			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}
 }

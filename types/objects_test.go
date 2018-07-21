@@ -14,7 +14,7 @@ func TestObjects(t *testing.T) {
 	}
 
 	list := map[string]types.ObjectsType{
-		"_":            types.ObjectsType(0),
+		"":             types.ObjectsType(0),
 		"all":          types.ObjectsTypeAll,
 		"placeholders": types.ObjectsTypePlaceholders,
 		"none":         types.ObjectsTypeNone,
@@ -26,7 +26,7 @@ func TestObjects(t *testing.T) {
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "_" {
+			if s == "" {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))
@@ -37,6 +37,7 @@ func TestObjects(t *testing.T) {
 			require.Empty(tt, err)
 
 			require.Equal(tt, entity, decoded)
+			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}
 }
