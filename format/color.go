@@ -2,29 +2,33 @@ package format
 
 import (
 	"strings"
+	//"github.com/plandem/xlsx/internal/ml"
 )
 
-//ARGB is a type to encode XSD ST_UnsignedIntHex, hexBinary[4]
-type ARGB string
+func newColor(color string) string {
+	return color
+}
+//func newColor(color string) *ml.Color {
+	//color = normalizeColor(color)
+	//
+	////check if it's indexed color
+	//for i, c := range indexedColors {
+	//	if color == c {
+	//		return &ml.Color{ Indexed: &i }
+	//	}
+	//}
+	//
+	//return &ml.Color{ RGB: color }
+//}
 
-//ColorToARGB check if color in #RGB format and convert it into ARGB format
-func ColorToARGB(color string) ARGB {
+//normalizeColor check if color in #RGB format and convert it into ARGB format
+func normalizeColor(color string) string {
+	//normalize color
 	if len(color) > 1 {
 		if color[0] == '#' {
 			color = "FF" + color[1:]
 		}
 	}
 
-	return ARGB(strings.ToUpper(color))
-}
-
-//ToIndex convert to index if it's possible, or return -1 in other case
-func (c ARGB) ToIndex() int {
-	for i, color := range indexedColors {
-		if color == c {
-			return i
-		}
-	}
-
-	return -1
+	return strings.ToUpper(color)
 }

@@ -2,7 +2,6 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/types"
 )
 
@@ -58,7 +57,7 @@ type Col struct {
 	Min          int               `xml:"min,attr"`
 	Max          int               `xml:"max,attr"`
 	Width        float32           `xml:"width,attr,omitempty"`
-	Style        format.StyleRefID `xml:"style,attr,omitempty"`
+	Style        StyleRefID `xml:"style,attr,omitempty"`
 	Hidden       bool              `xml:"hidden,attr,omitempty"`
 	BestFit      bool              `xml:"bestFit,attr,omitempty"`
 	CustomWidth  bool              `xml:"customWidth,attr,omitempty"`
@@ -73,7 +72,7 @@ type Row struct {
 	ExtLst       *ml.Reserved      `xml:"extLst,omitempty"`
 	Ref          int               `xml:"r,attr,omitempty"` //1-based index
 	Spans        string            `xml:"spans,attr,omitempty"`
-	Style        format.StyleRefID `xml:"s,attr,omitempty"`
+	Style        StyleRefID `xml:"s,attr,omitempty"`
 	CustomFormat bool              `xml:"customFormat,attr,omitempty"`
 	Height       float32           `xml:"ht,attr,omitempty"`
 	Hidden       bool              `xml:"hidden,attr,omitempty"`
@@ -92,7 +91,7 @@ type Cell struct {
 	InlineStr *StringItem       `xml:"is,omitempty"`
 	ExtLst    *ml.Reserved      `xml:"extLst,omitempty"`
 	Ref       types.CellRef     `xml:"r,attr"`
-	Style     format.StyleRefID `xml:"s,attr,omitempty"`
+	Style     StyleRefID `xml:"s,attr,omitempty"`
 	Type      types.CellType    `xml:"t,attr,omitempty"`
 	Cm        ml.OptionalIndex  `xml:"cm,attr,omitempty"`
 	Vm        ml.OptionalIndex  `xml:"vm,attr,omitempty"`

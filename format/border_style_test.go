@@ -4,17 +4,18 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestBorderStyle(t *testing.T) {
 	type Entity struct {
-		Attribute format.BorderStyleType `xml:"attribute,attr"`
+		Attribute ml.BorderStyleType `xml:"attribute,attr"`
 	}
 
-	list := map[string]format.BorderStyleType{
-		"":                 format.BorderStyleType(0),
+	list := map[string]ml.BorderStyleType{
+		"":                 ml.BorderStyleType(0),
 		"none":             format.BorderStyleNone,
 		"thin":             format.BorderStyleThin,
 		"medium":           format.BorderStyleMedium,

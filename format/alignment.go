@@ -1,8 +1,10 @@
 package format
 
+import "github.com/plandem/xlsx/internal/ml"
+
 type alignment struct {
-	Horizontal      HAlignType
-	Vertical        VAlignType
+	Horizontal      ml.HAlignType
+	Vertical        ml.VAlignType
 	TextRotation    int
 	WrapText        bool
 	Indent          int
@@ -17,13 +19,13 @@ type alignmentOption byte
 //Alignment is a 'namespace' for all possible settings for alignment
 var Alignment alignmentOption
 
-func (f *alignmentOption) VAlign(va VAlignType) option {
+func (f *alignmentOption) VAlign(va ml.VAlignType) option {
 	return func(s *StyleFormat) {
 		s.Alignment.Vertical = va
 	}
 }
 
-func (f *alignmentOption) HAlign(ha HAlignType) option {
+func (f *alignmentOption) HAlign(ha ml.HAlignType) option {
 	return func(s *StyleFormat) {
 		s.Alignment.Horizontal = ha
 	}

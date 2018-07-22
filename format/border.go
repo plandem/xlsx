@@ -1,5 +1,7 @@
 package format
 
+import "github.com/plandem/xlsx/internal/ml"
+
 type border struct {
 	Top    borderSegment
 	Bottom borderSegment
@@ -8,8 +10,8 @@ type border struct {
 }
 
 type borderSegment struct {
-	Color ARGB
-	Type  BorderStyleType
+	//Color ARGB
+	Type  ml.BorderStyleType
 }
 
 type borderTopSegmentOption byte
@@ -26,7 +28,7 @@ type borderOption struct {
 //Border is a 'namespace' for all possible settings for border
 var Border borderOption
 
-func (b *borderOption) Type(t BorderStyleType) option {
+func (b *borderOption) Type(t ml.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.Border.Top.Type = t
 		s.Border.Bottom.Type = t
@@ -37,15 +39,15 @@ func (b *borderOption) Type(t BorderStyleType) option {
 
 func (b *borderOption) Color(color string) option {
 	return func(s *StyleFormat) {
-		rgb := ColorToARGB(color)
-		s.Border.Top.Color = rgb
-		s.Border.Bottom.Color = rgb
-		s.Border.Left.Color = rgb
-		s.Border.Right.Color = rgb
+		//rgb := ColorToARGB(color)
+		//s.Border.Top.Color = rgb
+		//s.Border.Bottom.Color = rgb
+		//s.Border.Left.Color = rgb
+		//s.Border.Right.Color = rgb
 	}
 }
 
-func (b *borderTopSegmentOption) Type(t BorderStyleType) option {
+func (b *borderTopSegmentOption) Type(t ml.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.Border.Top.Type = t
 	}
@@ -53,11 +55,11 @@ func (b *borderTopSegmentOption) Type(t BorderStyleType) option {
 
 func (b *borderTopSegmentOption) Color(color string) option {
 	return func(s *StyleFormat) {
-		s.Border.Top.Color = ColorToARGB(color)
+		//s.Border.Top.Color = ColorToARGB(color)
 	}
 }
 
-func (b *borderBottomSegmentOption) Type(t BorderStyleType) option {
+func (b *borderBottomSegmentOption) Type(t ml.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.Border.Bottom.Type = t
 	}
@@ -65,11 +67,11 @@ func (b *borderBottomSegmentOption) Type(t BorderStyleType) option {
 
 func (b *borderBottomSegmentOption) Color(color string) option {
 	return func(s *StyleFormat) {
-		s.Border.Bottom.Color = ColorToARGB(color)
+		//s.Border.Bottom.Color = ColorToARGB(color)
 	}
 }
 
-func (b *borderLeftSegmentOption) Type(t BorderStyleType) option {
+func (b *borderLeftSegmentOption) Type(t ml.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.Border.Left.Type = t
 	}
@@ -77,11 +79,11 @@ func (b *borderLeftSegmentOption) Type(t BorderStyleType) option {
 
 func (b *borderLeftSegmentOption) Color(color string) option {
 	return func(s *StyleFormat) {
-		s.Border.Left.Color = ColorToARGB(color)
+		//s.Border.Left.Color = ColorToARGB(color)
 	}
 }
 
-func (b *borderRightSegmentOption) Type(t BorderStyleType) option {
+func (b *borderRightSegmentOption) Type(t ml.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.Border.Right.Type = t
 	}
@@ -89,6 +91,6 @@ func (b *borderRightSegmentOption) Type(t BorderStyleType) option {
 
 func (b *borderRightSegmentOption) Color(color string) option {
 	return func(s *StyleFormat) {
-		s.Border.Right.Color = ColorToARGB(color)
+		//s.Border.Right.Color = ColorToARGB(color)
 	}
 }

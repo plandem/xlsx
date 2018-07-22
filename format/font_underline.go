@@ -1,33 +1,14 @@
 package format
 
-//UnderlineType is a type to encode XSD CT_UnderlineProperty
-type UnderlineType byte
+import (
+	"github.com/plandem/xlsx/internal/ml"
+)
 
 //List of all possible values for UnderlineType
 const (
-	_ UnderlineType = iota
-	UnderlineTypeSingle
-	UnderlineTypeDouble
-	UnderlineTypeSingleAccounting
-	UnderlineTypeDoubleAccounting
-	UnderlineTypeNone
+	UnderlineTypeSingle           ml.UnderlineType = "single"
+	UnderlineTypeDouble           ml.UnderlineType = "double"
+	UnderlineTypeSingleAccounting ml.UnderlineType = "singleAccounting"
+	UnderlineTypeDoubleAccounting ml.UnderlineType = "doubleAccounting"
+	UnderlineTypeNone             ml.UnderlineType = "none"
 )
-
-func (v UnderlineType) String() string {
-	var s string
-
-	switch v {
-	case UnderlineTypeSingle:
-		s = "single"
-	case UnderlineTypeDouble:
-		s = "double"
-	case UnderlineTypeSingleAccounting:
-		s = "singleAccounting"
-	case UnderlineTypeDoubleAccounting:
-		s = "doubleAccounting"
-	case UnderlineTypeNone:
-		s = "none"
-	}
-
-	return s
-}

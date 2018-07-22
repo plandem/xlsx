@@ -2,6 +2,9 @@ package xlsx
 
 import (
 	"github.com/plandem/ooxml"
+
+	//init enums for marshal/unmarshal
+	_ "github.com/plandem/xlsx/format"
 )
 
 //Open opens a XLSX file with name or io.Reader
