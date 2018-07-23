@@ -1,9 +1,10 @@
 package format
 
 import (
+	"github.com/plandem/xlsx/format/internal/color"
+	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/internal/ml"
 )
 
 func TestFormat(t *testing.T) {
@@ -33,7 +34,8 @@ func TestFormat(t *testing.T) {
 		Alignment.ReadingOrder(4),
 		Protection.Hidden,
 		Protection.Locked,
-		NumberFormat(10, "#.### usd"),
+		NumberFormatID(0),
+		NumberFormat("#.### usd"),
 		Fill.Type(PatternTypeDarkDown),
 		Fill.Color("#FFFFFF"),
 		Fill.Background("#FF0000"),
@@ -51,7 +53,7 @@ func TestFormat(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "b1ed234f875f321a7a8812d8b06b5b10",
+		key: "6eb92b03bb130bd346522229f3e679d2",
 		Font: ml.Font{
 			Name:      "Calibri",
 			Bold:      true,
@@ -61,7 +63,7 @@ func TestFormat(t *testing.T) {
 			Condense:  true,
 			Extend:    true,
 			Size:      10.0,
-			Color:     newColor("FFFF00FF"),
+			Color:     color.New("FFFF00FF"),
 			Family:    FontFamilyDecorative,
 			Underline: UnderlineTypeSingle,
 			VAlign:    FontVAlignBaseline,
@@ -83,32 +85,32 @@ func TestFormat(t *testing.T) {
 			Hidden: true,
 		},
 		NumFormat: ml.NumberFormat{
-			10,
-			"#.### usd",
+			ID: -1,
+			Code: "#.### usd",
 		},
 		Fill: ml.Fill{
-			Pattern: &ml.PatternFill {
-				Color:      newColor("FFFFFFFF"),
-				Background: newColor("FFFF0000"),
-				Type: PatternTypeDarkDown,
+			Pattern: &ml.PatternFill{
+				Color:      color.New("FFFFFFFF"),
+				Background: color.New("FFFF0000"),
+				Type:       PatternTypeDarkDown,
 			},
 		},
 		Border: ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				Color: newColor("#FF00FF"),
+				Color: color.New("#FF00FF"),
 			},
 			Top: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				Color: newColor("#FF00FF"),
+				Color: color.New("#FF00FF"),
 			},
 			Bottom: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				Color: newColor("#FF00FF"),
+				Color: color.New("#FF00FF"),
 			},
 			Right: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				Color: newColor("#FF00FF"),
+				Color: color.New("#FF00FF"),
 			},
 		},
 	}, style)

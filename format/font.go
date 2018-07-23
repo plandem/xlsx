@@ -3,6 +3,7 @@ package format
 import (
 	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/format/internal/color"
 )
 
 type fontOption byte
@@ -46,9 +47,9 @@ func (f *fontOption) Family(family styles.FontFamilyType) option {
 	}
 }
 
-func (f *fontOption) Color(color string) option {
+func (f *fontOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Font.Color = newColor(color)
+		s.Font.Color = color.New(rgb)
 	}
 }
 

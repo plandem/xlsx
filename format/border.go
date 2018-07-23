@@ -2,6 +2,7 @@ package format
 
 import (
 	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/format/internal/color"
 )
 
 type borderTopSegmentOption byte
@@ -28,9 +29,9 @@ func (b *borderOption) Type(t styles.BorderStyleType) option {
 	}
 }
 
-func (b *borderOption) Color(color string) option {
+func (b *borderOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		rgb := newColor(color)
+		rgb := color.New(rgb)
 		s.Border.Top.Color = rgb
 		s.Border.Bottom.Color = rgb
 		s.Border.Left.Color = rgb
@@ -44,9 +45,9 @@ func (b *borderTopSegmentOption) Type(t styles.BorderStyleType) option {
 	}
 }
 
-func (b *borderTopSegmentOption) Color(color string) option {
+func (b *borderTopSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Top.Color = newColor(color)
+		s.Border.Top.Color = color.New(rgb)
 	}
 }
 
@@ -56,9 +57,9 @@ func (b *borderBottomSegmentOption) Type(t styles.BorderStyleType) option {
 	}
 }
 
-func (b *borderBottomSegmentOption) Color(color string) option {
+func (b *borderBottomSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Bottom.Color = newColor(color)
+		s.Border.Bottom.Color = color.New(rgb)
 	}
 }
 
@@ -68,9 +69,9 @@ func (b *borderLeftSegmentOption) Type(t styles.BorderStyleType) option {
 	}
 }
 
-func (b *borderLeftSegmentOption) Color(color string) option {
+func (b *borderLeftSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Left.Color = newColor(color)
+		s.Border.Left.Color = color.New(rgb)
 	}
 }
 
@@ -80,8 +81,8 @@ func (b *borderRightSegmentOption) Type(t styles.BorderStyleType) option {
 	}
 }
 
-func (b *borderRightSegmentOption) Color(color string) option {
+func (b *borderRightSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Right.Color = newColor(color)
+		s.Border.Right.Color = color.New(rgb)
 	}
 }
