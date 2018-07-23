@@ -2,10 +2,10 @@ package xlsx
 
 import (
 	"fmt"
-	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"strconv"
+	"github.com/plandem/xlsx/format"
 )
 
 //max length that excel cell can hold
@@ -159,5 +159,5 @@ func (c *Cell) HasFormatting() bool {
 
 //SetFormatting sets style format to requested styleRef
 func (c *Cell) SetFormatting(styleRef format.StyleRefID) {
-	c.ml.Style = styleRef
+	c.ml.Style = ml.StyleRefID(styleRef)
 }

@@ -9,6 +9,13 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 )
 
+//StyleRefID is alias of original ml.StyleRefID type to:
+// 1) make it public
+// 2) forbid usage of integers directly
+// 3) getting valid ID for StyleFormat via style-sheet
+// 4) put everything related to stylesheet to same package
+type StyleRefID ml.StyleRefID
+
 //StyleFormat is objects that holds combined information about cell styling
 type StyleFormat struct {
 	key string

@@ -5,7 +5,7 @@ import (
 	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
-//StyleRefID is helper type do forbid usage of integers directly and getting valid ID for StyleFormat via style-sheet
+//StyleRefID is helper alias type for ID of CT_Xf to make it easier to read/understand markup files
 type StyleRefID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
