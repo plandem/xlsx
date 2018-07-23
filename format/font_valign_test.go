@@ -4,21 +4,21 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 func TestFontVAlign(t *testing.T) {
 	type Element struct {
-		Property ml.FontVAlignType `xml:"property,omitempty"`
+		Property styles.FontVAlignType `xml:"property,omitempty"`
 	}
 
-	list := map[string]ml.FontVAlignType{
+	list := map[string]styles.FontVAlignType{
 		"baseline":    format.FontVAlignBaseline,
 		"superscript": format.FontVAlignSuperscript,
 		"subscript":   format.FontVAlignSubscript,
-		"align-a":     ml.FontVAlignType("align-a"),
+		"align-a":     styles.FontVAlignType("align-a"),
 	}
 
 	for s, v := range list {

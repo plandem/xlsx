@@ -4,23 +4,23 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 func TestFontUnderline(t *testing.T) {
 	type Element struct {
-		Property ml.UnderlineType `xml:"property,omitempty"`
+		Property styles.UnderlineType `xml:"property,omitempty"`
 	}
 
-	list := map[string]ml.UnderlineType{
+	list := map[string]styles.UnderlineType{
 		"single":           format.UnderlineTypeSingle,
 		"double":           format.UnderlineTypeDouble,
 		"singleAccounting": format.UnderlineTypeSingleAccounting,
 		"doubleAccounting": format.UnderlineTypeDoubleAccounting,
 		"none":             format.UnderlineTypeNone,
-		"underline-a":      ml.UnderlineType("underline-a"),
+		"underline-a":      styles.UnderlineType("underline-a"),
 	}
 
 	for s, v := range list {

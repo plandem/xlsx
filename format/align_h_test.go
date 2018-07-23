@@ -4,18 +4,18 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestAlignH(t *testing.T) {
 	type Entity struct {
-		Attribute ml.HAlignType `xml:"attribute,attr"`
+		Attribute styles.HAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]ml.HAlignType{
-		"":                 ml.HAlignType(0),
+	list := map[string]styles.HAlignType{
+		"":                 styles.HAlignType(0),
 		"general":          format.HAlignGeneral,
 		"left":             format.HAlignLeft,
 		"center":           format.HAlignCenter,

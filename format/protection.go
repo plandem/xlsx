@@ -1,10 +1,5 @@
 package format
 
-type protection struct {
-	Locked bool
-	Hidden bool
-}
-
 type protectionOption byte
 
 //Protection is a 'namespace' for all possible settings for protection

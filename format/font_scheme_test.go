@@ -4,21 +4,21 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 func TestFontScheme(t *testing.T) {
 	type Element struct {
-		Property ml.FontSchemeType `xml:"property,omitempty"`
+		Property styles.FontSchemeType `xml:"property,omitempty"`
 	}
 
-	list := map[string]ml.FontSchemeType{
+	list := map[string]styles.FontSchemeType{
 		"none":     format.FontSchemeNone,
 		"major":    format.FontSchemeMajor,
 		"minor":    format.FontSchemeMinor,
-		"schema-a": ml.FontSchemeType("schema-a"),
+		"schema-a": styles.FontSchemeType("schema-a"),
 	}
 
 	for s, v := range list {

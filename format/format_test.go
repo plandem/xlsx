@@ -3,6 +3,7 @@ package format
 import (
 	"github.com/stretchr/testify/require"
 	"testing"
+	"github.com/plandem/xlsx/internal/ml"
 )
 
 func TestFormat(t *testing.T) {
@@ -50,23 +51,23 @@ func TestFormat(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "2fcb2986ef404f133b9dfc23315658f8",
-		//Font: font{
-		//	Name:      "Calibri",
-		//	Bold:      true,
-		//	Italic:    true,
-		//	Strike:    true,
-		//	Shadow:    true,
-		//	Condense:  true,
-		//	Extend:    true,
-		//	Size:      10.0,
-		//	Color:     ARGB("FFFF00FF"),
-		//	Family:    FontFamilyDecorative,
-		//	Underline: UnderlineTypeSingle,
-		//	VAlign:    FontVAlignBaseline,
-		//	Scheme:    FontSchemeMinor,
-		//},
-		Alignment: alignment{
+		key: "b1ed234f875f321a7a8812d8b06b5b10",
+		Font: ml.Font{
+			Name:      "Calibri",
+			Bold:      true,
+			Italic:    true,
+			Strike:    true,
+			Shadow:    true,
+			Condense:  true,
+			Extend:    true,
+			Size:      10.0,
+			Color:     newColor("FFFF00FF"),
+			Family:    FontFamilyDecorative,
+			Underline: UnderlineTypeSingle,
+			VAlign:    FontVAlignBaseline,
+			Scheme:    FontSchemeMinor,
+		},
+		Alignment: ml.CellAlignment{
 			Vertical:        VAlignBottom,
 			Horizontal:      HAlignFill,
 			TextRotation:    90,
@@ -77,35 +78,37 @@ func TestFormat(t *testing.T) {
 			ShrinkToFit:     true,
 			ReadingOrder:    4,
 		},
-		Protection: protection{
+		Protection: ml.CellProtection{
 			Locked: true,
 			Hidden: true,
 		},
-		NumFormat: numberFormat{
+		NumFormat: ml.NumberFormat{
 			10,
 			"#.### usd",
 		},
-		Fill: fill{
-			//Color:      ColorToARGB("FFFFFFFF"),
-			//Background: ColorToARGB("FFFF0000"),
-			Type:       PatternTypeDarkDown,
+		Fill: ml.Fill{
+			Pattern: &ml.PatternFill {
+				Color:      newColor("FFFFFFFF"),
+				Background: newColor("FFFF0000"),
+				Type: PatternTypeDarkDown,
+			},
 		},
-		Border: border{
-			Left: borderSegment{
+		Border: ml.Border{
+			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				//Color: ColorToARGB("#FF00FF"),
+				Color: newColor("#FF00FF"),
 			},
-			Top: borderSegment{
+			Top: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				//Color: ColorToARGB("#FF00FF"),
+				Color: newColor("#FF00FF"),
 			},
-			Bottom: borderSegment{
+			Bottom: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				//Color: ColorToARGB("#FF00FF"),
+				Color: newColor("#FF00FF"),
 			},
-			Right: borderSegment{
+			Right: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
-				//Color: ColorToARGB("#FF00FF"),
+				Color: newColor("#FF00FF"),
 			},
 		},
 	}, style)

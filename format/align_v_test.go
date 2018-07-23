@@ -4,18 +4,18 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestAlignV(t *testing.T) {
 	type Entity struct {
-		Attribute ml.VAlignType `xml:"attribute,attr"`
+		Attribute styles.VAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]ml.VAlignType{
-		"":            ml.VAlignType(0),
+	list := map[string]styles.VAlignType{
+		"":            styles.VAlignType(0),
 		"top":         format.VAlignTop,
 		"center":      format.VAlignCenter,
 		"bottom":      format.VAlignBottom,

@@ -1,8 +1,8 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml"
-	sharedML "github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/ooxml/ml"
 )
 
 type fontOption byte
@@ -12,7 +12,7 @@ var Font fontOption
 
 func (f *fontOption) Name(name string) option {
 	return func(s *StyleFormat) {
-		s.Font.Name = sharedML.Property(name)
+		s.Font.Name = ml.Property(name)
 	}
 }
 
@@ -40,7 +40,7 @@ func (f *fontOption) Extend(s *StyleFormat) {
 	s.Font.Extend = true
 }
 
-func (f *fontOption) Family(family ml.FontFamilyType) option {
+func (f *fontOption) Family(family styles.FontFamilyType) option {
 	return func(s *StyleFormat) {
 		s.Font.Family = family
 	}
@@ -48,29 +48,29 @@ func (f *fontOption) Family(family ml.FontFamilyType) option {
 
 func (f *fontOption) Color(color string) option {
 	return func(s *StyleFormat) {
-		//s.Font.Color = newColor(color)
+		s.Font.Color = newColor(color)
 	}
 }
 
 func (f *fontOption) Size(size float64) option {
 	return func(s *StyleFormat) {
-		s.Font.Size = sharedML.PropertyDouble(size)
+		s.Font.Size = ml.PropertyDouble(size)
 	}
 }
 
-func (f *fontOption) Underline(ut ml.UnderlineType) option {
+func (f *fontOption) Underline(ut styles.UnderlineType) option {
 	return func(s *StyleFormat) {
 		s.Font.Underline = ut
 	}
 }
 
-func (f *fontOption) VAlign(va ml.FontVAlignType) option {
+func (f *fontOption) VAlign(va styles.FontVAlignType) option {
 	return func(s *StyleFormat) {
 		s.Font.VAlign = va
 	}
 }
 
-func (f *fontOption) Scheme(sn ml.FontSchemeType) option {
+func (f *fontOption) Scheme(sn styles.FontSchemeType) option {
 	return func(s *StyleFormat) {
 		s.Font.Scheme = sn
 	}

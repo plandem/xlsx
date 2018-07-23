@@ -1,13 +1,14 @@
 package format
 
 import (
-_	"github.com/stretchr/testify/require"
+	sharedML "github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/internal/ml"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestColor(t *testing.T) {
-	//color := ColorToARGB("#FF00FF")
-	//require.Equal(t, ARGB("FFFF00FF"), color)
-	//require.Equal(t, 6, color.ToIndex())
-	//require.Equal(t, -1, ColorToARGB("#112233").ToIndex())
+	indexedColor := 6
+	require.Equal(t, &ml.Color{Indexed: sharedML.OptionalIndex(&indexedColor)}, newColor("#FF00FF"))
+	require.Equal(t, &ml.Color{RGB: "FF112233"}, newColor("#112233"))
 }

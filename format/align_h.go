@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 //List of all possible values for HAlignType
 const (
-	_ ml.HAlignType = iota
+	_ styles.HAlignType = iota
 	HAlignGeneral
 	HAlignLeft
 	HAlignCenter
@@ -18,7 +18,7 @@ const (
 )
 
 func init() {
-	ml.FromHAlignType = map[ml.HAlignType]string{
+	styles.FromHAlignType = map[styles.HAlignType]string{
 		HAlignGeneral:          "general",
 		HAlignLeft:             "left",
 		HAlignCenter:           "center",
@@ -29,8 +29,8 @@ func init() {
 		HAlignDistributed:      "distributed",
 	}
 
-	ml.ToHAlignType = make(map[string]ml.HAlignType, len(ml.FromHAlignType))
-	for k, v := range ml.FromHAlignType {
-		ml.ToHAlignType[v] = k
+	styles.ToHAlignType = make(map[string]styles.HAlignType, len(styles.FromHAlignType))
+	for k, v := range styles.FromHAlignType {
+		styles.ToHAlignType[v] = k
 	}
 }

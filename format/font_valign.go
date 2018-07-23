@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 //List of all possible values for FontVAlignType
 const (
-	FontVAlignBaseline   ml.FontVAlignType = "baseline"
-	FontVAlignSuperscript ml.FontVAlignType = "superscript"
-	FontVAlignSubscript   ml.FontVAlignType = "subscript"
+	FontVAlignBaseline   styles.FontVAlignType = "baseline"
+	FontVAlignSuperscript styles.FontVAlignType = "superscript"
+	FontVAlignSubscript   styles.FontVAlignType = "subscript"
 )

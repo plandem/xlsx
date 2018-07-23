@@ -1,4 +1,4 @@
-package ml
+package styles
 
 import (
 	"encoding/xml"

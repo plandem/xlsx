@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 //List of all possible values for FontSchemeType
 const (
-	FontSchemeNone  ml.FontSchemeType = "none"
-	FontSchemeMinor ml.FontSchemeType = "minor"
-	FontSchemeMajor ml.FontSchemeType = "major"
+	FontSchemeNone  styles.FontSchemeType = "none"
+	FontSchemeMinor styles.FontSchemeType = "minor"
+	FontSchemeMajor styles.FontSchemeType = "major"
 )

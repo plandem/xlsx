@@ -2,7 +2,11 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
+
+//StyleRefID is helper type do forbid usage of integers directly and getting valid ID for StyleFormat via style-sheet
+type StyleRefID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
@@ -28,20 +32,20 @@ type NumberFormat struct {
 
 //Font is a direct mapping of XSD CT_Font
 type Font struct {
-	Name      ml.Property       `xml:"name,omitempty"`
-	Charset   ml.PropertyInt    `xml:"charset,omitempty"`
-	Family    FontFamilyType    `xml:"family,omitempty"`
-	Bold      ml.PropertyBool   `xml:"b,omitempty"`
-	Italic    ml.PropertyBool   `xml:"i,omitempty"`
-	Strike    ml.PropertyBool   `xml:"strike,omitempty"`
-	Shadow    ml.PropertyBool   `xml:"shadow,omitempty"`
-	Condense  ml.PropertyBool   `xml:"condense,omitempty"`
-	Extend    ml.PropertyBool   `xml:"extend,omitempty"`
-	Color     *Color            `xml:"color,omitempty"`
-	Size      ml.PropertyDouble `xml:"sz,omitempty"`
-	Underline UnderlineType     `xml:"u,omitempty"`
-	VAlign    FontVAlignType    `xml:"vertAlign,omitempty"`
-	Scheme    FontSchemeType    `xml:"scheme,omitempty"`
+	Name      ml.Property           `xml:"name,omitempty"`
+	Charset   ml.PropertyInt        `xml:"charset,omitempty"`
+	Family    styles.FontFamilyType `xml:"family,omitempty"`
+	Bold      ml.PropertyBool       `xml:"b,omitempty"`
+	Italic    ml.PropertyBool       `xml:"i,omitempty"`
+	Strike    ml.PropertyBool       `xml:"strike,omitempty"`
+	Shadow    ml.PropertyBool       `xml:"shadow,omitempty"`
+	Condense  ml.PropertyBool       `xml:"condense,omitempty"`
+	Extend    ml.PropertyBool       `xml:"extend,omitempty"`
+	Color     *Color                `xml:"color,omitempty"`
+	Size      ml.PropertyDouble     `xml:"sz,omitempty"`
+	Underline styles.UnderlineType  `xml:"u,omitempty"`
+	VAlign    styles.FontVAlignType `xml:"vertAlign,omitempty"`
+	Scheme    styles.FontSchemeType `xml:"scheme,omitempty"`
 }
 
 //Color is a direct mapping of XSD CT_Color
@@ -61,9 +65,9 @@ type Fill struct {
 
 //PatternFill is a direct mapping of XSD CT_PatternFill
 type PatternFill struct {
-	Color      *Color      `xml:"fgColor,omitempty"`
-	Background *Color      `xml:"bgColor,omitempty"`
-	Type       PatternType `xml:"patternType,attr,omitempty"`
+	Color      *Color             `xml:"fgColor,omitempty"`
+	Background *Color             `xml:"bgColor,omitempty"`
+	Type       styles.PatternType `xml:"patternType,attr,omitempty"`
 }
 
 //Border is a direct mapping of XSD CT_Border
@@ -82,8 +86,8 @@ type Border struct {
 
 //BorderSegment is a direct mapping of XSD CT_BorderPr
 type BorderSegment struct {
-	Color *Color          `xml:"color,omitempty"`
-	Type  BorderStyleType `xml:"style,attr,omitempty"`
+	Color *Color                 `xml:"color,omitempty"`
+	Type  styles.BorderStyleType `xml:"style,attr,omitempty"`
 }
 
 //CellStyle is a direct mapping of XSD CT_CellStyle
@@ -125,16 +129,13 @@ type CellProtection struct {
 
 //CellAlignment is a direct mapping of XSD CT_CellAlignment
 type CellAlignment struct {
-	Horizontal      HAlignType `xml:"horizontal,attr,omitempty"`
-	Vertical        VAlignType `xml:"vertical,attr,omitempty"`
-	TextRotation    int        `xml:"textRotation,attr,omitempty"`
-	WrapText        bool       `xml:"wrapText,attr,omitempty"`
-	Indent          int        `xml:"indent,attr,omitempty"`
-	RelativeIndent  int        `xml:"relativeIndent,attr,omitempty"`
-	JustifyLastLine bool       `xml:"justifyLastLine,attr,omitempty"`
-	ShrinkToFit     bool       `xml:"shrinkToFit,attr,omitempty"`
-	ReadingOrder    int        `xml:"readingOrder,attr,omitempty"`
+	Horizontal      styles.HAlignType `xml:"horizontal,attr,omitempty"`
+	Vertical        styles.VAlignType `xml:"vertical,attr,omitempty"`
+	TextRotation    int               `xml:"textRotation,attr,omitempty"`
+	WrapText        bool              `xml:"wrapText,attr,omitempty"`
+	Indent          int               `xml:"indent,attr,omitempty"`
+	RelativeIndent  int               `xml:"relativeIndent,attr,omitempty"`
+	JustifyLastLine bool              `xml:"justifyLastLine,attr,omitempty"`
+	ShrinkToFit     bool              `xml:"shrinkToFit,attr,omitempty"`
+	ReadingOrder    int               `xml:"readingOrder,attr,omitempty"`
 }
-
-//StyleRefID is helper type do forbid usage of integers directly and getting valid ID for StyleFormat via style-sheet
-type StyleRefID int

@@ -4,25 +4,25 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestFontFamily(t *testing.T) {
 	type Element struct {
-		Property ml.FontFamilyType `xml:"property,omitempty"`
+		Property styles.FontFamilyType `xml:"property,omitempty"`
 	}
 
-	list := map[string]ml.FontFamilyType{
-		"":   ml.FontFamilyType(0),
+	list := map[string]styles.FontFamilyType{
+		"":   styles.FontFamilyType(0),
 		"1":  format.FontFamilyRoman,
 		"2":  format.FontFamilySwiss,
 		"3":  format.FontFamilyModern,
 		"4":  format.FontFamilyScript,
 		"5":  format.FontFamilyDecorative,
-		"6":  ml.FontFamilyType(6), //officially 6-14 - reserved
-		"25": ml.FontFamilyType(25),
+		"6":  styles.FontFamilyType(6), //officially 6-14 - reserved
+		"25": styles.FontFamilyType(25),
 	}
 
 	for s, v := range list {
