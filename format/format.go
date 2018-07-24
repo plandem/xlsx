@@ -30,14 +30,17 @@ type option func(o *StyleFormat)
 func New(options ...option) *StyleFormat {
 	s := &StyleFormat{
 		Fill: ml.Fill{
-			Pattern: &ml.PatternFill{},
+			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
 		Border: ml.Border{
-			Left:   &ml.BorderSegment{},
-			Right:  &ml.BorderSegment{},
-			Top:    &ml.BorderSegment{},
-			Bottom: &ml.BorderSegment{},
+			Left:       &ml.BorderSegment{},
+			Right:      &ml.BorderSegment{},
+			Top:        &ml.BorderSegment{},
+			Bottom:     &ml.BorderSegment{},
+			Diagonal:   &ml.BorderSegment{},
+			Vertical:   &ml.BorderSegment{},
+			Horizontal: &ml.BorderSegment{},
 		},
 	}
 	s.Set(options...)

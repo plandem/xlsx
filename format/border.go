@@ -9,12 +9,18 @@ type borderTopSegmentOption byte
 type borderBottomSegmentOption byte
 type borderLeftSegmentOption byte
 type borderRightSegmentOption byte
+type borderDiagonalSegmentOption byte
+type borderVerticalSegmentOption byte
+type borderHorizontalSegmentOption byte
 
 type borderOption struct {
-	Top    borderTopSegmentOption
-	Bottom borderBottomSegmentOption
-	Left   borderLeftSegmentOption
-	Right  borderRightSegmentOption
+	Top        borderTopSegmentOption
+	Bottom     borderBottomSegmentOption
+	Left       borderLeftSegmentOption
+	Right      borderRightSegmentOption
+	Diagonal   borderDiagonalSegmentOption
+	Vertical   borderVerticalSegmentOption
+	Horizontal borderHorizontalSegmentOption
 }
 
 //Border is a 'namespace' for all possible settings for border
@@ -84,5 +90,41 @@ func (b *borderRightSegmentOption) Type(t styles.BorderStyleType) option {
 func (b *borderRightSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
 		s.Border.Right.Color = color.New(rgb)
+	}
+}
+
+func (b *borderDiagonalSegmentOption) Type(t styles.BorderStyleType) option {
+	return func(s *StyleFormat) {
+		s.Border.Diagonal.Type = t
+	}
+}
+
+func (b *borderDiagonalSegmentOption) Color(rgb string) option {
+	return func(s *StyleFormat) {
+		s.Border.Diagonal.Color = color.New(rgb)
+	}
+}
+
+func (b *borderVerticalSegmentOption) Type(t styles.BorderStyleType) option {
+	return func(s *StyleFormat) {
+		s.Border.Vertical.Type = t
+	}
+}
+
+func (b *borderVerticalSegmentOption) Color(rgb string) option {
+	return func(s *StyleFormat) {
+		s.Border.Vertical.Color = color.New(rgb)
+	}
+}
+
+func (b *borderHorizontalSegmentOption) Type(t styles.BorderStyleType) option {
+	return func(s *StyleFormat) {
+		s.Border.Horizontal.Type = t
+	}
+}
+
+func (b *borderHorizontalSegmentOption) Color(rgb string) option {
+	return func(s *StyleFormat) {
+		s.Border.Horizontal.Color = color.New(rgb)
 	}
 }
