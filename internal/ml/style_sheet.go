@@ -51,16 +51,16 @@ type Font struct {
 //Color is a direct mapping of XSD CT_Color
 type Color struct {
 	Auto    bool             `xml:"auto,attr,omitempty"`
-	Indexed ml.OptionalIndex `xml:"indexed,attr,omitempty"`
 	RGB     string           `xml:"rgb,attr,omitempty"`
+	Tint    float64          `xml:"tint,attr,omitempty"` //default 0.0
+	Indexed ml.OptionalIndex `xml:"indexed,attr,omitempty"`
 	Theme   ml.OptionalIndex `xml:"theme,attr,omitempty"`
-	Tint    *float64         `xml:"tint,attr,omitempty"` //optional double
 }
 
 //Fill is a direct mapping of XSD CT_Fill
 type Fill struct {
-	Pattern  *PatternFill `xml:"patternFill,omitempty"`
-	Gradient *ml.Reserved `xml:"gradientFill,omitempty"`
+	Pattern  *PatternFill  `xml:"patternFill,omitempty"`
+	Gradient *GradientFill `xml:"gradientFill,omitempty"`
 }
 
 //PatternFill is a direct mapping of XSD CT_PatternFill
@@ -68,6 +68,23 @@ type PatternFill struct {
 	Color      *Color             `xml:"fgColor,omitempty"`
 	Background *Color             `xml:"bgColor,omitempty"`
 	Type       styles.PatternType `xml:"patternType,attr,omitempty"`
+}
+
+//GradientFill is a direct mapping of XSD CT_GradientFill
+type GradientFill struct {
+	Stop   []*GradientStop     `xml:"stop,omitempty"`
+	Degree float64             `xml:"degree,attr,omitempty"` //default 0.0
+	Left   float64             `xml:"left,attr,omitempty"`   //default 0.0
+	Right  float64             `xml:"right,attr,omitempty"`  //default 0.0
+	Top    float64             `xml:"top,attr,omitempty"`    //default 0.0
+	Bottom float64             `xml:"bottom,attr,omitempty"` //default 0.0
+	Type   styles.GradientType `xml:"type,attr,omitempty"`   //default linear
+}
+
+//GradientStop is a direct mapping of XSD CT_GradientStop
+type GradientStop struct {
+	Color    *Color  `xml:"color"`
+	Position float64 `xml:"position"`
 }
 
 //Border is a direct mapping of XSD CT_Border

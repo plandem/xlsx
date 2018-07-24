@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 func TestFontUnderline(t *testing.T) {

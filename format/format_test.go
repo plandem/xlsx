@@ -36,9 +36,9 @@ func TestFormat(t *testing.T) {
 		Protection.Locked,
 		NumberFormatID(0),
 		NumberFormat("#.### usd"),
-		Fill.Type(PatternTypeDarkDown),
-		Fill.Color("#FFFFFF"),
-		Fill.Background("#FF0000"),
+		Fill.Pattern.Type(PatternTypeDarkDown),
+		Fill.Pattern.Color("#FFFFFF"),
+		Fill.Pattern.Background("#FF0000"),
 		Border.Type(BorderStyleDashDot),
 		Border.Color("#FF00FF"),
 		Border.Left.Type(BorderStyleDashDot),
@@ -53,7 +53,7 @@ func TestFormat(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "6eb92b03bb130bd346522229f3e679d2",
+		key: "b181ad945855b12bb5b156f475d251fc",
 		Font: ml.Font{
 			Name:      "Calibri",
 			Bold:      true,
@@ -85,7 +85,7 @@ func TestFormat(t *testing.T) {
 			Hidden: true,
 		},
 		NumFormat: ml.NumberFormat{
-			ID: -1,
+			ID:   -1,
 			Code: "#.### usd",
 		},
 		Fill: ml.Fill{
@@ -93,6 +93,9 @@ func TestFormat(t *testing.T) {
 				Color:      color.New("FFFFFFFF"),
 				Background: color.New("FFFF0000"),
 				Type:       PatternTypeDarkDown,
+			},
+			Gradient: &ml.GradientFill{
+
 			},
 		},
 		Border: ml.Border{

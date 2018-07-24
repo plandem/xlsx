@@ -12,14 +12,14 @@ var (
 	FromVAlignType map[VAlignType]string
 )
 
-func (e VAlignType) String() string {
-	return FromVAlignType[e]
+func (t VAlignType) String() string {
+	return FromVAlignType[t]
 }
 
-func (e *VAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+func (t *VAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	if v, ok := FromVAlignType[*e]; ok {
+	if v, ok := FromVAlignType[*t]; ok {
 		attr.Value = v
 	} else {
 		attr = xml.Attr{}
@@ -28,9 +28,9 @@ func (e *VAlignType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
-func (e *VAlignType) UnmarshalXMLAttr(attr xml.Attr) error {
+func (t *VAlignType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := ToVAlignType[attr.Value]; ok {
-		*e = v
+		*t = v
 	}
 
 	return nil

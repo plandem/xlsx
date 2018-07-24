@@ -2,10 +2,10 @@ package xlsx
 
 import (
 	"fmt"
+	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"strconv"
-	"github.com/plandem/xlsx/format"
 )
 
 //max length that excel cell can hold

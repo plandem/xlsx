@@ -15,10 +15,10 @@ const (
 	FontVAlignSubscript   FontVAlignType = "subscript"
 )
 
-func (f *FontVAlignType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	return (*ml.Property)(f).MarshalXML(e, start)
+func (t *FontVAlignType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return (*ml.Property)(t).MarshalXML(e, start)
 }
 
-func (f *FontVAlignType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	return (*ml.Property)(f).UnmarshalXML(d, start)
+func (t *FontVAlignType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	return (*ml.Property)(t).UnmarshalXML(d, start)
 }

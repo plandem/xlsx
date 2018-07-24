@@ -12,14 +12,14 @@ var (
 	FromBorderStyleType map[BorderStyleType]string
 )
 
-func (e BorderStyleType) String() string {
-	return FromBorderStyleType[e]
+func (t BorderStyleType) String() string {
+	return FromBorderStyleType[t]
 }
 
-func (e *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+func (t *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	if v, ok := FromBorderStyleType[*e]; ok {
+	if v, ok := FromBorderStyleType[*t]; ok {
 		attr.Value = v
 	} else {
 		attr = xml.Attr{}
@@ -28,9 +28,9 @@ func (e *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
-func (e *BorderStyleType) UnmarshalXMLAttr(attr xml.Attr) error {
+func (t *BorderStyleType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := ToBorderStyleType[attr.Value]; ok {
-		*e = v
+		*t = v
 	}
 
 	return nil

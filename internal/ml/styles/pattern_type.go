@@ -12,14 +12,14 @@ var (
 	FromPatternType map[PatternType]string
 )
 
-func (e PatternType) String() string {
-	return FromPatternType[e]
+func (t PatternType) String() string {
+	return FromPatternType[t]
 }
 
-func (e *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+func (t *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
-	if v, ok := FromPatternType[*e]; ok {
+	if v, ok := FromPatternType[*t]; ok {
 		attr.Value = v
 	} else {
 		attr = xml.Attr{}
@@ -28,9 +28,9 @@ func (e *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
-func (e *PatternType) UnmarshalXMLAttr(attr xml.Attr) error {
+func (t *PatternType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := ToPatternType[attr.Value]; ok {
-		*e = v
+		*t = v
 	}
 
 	return nil

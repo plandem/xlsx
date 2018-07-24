@@ -28,7 +28,7 @@ const LastReservedID = 163
 
 //New create and return ml.NumberFormat type for provided values, respecting built-in number formats
 func New(id int, code string) ml.NumberFormat {
-	return Normalize(ml.NumberFormat{ID: id, Code: code })
+	return Normalize(ml.NumberFormat{ID: id, Code: code})
 }
 
 //IsBuiltIn returns true if id is one of built-in
@@ -45,7 +45,7 @@ func Resolve(nf ml.NumberFormat) *BuiltInFormat {
 			return knownFormat
 		} else {
 			//general built-in format?
-			return &BuiltInFormat{ml.NumberFormat{ ID: nf.ID, Code: builtIn[0x00].Code }, General}
+			return &BuiltInFormat{ml.NumberFormat{ID: nf.ID, Code: builtIn[0x00].Code}, General}
 		}
 	}
 

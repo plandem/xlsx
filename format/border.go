@@ -1,8 +1,8 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/plandem/xlsx/format/internal/color"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
 type borderTopSegmentOption byte
