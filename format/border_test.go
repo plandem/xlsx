@@ -1,10 +1,10 @@
 package format
 
 import (
+	"github.com/plandem/xlsx/format/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/format/internal/color"
 )
 
 func TestBorder(t *testing.T) {
@@ -17,7 +17,7 @@ func TestBorder(t *testing.T) {
 	require.Equal(t, &StyleFormat{
 		key: "c2d0dc7863dc2db9eb4dc3d4a5f824f7",
 		Fill: ml.Fill{
-			Pattern: &ml.PatternFill{},
+			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
 		Border: ml.Border{
@@ -37,8 +37,8 @@ func TestBorder(t *testing.T) {
 				Type:  BorderStyleDashDot,
 				Color: color.New("#FF00FF"),
 			},
-			Diagonal: &ml.BorderSegment{},
-			Vertical: &ml.BorderSegment{},
+			Diagonal:   &ml.BorderSegment{},
+			Vertical:   &ml.BorderSegment{},
 			Horizontal: &ml.BorderSegment{},
 		},
 	}, style)
@@ -63,7 +63,7 @@ func TestBorder(t *testing.T) {
 	require.Equal(t, &StyleFormat{
 		key: "8f76fa3db58884dcc28d64629da513e7",
 		Fill: ml.Fill{
-			Pattern: &ml.PatternFill{},
+			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
 		Border: ml.Border{

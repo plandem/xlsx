@@ -1,10 +1,10 @@
 package format
 
 import (
+	"github.com/plandem/xlsx/format/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/format/internal/color"
 )
 
 func TestFont(t *testing.T) {
@@ -28,16 +28,16 @@ func TestFont(t *testing.T) {
 	require.Equal(t, &StyleFormat{
 		key: "dec64c1f2177f8a1995cef78a107ef4e",
 		Fill: ml.Fill{
-			Pattern: &ml.PatternFill{},
+			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
 		Border: ml.Border{
-			Left: &ml.BorderSegment{},
-			Right: &ml.BorderSegment{},
-			Top: &ml.BorderSegment{},
-			Bottom: &ml.BorderSegment{},
-			Diagonal: &ml.BorderSegment{},
-			Vertical: &ml.BorderSegment{},
+			Left:       &ml.BorderSegment{},
+			Right:      &ml.BorderSegment{},
+			Top:        &ml.BorderSegment{},
+			Bottom:     &ml.BorderSegment{},
+			Diagonal:   &ml.BorderSegment{},
+			Vertical:   &ml.BorderSegment{},
 			Horizontal: &ml.BorderSegment{},
 		},
 		Font: ml.Font{

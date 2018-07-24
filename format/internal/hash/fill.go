@@ -25,7 +25,7 @@ func Fill(fill *ml.Fill) string {
 		f.Gradient = &ml.GradientFill{}
 	}
 
-	result := []string {
+	result := []string{
 		strconv.FormatInt(int64(f.Pattern.Type), 10),
 		Color(f.Pattern.Color),
 		Color(f.Pattern.Background),

@@ -2,8 +2,8 @@ package hash
 
 import (
 	"github.com/plandem/xlsx/internal/ml"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 //Border returns string with all values of border

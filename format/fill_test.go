@@ -1,10 +1,10 @@
 package format
 
 import (
+	"github.com/plandem/xlsx/format/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/format/internal/color"
 )
 
 func TestFill(t *testing.T) {
@@ -32,25 +32,25 @@ func TestFill(t *testing.T) {
 				Type:       PatternTypeDarkDown,
 			},
 			Gradient: &ml.GradientFill{
-				Degree:90,
-				Type: GradientTypePath,
-				Left: 1,
-				Right: 2,
-				Top: 3,
+				Degree: 90,
+				Type:   GradientTypePath,
+				Left:   1,
+				Right:  2,
+				Top:    3,
 				Bottom: 4,
 				Stop: []*ml.GradientStop{
-					{ Position: 100, Color: color.New("FFFF00FF")},
-					{ Position: 200, Color: color.New("FF00FF00")},
+					{Position: 100, Color: color.New("FFFF00FF")},
+					{Position: 200, Color: color.New("FF00FF00")},
 				},
 			},
 		},
 		Border: ml.Border{
-			Left: &ml.BorderSegment{},
-			Right: &ml.BorderSegment{},
-			Top: &ml.BorderSegment{},
-			Bottom: &ml.BorderSegment{},
-			Diagonal: &ml.BorderSegment{},
-			Vertical: &ml.BorderSegment{},
+			Left:       &ml.BorderSegment{},
+			Right:      &ml.BorderSegment{},
+			Top:        &ml.BorderSegment{},
+			Bottom:     &ml.BorderSegment{},
+			Diagonal:   &ml.BorderSegment{},
+			Vertical:   &ml.BorderSegment{},
 			Horizontal: &ml.BorderSegment{},
 		},
 	}, style)

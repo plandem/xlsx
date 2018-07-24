@@ -8,7 +8,7 @@ import (
 type GradientType byte
 
 var (
-	ToGradientType  map[string]GradientType
+	ToGradientType   map[string]GradientType
 	FromGradientType map[GradientType]string
 )
 
