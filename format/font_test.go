@@ -27,11 +27,11 @@ func TestFont(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
 		key: "dec64c1f2177f8a1995cef78a107ef4e",
-		Fill: ml.Fill{
+		fill: ml.Fill{
 			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
-		Border: ml.Border{
+		border: ml.Border{
 			Left:       &ml.BorderSegment{},
 			Right:      &ml.BorderSegment{},
 			Top:        &ml.BorderSegment{},
@@ -40,7 +40,7 @@ func TestFont(t *testing.T) {
 			Vertical:   &ml.BorderSegment{},
 			Horizontal: &ml.BorderSegment{},
 		},
-		Font: ml.Font{
+		font: ml.Font{
 			Name:      "Calibri",
 			Bold:      true,
 			Italic:    true,

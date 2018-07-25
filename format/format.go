@@ -14,14 +14,13 @@ type StyleRefID ml.StyleRefID
 
 //StyleFormat is objects that holds combined information about cell styling
 type StyleFormat struct {
-	key string
-
-	Font       ml.Font
-	Fill       ml.Fill
-	Alignment  ml.CellAlignment
-	NumFormat  ml.NumberFormat
-	Protection ml.CellProtection
-	Border     ml.Border
+	key        string
+	font       ml.Font
+	fill       ml.Fill
+	alignment  ml.CellAlignment
+	numFormat  ml.NumberFormat
+	protection ml.CellProtection
+	border     ml.Border
 }
 
 type option func(o *StyleFormat)
@@ -29,11 +28,11 @@ type option func(o *StyleFormat)
 //New creates and returns StyleFormat object with requested options
 func New(options ...option) *StyleFormat {
 	s := &StyleFormat{
-		Fill: ml.Fill{
+		fill: ml.Fill{
 			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
-		Border: ml.Border{
+		border: ml.Border{
 			Left:       &ml.BorderSegment{},
 			Right:      &ml.BorderSegment{},
 			Top:        &ml.BorderSegment{},
@@ -43,6 +42,7 @@ func New(options ...option) *StyleFormat {
 			Horizontal: &ml.BorderSegment{},
 		},
 	}
+
 	s.Set(options...)
 	return s
 }
@@ -58,5 +58,14 @@ func (s *StyleFormat) Set(options ...option) {
 		o(s)
 	}
 
-	s.key = hash.Style(&s.Font, &s.Fill, &s.Alignment, &s.NumFormat, &s.Protection, &s.Border)
+	s.key = hash.Style(&s.font, &s.fill, &s.alignment, &s.numFormat, &s.protection, &s.border)
+}
+
+//Pack pack current style settings and returns only non-empty objects
+func (s *StyleFormat) Pack() (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, number *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border) {
+	if (s.font != ml.Font{}) {
+		*font = s.font
+	}
+
+	return
 }

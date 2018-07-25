@@ -25,7 +25,7 @@ func TestFill(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
 		key: "11a3f77080cbe4b5d41a3d171793fc88",
-		Fill: ml.Fill{
+		fill: ml.Fill{
 			Pattern: &ml.PatternFill{
 				Color:      color.New("FFFFFFFF"),
 				Background: color.New("FFFF0000"),
@@ -44,7 +44,7 @@ func TestFill(t *testing.T) {
 				},
 			},
 		},
-		Border: ml.Border{
+		border: ml.Border{
 			Left:       &ml.BorderSegment{},
 			Right:      &ml.BorderSegment{},
 			Top:        &ml.BorderSegment{},

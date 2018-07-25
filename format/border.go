@@ -28,103 +28,103 @@ var Border borderOption
 
 func (b *borderOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Top.Type = t
-		s.Border.Bottom.Type = t
-		s.Border.Left.Type = t
-		s.Border.Right.Type = t
+		s.border.Top.Type = t
+		s.border.Bottom.Type = t
+		s.border.Left.Type = t
+		s.border.Right.Type = t
 	}
 }
 
 func (b *borderOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
 		rgb := color.New(rgb)
-		s.Border.Top.Color = rgb
-		s.Border.Bottom.Color = rgb
-		s.Border.Left.Color = rgb
-		s.Border.Right.Color = rgb
+		s.border.Top.Color = rgb
+		s.border.Bottom.Color = rgb
+		s.border.Left.Color = rgb
+		s.border.Right.Color = rgb
 	}
 }
 
 func (b *borderTopSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Top.Type = t
+		s.border.Top.Type = t
 	}
 }
 
 func (b *borderTopSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Top.Color = color.New(rgb)
+		s.border.Top.Color = color.New(rgb)
 	}
 }
 
 func (b *borderBottomSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Bottom.Type = t
+		s.border.Bottom.Type = t
 	}
 }
 
 func (b *borderBottomSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Bottom.Color = color.New(rgb)
+		s.border.Bottom.Color = color.New(rgb)
 	}
 }
 
 func (b *borderLeftSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Left.Type = t
+		s.border.Left.Type = t
 	}
 }
 
 func (b *borderLeftSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Left.Color = color.New(rgb)
+		s.border.Left.Color = color.New(rgb)
 	}
 }
 
 func (b *borderRightSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Right.Type = t
+		s.border.Right.Type = t
 	}
 }
 
 func (b *borderRightSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Right.Color = color.New(rgb)
+		s.border.Right.Color = color.New(rgb)
 	}
 }
 
 func (b *borderDiagonalSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Diagonal.Type = t
+		s.border.Diagonal.Type = t
 	}
 }
 
 func (b *borderDiagonalSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Diagonal.Color = color.New(rgb)
+		s.border.Diagonal.Color = color.New(rgb)
 	}
 }
 
 func (b *borderVerticalSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Vertical.Type = t
+		s.border.Vertical.Type = t
 	}
 }
 
 func (b *borderVerticalSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Vertical.Color = color.New(rgb)
+		s.border.Vertical.Color = color.New(rgb)
 	}
 }
 
 func (b *borderHorizontalSegmentOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
-		s.Border.Horizontal.Type = t
+		s.border.Horizontal.Type = t
 	}
 }
 
 func (b *borderHorizontalSegmentOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Border.Horizontal.Color = color.New(rgb)
+		s.border.Horizontal.Color = color.New(rgb)
 	}
 }

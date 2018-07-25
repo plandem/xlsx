@@ -37,60 +37,60 @@ func (f *fillOption) Type(pt styles.PatternType) option {
 
 func (p *patternOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Fill.Pattern.Color = color.New(rgb)
+		s.fill.Pattern.Color = color.New(rgb)
 	}
 }
 
 func (p *patternOption) Background(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Fill.Pattern.Background = color.New(rgb)
+		s.fill.Pattern.Background = color.New(rgb)
 	}
 }
 
 func (p *patternOption) Type(pt styles.PatternType) option {
 	return func(s *StyleFormat) {
-		s.Fill.Pattern.Type = pt
+		s.fill.Pattern.Type = pt
 	}
 }
 
 func (g *gradientOption) Type(gt styles.GradientType) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Type = gt
+		s.fill.Gradient.Type = gt
 	}
 }
 
 func (g *gradientOption) Degree(degree float64) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Degree = degree
+		s.fill.Gradient.Degree = degree
 	}
 }
 
 func (g *gradientOption) Left(left float64) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Left = left
+		s.fill.Gradient.Left = left
 	}
 }
 
 func (g *gradientOption) Right(right float64) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Right = right
+		s.fill.Gradient.Right = right
 	}
 }
 
 func (g *gradientOption) Top(top float64) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Top = top
+		s.fill.Gradient.Top = top
 	}
 }
 
 func (g *gradientOption) Bottom(bottom float64) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Bottom = bottom
+		s.fill.Gradient.Bottom = bottom
 	}
 }
 
 func (g *gradientOption) Stop(position float64, rgb string) option {
 	return func(s *StyleFormat) {
-		s.Fill.Gradient.Stop = append(s.Fill.Gradient.Stop, &ml.GradientStop{Position: position, Color: color.New(rgb)})
+		s.fill.Gradient.Stop = append(s.fill.Gradient.Stop, &ml.GradientStop{Position: position, Color: color.New(rgb)})
 	}
 }

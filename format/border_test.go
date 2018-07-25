@@ -16,11 +16,11 @@ func TestBorder(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
 		key: "c2d0dc7863dc2db9eb4dc3d4a5f824f7",
-		Fill: ml.Fill{
+		fill: ml.Fill{
 			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
-		Border: ml.Border{
+		border: ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
 				Color: color.New("#FF00FF"),
@@ -62,11 +62,11 @@ func TestBorder(t *testing.T) {
 
 	require.Equal(t, &StyleFormat{
 		key: "8f76fa3db58884dcc28d64629da513e7",
-		Fill: ml.Fill{
+		fill: ml.Fill{
 			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
-		Border: ml.Border{
+		border: ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
 				Color: color.New("#FF00FF"),

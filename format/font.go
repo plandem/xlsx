@@ -13,66 +13,66 @@ var Font fontOption
 
 func (f *fontOption) Name(name string) option {
 	return func(s *StyleFormat) {
-		s.Font.Name = ml.Property(name)
+		s.font.Name = ml.Property(name)
 	}
 }
 
 func (f *fontOption) Bold(s *StyleFormat) {
-	s.Font.Bold = true
+	s.font.Bold = true
 }
 
 func (f *fontOption) Italic(s *StyleFormat) {
-	s.Font.Italic = true
+	s.font.Italic = true
 }
 
 func (f *fontOption) Strikeout(s *StyleFormat) {
-	s.Font.Strike = true
+	s.font.Strike = true
 }
 
 func (f *fontOption) Shadow(s *StyleFormat) {
-	s.Font.Shadow = true
+	s.font.Shadow = true
 }
 
 func (f *fontOption) Condense(s *StyleFormat) {
-	s.Font.Condense = true
+	s.font.Condense = true
 }
 
 func (f *fontOption) Extend(s *StyleFormat) {
-	s.Font.Extend = true
+	s.font.Extend = true
 }
 
 func (f *fontOption) Family(family styles.FontFamilyType) option {
 	return func(s *StyleFormat) {
-		s.Font.Family = family
+		s.font.Family = family
 	}
 }
 
 func (f *fontOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Font.Color = color.New(rgb)
+		s.font.Color = color.New(rgb)
 	}
 }
 
 func (f *fontOption) Size(size float64) option {
 	return func(s *StyleFormat) {
-		s.Font.Size = ml.PropertyDouble(size)
+		s.font.Size = ml.PropertyDouble(size)
 	}
 }
 
 func (f *fontOption) Underline(ut styles.UnderlineType) option {
 	return func(s *StyleFormat) {
-		s.Font.Underline = ut
+		s.font.Underline = ut
 	}
 }
 
 func (f *fontOption) VAlign(va styles.FontVAlignType) option {
 	return func(s *StyleFormat) {
-		s.Font.VAlign = va
+		s.font.VAlign = va
 	}
 }
 
 func (f *fontOption) Scheme(sn styles.FontSchemeType) option {
 	return func(s *StyleFormat) {
-		s.Font.Scheme = sn
+		s.font.Scheme = sn
 	}
 }

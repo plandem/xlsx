@@ -1,10 +1,6 @@
 package format
 
-/*
-
 import (
-	"github.com/plandem/xlsx/format/internal/color"
-	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -54,71 +50,8 @@ func TestFormat(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, &StyleFormat{
-		key: "b181ad945855b12bb5b156f475d251fc",
-		Font: ml.Font{
-			Name:      "Calibri",
-			Bold:      true,
-			Italic:    true,
-			Strike:    true,
-			Shadow:    true,
-			Condense:  true,
-			Extend:    true,
-			Size:      10.0,
-			Color:     color.New("FFFF00FF"),
-			Family:    FontFamilyDecorative,
-			Underline: UnderlineTypeSingle,
-			VAlign:    FontVAlignBaseline,
-			Scheme:    FontSchemeMinor,
-		},
-		Alignment: ml.CellAlignment{
-			Vertical:        VAlignBottom,
-			Horizontal:      HAlignFill,
-			TextRotation:    90,
-			WrapText:        true,
-			Indent:          10,
-			RelativeIndent:  5,
-			JustifyLastLine: true,
-			ShrinkToFit:     true,
-			ReadingOrder:    4,
-		},
-		Protection: ml.CellProtection{
-			Locked: true,
-			Hidden: true,
-		},
-		NumFormat: ml.NumberFormat{
-			ID:   -1,
-			Code: "#.### usd",
-		},
-		Fill: ml.Fill{
-			Pattern: &ml.PatternFill{
-				Color:      color.New("FFFFFFFF"),
-				Background: color.New("FFFF0000"),
-				Type:       PatternTypeDarkDown,
-			},
-			Gradient: &ml.GradientFill{
 
-			},
-		},
-		Border: ml.Border{
-			Left: &ml.BorderSegment{
-				Type:  BorderStyleDashDot,
-				Color: color.New("#FF00FF"),
-			},
-			Top: &ml.BorderSegment{
-				Type:  BorderStyleDashDot,
-				Color: color.New("#FF00FF"),
-			},
-			Bottom: &ml.BorderSegment{
-				Type:  BorderStyleDashDot,
-				Color: color.New("#FF00FF"),
-			},
-			Right: &ml.BorderSegment{
-				Type:  BorderStyleDashDot,
-				Color: color.New("#FF00FF"),
-			},
-		},
-	}, style)
-
+	//font, fill, alignment, number, protection, border := style.Pack()
+	//require.Equal(t, )
 }
-*/
+

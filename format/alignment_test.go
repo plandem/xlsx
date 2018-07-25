@@ -22,11 +22,11 @@ func TestAlignment(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
 		key: "31938baca968c10c008c70df782ec8a8",
-		Fill: ml.Fill{
+		fill: ml.Fill{
 			Pattern:  &ml.PatternFill{},
 			Gradient: &ml.GradientFill{},
 		},
-		Border: ml.Border{
+		border: ml.Border{
 			Left:       &ml.BorderSegment{},
 			Right:      &ml.BorderSegment{},
 			Top:        &ml.BorderSegment{},
@@ -35,7 +35,7 @@ func TestAlignment(t *testing.T) {
 			Vertical:   &ml.BorderSegment{},
 			Horizontal: &ml.BorderSegment{},
 		},
-		Alignment: ml.CellAlignment{
+		alignment: ml.CellAlignment{
 			Vertical:        VAlignBottom,
 			Horizontal:      HAlignFill,
 			TextRotation:    90,
