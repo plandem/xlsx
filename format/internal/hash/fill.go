@@ -7,7 +7,7 @@ import (
 )
 
 //Fill returns string with all values of fill
-func Fill(fill *ml.Fill) string {
+func Fill(fill *ml.Fill) Key {
 	var f ml.Fill
 
 	if fill == nil {
@@ -27,8 +27,8 @@ func Fill(fill *ml.Fill) string {
 
 	result := []string{
 		strconv.FormatInt(int64(f.Pattern.Type), 10),
-		Color(f.Pattern.Color),
-		Color(f.Pattern.Background),
+		string(Color(f.Pattern.Color)),
+		string(Color(f.Pattern.Background)),
 		strconv.FormatInt(int64(f.Gradient.Type), 10),
 		strconv.FormatFloat(float64(f.Gradient.Degree), 'f', -1, 64),
 		strconv.FormatFloat(float64(f.Gradient.Left), 'f', -1, 64),
@@ -40,9 +40,9 @@ func Fill(fill *ml.Fill) string {
 	for _, stop := range f.Gradient.Stop {
 		result = append(result,
 			strconv.FormatFloat(float64(stop.Position), 'f', -1, 64),
-			Color(stop.Color),
+			string(Color(stop.Color)),
 		)
 	}
 
-	return strings.Join(result, ":")
+	return Key(strings.Join(result, ":"))
 }

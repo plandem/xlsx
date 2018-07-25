@@ -7,12 +7,12 @@ import (
 )
 
 //Font return string with all values of font
-func Font(font *ml.Font) string {
+func Font(font *ml.Font) Key {
 	if font == nil {
 		font = &ml.Font{}
 	}
 
-	return strings.Join([]string{
+	return Key(strings.Join([]string{
 		string(font.Name),
 		strconv.FormatInt(int64(font.Charset), 10),
 		strconv.FormatInt(int64(font.Family), 10),
@@ -22,10 +22,10 @@ func Font(font *ml.Font) string {
 		strconv.FormatBool(bool(font.Shadow)),
 		strconv.FormatBool(bool(font.Condense)),
 		strconv.FormatBool(bool(font.Extend)),
-		Color(font.Color),
+		string(Color(font.Color)),
 		strconv.FormatFloat(float64(font.Size), 'f', -1, 64),
 		string(font.Underline),
 		string(font.VAlign),
 		string(font.Scheme),
-	}, ":")
+	}, ":"))
 }

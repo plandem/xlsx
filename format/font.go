@@ -76,3 +76,12 @@ func (f *fontOption) Scheme(sn styles.FontSchemeType) option {
 		s.font.Scheme = sn
 	}
 }
+
+func (f *fontOption) Charset(charset FontCharsetType) option {
+	return func(s *StyleFormat) {
+		if charset >= FontCharsetANSI && charset <= FontCharsetOEM {
+			//FIXME: right now it's not possible to encode 'Ansi' charset with 'omitempty'
+			s.font.Charset = styles.FontCharsetType(charset)
+		}
+	}
+}

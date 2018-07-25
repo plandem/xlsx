@@ -15,19 +15,6 @@ func TestProtection(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
 		key: "0b65d5dc27be42d7f4826817e6650162",
-		fill: ml.Fill{
-			Pattern:  &ml.PatternFill{},
-			Gradient: &ml.GradientFill{},
-		},
-		border: ml.Border{
-			Left:       &ml.BorderSegment{},
-			Right:      &ml.BorderSegment{},
-			Top:        &ml.BorderSegment{},
-			Bottom:     &ml.BorderSegment{},
-			Diagonal:   &ml.BorderSegment{},
-			Vertical:   &ml.BorderSegment{},
-			Horizontal: &ml.BorderSegment{},
-		},
 		protection: ml.CellProtection{
 			Locked: true,
 			Hidden: true,

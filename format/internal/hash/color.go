@@ -7,7 +7,7 @@ import (
 )
 
 //Color returns string with all values of color
-func Color(color *ml.Color) string {
+func Color(color *ml.Color) Key {
 	if color == nil {
 		color = &ml.Color{}
 	}
@@ -30,5 +30,5 @@ func Color(color *ml.Color) string {
 		result = append(result, "")
 	}
 
-	return strings.Join(result, ":")
+	return Key(strings.Join(result, ":"))
 }

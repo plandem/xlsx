@@ -32,20 +32,20 @@ type NumberFormat struct {
 
 //Font is a direct mapping of XSD CT_Font
 type Font struct {
-	Name      ml.Property           `xml:"name,omitempty"`
-	Charset   ml.PropertyInt        `xml:"charset,omitempty"`
-	Family    styles.FontFamilyType `xml:"family,omitempty"`
-	Bold      ml.PropertyBool       `xml:"b,omitempty"`
-	Italic    ml.PropertyBool       `xml:"i,omitempty"`
-	Strike    ml.PropertyBool       `xml:"strike,omitempty"`
-	Shadow    ml.PropertyBool       `xml:"shadow,omitempty"`
-	Condense  ml.PropertyBool       `xml:"condense,omitempty"`
-	Extend    ml.PropertyBool       `xml:"extend,omitempty"`
-	Color     *Color                `xml:"color,omitempty"`
-	Size      ml.PropertyDouble     `xml:"sz,omitempty"`
-	Underline styles.UnderlineType  `xml:"u,omitempty"`
-	VAlign    styles.FontVAlignType `xml:"vertAlign,omitempty"`
-	Scheme    styles.FontSchemeType `xml:"scheme,omitempty"`
+	Name      ml.Property            `xml:"name,omitempty"`
+	Charset   styles.FontCharsetType `xml:"charset,omitempty"`
+	Family    styles.FontFamilyType  `xml:"family,omitempty"`
+	Bold      ml.PropertyBool        `xml:"b,omitempty"`
+	Italic    ml.PropertyBool        `xml:"i,omitempty"`
+	Strike    ml.PropertyBool        `xml:"strike,omitempty"`
+	Shadow    ml.PropertyBool        `xml:"shadow,omitempty"`
+	Condense  ml.PropertyBool        `xml:"condense,omitempty"`
+	Extend    ml.PropertyBool        `xml:"extend,omitempty"`
+	Color     *Color                 `xml:"color,omitempty"`
+	Size      ml.PropertyDouble      `xml:"sz,omitempty"`
+	Underline styles.UnderlineType   `xml:"u,omitempty"`
+	VAlign    styles.FontVAlignType  `xml:"vertAlign,omitempty"`
+	Scheme    styles.FontSchemeType  `xml:"scheme,omitempty"`
 }
 
 //Color is a direct mapping of XSD CT_Color
@@ -84,7 +84,7 @@ type GradientFill struct {
 //GradientStop is a direct mapping of XSD CT_GradientStop
 type GradientStop struct {
 	Color    *Color  `xml:"color"`
-	Position float64 `xml:"position"`
+	Position float64 `xml:"position,attr"`
 }
 
 //Border is a direct mapping of XSD CT_Border

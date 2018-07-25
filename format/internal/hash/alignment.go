@@ -7,12 +7,12 @@ import (
 )
 
 //Alignment returns string with all values of alignment
-func Alignment(alignment *ml.CellAlignment) string {
+func Alignment(alignment *ml.CellAlignment) Key {
 	if alignment == nil {
 		alignment = &ml.CellAlignment{}
 	}
 
-	return strings.Join([]string{
+	return Key(strings.Join([]string{
 		strconv.FormatInt(int64(alignment.Horizontal), 10),
 		strconv.FormatInt(int64(alignment.Vertical), 10),
 		strconv.FormatInt(int64(alignment.TextRotation), 10),
@@ -22,5 +22,5 @@ func Alignment(alignment *ml.CellAlignment) string {
 		strconv.FormatBool(alignment.JustifyLastLine),
 		strconv.FormatBool(alignment.ShrinkToFit),
 		strconv.FormatInt(int64(alignment.ReadingOrder), 10),
-	}, ":")
+	}, ":"))
 }

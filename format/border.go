@@ -26,6 +26,18 @@ type borderOption struct {
 //Border is a 'namespace' for all possible settings for border
 var Border borderOption
 
+func (b *borderOption) DiagonalUp(s *StyleFormat) {
+	s.border.DiagonalUp = true
+}
+
+func (b *borderOption) DiagonalDown(s *StyleFormat) {
+	s.border.DiagonalDown = true
+}
+
+func (b *borderOption) Outline(s *StyleFormat) {
+	s.border.Outline = true
+}
+
 func (b *borderOption) Type(t styles.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Top.Type = t

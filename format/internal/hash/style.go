@@ -8,18 +8,24 @@ import (
 	"strings"
 )
 
+type Key string
+
+func (k Key) Hash() string {
+	h := md5.New()
+	io.WriteString(h, string(k))
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
 //Style returns md5 hash string for provided information
 func Style(font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, number *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border) string {
-	h := md5.New()
-
-	io.WriteString(h, strings.Join([]string{
-		Font(font),
-		Fill(fill),
-		Alignment(alignment),
-		NumberFormat(number),
-		Protection(protection),
-		Border(border),
+	k := Key(strings.Join([]string{
+		string(Font(font)),
+		string(Fill(fill)),
+		string(Alignment(alignment)),
+		string(NumberFormat(number)),
+		string(Protection(protection)),
+		string(Border(border)),
 	}, ":"))
 
-	return fmt.Sprintf("%x", h.Sum(nil))
+	return k.Hash()
 }

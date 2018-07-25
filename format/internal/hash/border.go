@@ -7,7 +7,7 @@ import (
 )
 
 //Border returns string with all values of border
-func Border(border *ml.Border) string {
+func Border(border *ml.Border) Key {
 	var b ml.Border
 
 	if border == nil {
@@ -45,30 +45,30 @@ func Border(border *ml.Border) string {
 		b.Horizontal = &ml.BorderSegment{}
 	}
 
-	return strings.Join([]string{
-		Color(b.Left.Color),
+	return Key(strings.Join([]string{
+		string(Color(b.Left.Color)),
 		b.Left.Type.String(),
 
-		Color(b.Right.Color),
+		string(Color(b.Right.Color)),
 		b.Right.Type.String(),
 
-		Color(b.Top.Color),
+		string(Color(b.Top.Color)),
 		b.Top.Type.String(),
 
-		Color(b.Bottom.Color),
+		string(Color(b.Bottom.Color)),
 		b.Bottom.Type.String(),
 
-		Color(b.Diagonal.Color),
+		string(Color(b.Diagonal.Color)),
 		b.Diagonal.Type.String(),
 
-		Color(b.Vertical.Color),
+		string(Color(b.Vertical.Color)),
 		b.Vertical.Type.String(),
 
-		Color(b.Horizontal.Color),
+		string(Color(b.Horizontal.Color)),
 		b.Horizontal.Type.String(),
 
 		strconv.FormatBool(bool(b.DiagonalUp)),
 		strconv.FormatBool(bool(b.DiagonalDown)),
 		strconv.FormatBool(bool(b.Outline)),
-	}, ":")
+	}, ":"))
 }
