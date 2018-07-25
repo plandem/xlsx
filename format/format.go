@@ -122,7 +122,7 @@ func (s *StyleFormat) afterSet() {
 
 //Set sets new options for style
 func (s *StyleFormat) Set(options ...option) {
-	//N.B.: performance for this package is not so critical, so let's unpack/pack nested structures each call
+	//N.B.: performance for this package is not so critical, so let's init/de-init nested structures each call
 	s.beforeSet()
 	for _, o := range options {
 		o(s)
@@ -132,11 +132,89 @@ func (s *StyleFormat) Set(options ...option) {
 	s.key = hash.Style(&s.font, &s.fill, &s.alignment, &s.numFormat, &s.protection, &s.border)
 }
 
-//Pack pack current style settings and returns only non-empty objects
-func (s *StyleFormat) Pack() (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, number *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border) {
+//Settings checks current style settings and returns copies of non-empty objects
+func (s *StyleFormat) Settings() (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border) {
+	//copy non-empty alignment
+	if s.alignment != (ml.CellAlignment{}) {
+		alignment = &ml.CellAlignment{}
+		*alignment = s.alignment
+	}
+
+	//copy non-empty border
+	if s.border != (ml.Border{}) {
+		border = &ml.Border{}
+		*border = s.border
+
+		if s.border.Left != nil && !reflect.DeepEqual(border.Left, &ml.BorderSegment{}) {
+			border.Left = &ml.BorderSegment{}
+			*border.Left = *s.border.Left
+		}
+
+		if s.border.Right != nil && !reflect.DeepEqual(border.Right, &ml.BorderSegment{}) {
+			border.Right = &ml.BorderSegment{}
+			*border.Right = *s.border.Right
+		}
+
+		if s.border.Top != nil && !reflect.DeepEqual(border.Top, &ml.BorderSegment{}) {
+			border.Top = &ml.BorderSegment{}
+			*border.Top = *s.border.Top
+		}
+
+		if s.border.Bottom != nil && !reflect.DeepEqual(border.Bottom, &ml.BorderSegment{}) {
+			border.Bottom = &ml.BorderSegment{}
+			*border.Bottom = *s.border.Bottom
+		}
+
+		if s.border.Diagonal != nil && !reflect.DeepEqual(border.Diagonal, &ml.BorderSegment{}) {
+			border.Diagonal = &ml.BorderSegment{}
+			*border.Diagonal = *s.border.Diagonal
+		}
+
+		if s.border.Vertical != nil && !reflect.DeepEqual(border.Vertical, &ml.BorderSegment{}) {
+			border.Vertical = &ml.BorderSegment{}
+			*border.Vertical = *s.border.Vertical
+		}
+
+		if s.border.Horizontal != nil && !reflect.DeepEqual(border.Horizontal, &ml.BorderSegment{}) {
+			border.Horizontal = &ml.BorderSegment{}
+			*border.Horizontal = *s.border.Horizontal
+		}
+	}
+
+	//copy non-empty fill
+	if s.fill != (ml.Fill{}) {
+		fill = &ml.Fill{}
+
+		//copy pattern
+		if s.fill.Pattern != nil && !reflect.DeepEqual(s.fill.Pattern, &ml.PatternFill{}) {
+			fill.Pattern = &ml.PatternFill{}
+			*fill.Pattern = *s.fill.Pattern
+		}
+
+		//copy gradient
+		if s.fill.Gradient != nil && !reflect.DeepEqual(s.fill.Gradient, &ml.GradientFill{}) {
+			fill.Gradient = &ml.GradientFill{}
+			*fill.Gradient = *s.fill.Gradient
+			copy(fill.Gradient.Stop, s.fill.Gradient.Stop)
+		}
+	}
+
+	//copy non-empty font
 	if (s.font != ml.Font{} && s.font != ml.Font{Size: 0, Family: 0, Charset: 0}) {
 		font = &ml.Font{}
 		*font = s.font
+	}
+
+	//copy non-empty numFormat
+	if s.numFormat != (ml.NumberFormat{}) {
+		numFormat = &ml.NumberFormat{}
+		*numFormat = s.numFormat
+	}
+
+	//copy non-empty protection
+	if s.protection != (ml.CellProtection{}) {
+		protection = &ml.CellProtection{}
+		*protection = s.protection
 	}
 
 	return
