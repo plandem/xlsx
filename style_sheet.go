@@ -43,32 +43,43 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	if ss.file.IsNew() {
 		ss.doc.pkg.ContentTypes().RegisterContent(ss.file.FileName(), internal.ContentTypeStyles)
 		ss.doc.relationships.AddFile(internal.RelationTypeStyles, ss.file.FileName())
-
-		//TODO: research about default items for a new XLSX
-		ss.ml.Fills = &[]*ml.Fill{{
-			Pattern: &ml.PatternFill{
-				Type: format.PatternTypeNone,
-			},
-		}}
-
-		ss.ml.Borders = &[]*ml.Border{{
-			Left:   &ml.BorderSegment{},
-			Right:  &ml.BorderSegment{},
-			Top:    &ml.BorderSegment{},
-			Bottom: &ml.BorderSegment{},
-		}}
-
-		ss.ml.Fonts = &[]*ml.Font{{
-			Family: 2,
-			Size:   12.0,
-			Name:   "Calibri",
-			Scheme: "minor",
-		}}
-
 		ss.file.MarkAsUpdated()
+		ss.addDefaults()
+		ss.buildIndexes()
 	}
 
 	return ss
+}
+
+func (ss *StyleSheet) addDefaults() {
+	//TODO: research about default items for a new XLSX
+	ss.ml.Fills = &[]*ml.Fill{{
+		Pattern: &ml.PatternFill{
+			Type: format.PatternTypeNone,
+		},
+	}}
+
+	ss.ml.Borders = &[]*ml.Border{{
+		Left:   &ml.BorderSegment{},
+		Right:  &ml.BorderSegment{},
+		Top:    &ml.BorderSegment{},
+		Bottom: &ml.BorderSegment{},
+	}}
+
+	ss.ml.Fonts = &[]*ml.Font{{
+		Family: 2,
+		Size:   12.0,
+		Name:   "Calibri",
+		Scheme: "minor",
+	}}
+
+	ss.ml.CellXfs = &[]*ml.StyleRef{{
+		XfId:              0,
+		FontId:            0,
+		FillId:            0,
+		BorderId:          0,
+		NumFmtId:          0,
+	}}
 }
 
 func (ss *StyleSheet) buildFontIndexes() {

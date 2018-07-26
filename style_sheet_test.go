@@ -13,8 +13,7 @@ import (
 func TestStyleSheets_new(t *testing.T) {
 	xl := New()
 	require.NotNil(t, xl)
-	xl.styleSheet.file.LoadIfRequired(xl.styleSheet.buildIndexes)
-	log.Printf("%+v", xl.styleSheet.borderIndex)
+	log.Printf("%+v", xl.styleSheet.xfIndex)
 }
 
 
