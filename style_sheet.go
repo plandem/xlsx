@@ -52,7 +52,7 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 }
 
 func (ss *StyleSheet) addDefaults() {
-	//TODO: research about default items for a new XLSX
+	//TODO: research more about default items for a new XLSX
 	ss.ml.Fills = &[]*ml.Fill{{
 		Pattern: &ml.PatternFill{
 			Type: format.PatternTypeNone,
@@ -74,11 +74,11 @@ func (ss *StyleSheet) addDefaults() {
 	}}
 
 	ss.ml.CellXfs = &[]*ml.StyleRef{{
-		XfId:              0,
-		FontId:            0,
-		FillId:            0,
-		BorderId:          0,
-		NumFmtId:          0,
+		XfId:     0,
+		FontId:   0,
+		FillId:   0,
+		BorderId: 0,
+		NumFmtId: 0,
 	}}
 }
 

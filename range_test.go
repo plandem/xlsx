@@ -2,8 +2,8 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/format"
-	"github.com/stretchr/testify/require"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 

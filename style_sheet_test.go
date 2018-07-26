@@ -16,7 +16,6 @@ func TestStyleSheets_new(t *testing.T) {
 	log.Printf("%+v", xl.styleSheet.xfIndex)
 }
 
-
 func TestStyleSheets_existing(t *testing.T) {
 	xl, err := Open("./test_files/example_format.xlsx")
 	require.NotNil(t, xl)
@@ -74,7 +73,7 @@ func aTestStyleSheets(t *testing.T) {
 	require.Equal(t, &[]*ml.Font{{
 		//Name:   sharedML.Property("Calibri"),
 		//Size:   sharedML.Property("12"),
-		Color:  &ml.Color{Indexed: &indexedColor},
+		Color: &ml.Color{Indexed: &indexedColor},
 		//Scheme: sharedML.Property("minor"),
 		//Family: sharedML.Property("2"),
 	}}, ss.ml.Fonts)

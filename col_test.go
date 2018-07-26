@@ -2,10 +2,10 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/internal/ml"
 )
 
 func TestCol(t *testing.T) {

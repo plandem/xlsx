@@ -2,8 +2,8 @@ package hash
 
 import (
 	"github.com/plandem/xlsx/internal/ml"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 //StyleRef returns string with all values of Xf
