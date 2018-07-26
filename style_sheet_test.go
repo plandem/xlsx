@@ -7,7 +7,17 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
+	"log"
 )
+
+func TestStyleSheets_indexes(t *testing.T) {
+	xl, err := Open("./test_files/example_format.xlsx")
+	require.NotNil(t, xl)
+	require.Nil(t, err)
+
+	xl.styleSheet.file.LoadIfRequired(xl.styleSheet.buildIndexes)
+	log.Printf("%+v", xl.styleSheet.xfIndex)
+}
 
 func aTestStyleSheets(t *testing.T) {
 	pkg := ooxml.NewPackage(nil)

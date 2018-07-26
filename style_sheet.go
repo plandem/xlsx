@@ -4,10 +4,10 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/hash"
+	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/number_format"
 	"reflect"
-	"log"
 )
 
 //StyleSheet is a higher level object that wraps ml.StyleSheet with functionality
@@ -19,10 +19,10 @@ type StyleSheet struct {
 	dxfIndex map[string]int
 
 	//hash -> index for types
-	borderIndex     map[string]int
-	fillIndex       map[string]int
-	fontIndex       map[string]int
-	numberIndex     map[string]int
+	borderIndex map[string]int
+	fillIndex   map[string]int
+	fontIndex   map[string]int
+	numberIndex map[string]int
 
 	doc  *Spreadsheet
 	file *ooxml.PackageFile
@@ -30,91 +30,138 @@ type StyleSheet struct {
 
 func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	ss := &StyleSheet{
-		doc:             doc,
-		xfIndex:         make(map[string]int),
-		dxfIndex:        make(map[string]int),
-		borderIndex:     make(map[string]int),
-		fillIndex:       make(map[string]int),
-		fontIndex:       make(map[string]int),
-		numberIndex:     make(map[string]int),
+		doc:         doc,
+		xfIndex:     make(map[string]int),
+		dxfIndex:    make(map[string]int),
+		borderIndex: make(map[string]int),
+		fillIndex:   make(map[string]int),
+		fontIndex:   make(map[string]int),
+		numberIndex: make(map[string]int),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
 
-	//TODO: research about default items for a new XLSX
 	if ss.file.IsNew() {
 		ss.doc.pkg.ContentTypes().RegisterContent(ss.file.FileName(), internal.ContentTypeStyles)
 		ss.doc.relationships.AddFile(internal.RelationTypeStyles, ss.file.FileName())
 
-		//ss.ml.Fills = &[]*ml.Fill{{Pattern:&ml.PatternFill{
-		//	Type:format.PatternTypeNone,
-		//}}}
-		//
-		//ss.ml.Borders = &[]*ml.Border{{
-		//	Left:   &ml.BorderSegment{},
-		//	Right:  &ml.BorderSegment{},
-		//	Top:    &ml.BorderSegment{},
-		//	Bottom: &ml.BorderSegment{},
-		//}}
+		//TODO: research about default items for a new XLSX
+		ss.ml.Fills = &[]*ml.Fill{{
+			Pattern: &ml.PatternFill{
+				Type: format.PatternTypeNone,
+			},
+		}}
+
+		ss.ml.Borders = &[]*ml.Border{{
+			Left:   &ml.BorderSegment{},
+			Right:  &ml.BorderSegment{},
+			Top:    &ml.BorderSegment{},
+			Bottom: &ml.BorderSegment{},
+		}}
+
+		ss.ml.Fonts = &[]*ml.Font{{
+			Family: 2,
+			Size:   12.0,
+			Name:   "Calibri",
+			Scheme: "minor",
+		}}
+
 		ss.file.MarkAsUpdated()
 	}
 
-	ss.buildIndexes()
 	return ss
 }
 
-//buildIndexes process already existing styles and build indexed for it
-func (ss *StyleSheet) buildIndexes() {
-	//file can be new or missing this part of information, so let's fix it
+func (ss *StyleSheet) buildFontIndexes() {
 	if ss.ml.Fonts == nil {
 		ss.ml.Fonts = &[]*ml.Font{}
 	}
 
+	for id, f := range *ss.ml.Fonts {
+		ss.fontIndex[hash.Font(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildFillIndexes() {
 	if ss.ml.Fills == nil {
 		ss.ml.Fills = &[]*ml.Fill{}
 	}
 
+	for id, f := range *ss.ml.Fills {
+		ss.fillIndex[hash.Fill(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildBorderIndexes() {
 	if ss.ml.Borders == nil {
 		ss.ml.Borders = &[]*ml.Border{}
 	}
 
+	for id, f := range *ss.ml.Borders {
+		ss.borderIndex[hash.Border(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildNumberIndexes() {
 	if ss.ml.NumberFormats == nil {
 		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
 	}
 
+	for id, f := range *ss.ml.NumberFormats {
+		ss.numberIndex[hash.NumberFormat(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildXfIndexes() {
 	if ss.ml.CellXfs == nil {
 		ss.ml.CellXfs = &[]*ml.StyleRef{}
 	}
 
-	//build font indexes
-	for id, f := range *ss.ml.Fonts {
-		ss.fontIndex[hash.Font(f).Hash()] = id
-	}
-
-	//build fill indexes
-	for id, f := range *ss.ml.Fills {
-		ss.fillIndex[hash.Fill(f).Hash()] = id
-	}
-
-	//build border indexes
-	for id, f := range *ss.ml.Borders {
-		ss.borderIndex[hash.Border(f).Hash()] = id
-	}
-
-	//build number indexes
-	for id, f := range *ss.ml.NumberFormats {
-		ss.numberIndex[hash.NumberFormat(f).Hash()] = id
-	}
+	var (
+		font *ml.Font
+		border *ml.Border
+		fill *ml.Fill
+		number *ml.NumberFormat
+	)
 
 	//build xf indexes
 	for id, xf := range *ss.ml.CellXfs {
-		log.Printf("%v, %v", id, xf)
+		font = (*ss.ml.Fonts)[xf.FontId]
+		border = (*ss.ml.Borders)[xf.BorderId]
+		fill = (*ss.ml.Fills)[xf.FillId]
+
+		if numberFormat.IsBuiltIn(xf.NumFmtId) {
+			//create built-in pseudo type
+			number = &ml.NumberFormat{}
+			*number = numberFormat.New(xf.NumFmtId, "")
+		} else {
+			//lookup for existing type
+			for _, num := range *ss.ml.NumberFormats {
+				if num.ID == xf.NumFmtId {
+					number = num
+					break
+				}
+			}
+		}
+
+		key := hash.Style(font, fill, xf.Alignment, number, xf.Protection, border)
+		ss.xfIndex[key] = id
 	}
+}
+
+//buildIndexes process already existing styles and build indexed for it
+func (ss *StyleSheet) buildIndexes() {
+	ss.buildBorderIndexes()
+	ss.buildFillIndexes()
+	ss.buildFontIndexes()
+	ss.buildNumberIndexes()
+	ss.buildXfIndexes()
+	//ss.buildDxfIndexes()
 }
 
 /*
 func (ss *StyleSheet) addDXF(f *format.StyleFormat) int {
-	ss.loadIfRequired()
+	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//--- inline styles?
 	//<xsd:element name="font" type="CT_Font" minOccurs="0" maxOccurs="1"/>
@@ -136,7 +183,7 @@ func (ss *StyleSheet) addDXF(f *format.StyleFormat) int {
 */
 
 func (ss *StyleSheet) addXF(f *format.StyleFormat) format.StyleRefID {
-	ss.file.LoadIfRequired(nil)
+	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	xfID, ok := ss.xfIndex[f.Key()]
 	if !ok {

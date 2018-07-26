@@ -1,8 +1,8 @@
-package color_test
+package color
 
 import (
 	sharedML "github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format/internal/color"
+	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
