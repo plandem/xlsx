@@ -1,31 +1,29 @@
 package hash
 
 import (
-	"crypto/md5"
-	"fmt"
 	"github.com/plandem/xlsx/internal/ml"
-	"io"
 	"strings"
+	"strconv"
 )
 
-type Key string
-
-func (k Key) Hash() string {
-	h := md5.New()
-	io.WriteString(h, string(k))
-	return fmt.Sprintf("%x", h.Sum(nil))
-}
-
-//Style returns md5 hash string for provided information
-func Style(font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, number *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border) string {
-	k := Key(strings.Join([]string{
-		string(Font(font)),
-		string(Fill(fill)),
-		string(Alignment(alignment)),
-		string(NumberFormat(number)),
-		string(Protection(protection)),
-		string(Border(border)),
+//StyleRef returns string with all values of Xf
+func StyleRef(style *ml.StyleRef) Key {
+	return Key(strings.Join([]string{
+		strconv.FormatInt(int64(style.NumFmtId), 10),
+		strconv.FormatInt(int64(style.FontId), 10),
+		strconv.FormatInt(int64(style.FillId), 10),
+		strconv.FormatInt(int64(style.BorderId), 10),
+		strconv.FormatInt(int64(style.XfId), 10),
+		strconv.FormatBool(style.QuotePrefix),
+		strconv.FormatBool(style.PivotButton),
+		strconv.FormatBool(style.ApplyNumberFormat),
+		strconv.FormatBool(style.ApplyFont),
+		strconv.FormatBool(style.ApplyFill),
+		strconv.FormatBool(style.ApplyBorder),
+		strconv.FormatBool(style.ApplyAlignment),
+		strconv.FormatBool(style.ApplyProtection),
+		string(Alignment(style.Alignment)),
+		string(Protection(style.Protection)),
+		string(Reserved(style.ExtLst)),
 	}, ":"))
-
-	return k.Hash()
 }

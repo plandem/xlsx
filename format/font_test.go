@@ -27,7 +27,6 @@ func TestFont(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "dec64c1f2177f8a1995cef78a107ef4e",
 		font: ml.Font{
 			Name:      "Calibri",
 			Bold:      true,

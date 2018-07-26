@@ -1,7 +1,6 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"reflect"
 )
@@ -15,7 +14,6 @@ type StyleRefID ml.StyleRefID
 
 //StyleFormat is objects that holds combined information about cell styling
 type StyleFormat struct {
-	key        string
 	font       ml.Font
 	fill       ml.Fill
 	alignment  ml.CellAlignment
@@ -31,11 +29,6 @@ func New(options ...option) *StyleFormat {
 	s := &StyleFormat{}
 	s.Set(options...)
 	return s
-}
-
-//Key returns unique hash for style settings
-func (s *StyleFormat) Key() string {
-	return s.key
 }
 
 //beforeSet init nested data to simplify code around it
@@ -128,8 +121,6 @@ func (s *StyleFormat) Set(options ...option) {
 		o(s)
 	}
 	s.afterSet()
-
-	s.key = hash.Style(&s.font, &s.fill, &s.alignment, &s.numFormat, &s.protection, &s.border)
 }
 
 //Settings checks current style settings and returns copies of non-empty objects

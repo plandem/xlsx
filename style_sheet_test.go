@@ -10,7 +10,15 @@ import (
 	"log"
 )
 
-func TestStyleSheets_indexes(t *testing.T) {
+func TestStyleSheets_new(t *testing.T) {
+	xl := New()
+	require.NotNil(t, xl)
+	xl.styleSheet.file.LoadIfRequired(xl.styleSheet.buildIndexes)
+	log.Printf("%+v", xl.styleSheet.borderIndex)
+}
+
+
+func TestStyleSheets_existing(t *testing.T) {
 	xl, err := Open("./test_files/example_format.xlsx")
 	require.NotNil(t, xl)
 	require.Nil(t, err)

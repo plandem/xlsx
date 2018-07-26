@@ -18,7 +18,6 @@ func TestFill(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "d93b12d1d2a15cbe6863105a25b64740",
 		fill: ml.Fill{
 			Pattern: &ml.PatternFill{
 				Color:      color.New("FFFFFFFF"),
@@ -42,7 +41,6 @@ func TestFill(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "5c68020f96642d0875563e8e16277b0d",
 		fill: ml.Fill{
 			Gradient: &ml.GradientFill{
 				Degree: 90,
@@ -76,7 +74,6 @@ func TestFill(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "5c68020f96642d0875563e8e16277b0d",
 		fill: ml.Fill{
 			Gradient: &ml.GradientFill{
 				Degree: 90,
@@ -110,7 +107,6 @@ func TestFill(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "d93b12d1d2a15cbe6863105a25b64740",
 		fill: ml.Fill{
 			Pattern: &ml.PatternFill{
 				Color:      color.New("FFFFFFFF"),

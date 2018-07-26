@@ -7,7 +7,6 @@ import (
 	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
-	"reflect"
 )
 
 //StyleSheet is a higher level object that wraps ml.StyleSheet with functionality
@@ -107,8 +106,9 @@ func (ss *StyleSheet) buildNumberIndexes() {
 		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
 	}
 
-	for id, f := range *ss.ml.NumberFormats {
-		ss.numberIndex[hash.NumberFormat(f).Hash()] = id
+	//N.B.: NumberFormat uses ID, not indexes
+	for _, f := range *ss.ml.NumberFormats {
+		ss.numberIndex[hash.NumberFormat(f).Hash()] = f.ID
 	}
 }
 
@@ -117,35 +117,9 @@ func (ss *StyleSheet) buildXfIndexes() {
 		ss.ml.CellXfs = &[]*ml.StyleRef{}
 	}
 
-	var (
-		font *ml.Font
-		border *ml.Border
-		fill *ml.Fill
-		number *ml.NumberFormat
-	)
-
 	//build xf indexes
 	for id, xf := range *ss.ml.CellXfs {
-		font = (*ss.ml.Fonts)[xf.FontId]
-		border = (*ss.ml.Borders)[xf.BorderId]
-		fill = (*ss.ml.Fills)[xf.FillId]
-
-		if numberFormat.IsBuiltIn(xf.NumFmtId) {
-			//create built-in pseudo type
-			number = &ml.NumberFormat{}
-			*number = numberFormat.New(xf.NumFmtId, "")
-		} else {
-			//lookup for existing type
-			for _, num := range *ss.ml.NumberFormats {
-				if num.ID == xf.NumFmtId {
-					number = num
-					break
-				}
-			}
-		}
-
-		key := hash.Style(font, fill, xf.Alignment, number, xf.Protection, border)
-		ss.xfIndex[key] = id
+		ss.xfIndex[hash.StyleRef(xf).Hash()] = id
 	}
 }
 
@@ -185,188 +159,134 @@ func (ss *StyleSheet) addDXF(f *format.StyleFormat) int {
 func (ss *StyleSheet) addXF(f *format.StyleFormat) format.StyleRefID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
-	xfID, ok := ss.xfIndex[f.Key()]
-	if !ok {
-		font, fill, alignment, numFormat, protection, border := f.Settings()
+	//get settings and add information if required
+	font, fill, alignment, numFormat, protection, border := f.Settings()
+	fontID := ss.addFontIfRequired(font)
+	fillID := ss.addFillIfRequired(fill)
+	borderID := ss.addBorderIfRequired(border)
+	numID := ss.addNumFormatIfRequired(numFormat)
 
-		fontID := ss.addFontIfRequired(font)
-		fillID := ss.addFillIfRequired(fill)
-		borderID := ss.addBorderIfRequired(border)
-		numID := ss.addNumFormatIfRequired(numFormat)
+	/*
+		Note to remember excel internals:
+		---
+		cell.s = cellXfs.index
+		cellXfs.xfId = cellStyleXf.index
+		cellStyle.xfId = cellStyleXf.index
+	*/
 
-		/*
-			Note to remember excel internals:
-			---
-			cell.s = cellXfs.index
-			cellXfs.xfId = cellStyleXf.index
-			cellStyle.xfId = cellStyleXf.index
-		*/
-
-		//we don't need this one, because we don't have task 'render final style', so for our case there is no 'override' of direct style
-		styleXfID := 0
-
-		//now let's try to get xf index of direct formatting - cellXf
-		cellXf := &ml.StyleRef{
-			XfId:              styleXfID,
-			FontId:            fontID,
-			FillId:            fillID,
-			BorderId:          borderID,
-			NumFmtId:          numID,
-			Alignment:         alignment,
-			Protection:        protection,
-			ApplyFont:         fontID > 0,
-			ApplyBorder:       borderID > 0,
-			ApplyFill:         fillID > 0,
-			ApplyNumberFormat: numID > 0,
-			ApplyAlignment:    alignment != nil,
-			ApplyProtection:   protection != nil,
-		}
-
-		xfID = -1
-
-		if ss.ml.CellXfs == nil {
-			//file can be new or missing this part of information, so let's fix it
-			ss.ml.CellXfs = &[]*ml.StyleRef{}
-		} else {
-			//try to find at already existing cellXf
-			for id, xf := range *ss.ml.CellXfs {
-				if reflect.DeepEqual(xf, cellXf) {
-					xfID = id
-					break
-				}
-			}
-		}
-
-		//add a new cellXf
-		if xfID == -1 {
-			xfID = len(*ss.ml.CellXfs)
-			*ss.ml.CellXfs = append(*ss.ml.CellXfs, cellXf)
-			ss.file.MarkAsUpdated()
-		}
-
-		//link this format with xfID
-		ss.xfIndex[f.Key()] = xfID
+	cellXf := &ml.StyleRef{
+		XfId:              0, //we don't need this one, because we don't have task 'render final style', so for our case there is no 'override' of direct style
+		FontId:            fontID,
+		FillId:            fillID,
+		BorderId:          borderID,
+		NumFmtId:          numID,
+		Alignment:         alignment,
+		Protection:        protection,
+		ApplyFont:         fontID > 0,
+		ApplyBorder:       borderID > 0,
+		ApplyFill:         fillID > 0,
+		ApplyNumberFormat: numID > 0,
+		ApplyAlignment:    alignment != nil,
+		ApplyProtection:   protection != nil,
 	}
 
-	return format.StyleRefID(xfID)
+	//return id of already existing information
+	key := hash.StyleRef(cellXf).Hash()
+	if id, ok := ss.xfIndex[key]; ok {
+		return format.StyleRefID(id)
+	}
+
+	//add a new one and return related id
+	nextID := len(*ss.ml.CellXfs)
+	*ss.ml.CellXfs = append(*ss.ml.CellXfs, cellXf)
+	ss.xfIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return format.StyleRefID(nextID)
 }
 
 func (ss *StyleSheet) addFontIfRequired(font *ml.Font) int {
+	//if there is no information, then use default
 	if font == nil {
 		return 0
 	}
 
-	fontID := -1
-
-	if ss.ml.Fonts == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.Fonts = &[]*ml.Font{}
-	} else {
-		//get id of font
-		for id, f := range *ss.ml.Fonts {
-			if reflect.DeepEqual(f, font) {
-				fontID = id
-				break
-			}
-		}
+	//return id of already existing information
+	key := hash.Font(font).Hash()
+	if id, ok := ss.fontIndex[key]; ok {
+		return id
 	}
 
-	//add a new one, if there is no such font
-	if fontID == -1 {
-		fontID = len(*ss.ml.Fonts)
-		*ss.ml.Fonts = append(*ss.ml.Fonts, font)
-		ss.file.MarkAsUpdated()
-	}
-
-	return fontID
+	//add a new one and return related id
+	nextID := len(*ss.ml.Fonts)
+	*ss.ml.Fonts = append(*ss.ml.Fonts, font)
+	ss.fontIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }
 
 func (ss *StyleSheet) addFillIfRequired(fill *ml.Fill) int {
+	//if there is no information, then use default
 	if fill == nil {
 		return 0
 	}
 
-	fillID := -1
-
-	if ss.ml.Fills == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.Fills = &[]*ml.Fill{}
-	} else {
-		//get id of fill
-		for id, f := range *ss.ml.Fills {
-			if reflect.DeepEqual(f, fill) {
-				fillID = id
-				break
-			}
-		}
+	//return id of already existing information
+	key := hash.Fill(fill).Hash()
+	if id, ok := ss.fillIndex[key]; ok {
+		return id
 	}
 
-	//add a new one, if there is no such fill
-	if fillID == -1 {
-		fillID = len(*ss.ml.Fills)
-		*ss.ml.Fills = append(*ss.ml.Fills, fill)
-		ss.file.MarkAsUpdated()
-	}
-
-	return fillID
+	//add a new one and return related id
+	nextID := len(*ss.ml.Fills)
+	*ss.ml.Fills = append(*ss.ml.Fills, fill)
+	ss.fillIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }
 
 func (ss *StyleSheet) addBorderIfRequired(border *ml.Border) int {
+	//if there is no information, then use default
 	if border == nil {
 		return 0
 	}
 
-	borderID := -1
-
-	if ss.ml.Borders == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.Borders = &[]*ml.Border{}
-	} else {
-		//get id of border
-		for id, b := range *ss.ml.Borders {
-			if reflect.DeepEqual(b, border) {
-				borderID = id
-				break
-			}
-		}
+	//return id of already existing information
+	key := hash.Border(border).Hash()
+	if id, ok := ss.borderIndex[key]; ok {
+		return id
 	}
 
-	//add a new one, if there is no such border
-	if borderID == -1 {
-		borderID = len(*ss.ml.Borders)
-		*ss.ml.Borders = append(*ss.ml.Borders, border)
-		ss.file.MarkAsUpdated()
-	}
-
-	return borderID
+	//add a new one and return related id
+	nextID := len(*ss.ml.Borders)
+	*ss.ml.Borders = append(*ss.ml.Borders, border)
+	ss.borderIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }
 
-func (ss *StyleSheet) addNumFormatIfRequired(numFormat *ml.NumberFormat) int {
-	if numFormat == nil {
+func (ss *StyleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
+	//if there is no information, then use default
+	if number == nil {
 		return 0
 	}
 
-	numID := -1
-
-	if ss.ml.NumberFormats == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
-	} else {
-		//get id of number format
-		for id, b := range *ss.ml.NumberFormats {
-			if reflect.DeepEqual(b, numFormat) {
-				numID = id
-				break
-			}
-		}
+	//if is built-in format then return id
+	if numberFormat.IsBuiltIn(number.ID) {
+		return number.ID
 	}
 
-	//add a new one, if there is no such number format
-	if numID == -1 {
-		numID = len(*ss.ml.NumberFormats)
-		*ss.ml.NumberFormats = append(*ss.ml.NumberFormats, numFormat)
-		ss.file.MarkAsUpdated()
+	//return id of already existing information. hash ignores ID for non built-in types
+	key := hash.NumberFormat(number).Hash()
+	if id, ok := ss.numberIndex[key]; ok {
+		return id
 	}
 
-	return numID
+	//N.B.: NumberFormat uses ID, not indexes
+	nextID := numberFormat.LastReservedID + len(*ss.ml.NumberFormats) + 1
+	number.ID = nextID
+
+	*ss.ml.NumberFormats = append(*ss.ml.NumberFormats, number)
+	ss.numberIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }

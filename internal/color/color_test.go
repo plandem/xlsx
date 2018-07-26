@@ -1,4 +1,4 @@
-package color
+package color_test
 
 import (
 	sharedML "github.com/plandem/ooxml/ml"

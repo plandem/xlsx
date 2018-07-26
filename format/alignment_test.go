@@ -22,7 +22,6 @@ func TestAlignment(t *testing.T) {
 
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, &StyleFormat{
-		key: "31938baca968c10c008c70df782ec8a8",
 		alignment: ml.CellAlignment{
 			Vertical:        VAlignBottom,
 			Horizontal:      HAlignFill,
