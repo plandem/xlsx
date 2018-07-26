@@ -1,8 +1,8 @@
-package hash_test
+package hash
 
 import (
 	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/format/internal/hash"
+	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"

@@ -5,23 +5,38 @@ import (
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/hash"
 	"reflect"
+	"log"
 )
 
 //StyleSheet is a higher level object that wraps ml.StyleSheet with functionality
 type StyleSheet struct {
-	ml       ml.StyleSheet
+	ml ml.StyleSheet
+
+	//hash -> index for styles
 	xfIndex  map[string]int
 	dxfIndex map[string]int
-	doc      *Spreadsheet
-	file     *ooxml.PackageFile
+
+	//hash -> index for types
+	borderIndex     map[string]int
+	fillIndex       map[string]int
+	fontIndex       map[string]int
+	numberIndex     map[string]int
+
+	doc  *Spreadsheet
+	file *ooxml.PackageFile
 }
 
 func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	ss := &StyleSheet{
-		doc:      doc,
-		xfIndex:  make(map[string]int),
-		dxfIndex: make(map[string]int),
+		doc:             doc,
+		xfIndex:         make(map[string]int),
+		dxfIndex:        make(map[string]int),
+		borderIndex:     make(map[string]int),
+		fillIndex:       make(map[string]int),
+		fontIndex:       make(map[string]int),
+		numberIndex:     make(map[string]int),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
@@ -44,7 +59,57 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 		ss.file.MarkAsUpdated()
 	}
 
+	ss.buildIndexes()
 	return ss
+}
+
+//buildIndexes process already existing styles and build indexed for it
+func (ss *StyleSheet) buildIndexes() {
+	//file can be new or missing this part of information, so let's fix it
+	if ss.ml.Fonts == nil {
+		ss.ml.Fonts = &[]*ml.Font{}
+	}
+
+	if ss.ml.Fills == nil {
+		ss.ml.Fills = &[]*ml.Fill{}
+	}
+
+	if ss.ml.Borders == nil {
+		ss.ml.Borders = &[]*ml.Border{}
+	}
+
+	if ss.ml.NumberFormats == nil {
+		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
+	}
+
+	if ss.ml.CellXfs == nil {
+		ss.ml.CellXfs = &[]*ml.StyleRef{}
+	}
+
+	//build font indexes
+	for id, f := range *ss.ml.Fonts {
+		ss.fontIndex[hash.Font(f).Hash()] = id
+	}
+
+	//build fill indexes
+	for id, f := range *ss.ml.Fills {
+		ss.fillIndex[hash.Fill(f).Hash()] = id
+	}
+
+	//build border indexes
+	for id, f := range *ss.ml.Borders {
+		ss.borderIndex[hash.Border(f).Hash()] = id
+	}
+
+	//build number indexes
+	for id, f := range *ss.ml.NumberFormats {
+		ss.numberIndex[hash.NumberFormat(f).Hash()] = id
+	}
+
+	//build xf indexes
+	for id, xf := range *ss.ml.CellXfs {
+		log.Printf("%v, %v", id, xf)
+	}
 }
 
 /*
@@ -75,7 +140,7 @@ func (ss *StyleSheet) addXF(f *format.StyleFormat) format.StyleRefID {
 
 	xfID, ok := ss.xfIndex[f.Key()]
 	if !ok {
-		font, fill, alignment, numFormat, protection, border := internal.FromFormat(f)
+		font, fill, alignment, numFormat, protection, border := f.Settings()
 
 		fontID := ss.addFontIfRequired(font)
 		fillID := ss.addFillIfRequired(fill)
@@ -140,7 +205,7 @@ func (ss *StyleSheet) addXF(f *format.StyleFormat) format.StyleRefID {
 }
 
 func (ss *StyleSheet) addFontIfRequired(font *ml.Font) int {
-	if *font == (ml.Font{}) {
+	if font == nil {
 		return 0
 	}
 
@@ -170,7 +235,7 @@ func (ss *StyleSheet) addFontIfRequired(font *ml.Font) int {
 }
 
 func (ss *StyleSheet) addFillIfRequired(fill *ml.Fill) int {
-	if *fill == (ml.Fill{}) {
+	if fill == nil {
 		return 0
 	}
 
@@ -200,7 +265,7 @@ func (ss *StyleSheet) addFillIfRequired(fill *ml.Fill) int {
 }
 
 func (ss *StyleSheet) addBorderIfRequired(border *ml.Border) int {
-	if *border == (ml.Border{}) {
+	if border == nil {
 		return 0
 	}
 
@@ -230,7 +295,7 @@ func (ss *StyleSheet) addBorderIfRequired(border *ml.Border) int {
 }
 
 func (ss *StyleSheet) addNumFormatIfRequired(numFormat *ml.NumberFormat) int {
-	if *numFormat == (ml.NumberFormat{}) {
+	if numFormat == nil {
 		return 0
 	}
 
