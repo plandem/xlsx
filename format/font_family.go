@@ -1,22 +1,15 @@
 package format
 
 import (
-	"strconv"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
-
-//FontFamilyType is a type to encode XSD ST_FontFamily
-type FontFamilyType byte
 
 //List of all possible values for FontFamilyType
 const (
-	_ FontFamilyType = iota
+	_ styles.FontFamilyType = iota
 	FontFamilyRoman
 	FontFamilySwiss
 	FontFamilyModern
 	FontFamilyScript
 	FontFamilyDecorative
 )
-
-func (v FontFamilyType) String() string {
-	return strconv.Itoa(int(v))
-}

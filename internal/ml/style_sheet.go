@@ -2,23 +2,26 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
+
+//StyleRefID is helper alias type for ID of CT_Xf to make it easier to read/understand markup files
+type StyleRefID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
-	XMLName       ml.Name          `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
-	NumberFormats *[]*NumberFormat `xml:"numFmts>numFmt,omitempty"`
-	Fonts         *[]*Font         `xml:"fonts>font,omitempty"`
-	Fills         *[]*Fill         `xml:"fills>fill,omitempty"`
-	Borders       *[]*Border       `xml:"borders>border,omitempty"`
-	CellStyleXfs  *[]*StyleRef     `xml:"cellStyleXfs>xf,omitempty"`
-	CellXfs       *[]*StyleRef     `xml:"cellXfs>xf,omitempty"`
-	CellStyles    *[]*CellStyle    `xml:"cellStyles>cellStyle,omitempty"`
-	Dxfs          *ml.Reserved     `xml:"dxfs,omitempty"`
-	TableStyles   *ml.Reserved     `xml:"tableStyles,omitempty"`
-	Colors        *ml.Reserved     `xml:"colors,omitempty"`
-	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
+	XMLName       ml.Name               `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
+	NumberFormats *[]*NumberFormat      `xml:"numFmts>numFmt,omitempty"`
+	Fonts         *[]*Font              `xml:"fonts>font,omitempty"`
+	Fills         *[]*Fill              `xml:"fills>fill,omitempty"`
+	Borders       *[]*Border            `xml:"borders>border,omitempty"`
+	CellStyleXfs  *[]*StyleRef          `xml:"cellStyleXfs>xf,omitempty"`
+	CellXfs       *[]*StyleRef          `xml:"cellXfs>xf,omitempty"`
+	CellStyles    *[]*NamedStyleRef     `xml:"cellStyles>cellStyle,omitempty"`
+	Dxfs          *[]*DifferentialStyle `xml:"dxfs>dxf,omitempty"`
+	TableStyles   *ml.Reserved          `xml:"tableStyles,omitempty"`
+	Colors        *ml.Reserved          `xml:"colors,omitempty"`
+	ExtLst        *ml.Reserved          `xml:"extLst,omitempty"`
 }
 
 //NumberFormat is a direct mapping of XSD CT_NumFmt
@@ -29,42 +32,59 @@ type NumberFormat struct {
 
 //Font is a direct mapping of XSD CT_Font
 type Font struct {
-	Name      ml.Property     `xml:"name,omitempty"`
-	Charset   ml.Property     `xml:"charset,omitempty"`
-	Family    ml.Property     `xml:"family,omitempty"`
-	Bold      ml.PropertyBool `xml:"b,omitempty"`
-	Italic    ml.PropertyBool `xml:"i,omitempty"`
-	Strike    ml.PropertyBool `xml:"strike,omitempty"`
-	Shadow    ml.PropertyBool `xml:"shadow,omitempty"`
-	Condense  ml.PropertyBool `xml:"condense,omitempty"`
-	Extend    ml.PropertyBool `xml:"extend,omitempty"`
-	Color     *Color          `xml:"color,omitempty"`
-	Size      ml.Property     `xml:"sz,omitempty"`
-	Underline ml.Property     `xml:"u,omitempty"`
-	VAlign    ml.Property     `xml:"vertAlign,omitempty"`
-	Scheme    ml.Property     `xml:"scheme,omitempty"`
+	Name      ml.Property            `xml:"name,omitempty"`
+	Charset   styles.FontCharsetType `xml:"charset,omitempty"`
+	Family    styles.FontFamilyType  `xml:"family,omitempty"`
+	Bold      ml.PropertyBool        `xml:"b,omitempty"`
+	Italic    ml.PropertyBool        `xml:"i,omitempty"`
+	Strike    ml.PropertyBool        `xml:"strike,omitempty"`
+	Shadow    ml.PropertyBool        `xml:"shadow,omitempty"`
+	Condense  ml.PropertyBool        `xml:"condense,omitempty"`
+	Extend    ml.PropertyBool        `xml:"extend,omitempty"`
+	Color     *Color                 `xml:"color,omitempty"`
+	Size      ml.PropertyDouble      `xml:"sz,omitempty"`
+	Underline styles.UnderlineType   `xml:"u,omitempty"`
+	VAlign    styles.FontVAlignType  `xml:"vertAlign,omitempty"`
+	Scheme    styles.FontSchemeType  `xml:"scheme,omitempty"`
 }
 
 //Color is a direct mapping of XSD CT_Color
 type Color struct {
 	Auto    bool             `xml:"auto,attr,omitempty"`
+	RGB     string           `xml:"rgb,attr,omitempty"`
+	Tint    float64          `xml:"tint,attr,omitempty"` //default 0.0
 	Indexed ml.OptionalIndex `xml:"indexed,attr,omitempty"`
-	RGB     format.ARGB      `xml:"rgb,attr,omitempty"`
 	Theme   ml.OptionalIndex `xml:"theme,attr,omitempty"`
-	Tint    float32          `xml:"tint,attr,omitempty"`
 }
 
 //Fill is a direct mapping of XSD CT_Fill
 type Fill struct {
-	Pattern  *PatternFill `xml:"patternFill,omitempty"`
-	Gradient *ml.Reserved `xml:"gradientFill,omitempty"`
+	Pattern  *PatternFill  `xml:"patternFill,omitempty"`
+	Gradient *GradientFill `xml:"gradientFill,omitempty"`
 }
 
 //PatternFill is a direct mapping of XSD CT_PatternFill
 type PatternFill struct {
 	Color      *Color             `xml:"fgColor,omitempty"`
 	Background *Color             `xml:"bgColor,omitempty"`
-	Type       format.PatternType `xml:"patternType,attr,omitempty"`
+	Type       styles.PatternType `xml:"patternType,attr,omitempty"`
+}
+
+//GradientFill is a direct mapping of XSD CT_GradientFill
+type GradientFill struct {
+	Stop   []*GradientStop     `xml:"stop,omitempty"`
+	Degree float64             `xml:"degree,attr,omitempty"` //default 0.0
+	Left   float64             `xml:"left,attr,omitempty"`   //default 0.0
+	Right  float64             `xml:"right,attr,omitempty"`  //default 0.0
+	Top    float64             `xml:"top,attr,omitempty"`    //default 0.0
+	Bottom float64             `xml:"bottom,attr,omitempty"` //default 0.0
+	Type   styles.GradientType `xml:"type,attr,omitempty"`   //default linear
+}
+
+//GradientStop is a direct mapping of XSD CT_GradientStop
+type GradientStop struct {
+	Color    *Color  `xml:"color"`
+	Position float64 `xml:"position,attr"`
 }
 
 //Border is a direct mapping of XSD CT_Border
@@ -84,11 +104,11 @@ type Border struct {
 //BorderSegment is a direct mapping of XSD CT_BorderPr
 type BorderSegment struct {
 	Color *Color                 `xml:"color,omitempty"`
-	Type  format.BorderStyleType `xml:"style,attr,omitempty"`
+	Type  styles.BorderStyleType `xml:"style,attr,omitempty"`
 }
 
-//CellStyle is a direct mapping of XSD CT_CellStyle
-type CellStyle struct {
+//NamedStyleRef is a direct mapping of XSD CT_CellStyle
+type NamedStyleRef struct {
 	Name          string           `xml:"name,attr,omitempty"`
 	XfId          int              `xml:"xfId,attr"`
 	BuiltinId     ml.OptionalIndex `xml:"builtinId,attr,omitempty"`
@@ -118,6 +138,17 @@ type StyleRef struct {
 	ExtLst            *ml.Reserved    `xml:"extLst,omitempty"`
 }
 
+//DifferentialStyle is a direct mapping of XSD CT_Dxf
+type DifferentialStyle struct {
+	NumberFormat *NumberFormat   `xml:"numFmt,omitempty"`
+	Font         *Font           `xml:"font,omitempty"`
+	Fill         *Fill           `xml:"fill,omitempty"`
+	Border       *Border         `xml:"border,omitempty"`
+	Alignment    *CellAlignment  `xml:"alignment,omitempty"`
+	Protection   *CellProtection `xml:"protection,omitempty"`
+	ExtLst       *ml.Reserved    `xml:"extLst,omitempty"`
+}
+
 //CellProtection is a direct mapping of XSD CT_CellProtection
 type CellProtection struct {
 	Locked bool `xml:"locked,attr,omitempty"`
@@ -126,8 +157,8 @@ type CellProtection struct {
 
 //CellAlignment is a direct mapping of XSD CT_CellAlignment
 type CellAlignment struct {
-	Horizontal      format.HAlignType `xml:"horizontal,attr,omitempty"`
-	Vertical        format.VAlignType `xml:"vertical,attr,omitempty"`
+	Horizontal      styles.HAlignType `xml:"horizontal,attr,omitempty"`
+	Vertical        styles.VAlignType `xml:"vertical,attr,omitempty"`
 	TextRotation    int               `xml:"textRotation,attr,omitempty"`
 	WrapText        bool              `xml:"wrapText,attr,omitempty"`
 	Indent          int               `xml:"indent,attr,omitempty"`

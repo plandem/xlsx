@@ -1,6 +1,8 @@
 package internal
 
-import "github.com/plandem/ooxml/ml"
+import (
+	"github.com/plandem/ooxml/ml"
+)
 
 //List of all supported RelationType and ContentType
 const (

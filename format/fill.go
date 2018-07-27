@@ -1,30 +1,110 @@
 package format
 
-type fill struct {
-	Color      ARGB
-	Background ARGB
-	Type       PatternType
-}
+import (
+	"github.com/plandem/xlsx/internal/color"
+	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/styles"
+)
 
-type fillOption byte
+type patternOption byte
+type gradientOption byte
+
+//N.B.: only one kind of fill is allowed by standard
+type fillOption struct {
+	Pattern  patternOption
+	Gradient gradientOption
+}
 
 //Fill is a 'namespace' for all possible settings for fill
 var Fill fillOption
 
-func (p *fillOption) Color(color string) option {
+func (f *fillOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Fill.Color = ColorToARGB(color)
+		s.fill.Pattern.Color = color.New(rgb)
+		s.fill.Gradient = &ml.GradientFill{}
 	}
 }
 
-func (p *fillOption) Background(color string) option {
+func (f *fillOption) Background(rgb string) option {
 	return func(s *StyleFormat) {
-		s.Fill.Background = ColorToARGB(color)
+		s.fill.Pattern.Background = color.New(rgb)
+		s.fill.Gradient = &ml.GradientFill{}
 	}
 }
 
-func (p *fillOption) Type(pt PatternType) option {
+func (f *fillOption) Type(pt styles.PatternType) option {
 	return func(s *StyleFormat) {
-		s.Fill.Type = pt
+		s.fill.Pattern.Type = pt
+		s.fill.Gradient = &ml.GradientFill{}
+	}
+}
+
+func (p *patternOption) Color(rgb string) option {
+	return func(s *StyleFormat) {
+		s.fill.Pattern.Color = color.New(rgb)
+		s.fill.Gradient = &ml.GradientFill{}
+	}
+}
+
+func (p *patternOption) Background(rgb string) option {
+	return func(s *StyleFormat) {
+		s.fill.Pattern.Background = color.New(rgb)
+		s.fill.Gradient = &ml.GradientFill{}
+	}
+}
+
+func (p *patternOption) Type(pt styles.PatternType) option {
+	return func(s *StyleFormat) {
+		s.fill.Pattern.Type = pt
+		s.fill.Gradient = &ml.GradientFill{}
+	}
+}
+
+func (g *gradientOption) Type(gt styles.GradientType) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Type = gt
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+}
+
+func (g *gradientOption) Degree(degree float64) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Degree = degree
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+}
+
+func (g *gradientOption) Left(left float64) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Left = left
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+}
+
+func (g *gradientOption) Right(right float64) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Right = right
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+}
+
+func (g *gradientOption) Top(top float64) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Top = top
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+}
+
+func (g *gradientOption) Bottom(bottom float64) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Bottom = bottom
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+}
+
+func (g *gradientOption) Stop(position float64, rgb string) option {
+	return func(s *StyleFormat) {
+		s.fill.Gradient.Stop = append(s.fill.Gradient.Stop, &ml.GradientStop{Position: position, Color: color.New(rgb)})
+		s.fill.Pattern = &ml.PatternFill{}
 	}
 }

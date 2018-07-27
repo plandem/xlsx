@@ -1,27 +1,12 @@
 package format
 
-//FontVAlignType is a type to encode XSD ST_VerticalAlignRun
-type FontVAlignType byte
+import (
+	"github.com/plandem/xlsx/internal/ml/styles"
+)
 
 //List of all possible values for FontVAlignType
 const (
-	_ FontVAlignType = iota
-	FontVAlignBaseline
-	FontVAlignSuperscript
-	FontVAlignSubscript
+	FontVAlignBaseline    styles.FontVAlignType = "baseline"
+	FontVAlignSuperscript styles.FontVAlignType = "superscript"
+	FontVAlignSubscript   styles.FontVAlignType = "subscript"
 )
-
-func (v FontVAlignType) String() string {
-	var s string
-
-	switch v {
-	case FontVAlignBaseline:
-		s = "baseline"
-	case FontVAlignSuperscript:
-		s = "superscript"
-	case FontVAlignSubscript:
-		s = "subscript"
-	}
-
-	return s
-}

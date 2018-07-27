@@ -33,5 +33,9 @@ func (r Ref) ToBounds() Bounds {
 
 //RefFromCellRefs returns Ref for from/to CellRefs
 func RefFromCellRefs(from CellRef, to CellRef) Ref {
+	if from == to {
+		return Ref(from)
+	}
+
 	return Ref(string(from) + ":" + string(to))
 }

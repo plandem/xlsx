@@ -1,15 +1,12 @@
 package format
 
 import (
-	"encoding/xml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
-
-//BorderStyleType is a type to encode XSD BorderStyleType
-type BorderStyleType byte
 
 //List of all possible values for BorderStyleType
 const (
-	_ BorderStyleType = iota
+	_ styles.BorderStyleType = iota
 	BorderStyleNone
 	BorderStyleThin
 	BorderStyleMedium
@@ -26,13 +23,8 @@ const (
 	BorderStyleSlantDashDot
 )
 
-var (
-	toBorderStyleType   map[string]BorderStyleType
-	fromBorderStyleType map[BorderStyleType]string
-)
-
 func init() {
-	fromBorderStyleType = map[BorderStyleType]string{
+	styles.FromBorderStyleType = map[styles.BorderStyleType]string{
 		BorderStyleNone:             "none",
 		BorderStyleThin:             "thin",
 		BorderStyleMedium:           "medium",
@@ -49,32 +41,8 @@ func init() {
 		BorderStyleSlantDashDot:     "slantDashDot",
 	}
 
-	toBorderStyleType = make(map[string]BorderStyleType, len(fromBorderStyleType))
-	for k, v := range fromBorderStyleType {
-		toBorderStyleType[v] = k
+	styles.ToBorderStyleType = make(map[string]styles.BorderStyleType, len(styles.FromBorderStyleType))
+	for k, v := range styles.FromBorderStyleType {
+		styles.ToBorderStyleType[v] = k
 	}
-}
-
-func (e BorderStyleType) String() string {
-	return fromBorderStyleType[e]
-}
-
-func (e *BorderStyleType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
-	attr := xml.Attr{Name: name}
-
-	if v, ok := fromBorderStyleType[*e]; ok {
-		attr.Value = v
-	} else {
-		attr = xml.Attr{}
-	}
-
-	return attr, nil
-}
-
-func (e *BorderStyleType) UnmarshalXMLAttr(attr xml.Attr) error {
-	if v, ok := toBorderStyleType[attr.Value]; ok {
-		*e = v
-	}
-
-	return nil
 }

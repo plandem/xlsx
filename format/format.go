@@ -1,26 +1,25 @@
 package format
 
 import (
-	"crypto/md5"
-	"fmt"
-	"io"
-	"strconv"
-	"strings"
+	"github.com/plandem/xlsx/internal/ml"
+	"reflect"
 )
 
-//StyleRefID is helper type do forbid usage of integers directly and getting valid ID for StyleFormat via style-sheet
-type StyleRefID int
+//StyleRefID is alias of original ml.StyleRefID type to:
+// 1) make it public
+// 2) forbid usage of integers directly
+// 3) getting valid ID for StyleFormat via style-sheet
+// 4) put everything related to stylesheet to same package
+type StyleRefID ml.StyleRefID
 
 //StyleFormat is objects that holds combined information about cell styling
 type StyleFormat struct {
-	key string
-
-	Font       font
-	Fill       fill
-	Alignment  alignment
-	NumFormat  numberFormat
-	Protection protection
-	Border     border
+	font       ml.Font
+	fill       ml.Fill
+	alignment  ml.CellAlignment
+	numFormat  ml.NumberFormat
+	protection ml.CellProtection
+	border     ml.Border
 }
 
 type option func(o *StyleFormat)
@@ -32,96 +31,182 @@ func New(options ...option) *StyleFormat {
 	return s
 }
 
-//Key returns unique hash for style settings
-func (s *StyleFormat) Key() string {
-	return s.key
+//beforeSet init nested data to simplify code around it
+func (s *StyleFormat) beforeSet() {
+	//unpack fill
+	if s.fill.Pattern == nil {
+		s.fill.Pattern = &ml.PatternFill{}
+	}
+
+	if s.fill.Gradient == nil {
+		s.fill.Gradient = &ml.GradientFill{}
+	}
+
+	//unpack border
+	if s.border.Left == nil {
+		s.border.Left = &ml.BorderSegment{}
+	}
+
+	if s.border.Right == nil {
+		s.border.Right = &ml.BorderSegment{}
+	}
+
+	if s.border.Top == nil {
+		s.border.Top = &ml.BorderSegment{}
+	}
+
+	if s.border.Bottom == nil {
+		s.border.Bottom = &ml.BorderSegment{}
+	}
+
+	if s.border.Diagonal == nil {
+		s.border.Diagonal = &ml.BorderSegment{}
+	}
+
+	if s.border.Vertical == nil {
+		s.border.Vertical = &ml.BorderSegment{}
+	}
+
+	if s.border.Horizontal == nil {
+		s.border.Horizontal = &ml.BorderSegment{}
+	}
+}
+
+//afterSet remove empty nested structures
+func (s *StyleFormat) afterSet() {
+	//pack fill
+	if s.fill.Pattern != nil && *s.fill.Pattern == (ml.PatternFill{}) {
+		s.fill.Pattern = nil
+	}
+
+	if s.fill.Gradient != nil && reflect.DeepEqual(s.fill.Gradient, &ml.GradientFill{}) {
+		s.fill.Gradient = nil
+	}
+
+	//pack border
+	if s.border.Left != nil && *s.border.Left == (ml.BorderSegment{}) {
+		s.border.Left = nil
+	}
+
+	if s.border.Right != nil && *s.border.Right == (ml.BorderSegment{}) {
+		s.border.Right = nil
+	}
+
+	if s.border.Top != nil && *s.border.Top == (ml.BorderSegment{}) {
+		s.border.Top = nil
+	}
+
+	if s.border.Bottom != nil && *s.border.Bottom == (ml.BorderSegment{}) {
+		s.border.Bottom = nil
+	}
+
+	if s.border.Diagonal != nil && *s.border.Diagonal == (ml.BorderSegment{}) {
+		s.border.Diagonal = nil
+	}
+
+	if s.border.Vertical != nil && *s.border.Vertical == (ml.BorderSegment{}) {
+		s.border.Vertical = nil
+	}
+
+	if s.border.Horizontal != nil && *s.border.Horizontal == (ml.BorderSegment{}) {
+		s.border.Horizontal = nil
+	}
 }
 
 //Set sets new options for style
 func (s *StyleFormat) Set(options ...option) {
+	//N.B.: performance for this package is not so critical, so let's init/de-init nested structures each call
+	s.beforeSet()
 	for _, o := range options {
 		o(s)
 	}
-
-	h := md5.New()
-	io.WriteString(h, strings.Join([]string{
-		s.getKeyForFont(),
-		s.getKeyForFill(),
-		s.getKeyForAlignment(),
-		s.getKeyForNumFormat(),
-		s.getKeyForProtection(),
-		s.getKeyForBorder(),
-	}, ":"))
-
-	s.key = fmt.Sprintf("%x", h.Sum(nil))
+	s.afterSet()
 }
 
-func (s *StyleFormat) getKeyForFont() string {
-	return strings.Join([]string{
-		s.Font.Name,
-		strconv.FormatInt(int64(s.Font.Family), 10),
-		strconv.FormatBool(bool(s.Font.Bold)),
-		strconv.FormatBool(bool(s.Font.Italic)),
-		strconv.FormatBool(bool(s.Font.Strike)),
-		strconv.FormatBool(bool(s.Font.Shadow)),
-		strconv.FormatBool(bool(s.Font.Condense)),
-		strconv.FormatBool(bool(s.Font.Extend)),
-		string(s.Font.Color),
-		strconv.FormatFloat(s.Font.Size, 'f', -1, 64),
-		strconv.FormatInt(int64(s.Font.Underline), 10),
-		strconv.FormatInt(int64(s.Font.VAlign), 10),
-		strconv.FormatInt(int64(s.Font.Scheme), 10),
-	}, ":")
-}
+//Settings checks current style settings and returns copies of non-empty objects
+func (s *StyleFormat) Settings() (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border) {
+	//copy non-empty alignment
+	if s.alignment != (ml.CellAlignment{}) {
+		alignment = &ml.CellAlignment{}
+		*alignment = s.alignment
+	}
 
-func (s *StyleFormat) getKeyForFill() string {
-	return strings.Join([]string{
-		strconv.FormatInt(int64(s.Fill.Type), 10),
-		string(s.Fill.Color),
-		string(s.Fill.Background),
-	}, ":")
-}
+	//copy non-empty border
+	if s.border != (ml.Border{}) {
+		border = &ml.Border{}
+		*border = s.border
 
-func (s *StyleFormat) getKeyForNumFormat() string {
-	return strings.Join([]string{
-		strconv.FormatInt(int64(s.NumFormat.ID), 10),
-		s.NumFormat.Code,
-	}, ":")
-}
+		if s.border.Left != nil && !reflect.DeepEqual(border.Left, &ml.BorderSegment{}) {
+			border.Left = &ml.BorderSegment{}
+			*border.Left = *s.border.Left
+		}
 
-func (s *StyleFormat) getKeyForProtection() string {
-	return strings.Join([]string{
-		strconv.FormatBool(s.Protection.Locked),
-		strconv.FormatBool(s.Protection.Hidden),
-	}, ":")
-}
+		if s.border.Right != nil && !reflect.DeepEqual(border.Right, &ml.BorderSegment{}) {
+			border.Right = &ml.BorderSegment{}
+			*border.Right = *s.border.Right
+		}
 
-func (s *StyleFormat) getKeyForBorder() string {
-	return strings.Join([]string{
-		string(s.Border.Top.Color),
-		strconv.FormatInt(int64(s.Border.Top.Type), 10),
+		if s.border.Top != nil && !reflect.DeepEqual(border.Top, &ml.BorderSegment{}) {
+			border.Top = &ml.BorderSegment{}
+			*border.Top = *s.border.Top
+		}
 
-		string(s.Border.Bottom.Color),
-		strconv.FormatInt(int64(s.Border.Bottom.Type), 10),
+		if s.border.Bottom != nil && !reflect.DeepEqual(border.Bottom, &ml.BorderSegment{}) {
+			border.Bottom = &ml.BorderSegment{}
+			*border.Bottom = *s.border.Bottom
+		}
 
-		string(s.Border.Left.Color),
-		strconv.FormatInt(int64(s.Border.Left.Type), 10),
+		if s.border.Diagonal != nil && !reflect.DeepEqual(border.Diagonal, &ml.BorderSegment{}) {
+			border.Diagonal = &ml.BorderSegment{}
+			*border.Diagonal = *s.border.Diagonal
+		}
 
-		string(s.Border.Right.Color),
-		strconv.FormatInt(int64(s.Border.Right.Type), 10),
-	}, ":")
-}
+		if s.border.Vertical != nil && !reflect.DeepEqual(border.Vertical, &ml.BorderSegment{}) {
+			border.Vertical = &ml.BorderSegment{}
+			*border.Vertical = *s.border.Vertical
+		}
 
-func (s *StyleFormat) getKeyForAlignment() string {
-	return strings.Join([]string{
-		strconv.FormatInt(int64(s.Alignment.Horizontal), 10),
-		strconv.FormatInt(int64(s.Alignment.Vertical), 10),
-		strconv.FormatInt(int64(s.Alignment.TextRotation), 10),
-		strconv.FormatBool(s.Alignment.WrapText),
-		strconv.FormatInt(int64(s.Alignment.Indent), 10),
-		strconv.FormatInt(int64(s.Alignment.RelativeIndent), 10),
-		strconv.FormatBool(s.Alignment.JustifyLastLine),
-		strconv.FormatBool(s.Alignment.ShrinkToFit),
-		strconv.FormatInt(int64(s.Alignment.ReadingOrder), 10),
-	}, ":")
+		if s.border.Horizontal != nil && !reflect.DeepEqual(border.Horizontal, &ml.BorderSegment{}) {
+			border.Horizontal = &ml.BorderSegment{}
+			*border.Horizontal = *s.border.Horizontal
+		}
+	}
+
+	//copy non-empty fill
+	if s.fill != (ml.Fill{}) {
+		fill = &ml.Fill{}
+
+		//copy pattern
+		if s.fill.Pattern != nil && !reflect.DeepEqual(s.fill.Pattern, &ml.PatternFill{}) {
+			fill.Pattern = &ml.PatternFill{}
+			*fill.Pattern = *s.fill.Pattern
+		}
+
+		//copy gradient
+		if s.fill.Gradient != nil && !reflect.DeepEqual(s.fill.Gradient, &ml.GradientFill{}) {
+			fill.Gradient = &ml.GradientFill{}
+			*fill.Gradient = *s.fill.Gradient
+			copy(fill.Gradient.Stop, s.fill.Gradient.Stop)
+		}
+	}
+
+	//copy non-empty font
+	if (s.font != ml.Font{} && s.font != ml.Font{Size: 0, Family: 0, Charset: 0}) {
+		font = &ml.Font{}
+		*font = s.font
+	}
+
+	//copy non-empty numFormat
+	if s.numFormat != (ml.NumberFormat{}) {
+		numFormat = &ml.NumberFormat{}
+		*numFormat = s.numFormat
+	}
+
+	//copy non-empty protection
+	if s.protection != (ml.CellProtection{}) {
+		protection = &ml.CellProtection{}
+		*protection = s.protection
+	}
+
+	return
 }

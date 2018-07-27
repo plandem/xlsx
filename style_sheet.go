@@ -4,52 +4,177 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal"
+	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
-	"reflect"
+	"github.com/plandem/xlsx/internal/number_format"
 )
 
 //StyleSheet is a higher level object that wraps ml.StyleSheet with functionality
 type StyleSheet struct {
-	ml       ml.StyleSheet
+	ml ml.StyleSheet
+
+	//hash -> index for styles
 	xfIndex  map[string]int
 	dxfIndex map[string]int
-	doc      *Spreadsheet
-	file     *ooxml.PackageFile
+
+	//hash -> index for types
+	borderIndex map[string]int
+	fillIndex   map[string]int
+	fontIndex   map[string]int
+	numberIndex map[string]int
+
+	doc  *Spreadsheet
+	file *ooxml.PackageFile
 }
 
 func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	ss := &StyleSheet{
-		doc:      doc,
-		xfIndex:  make(map[string]int),
-		dxfIndex: make(map[string]int),
+		doc:         doc,
+		xfIndex:     make(map[string]int),
+		dxfIndex:    make(map[string]int),
+		borderIndex: make(map[string]int),
+		fillIndex:   make(map[string]int),
+		fontIndex:   make(map[string]int),
+		numberIndex: make(map[string]int),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
 
-	//TODO: research about default items for a new XLSX
 	if ss.file.IsNew() {
 		ss.doc.pkg.ContentTypes().RegisterContent(ss.file.FileName(), internal.ContentTypeStyles)
 		ss.doc.relationships.AddFile(internal.RelationTypeStyles, ss.file.FileName())
-
-		//ss.ml.Fills = &[]*ml.Fill{{Pattern:&ml.PatternFill{
-		//	Type:format.PatternTypeNone,
-		//}}}
-		//
-		//ss.ml.Borders = &[]*ml.Border{{
-		//	Left:   &ml.BorderSegment{},
-		//	Right:  &ml.BorderSegment{},
-		//	Top:    &ml.BorderSegment{},
-		//	Bottom: &ml.BorderSegment{},
-		//}}
 		ss.file.MarkAsUpdated()
+		ss.addDefaults()
+		ss.buildIndexes()
 	}
 
 	return ss
 }
 
+func (ss *StyleSheet) addDefaults() {
+	//TODO: research more about default items for a new XLSX
+	//..
+
+	//add default types
+	ss.ml.Fills = &[]*ml.Fill{
+		{
+			Pattern: &ml.PatternFill{
+				Type: format.PatternTypeNone,
+			},
+		},
+		{
+			Pattern: &ml.PatternFill{
+				Type: format.PatternTypeGray125,
+			},
+		},
+	}
+
+	ss.ml.Borders = &[]*ml.Border{{
+		Left:   &ml.BorderSegment{},
+		Right:  &ml.BorderSegment{},
+		Top:    &ml.BorderSegment{},
+		Bottom: &ml.BorderSegment{},
+	}}
+
+	ss.ml.Fonts = &[]*ml.Font{{
+		Family: format.FontFamilySwiss,
+		Scheme: format.FontSchemeMinor,
+		Name:   "Calibri",
+		Size:   11.0,
+		//Color: ml.Color{Theme: 1}
+	}}
+
+	//add default ref for CellStyleXfs
+	ss.ml.CellStyleXfs = &[]*ml.StyleRef{{
+		FontId:   0,
+		FillId:   0,
+		BorderId: 0,
+		NumFmtId: 0,
+	}}
+
+	//add default ref for CellXfs
+	ss.ml.CellXfs = &[]*ml.StyleRef{{
+		XfId:     0,
+		FontId:   0,
+		FillId:   0,
+		BorderId: 0,
+		NumFmtId: 0,
+	}}
+
+	//add default ref for CellStyles
+	index := 0
+	ss.ml.CellStyles = &[]*ml.NamedStyleRef{{
+		Name:      "Normal",
+		XfId:      0,
+		BuiltinId: &index,
+	}}
+}
+
+func (ss *StyleSheet) buildFontIndexes() {
+	if ss.ml.Fonts == nil {
+		ss.ml.Fonts = &[]*ml.Font{}
+	}
+
+	for id, f := range *ss.ml.Fonts {
+		ss.fontIndex[hash.Font(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildFillIndexes() {
+	if ss.ml.Fills == nil {
+		ss.ml.Fills = &[]*ml.Fill{}
+	}
+
+	for id, f := range *ss.ml.Fills {
+		ss.fillIndex[hash.Fill(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildBorderIndexes() {
+	if ss.ml.Borders == nil {
+		ss.ml.Borders = &[]*ml.Border{}
+	}
+
+	for id, f := range *ss.ml.Borders {
+		ss.borderIndex[hash.Border(f).Hash()] = id
+	}
+}
+
+func (ss *StyleSheet) buildNumberIndexes() {
+	if ss.ml.NumberFormats == nil {
+		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
+	}
+
+	//N.B.: NumberFormat uses ID, not indexes
+	for _, f := range *ss.ml.NumberFormats {
+		ss.numberIndex[hash.NumberFormat(f).Hash()] = f.ID
+	}
+}
+
+func (ss *StyleSheet) buildXfIndexes() {
+	if ss.ml.CellXfs == nil {
+		ss.ml.CellXfs = &[]*ml.StyleRef{}
+	}
+
+	//build xf indexes
+	for id, xf := range *ss.ml.CellXfs {
+		ss.xfIndex[hash.StyleRef(xf).Hash()] = id
+	}
+}
+
+//buildIndexes process already existing styles and build indexed for it
+func (ss *StyleSheet) buildIndexes() {
+	ss.buildBorderIndexes()
+	ss.buildFillIndexes()
+	ss.buildFontIndexes()
+	ss.buildNumberIndexes()
+	ss.buildXfIndexes()
+	//ss.buildDxfIndexes()
+}
+
 /*
 func (ss *StyleSheet) addDXF(f *format.StyleFormat) int {
-	ss.loadIfRequired()
+	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//--- inline styles?
 	//<xsd:element name="font" type="CT_Font" minOccurs="0" maxOccurs="1"/>
@@ -71,190 +196,144 @@ func (ss *StyleSheet) addDXF(f *format.StyleFormat) int {
 */
 
 func (ss *StyleSheet) addXF(f *format.StyleFormat) format.StyleRefID {
-	ss.file.LoadIfRequired(nil)
+	ss.file.LoadIfRequired(ss.buildIndexes)
 
-	xfID, ok := ss.xfIndex[f.Key()]
-	if !ok {
-		font, fill, alignment, numFormat, protection, border := internal.FromFormat(f)
+	//get settings and add information if required
+	font, fill, alignment, numFormat, protection, border := f.Settings()
+	fontID := ss.addFontIfRequired(font)
+	fillID := ss.addFillIfRequired(fill)
+	borderID := ss.addBorderIfRequired(border)
+	numID := ss.addNumFormatIfRequired(numFormat)
 
-		fontID := ss.addFontIfRequired(font)
-		fillID := ss.addFillIfRequired(fill)
-		borderID := ss.addBorderIfRequired(border)
-		numID := ss.addNumFormatIfRequired(numFormat)
+	/*
+		Note to remember excel internals:
+		---
+		cell.s = cellXfs.index
+		cellXfs.xfId = cellStyleXf.index
+		cellStyle.xfId = cellStyleXf.index
+	*/
 
-		/*
-			Note to remember excel internals:
-			---
-			cell.s = cellXfs.index
-			cellXfs.xfId = cellStyleXf.index
-			cellStyle.xfId = cellStyleXf.index
-		*/
-
-		//we don't need this one, because we don't have task 'render final style', so for our case there is no 'override' of direct style
-		styleXfID := 0
-
-		//now let's try to get xf index of direct formatting - cellXf
-		cellXf := &ml.StyleRef{
-			XfId:              styleXfID,
-			FontId:            fontID,
-			FillId:            fillID,
-			BorderId:          borderID,
-			NumFmtId:          numID,
-			Alignment:         alignment,
-			Protection:        protection,
-			ApplyFont:         fontID > 0,
-			ApplyBorder:       borderID > 0,
-			ApplyFill:         fillID > 0,
-			ApplyNumberFormat: numID > 0,
-			ApplyAlignment:    alignment != nil,
-			ApplyProtection:   protection != nil,
-		}
-
-		xfID = -1
-
-		if ss.ml.CellXfs == nil {
-			//file can be new or missing this part of information, so let's fix it
-			ss.ml.CellXfs = &[]*ml.StyleRef{}
-		} else {
-			//try to find at already existing cellXf
-			for id, xf := range *ss.ml.CellXfs {
-				if reflect.DeepEqual(xf, cellXf) {
-					xfID = id
-					break
-				}
-			}
-		}
-
-		//add a new cellXf
-		if xfID == -1 {
-			xfID = len(*ss.ml.CellXfs)
-			*ss.ml.CellXfs = append(*ss.ml.CellXfs, cellXf)
-			ss.file.MarkAsUpdated()
-		}
-
-		//link this format with xfID
-		ss.xfIndex[f.Key()] = xfID
+	cellXf := &ml.StyleRef{
+		XfId:              0, //we don't need this one, because we don't have task 'render final style', so for our case there is no 'override' of direct style
+		FontId:            fontID,
+		FillId:            fillID,
+		BorderId:          borderID,
+		NumFmtId:          numID,
+		Alignment:         alignment,
+		Protection:        protection,
+		ApplyFont:         fontID > 0,
+		ApplyBorder:       borderID > 0,
+		ApplyFill:         fillID > 0,
+		ApplyNumberFormat: numID > 0,
+		ApplyAlignment:    alignment != nil,
+		ApplyProtection:   protection != nil,
 	}
 
-	return format.StyleRefID(xfID)
+	//return id of already existing information
+	key := hash.StyleRef(cellXf).Hash()
+	if id, ok := ss.xfIndex[key]; ok {
+		return format.StyleRefID(id)
+	}
+
+	//add a new one and return related id
+	nextID := len(*ss.ml.CellXfs)
+	*ss.ml.CellXfs = append(*ss.ml.CellXfs, cellXf)
+	ss.xfIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return format.StyleRefID(nextID)
 }
 
 func (ss *StyleSheet) addFontIfRequired(font *ml.Font) int {
-	if *font == (ml.Font{}) {
+	//if there is no information, then use default
+	if font == nil {
 		return 0
 	}
 
-	fontID := -1
-
-	if ss.ml.Fonts == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.Fonts = &[]*ml.Font{}
-	} else {
-		//get id of font
-		for id, f := range *ss.ml.Fonts {
-			if reflect.DeepEqual(f, font) {
-				fontID = id
-				break
-			}
-		}
+	//return id of already existing information
+	key := hash.Font(font).Hash()
+	if id, ok := ss.fontIndex[key]; ok {
+		return id
 	}
 
-	//add a new one, if there is no such font
-	if fontID == -1 {
-		fontID = len(*ss.ml.Fonts)
-		*ss.ml.Fonts = append(*ss.ml.Fonts, font)
-		ss.file.MarkAsUpdated()
-	}
-
-	return fontID
+	//add a new one and return related id
+	nextID := len(*ss.ml.Fonts)
+	*ss.ml.Fonts = append(*ss.ml.Fonts, font)
+	ss.fontIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }
 
 func (ss *StyleSheet) addFillIfRequired(fill *ml.Fill) int {
-	if *fill == (ml.Fill{}) {
+	//if there is no information, then use default
+	if fill == nil {
 		return 0
 	}
 
-	fillID := -1
-
-	if ss.ml.Fills == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.Fills = &[]*ml.Fill{}
-	} else {
-		//get id of fill
-		for id, f := range *ss.ml.Fills {
-			if reflect.DeepEqual(f, fill) {
-				fillID = id
-				break
-			}
-		}
+	//return id of already existing information
+	key := hash.Fill(fill).Hash()
+	if id, ok := ss.fillIndex[key]; ok {
+		return id
 	}
 
-	//add a new one, if there is no such fill
-	if fillID == -1 {
-		fillID = len(*ss.ml.Fills)
-		*ss.ml.Fills = append(*ss.ml.Fills, fill)
-		ss.file.MarkAsUpdated()
-	}
-
-	return fillID
+	//add a new one and return related id
+	nextID := len(*ss.ml.Fills)
+	*ss.ml.Fills = append(*ss.ml.Fills, fill)
+	ss.fillIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }
 
 func (ss *StyleSheet) addBorderIfRequired(border *ml.Border) int {
-	if *border == (ml.Border{}) {
+	//if there is no information, then use default
+	if border == nil {
 		return 0
 	}
 
-	borderID := -1
-
-	if ss.ml.Borders == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.Borders = &[]*ml.Border{}
-	} else {
-		//get id of border
-		for id, b := range *ss.ml.Borders {
-			if reflect.DeepEqual(b, border) {
-				borderID = id
-				break
-			}
-		}
+	//return id of already existing information
+	key := hash.Border(border).Hash()
+	if id, ok := ss.borderIndex[key]; ok {
+		return id
 	}
 
-	//add a new one, if there is no such border
-	if borderID == -1 {
-		borderID = len(*ss.ml.Borders)
-		*ss.ml.Borders = append(*ss.ml.Borders, border)
-		ss.file.MarkAsUpdated()
-	}
-
-	return borderID
+	//add a new one and return related id
+	nextID := len(*ss.ml.Borders)
+	*ss.ml.Borders = append(*ss.ml.Borders, border)
+	ss.borderIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }
 
-func (ss *StyleSheet) addNumFormatIfRequired(numFormat *ml.NumberFormat) int {
-	if *numFormat == (ml.NumberFormat{}) {
+func (ss *StyleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
+	//if there is no information, then use default
+	if number == nil {
 		return 0
 	}
 
-	numID := -1
+	//if is built-in format then return id
+	if numberFormat.IsBuiltIn(number.ID) {
+		return number.ID
+	}
 
-	if ss.ml.NumberFormats == nil {
-		//file can be new or missing this part of information, so let's fix it
-		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
-	} else {
-		//get id of number format
-		for id, b := range *ss.ml.NumberFormats {
-			if reflect.DeepEqual(b, numFormat) {
-				numID = id
-				break
-			}
+	//Return id of already existing information.
+	//N.B.: Supposed that for custom format we have -1 as code, so hash should be same for new/existing custom format
+	key := hash.NumberFormat(number).Hash()
+	if id, ok := ss.numberIndex[key]; ok {
+		return id
+	}
+
+	//try to lookup through custom formats and find same code
+	for _, f := range *ss.ml.NumberFormats {
+		if number.Code == f.Code {
+			return f.ID
 		}
 	}
 
-	//add a new one, if there is no such number format
-	if numID == -1 {
-		numID = len(*ss.ml.NumberFormats)
-		*ss.ml.NumberFormats = append(*ss.ml.NumberFormats, numFormat)
-		ss.file.MarkAsUpdated()
-	}
+	//N.B.: NumberFormat uses ID, not indexes
+	nextID := numberFormat.LastReservedID + len(*ss.ml.NumberFormats) + 1
+	number.ID = nextID
 
-	return numID
+	*ss.ml.NumberFormats = append(*ss.ml.NumberFormats, number)
+	ss.numberIndex[key] = nextID
+	ss.file.MarkAsUpdated()
+	return nextID
 }

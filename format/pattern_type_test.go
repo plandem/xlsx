@@ -4,17 +4,18 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestFillPattern(t *testing.T) {
 	type Entity struct {
-		Attribute format.PatternType `xml:"attribute,attr"`
+		Attribute styles.PatternType `xml:"attribute,attr"`
 	}
 
-	list := map[string]format.PatternType{
-		"":                format.PatternType(0),
+	list := map[string]styles.PatternType{
+		"":                styles.PatternType(0),
 		"none":            format.PatternTypeNone,
 		"solid":           format.PatternTypeSolid,
 		"mediumGray":      format.PatternTypeMediumGray,

@@ -2,6 +2,7 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -34,7 +35,7 @@ func TestRow(t *testing.T) {
 	require.Equal(t, r.ml.Height, float32(0.0))
 	require.Equal(t, r.ml.CustomHeight, false)
 	require.Equal(t, r.ml.CustomFormat, false)
-	require.Equal(t, r.ml.Style, format.StyleRefID(0))
+	require.Equal(t, r.ml.Style, ml.StyleRefID(0))
 
 	o = options.NewRowOptions(
 		options.Row.Height(100.0),
@@ -48,7 +49,7 @@ func TestRow(t *testing.T) {
 	require.Equal(t, r.ml.Height, float32(100.0))
 	require.Equal(t, r.ml.CustomHeight, true)
 	require.Equal(t, r.ml.CustomFormat, false)
-	require.Equal(t, r.ml.Style, format.StyleRefID(0))
+	require.Equal(t, r.ml.Style, ml.StyleRefID(0))
 
 	style := format.New(
 		format.Font.Name("Calibri"),
@@ -59,5 +60,5 @@ func TestRow(t *testing.T) {
 	r.SetFormatting(styleRef)
 
 	require.Equal(t, r.ml.CustomFormat, true)
-	require.Equal(t, r.ml.Style, styleRef)
+	require.Equal(t, r.ml.Style, ml.StyleRefID(styleRef))
 }

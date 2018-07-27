@@ -2,7 +2,6 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/types"
 )
 
@@ -55,48 +54,48 @@ type SheetDimension struct {
 
 //Col is a direct mapping of XSD CT_Col
 type Col struct {
-	Min          int               `xml:"min,attr"`
-	Max          int               `xml:"max,attr"`
-	Width        float32           `xml:"width,attr,omitempty"`
-	Style        format.StyleRefID `xml:"style,attr,omitempty"`
-	Hidden       bool              `xml:"hidden,attr,omitempty"`
-	BestFit      bool              `xml:"bestFit,attr,omitempty"`
-	CustomWidth  bool              `xml:"customWidth,attr,omitempty"`
-	Phonetic     bool              `xml:"phonetic,attr,omitempty"`
-	OutlineLevel uint8             `xml:"outlineLevel,attr,omitempty"`
-	Collapsed    bool              `xml:"collapsed,attr,omitempty"`
+	Min          int        `xml:"min,attr"`
+	Max          int        `xml:"max,attr"`
+	Width        float32    `xml:"width,attr,omitempty"`
+	Style        StyleRefID `xml:"style,attr,omitempty"`
+	Hidden       bool       `xml:"hidden,attr,omitempty"`
+	BestFit      bool       `xml:"bestFit,attr,omitempty"`
+	CustomWidth  bool       `xml:"customWidth,attr,omitempty"`
+	Phonetic     bool       `xml:"phonetic,attr,omitempty"`
+	OutlineLevel uint8      `xml:"outlineLevel,attr,omitempty"`
+	Collapsed    bool       `xml:"collapsed,attr,omitempty"`
 }
 
 //Row is a direct mapping of XSD CT_Row
 type Row struct {
-	Cells        []*Cell           `xml:"c"`
-	ExtLst       *ml.Reserved      `xml:"extLst,omitempty"`
-	Ref          int               `xml:"r,attr,omitempty"` //1-based index
-	Spans        string            `xml:"spans,attr,omitempty"`
-	Style        format.StyleRefID `xml:"s,attr,omitempty"`
-	CustomFormat bool              `xml:"customFormat,attr,omitempty"`
-	Height       float32           `xml:"ht,attr,omitempty"`
-	Hidden       bool              `xml:"hidden,attr,omitempty"`
-	CustomHeight bool              `xml:"customHeight,attr,omitempty"`
-	OutlineLevel uint8             `xml:"outlineLevel,attr,omitempty"`
-	Collapsed    bool              `xml:"collapsed,attr,omitempty"`
-	ThickTop     bool              `xml:"thickTop,attr,omitempty"`
-	ThickBot     bool              `xml:"thickBot,attr,omitempty"`
-	Phonetic     bool              `xml:"ph,attr,omitempty"`
+	Cells        []*Cell      `xml:"c"`
+	ExtLst       *ml.Reserved `xml:"extLst,omitempty"`
+	Ref          int          `xml:"r,attr,omitempty"` //1-based index
+	Spans        string       `xml:"spans,attr,omitempty"`
+	Style        StyleRefID   `xml:"s,attr,omitempty"`
+	CustomFormat bool         `xml:"customFormat,attr,omitempty"`
+	Height       float32      `xml:"ht,attr,omitempty"`
+	Hidden       bool         `xml:"hidden,attr,omitempty"`
+	CustomHeight bool         `xml:"customHeight,attr,omitempty"`
+	OutlineLevel uint8        `xml:"outlineLevel,attr,omitempty"`
+	Collapsed    bool         `xml:"collapsed,attr,omitempty"`
+	ThickTop     bool         `xml:"thickTop,attr,omitempty"`
+	ThickBot     bool         `xml:"thickBot,attr,omitempty"`
+	Phonetic     bool         `xml:"ph,attr,omitempty"`
 }
 
 //Cell is a direct mapping of XSD CT_Cell
 type Cell struct {
-	Formula   *CellFormula      `xml:"f,omitempty"`
-	Value     string            `xml:"v,omitempty"`
-	InlineStr *StringItem       `xml:"is,omitempty"`
-	ExtLst    *ml.Reserved      `xml:"extLst,omitempty"`
-	Ref       types.CellRef     `xml:"r,attr"`
-	Style     format.StyleRefID `xml:"s,attr,omitempty"`
-	Type      types.CellType    `xml:"t,attr,omitempty"`
-	Cm        ml.OptionalIndex  `xml:"cm,attr,omitempty"`
-	Vm        ml.OptionalIndex  `xml:"vm,attr,omitempty"`
-	Ph        bool              `xml:"ph,attr,omitempty"`
+	Formula   *CellFormula     `xml:"f,omitempty"`
+	Value     string           `xml:"v,omitempty"`
+	InlineStr *StringItem      `xml:"is,omitempty"`
+	ExtLst    *ml.Reserved     `xml:"extLst,omitempty"`
+	Ref       types.CellRef    `xml:"r,attr"`
+	Style     StyleRefID       `xml:"s,attr,omitempty"`
+	Type      types.CellType   `xml:"t,attr,omitempty"`
+	Cm        ml.OptionalIndex `xml:"cm,attr,omitempty"`
+	Vm        ml.OptionalIndex `xml:"vm,attr,omitempty"`
+	Ph        bool             `xml:"ph,attr,omitempty"`
 }
 
 //CellFormula is a direct mapping of XSD CT_CellFormula

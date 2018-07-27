@@ -1,15 +1,12 @@
 package format
 
 import (
-	"encoding/xml"
+	"github.com/plandem/xlsx/internal/ml/styles"
 )
-
-//PatternType is a type to encode XSD ST_PatternType
-type PatternType byte
 
 //List of all possible values for PatternType
 const (
-	_ PatternType = iota
+	_ styles.PatternType = iota
 	PatternTypeNone
 	PatternTypeSolid
 	PatternTypeMediumGray
@@ -31,13 +28,8 @@ const (
 	PatternTypeGray0625
 )
 
-var (
-	toPatternType   map[string]PatternType
-	fromPatternType map[PatternType]string
-)
-
 func init() {
-	fromPatternType = map[PatternType]string{
+	styles.FromPatternType = map[styles.PatternType]string{
 		PatternTypeNone:            "none",
 		PatternTypeSolid:           "solid",
 		PatternTypeMediumGray:      "mediumGray",
@@ -59,32 +51,8 @@ func init() {
 		PatternTypeGray0625:        "gray0625",
 	}
 
-	toPatternType = make(map[string]PatternType, len(fromPatternType))
-	for k, v := range fromPatternType {
-		toPatternType[v] = k
+	styles.ToPatternType = make(map[string]styles.PatternType, len(styles.FromPatternType))
+	for k, v := range styles.FromPatternType {
+		styles.ToPatternType[v] = k
 	}
-}
-
-func (e PatternType) String() string {
-	return fromPatternType[e]
-}
-
-func (e *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
-	attr := xml.Attr{Name: name}
-
-	if v, ok := fromPatternType[*e]; ok {
-		attr.Value = v
-	} else {
-		attr = xml.Attr{}
-	}
-
-	return attr, nil
-}
-
-func (e *PatternType) UnmarshalXMLAttr(attr xml.Attr) error {
-	if v, ok := toPatternType[attr.Value]; ok {
-		*e = v
-	}
-
-	return nil
 }
