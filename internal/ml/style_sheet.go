@@ -10,18 +10,18 @@ type StyleRefID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
-	XMLName       ml.Name          `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
-	NumberFormats *[]*NumberFormat `xml:"numFmts>numFmt,omitempty"`
-	Fonts         *[]*Font         `xml:"fonts>font,omitempty"`
-	Fills         *[]*Fill         `xml:"fills>fill,omitempty"`
-	Borders       *[]*Border       `xml:"borders>border,omitempty"`
-	CellStyleXfs  *[]*StyleRef     `xml:"cellStyleXfs>xf,omitempty"`
-	CellXfs       *[]*StyleRef     `xml:"cellXfs>xf,omitempty"`
-	CellStyles    *[]*NamedStyle   `xml:"cellStyles>cellStyle,omitempty"`
-	Dxfs          *[]*DiffRef      `xml:"dxfs>dxf,omitempty"`
-	TableStyles   *ml.Reserved     `xml:"tableStyles,omitempty"`
-	Colors        *ml.Reserved     `xml:"colors,omitempty"`
-	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
+	XMLName       ml.Name               `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
+	NumberFormats *[]*NumberFormat      `xml:"numFmts>numFmt,omitempty"`
+	Fonts         *[]*Font              `xml:"fonts>font,omitempty"`
+	Fills         *[]*Fill              `xml:"fills>fill,omitempty"`
+	Borders       *[]*Border            `xml:"borders>border,omitempty"`
+	CellStyleXfs  *[]*StyleRef          `xml:"cellStyleXfs>xf,omitempty"`
+	CellXfs       *[]*StyleRef          `xml:"cellXfs>xf,omitempty"`
+	CellStyles    *[]*NamedStyleRef     `xml:"cellStyles>cellStyle,omitempty"`
+	Dxfs          *[]*DifferentialStyle `xml:"dxfs>dxf,omitempty"`
+	TableStyles   *ml.Reserved          `xml:"tableStyles,omitempty"`
+	Colors        *ml.Reserved          `xml:"colors,omitempty"`
+	ExtLst        *ml.Reserved          `xml:"extLst,omitempty"`
 }
 
 //NumberFormat is a direct mapping of XSD CT_NumFmt
@@ -107,8 +107,8 @@ type BorderSegment struct {
 	Type  styles.BorderStyleType `xml:"style,attr,omitempty"`
 }
 
-//NamedStyle is a direct mapping of XSD CT_CellStyle
-type NamedStyle struct {
+//NamedStyleRef is a direct mapping of XSD CT_CellStyle
+type NamedStyleRef struct {
 	Name          string           `xml:"name,attr,omitempty"`
 	XfId          int              `xml:"xfId,attr"`
 	BuiltinId     ml.OptionalIndex `xml:"builtinId,attr,omitempty"`
@@ -138,8 +138,8 @@ type StyleRef struct {
 	ExtLst            *ml.Reserved    `xml:"extLst,omitempty"`
 }
 
-//DiffRef is a direct mapping of XSD CT_Dxf
-type DiffRef struct {
+//DifferentialStyle is a direct mapping of XSD CT_Dxf
+type DifferentialStyle struct {
 	NumberFormat *NumberFormat   `xml:"numFmt,omitempty"`
 	Font         *Font           `xml:"font,omitempty"`
 	Fill         *Fill           `xml:"fill,omitempty"`

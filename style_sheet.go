@@ -103,9 +103,9 @@ func (ss *StyleSheet) addDefaults() {
 
 	//add default ref for CellStyles
 	index := 0
-	ss.ml.CellStyles = &[]*ml.NamedStyle{{
-		Name:   "Normal",
-		XfId:     0,
+	ss.ml.CellStyles = &[]*ml.NamedStyleRef{{
+		Name:      "Normal",
+		XfId:      0,
 		BuiltinId: &index,
 	}}
 }

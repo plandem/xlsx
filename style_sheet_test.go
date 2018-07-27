@@ -127,10 +127,10 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 		//format.Fill.Color("#FF1122"), //color is red
 		format.Fill.Background("#EFF142"), //background is green
 		format.NumberFormat(`$0.00" usd"`),
-		format.Border.Color("#1122FF"), //border is blue
+		format.Border.Color("#1122FF"),                //border is blue
 		format.Border.Type(format.BorderStyleDashDot), //
-		format.Alignment.VAlign(format.VAlignBottom), //
-		format.Alignment.HAlign(format.HAlignFill),//
+		format.Alignment.VAlign(format.VAlignBottom),  //
+		format.Alignment.HAlign(format.HAlignFill),    //
 		format.Protection.Hidden,
 		format.Protection.Locked,
 	)
@@ -179,7 +179,7 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 		//new fill
 		{
 			Pattern: &ml.PatternFill{
-				Type:       format.PatternTypeLightGrid,
+				Type: format.PatternTypeLightGrid,
 				//Color:      &ml.Color{RGB: "FFEFF142"},
 				Background: &ml.Color{RGB: "FFEFF142"},
 				//Background: &ml.Color{Indexed: 4},

@@ -6,10 +6,10 @@ import (
 
 //Bounds is implementation of Ref
 type Bounds struct {
-	FromCol int
-	FromRow int
-	ToCol   int
-	ToRow   int
+	FromCol     int
+	FromRow     int
+	ToCol       int
+	ToRow       int
 	initialized bool
 }
 
