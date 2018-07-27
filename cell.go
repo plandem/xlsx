@@ -157,7 +157,7 @@ func (c *Cell) HasFormatting() bool {
 	return c.ml.Style != 0
 }
 
-//SetFormatting sets style format to requested styleRef
-func (c *Cell) SetFormatting(styleRef format.StyleRefID) {
-	c.ml.Style = ml.StyleRefID(styleRef)
+//SetFormatting sets style format to requested styleID
+func (c *Cell) SetFormatting(styleID format.StyleID) {
+	c.ml.Style = ml.StyleID(styleID)
 }

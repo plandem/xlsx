@@ -26,9 +26,9 @@ func (r *Row) Set(o *options.RowOptions) {
 }
 
 //SetFormatting sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.
-func (r *Row) SetFormatting(styleRef format.StyleRefID) {
+func (r *Row) SetFormatting(styleID format.StyleID) {
 	r.ml.CustomFormat = true
-	r.ml.Style = ml.StyleRefID(styleRef)
+	r.ml.Style = ml.StyleID(styleID)
 }
 
 //CopyTo copies row cells into another row with rIdx index.

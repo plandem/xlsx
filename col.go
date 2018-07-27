@@ -26,8 +26,8 @@ func (c *Col) Set(o *options.ColumnOptions) {
 }
 
 //SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
-func (c *Col) SetFormatting(styleRef format.StyleRefID) {
-	c.ml.Style = ml.StyleRefID(styleRef)
+func (c *Col) SetFormatting(styleID format.StyleID) {
+	c.ml.Style = ml.StyleID(styleID)
 }
 
 //CopyTo copies col cells into another col with cIdx index.

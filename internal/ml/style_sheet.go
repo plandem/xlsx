@@ -5,23 +5,29 @@ import (
 	"github.com/plandem/xlsx/internal/ml/styles"
 )
 
-//StyleRefID is helper alias type for ID of CT_Xf to make it easier to read/understand markup files
-type StyleRefID int
+//StyleID is helper alias type for ID of CT_Xf to make it easier to read/understand markup files
+type StyleID int
+
+//DiffStyleID is helper alias type for ID of CT_Dxf to make it easier to read/understand markup files
+type DiffStyleID int
+
+//NamedStyleID is helper alias type for ID of CT_CellStyle to make it easier to read/understand markup files
+type NamedStyleID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
-	XMLName       ml.Name               `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
-	NumberFormats *[]*NumberFormat      `xml:"numFmts>numFmt,omitempty"`
-	Fonts         *[]*Font              `xml:"fonts>font,omitempty"`
-	Fills         *[]*Fill              `xml:"fills>fill,omitempty"`
-	Borders       *[]*Border            `xml:"borders>border,omitempty"`
-	CellStyleXfs  *[]*StyleRef          `xml:"cellStyleXfs>xf,omitempty"`
-	CellXfs       *[]*StyleRef          `xml:"cellXfs>xf,omitempty"`
-	CellStyles    *[]*NamedStyleRef     `xml:"cellStyles>cellStyle,omitempty"`
-	Dxfs          *[]*DifferentialStyle `xml:"dxfs>dxf,omitempty"`
-	TableStyles   *ml.Reserved          `xml:"tableStyles,omitempty"`
-	Colors        *ml.Reserved          `xml:"colors,omitempty"`
-	ExtLst        *ml.Reserved          `xml:"extLst,omitempty"`
+	XMLName       ml.Name          `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
+	NumberFormats *[]*NumberFormat `xml:"numFmts>numFmt,omitempty"`
+	Fonts         *[]*Font         `xml:"fonts>font,omitempty"`
+	Fills         *[]*Fill         `xml:"fills>fill,omitempty"`
+	Borders       *[]*Border       `xml:"borders>border,omitempty"`
+	CellStyleXfs  *[]*Style        `xml:"cellStyleXfs>xf,omitempty"`
+	CellXfs       *[]*Style        `xml:"cellXfs>xf,omitempty"`
+	CellStyles    *[]*NamedStyle   `xml:"cellStyles>cellStyle,omitempty"`
+	Dxfs          *[]*DiffStyle    `xml:"dxfs>dxf,omitempty"`
+	TableStyles   *ml.Reserved     `xml:"tableStyles,omitempty"`
+	Colors        *ml.Reserved     `xml:"colors,omitempty"`
+	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
 }
 
 //NumberFormat is a direct mapping of XSD CT_NumFmt
@@ -107,8 +113,8 @@ type BorderSegment struct {
 	Type  styles.BorderStyleType `xml:"style,attr,omitempty"`
 }
 
-//NamedStyleRef is a direct mapping of XSD CT_CellStyle
-type NamedStyleRef struct {
+//NamedStyle is a direct mapping of XSD CT_CellStyle
+type NamedStyle struct {
 	Name          string           `xml:"name,attr,omitempty"`
 	XfId          int              `xml:"xfId,attr"`
 	BuiltinId     ml.OptionalIndex `xml:"builtinId,attr,omitempty"`
@@ -118,8 +124,8 @@ type NamedStyleRef struct {
 	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
 }
 
-//StyleRef is a direct mapping of XSD CT_Xf
-type StyleRef struct {
+//Style is a direct mapping of XSD CT_Xf
+type Style struct {
 	NumFmtId          int             `xml:"numFmtId,attr"`
 	FontId            int             `xml:"fontId,attr"`
 	FillId            int             `xml:"fillId,attr"`
@@ -138,8 +144,8 @@ type StyleRef struct {
 	ExtLst            *ml.Reserved    `xml:"extLst,omitempty"`
 }
 
-//DifferentialStyle is a direct mapping of XSD CT_Dxf
-type DifferentialStyle struct {
+//DiffStyle is a direct mapping of XSD CT_Dxf
+type DiffStyle struct {
 	NumberFormat *NumberFormat   `xml:"numFmt,omitempty"`
 	Font         *Font           `xml:"font,omitempty"`
 	Fill         *Fill           `xml:"fill,omitempty"`

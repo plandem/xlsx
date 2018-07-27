@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-//StyleRef returns string with all values of Xf
-func StyleRef(style *ml.StyleRef) Key {
+//Style returns string with all values of ml.Style
+func Style(style *ml.Style) Key {
 	return Key(strings.Join([]string{
 		strconv.FormatInt(int64(style.NumFmtId), 10),
 		strconv.FormatInt(int64(style.FontId), 10),

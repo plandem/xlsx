@@ -54,16 +54,16 @@ type SheetDimension struct {
 
 //Col is a direct mapping of XSD CT_Col
 type Col struct {
-	Min          int        `xml:"min,attr"`
-	Max          int        `xml:"max,attr"`
-	Width        float32    `xml:"width,attr,omitempty"`
-	Style        StyleRefID `xml:"style,attr,omitempty"`
-	Hidden       bool       `xml:"hidden,attr,omitempty"`
-	BestFit      bool       `xml:"bestFit,attr,omitempty"`
-	CustomWidth  bool       `xml:"customWidth,attr,omitempty"`
-	Phonetic     bool       `xml:"phonetic,attr,omitempty"`
-	OutlineLevel uint8      `xml:"outlineLevel,attr,omitempty"`
-	Collapsed    bool       `xml:"collapsed,attr,omitempty"`
+	Min          int     `xml:"min,attr"`
+	Max          int     `xml:"max,attr"`
+	Width        float32 `xml:"width,attr,omitempty"`
+	Style        StyleID `xml:"style,attr,omitempty"`
+	Hidden       bool    `xml:"hidden,attr,omitempty"`
+	BestFit      bool    `xml:"bestFit,attr,omitempty"`
+	CustomWidth  bool    `xml:"customWidth,attr,omitempty"`
+	Phonetic     bool    `xml:"phonetic,attr,omitempty"`
+	OutlineLevel uint8   `xml:"outlineLevel,attr,omitempty"`
+	Collapsed    bool    `xml:"collapsed,attr,omitempty"`
 }
 
 //Row is a direct mapping of XSD CT_Row
@@ -72,7 +72,7 @@ type Row struct {
 	ExtLst       *ml.Reserved `xml:"extLst,omitempty"`
 	Ref          int          `xml:"r,attr,omitempty"` //1-based index
 	Spans        string       `xml:"spans,attr,omitempty"`
-	Style        StyleRefID   `xml:"s,attr,omitempty"`
+	Style        StyleID      `xml:"s,attr,omitempty"`
 	CustomFormat bool         `xml:"customFormat,attr,omitempty"`
 	Height       float32      `xml:"ht,attr,omitempty"`
 	Hidden       bool         `xml:"hidden,attr,omitempty"`
@@ -91,7 +91,7 @@ type Cell struct {
 	InlineStr *StringItem      `xml:"is,omitempty"`
 	ExtLst    *ml.Reserved     `xml:"extLst,omitempty"`
 	Ref       types.CellRef    `xml:"r,attr"`
-	Style     StyleRefID       `xml:"s,attr,omitempty"`
+	Style     StyleID          `xml:"s,attr,omitempty"`
 	Type      types.CellType   `xml:"t,attr,omitempty"`
 	Cm        ml.OptionalIndex `xml:"cm,attr,omitempty"`
 	Vm        ml.OptionalIndex `xml:"vm,attr,omitempty"`

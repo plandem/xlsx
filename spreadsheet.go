@@ -118,8 +118,8 @@ func (xl *Spreadsheet) AddSheet(name string) Sheet {
 }
 
 //AddFormatting adds a new style formatting to document and return related ID that can be used lately
-func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.StyleRefID {
-	return xl.styleSheet.addXF(style)
+func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.StyleID {
+	return xl.styleSheet.addStyle(style)
 }
 
 //IsValid validates document and return error if there is any error. Using right before saving.

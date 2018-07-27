@@ -8,10 +8,10 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 )
 
-func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
+func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	require.NotNil(t, xl)
 
-	require.Equal(t, 1, len(xl.styleSheet.xfIndex))
+	require.Equal(t, 1, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 1, len(xl.styleSheet.fontIndex))
@@ -24,8 +24,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(1), styleRef)
-	require.Equal(t, 2, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(1), styleRef)
+	require.Equal(t, 2, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -38,8 +38,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(2), styleRef)
-	require.Equal(t, 3, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(2), styleRef)
+	require.Equal(t, 3, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -51,8 +51,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(3), styleRef)
-	require.Equal(t, 4, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(3), styleRef)
+	require.Equal(t, 4, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -64,8 +64,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(4), styleRef)
-	require.Equal(t, 5, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(4), styleRef)
+	require.Equal(t, 5, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -78,8 +78,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(5), styleRef)
-	require.Equal(t, 6, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(5), styleRef)
+	require.Equal(t, 6, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -92,8 +92,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(6), styleRef)
-	require.Equal(t, 7, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(6), styleRef)
+	require.Equal(t, 7, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -106,8 +106,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(7), styleRef)
-	require.Equal(t, 8, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(7), styleRef)
+	require.Equal(t, 8, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -134,8 +134,8 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 	)
 
 	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.StyleRefID(7), styleRef)
-	require.Equal(t, 8, len(xl.styleSheet.xfIndex))
+	require.Equal(t, format.StyleID(7), styleRef)
+	require.Equal(t, 8, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -177,7 +177,7 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 		//new fill
 		{
 			Pattern: &ml.PatternFill{
-				Type: format.PatternTypeLightGrid,
+				Type:       format.PatternTypeLightGrid,
 				Background: &ml.Color{RGB: "FFEFF142"},
 			},
 		},
@@ -210,7 +210,7 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 	}, xl.styleSheet.ml.Borders)
 
 	//validate stored Xf
-	require.Equal(t, &[]*ml.StyleRef{
+	require.Equal(t, &[]*ml.Style{
 		//default xf
 		{
 			XfId:     0,
