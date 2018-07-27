@@ -13,7 +13,7 @@ func (t *FontSchemeType) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 	return (*ml.Property)(t).MarshalXML(e, start)
 }
 
-//UnmarshalXMLAttr unmarshal FontSchemeType
+//UnmarshalXML unmarshal FontSchemeType
 func (t *FontSchemeType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return (*ml.Property)(t).UnmarshalXML(d, start)
 }

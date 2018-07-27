@@ -44,10 +44,10 @@ func Resolve(nf ml.NumberFormat) *BuiltInFormat {
 		if knownFormat, ok := builtIn[nf.ID]; ok {
 			//known built-in format?
 			return knownFormat
-		} else {
-			//general built-in format?
-			return &BuiltInFormat{ml.NumberFormat{ID: nf.ID, Code: builtIn[0x00].Code}, General}
 		}
+
+		//general built-in format?
+		return &BuiltInFormat{ml.NumberFormat{ID: nf.ID, Code: builtIn[0x00].Code}, General}
 	}
 
 	//if there is a known format code, then use that built-in format
