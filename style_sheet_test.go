@@ -34,7 +34,6 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleRefID {
 	//add fill
 	style.Set(
 		format.Fill.Type(format.PatternTypeLightGrid),
-		//format.Fill.Color("#FF1122"),
 		format.Fill.Background("#EFF142"),
 	)
 
@@ -122,15 +121,14 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 
 	style := format.New(
 		format.Font.Size(8),
-		format.Font.Color("#FF1122"), //font is red
+		format.Font.Color("#FF1122"),
 		format.Fill.Type(format.PatternTypeLightGrid),
-		//format.Fill.Color("#FF1122"), //color is red
-		format.Fill.Background("#EFF142"), //background is green
+		format.Fill.Background("#EFF142"),
 		format.NumberFormat(`$0.00" usd"`),
-		format.Border.Color("#1122FF"),                //border is blue
-		format.Border.Type(format.BorderStyleDashDot), //
-		format.Alignment.VAlign(format.VAlignBottom),  //
-		format.Alignment.HAlign(format.HAlignFill),    //
+		format.Border.Color("#1122FF"),
+		format.Border.Type(format.BorderStyleDashDot),
+		format.Alignment.VAlign(format.VAlignBottom),
+		format.Alignment.HAlign(format.HAlignFill),
 		format.Protection.Hidden,
 		format.Protection.Locked,
 	)
@@ -180,9 +178,7 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 		{
 			Pattern: &ml.PatternFill{
 				Type: format.PatternTypeLightGrid,
-				//Color:      &ml.Color{RGB: "FFEFF142"},
 				Background: &ml.Color{RGB: "FFEFF142"},
-				//Background: &ml.Color{Indexed: 4},
 			},
 		},
 	}, xl.styleSheet.ml.Fills)
@@ -325,7 +321,6 @@ func TestStyleSheets(t *testing.T) {
 				styleRef := addNewStyles(xl, tt)
 				sheet := xl.AddSheet("test sheet")
 				sheet.Row(0).SetFormatting(styleRef)
-				//sheet.Cell(10, 10).SetFormatting(styleRef)
 				return xl
 			},
 			func(fileName string, xl *Spreadsheet, tt *testing.T) {
