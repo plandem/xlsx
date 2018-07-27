@@ -128,7 +128,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] other: conditional formatting
 - [ ] other: rich texts
 - [ ] other: drawing
-- [ ] other: more tests
+- [x] other: more tests
 
 # Contribution 
 - To prevent mess, sources have strict separation of markup and functionality. Document that describes OOXML is quite huge (about 6K pages), but the same time - functionality is not.
