@@ -24,6 +24,7 @@ const (
 	DeltaTime
 )
 
+//LastReservedID is id of last built-in/reserved format
 const LastReservedID = 163
 
 //New create and return ml.NumberFormat type for provided values, respecting built-in number formats

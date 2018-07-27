@@ -35,6 +35,7 @@ func (e ObjectsType) String() string {
 	return fromObjectsType[e]
 }
 
+//MarshalXMLAttr marshal ObjectsType
 func (e *ObjectsType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
@@ -47,6 +48,7 @@ func (e *ObjectsType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
+//UnmarshalXMLAttr unmarshal ObjectsType
 func (e *ObjectsType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := toObjectsType[attr.Value]; ok {
 		*e = v

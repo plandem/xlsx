@@ -8,6 +8,7 @@ import (
 //Text is textual type that can have leading/trailing spaces that must be preserved
 type Text string
 
+//MarshalXML marshal Text
 func (t *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	value := string(*t)
 

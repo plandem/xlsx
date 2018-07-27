@@ -8,10 +8,12 @@ import (
 //FontSchemeType is a type to encode XSD ST_FontScheme
 type FontSchemeType ml.Property
 
+//MarshalXML marshal FontSchemeType
 func (t *FontSchemeType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return (*ml.Property)(t).MarshalXML(e, start)
 }
 
+//UnmarshalXMLAttr unmarshal FontSchemeType
 func (t *FontSchemeType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return (*ml.Property)(t).UnmarshalXML(d, start)
 }

@@ -69,6 +69,7 @@ func (b Bounds) IsEmpty() bool {
 	return b == Bounds{}
 }
 
+//MarshalXMLAttr marshal Bounds
 func (b *Bounds) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
@@ -81,6 +82,7 @@ func (b *Bounds) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
+//UnmarshalXMLAttr unmarshal Bounds
 func (b *Bounds) UnmarshalXMLAttr(attr xml.Attr) error {
 	*b = Ref(attr.Value).ToBounds()
 	return nil

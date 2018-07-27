@@ -57,7 +57,7 @@ func TestFill(t *testing.T) {
 		},
 	}, style)
 
-	//pattern overriden by gradient
+	//pattern override by gradient
 	style = New(
 		Fill.Pattern.Type(PatternTypeDarkDown),
 		Fill.Pattern.Color("#FFFFFF"),
@@ -90,7 +90,7 @@ func TestFill(t *testing.T) {
 		},
 	}, style)
 
-	//gradient overriden by pattern
+	//gradient override by pattern
 	style = New(
 		Fill.Gradient.Degree(90),
 		Fill.Gradient.Type(GradientTypePath),

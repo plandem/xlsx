@@ -37,6 +37,7 @@ func (e CellFormulaType) String() string {
 	return fromCellFormulaType[e]
 }
 
+//MarshalXMLAttr marshal CellFormulaType
 func (e *CellFormulaType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
@@ -49,6 +50,7 @@ func (e *CellFormulaType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
+//UnmarshalXMLAttr unmarshal CellFormulaType
 func (e *CellFormulaType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := toCellFormulaType[attr.Value]; ok {
 		*e = v

@@ -45,6 +45,7 @@ func (e CellType) String() string {
 	return fromCellType[e]
 }
 
+//MarshalXMLAttr marshal CellType
 func (e *CellType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
@@ -57,6 +58,7 @@ func (e *CellType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
+//UnmarshalXMLAttr unmarshal CellType
 func (e *CellType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := toCellType[attr.Value]; ok {
 		*e = v

@@ -35,6 +35,7 @@ func (e UpdateLinksType) String() string {
 	return fromUpdateLinksType[e]
 }
 
+//MarshalXMLAttr marshal UpdateLinksType
 func (e *UpdateLinksType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
@@ -47,6 +48,7 @@ func (e *UpdateLinksType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
+//UnmarshalXMLAttr unmarshal UpdateLinksType
 func (e *UpdateLinksType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := toUpdateLinksType[attr.Value]; ok {
 		*e = v

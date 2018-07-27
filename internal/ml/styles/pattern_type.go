@@ -7,6 +7,7 @@ import (
 //PatternType is a type to encode XSD ST_PatternType
 type PatternType byte
 
+//PatternType maps for marshal/unmarshal process
 var (
 	ToPatternType   map[string]PatternType
 	FromPatternType map[PatternType]string
@@ -16,6 +17,7 @@ func (t PatternType) String() string {
 	return FromPatternType[t]
 }
 
+//MarshalXMLAttr marshal PatternType
 func (t *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
@@ -28,6 +30,7 @@ func (t *PatternType) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return attr, nil
 }
 
+//UnmarshalXMLAttr unmarshal PatternType
 func (t *PatternType) UnmarshalXMLAttr(attr xml.Attr) error {
 	if v, ok := ToPatternType[attr.Value]; ok {
 		*t = v
