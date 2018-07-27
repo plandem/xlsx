@@ -53,11 +53,21 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 
 func (ss *StyleSheet) addDefaults() {
 	//TODO: research more about default items for a new XLSX
-	ss.ml.Fills = &[]*ml.Fill{{
-		Pattern: &ml.PatternFill{
-			Type: format.PatternTypeNone,
+	//..
+
+	//add default types
+	ss.ml.Fills = &[]*ml.Fill{
+		{
+			Pattern: &ml.PatternFill{
+				Type: format.PatternTypeNone,
+			},
 		},
-	}}
+		{
+			Pattern: &ml.PatternFill{
+				Type: format.PatternTypeGray125,
+			},
+		},
+	}
 
 	ss.ml.Borders = &[]*ml.Border{{
 		Left:   &ml.BorderSegment{},
@@ -67,18 +77,36 @@ func (ss *StyleSheet) addDefaults() {
 	}}
 
 	ss.ml.Fonts = &[]*ml.Font{{
-		Family: 2,
-		Size:   12.0,
+		Family: format.FontFamilySwiss,
+		Scheme: format.FontSchemeMinor,
 		Name:   "Calibri",
-		Scheme: "minor",
+		Size:   11.0,
+		//Color: ml.Color{Theme: 1}
 	}}
 
+	//add default ref for CellStyleXfs
+	ss.ml.CellStyleXfs = &[]*ml.StyleRef{{
+		FontId:   0,
+		FillId:   0,
+		BorderId: 0,
+		NumFmtId: 0,
+	}}
+
+	//add default ref for CellXfs
 	ss.ml.CellXfs = &[]*ml.StyleRef{{
 		XfId:     0,
 		FontId:   0,
 		FillId:   0,
 		BorderId: 0,
 		NumFmtId: 0,
+	}}
+
+	//add default ref for CellStyles
+	index := 0
+	ss.ml.CellStyles = &[]*ml.NamedStyle{{
+		Name:   "Normal",
+		XfId:     0,
+		BuiltinId: &index,
 	}}
 }
 
@@ -286,10 +314,18 @@ func (ss *StyleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
 		return number.ID
 	}
 
-	//return id of already existing information. hash ignores ID for non built-in types
+	//Return id of already existing information.
+	//N.B.: Supposed that for custom format we have -1 as code, so hash should be same for new/existing custom format
 	key := hash.NumberFormat(number).Hash()
 	if id, ok := ss.numberIndex[key]; ok {
 		return id
+	}
+
+	//try to lookup through custom formats and find same code
+	for _, f := range *ss.ml.NumberFormats {
+		if number.Code == f.Code {
+			return f.ID
+		}
 	}
 
 	//N.B.: NumberFormat uses ID, not indexes

@@ -17,8 +17,8 @@ type StyleSheet struct {
 	Borders       *[]*Border       `xml:"borders>border,omitempty"`
 	CellStyleXfs  *[]*StyleRef     `xml:"cellStyleXfs>xf,omitempty"`
 	CellXfs       *[]*StyleRef     `xml:"cellXfs>xf,omitempty"`
-	CellStyles    *[]*CellStyle    `xml:"cellStyles>cellStyle,omitempty"`
-	Dxfs          *ml.Reserved     `xml:"dxfs,omitempty"`
+	CellStyles    *[]*NamedStyle   `xml:"cellStyles>cellStyle,omitempty"`
+	Dxfs          *[]*DiffRef      `xml:"dxfs>dxf,omitempty"`
 	TableStyles   *ml.Reserved     `xml:"tableStyles,omitempty"`
 	Colors        *ml.Reserved     `xml:"colors,omitempty"`
 	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
@@ -107,8 +107,8 @@ type BorderSegment struct {
 	Type  styles.BorderStyleType `xml:"style,attr,omitempty"`
 }
 
-//CellStyle is a direct mapping of XSD CT_CellStyle
-type CellStyle struct {
+//NamedStyle is a direct mapping of XSD CT_CellStyle
+type NamedStyle struct {
 	Name          string           `xml:"name,attr,omitempty"`
 	XfId          int              `xml:"xfId,attr"`
 	BuiltinId     ml.OptionalIndex `xml:"builtinId,attr,omitempty"`
@@ -136,6 +136,17 @@ type StyleRef struct {
 	Alignment         *CellAlignment  `xml:"alignment,omitempty"`
 	Protection        *CellProtection `xml:"protection,omitempty"`
 	ExtLst            *ml.Reserved    `xml:"extLst,omitempty"`
+}
+
+//DiffRef is a direct mapping of XSD CT_Dxf
+type DiffRef struct {
+	NumberFormat *NumberFormat   `xml:"numFmt,omitempty"`
+	Font         *Font           `xml:"font,omitempty"`
+	Fill         *Fill           `xml:"fill,omitempty"`
+	Border       *Border         `xml:"border,omitempty"`
+	Alignment    *CellAlignment  `xml:"alignment,omitempty"`
+	Protection   *CellProtection `xml:"protection,omitempty"`
+	ExtLst       *ml.Reserved    `xml:"extLst,omitempty"`
 }
 
 //CellProtection is a direct mapping of XSD CT_CellProtection

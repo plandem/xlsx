@@ -10,6 +10,7 @@ type Bounds struct {
 	FromRow int
 	ToCol   int
 	ToRow   int
+	initialized bool
 }
 
 //BoundsFromIndexes returns a Bounds information for provided 0-based indexes
@@ -29,6 +30,7 @@ func BoundsFromIndexes(fromCol, fromRow, toCol, toRow int) Bounds {
 		fromRow,
 		toCol,
 		toRow,
+		true,
 	}
 }
 

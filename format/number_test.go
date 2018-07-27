@@ -9,7 +9,6 @@ import (
 func TestNumberFormat(t *testing.T) {
 	style := New(
 		NumberFormatID(8),
-		//NumberFormat("#.### usd"),
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
@@ -21,13 +20,13 @@ func TestNumberFormat(t *testing.T) {
 	}, style)
 
 	style = New(
-		NumberFormat("#.### usd"),
+		NumberFormat(`$0.00" usd"`),
 	)
 
 	require.Equal(t, &StyleFormat{
 		numFormat: ml.NumberFormat{
 			ID:   -1,
-			Code: "#.### usd",
+			Code: `$0.00" usd"`,
 		},
 	}, style)
 }
