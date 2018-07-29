@@ -558,7 +558,7 @@ func Example_copy() {
 }
 
 // Demonstrates how to get/set value for cell
-func Example_gettersAndSetters() {
+func Example_getters_and_setters() {
 	xl := xlsx.New()
 	defer xl.Close()
 
