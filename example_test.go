@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 // Demonstrates how to create/open/save XLSX files
@@ -554,4 +555,81 @@ func Example_copy() {
 	//,,,,,,,,Header 1,Header 2
 	//Header 1,Header 2,,Header 1,,,,,Value 1-1,Value 2-1
 	//,,,,,,,,Value 1-2,Value 2-2
+}
+
+// Demonstrates how to get/set value for cell
+func Example_getters_and_setters() {
+	xl := xlsx.New()
+	defer xl.Close()
+
+	sheet := xl.AddSheet("test sheet")
+
+	now, _ := time.Parse("02 Jan 06 15:04 MST", time.RFC822)
+
+	//set values by typed method
+	sheet.CellByRef("A1").SetString("string")
+	sheet.CellByRef("B1").SetInlineString("inline string")
+	sheet.CellByRef("C1").SetBool(true)
+	sheet.CellByRef("D1").SetInt(12345)
+	sheet.CellByRef("E1").SetFloat(123.123)
+	sheet.CellByRef("F1").SetDateTime(now)
+	sheet.CellByRef("G1").SetDate(now)
+	sheet.CellByRef("H1").SetTime(now)
+	sheet.CellByRef("I1").SetDeltaTime(now)
+
+	//set values by unified method
+	sheet.CellByRef("A2").SetValue("string")
+	sheet.CellByRef("B2").SetValue(true)
+	sheet.CellByRef("C2").SetValue(12345)
+	sheet.CellByRef("D2").SetValue(123.123)
+	sheet.CellByRef("E2").SetValue(now)
+
+	//get raw values that were set via typed setter
+	fmt.Println(sheet.CellByRef("A1").Value())
+	fmt.Println(sheet.CellByRef("B1").Value())
+	fmt.Println(sheet.CellByRef("C1").Value())
+	fmt.Println(sheet.CellByRef("D1").Value())
+	fmt.Println(sheet.CellByRef("E1").Value())
+	fmt.Println(sheet.CellByRef("F1").Value())
+	fmt.Println(sheet.CellByRef("G1").Value())
+	fmt.Println(sheet.CellByRef("H1").Value())
+	fmt.Println(sheet.CellByRef("I1").Value())
+
+	//get raw values that were set that via general setter
+	fmt.Println(sheet.CellByRef("A2").Value())
+	fmt.Println(sheet.CellByRef("B2").Value())
+	fmt.Println(sheet.CellByRef("C2").Value())
+	fmt.Println(sheet.CellByRef("D2").Value())
+	fmt.Println(sheet.CellByRef("E2").Value())
+
+	//get typed values and error if invalid type (values were set via typed setter)
+	_ = sheet.CellByRef("A1").String()
+	_ = sheet.CellByRef("B1").String()
+	_, _ = sheet.CellByRef("C1").Bool()
+	_, _ = sheet.CellByRef("D1").Int()
+	_, _ = sheet.CellByRef("E1").Float()
+	_, _ = sheet.CellByRef("F1").Date()
+
+	//get typed values and error if invalid type (values were set via general setter)
+	_ = sheet.CellByRef("A2").String()
+	_, _ = sheet.CellByRef("B2").Bool()
+	_, _ = sheet.CellByRef("C2").Int()
+	_, _ = sheet.CellByRef("D2").Float()
+	_, _ = sheet.CellByRef("E2").Date()
+
+	//Output:
+	//string
+	//inline string
+	//1
+	//12345
+	//123.123
+	//2006-01-02T15:04:00
+	//2006-01-02T15:04:00
+	//2006-01-02T15:04:00
+	//2006-01-02T15:04:00
+	//string
+	//1
+	//12345
+	//123.123
+	//2006-01-02T15:04:00
 }
