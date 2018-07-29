@@ -62,11 +62,11 @@ func TestToFloat(t *testing.T) {
 func TestToDate(t *testing.T) {
 	v, err := ToDate("43308.7047106481")
 	require.Nil(t, err)
-	require.Equal(t, "2018-07-27T11:54:46", v.Format(ISO8601))
+	require.Equal(t, "2018-07-27 16:54:46 +0000 UTC", v.UTC().String())
 
 	v, err = ToDate("2018-07-27T17:40:58")
 	require.Nil(t, err)
-	require.Equal(t, "2018-07-27T17:40:58", v.Format(ISO8601))
+	require.Equal(t, "2018-07-27 17:40:58 +0000 UTC", v.UTC().String())
 
 	v, err = ToDate("dsdsds")
 	require.NotNil(t, err)
