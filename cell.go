@@ -23,7 +23,7 @@ type Cell struct {
 }
 
 var (
-	typeMismatchError = errors.New("type mismatch")
+	errTypeMismatch = errors.New("type mismatch")
 )
 
 //Type returns current type of cell
@@ -74,7 +74,7 @@ func (c *Cell) Date() (time.Time, error) {
 		return convert.ToDate(c.ml.Value)
 	}
 
-	return time.Now(), typeMismatchError
+	return time.Now(), errTypeMismatch
 }
 
 //Int try to convert and return current raw value as int
@@ -83,7 +83,7 @@ func (c *Cell) Int() (int, error) {
 		return convert.ToInt(c.ml.Value)
 	}
 
-	return 0, typeMismatchError
+	return 0, errTypeMismatch
 }
 
 //Float try to convert and return current raw value as float64
@@ -92,7 +92,7 @@ func (c *Cell) Float() (float64, error) {
 		return convert.ToFloat(c.ml.Value)
 	}
 
-	return math.NaN(), typeMismatchError
+	return math.NaN(), errTypeMismatch
 }
 
 //Bool try to convert and return current raw value as bool
@@ -101,7 +101,7 @@ func (c *Cell) Bool() (bool, error) {
 		return convert.ToBool(c.ml.Value)
 	}
 
-	return false, typeMismatchError
+	return false, errTypeMismatch
 }
 
 //setGeneral sets the value as general type

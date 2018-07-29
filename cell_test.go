@@ -35,29 +35,29 @@ func checkCellTypedValues(sheet Sheet, rowIdx int, t *testing.T) {
 	require.Equal(t, true, b)
 
 	//bool can not be int
-	i, err := sheet.Cell(4, rowIdx).Int()
+	_, err = sheet.Cell(4, rowIdx).Int()
 	require.NotNil(t, err)
 
 	//bool can not be float
-	f, err := sheet.Cell(4, rowIdx).Float()
+	_, err = sheet.Cell(4, rowIdx).Float()
 	require.NotNil(t, err)
 
 	//bool can not be date
-	d, err := sheet.Cell(4, rowIdx).Date()
+	_, err = sheet.Cell(4, rowIdx).Date()
 	require.NotNil(t, err)
 
 	//int number must be int
-	i, err = sheet.Cell(5, rowIdx).Int()
+	i, err := sheet.Cell(5, rowIdx).Int()
 	require.Nil(t, err)
 	require.Equal(t, 12345, i)
 
 	//int number can be float
-	f, err = sheet.Cell(5, rowIdx).Float()
+	f, err := sheet.Cell(5, rowIdx).Float()
 	require.Nil(t, err)
 	require.Equal(t, 12345.0, f)
 
 	//int number can not be bool
-	b, err = sheet.Cell(5, rowIdx).Bool()
+	_, err = sheet.Cell(5, rowIdx).Bool()
 	require.NotNil(t, err)
 
 	//float number must be float
@@ -66,28 +66,28 @@ func checkCellTypedValues(sheet Sheet, rowIdx int, t *testing.T) {
 	require.Equal(t, 123.123, f)
 
 	//float number can not be int
-	i, err = sheet.Cell(6, rowIdx).Int()
+	_, err = sheet.Cell(6, rowIdx).Int()
 	require.NotNil(t, err)
 
 	//float number can not be bool
-	b, err = sheet.Cell(6, rowIdx).Bool()
+	_, err = sheet.Cell(6, rowIdx).Bool()
 	require.NotNil(t, err)
 
 	//date must be date
-	d, err = sheet.Cell(7, rowIdx).Date()
+	d, err := sheet.Cell(7, rowIdx).Date()
 	require.Nil(t, err)
 	require.Equal(t, now.Format(convert.ISO8601), d.Format(convert.ISO8601))
 
 	//date can not be int
-	i, err = sheet.Cell(7, rowIdx).Int()
+	_, err = sheet.Cell(7, rowIdx).Int()
 	require.NotNil(t, err)
 
 	//date can not be bool
-	b, err = sheet.Cell(7, rowIdx).Bool()
+	_, err = sheet.Cell(7, rowIdx).Bool()
 	require.NotNil(t, err)
 
 	//date can not be float
-	f, err = sheet.Cell(7, rowIdx).Float()
+	_, err = sheet.Cell(7, rowIdx).Float()
 	require.NotNil(t, err)
 }
 
