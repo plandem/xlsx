@@ -22,7 +22,7 @@ func TestToBool(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, false, v)
 
-	v, err = ToBool("dsds3wr")
+	_, err = ToBool("dsds3wr")
 	require.NotNil(t, err)
 }
 
@@ -35,10 +35,10 @@ func TestToInt(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, -1, v)
 
-	v, err = ToInt("12345.12345")
+	_, err = ToInt("12345.12345")
 	require.NotNil(t, err)
 
-	v, err = ToInt("fgfert3")
+	_, err = ToInt("fgfert3")
 	require.NotNil(t, err)
 }
 
@@ -55,7 +55,7 @@ func TestToFloat(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, 12345.12345, v)
 
-	v, err = ToFloat("fgfert3")
+	_, err = ToFloat("fgfert3")
 	require.NotNil(t, err)
 }
 
@@ -68,6 +68,6 @@ func TestToDate(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, "2018-07-27 17:40:58 +0000 UTC", v.UTC().String())
 
-	v, err = ToDate("dsdsds")
+	_, err = ToDate("dsdsds")
 	require.NotNil(t, err)
 }
