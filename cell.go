@@ -1,11 +1,16 @@
 package xlsx
 
 import (
+	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/number_format"
+	"github.com/plandem/xlsx/internal/number_format/convert"
 	"github.com/plandem/xlsx/types"
+	"math"
 	"strconv"
+	"time"
 )
 
 //max length that excel cell can hold
@@ -17,12 +22,16 @@ type Cell struct {
 	sheet *sheetInfo
 }
 
+var (
+	typeMismatchError = errors.New("type mismatch")
+)
+
 //Type returns current type of cell
 func (c *Cell) Type() types.CellType {
 	return c.ml.Type
 }
 
-//Value returns current value of cell
+//Value returns current raw value of cell
 func (c *Cell) Value() string {
 	var value string
 
@@ -46,6 +55,55 @@ func (c *Cell) Value() string {
 	return value
 }
 
+//String returns formatted value as string respecting cell number format and type. Any errors ignored to conform String() interface.
+func (c *Cell) String() string {
+	//if cell has error, then just return value that Excel put here
+	if c.ml.Type == types.CellTypeError {
+		return c.ml.Value
+	}
+
+	code := c.sheet.workbook.doc.styleSheet.resolveNumberFormat(c.ml.Style)
+
+	//N.B.: Maybe it's not a good idea to use resolved value (e.g. inline string) for conversion?!
+	return numberFormat.Format(c.Value(), code, c.ml.Type)
+}
+
+//Date try to convert and return current raw value as time.Time
+func (c *Cell) Date() (time.Time, error) {
+	if c.ml.Type == types.CellTypeDate || c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+		return convert.ToDate(c.ml.Value)
+	}
+
+	return time.Now(), typeMismatchError
+}
+
+//Int try to convert and return current raw value as int
+func (c *Cell) Int() (int, error) {
+	if c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+		return convert.ToInt(c.ml.Value)
+	}
+
+	return 0, typeMismatchError
+}
+
+//Float try to convert and return current raw value as float64
+func (c *Cell) Float() (float64, error) {
+	if c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+		return convert.ToFloat(c.ml.Value)
+	}
+
+	return math.NaN(), typeMismatchError
+}
+
+//Bool try to convert and return current raw value as bool
+func (c *Cell) Bool() (bool, error) {
+	if c.ml.Type == types.CellTypeBool || c.ml.Type == types.CellTypeGeneral || c.ml.Type == types.CellTypeNumber {
+		return convert.ToBool(c.ml.Value)
+	}
+
+	return false, typeMismatchError
+}
+
 //setGeneral sets the value as general type
 func (c *Cell) setGeneral(value string) {
 	c.ml.Type = types.CellTypeGeneral
@@ -65,12 +123,8 @@ func (c *Cell) truncateIfRequired(value string) string {
 
 //SetInlineString sets value as inline string
 func (c *Cell) SetInlineString(value string) {
-	c.ml.Formula = nil
-
 	if len(value) == 0 {
-		c.ml.Value = value
-		c.ml.Type = types.CellTypeGeneral
-		c.ml.InlineStr = nil
+		c.setGeneral(value)
 		return
 	}
 
@@ -82,11 +136,8 @@ func (c *Cell) SetInlineString(value string) {
 
 //SetString sets value as shared string
 func (c *Cell) SetString(value string) {
-	c.ml.Formula = nil
-
 	if len(value) == 0 {
-		c.ml.Value = value
-		c.ml.Type = types.CellTypeGeneral
+		c.setGeneral(value)
 		return
 	}
 
@@ -94,18 +145,69 @@ func (c *Cell) SetString(value string) {
 
 	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
 	sid := c.sheet.workbook.doc.sharedStrings.add(c.truncateIfRequired(value))
+	c.ml.Formula = nil
 	c.ml.Type = types.CellTypeSharedString
 	c.ml.Value = strconv.Itoa(sid)
 }
 
 //SetInt sets an integer value
 func (c *Cell) SetInt(value int) {
-	c.setGeneral(strconv.Itoa(value))
+	c.ml.Type = types.CellTypeNumber
+	c.ml.Value = strconv.Itoa(value)
+	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer])
+	c.ml.Formula = nil
+	c.ml.InlineStr = nil
 }
 
 //SetFloat sets a float value
 func (c *Cell) SetFloat(value float64) {
-	c.setGeneral(strconv.FormatFloat(value, 'f', -1, 64))
+	c.ml.Type = types.CellTypeNumber
+	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
+	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float])
+	c.ml.Formula = nil
+	c.ml.InlineStr = nil
+}
+
+//SetBool sets a bool value
+func (c *Cell) SetBool(value bool) {
+	c.ml.Type = types.CellTypeBool
+	c.ml.Formula = nil
+	c.ml.InlineStr = nil
+
+	if value {
+		c.ml.Value = "1"
+	} else {
+		c.ml.Value = "0"
+	}
+}
+
+//setDate is a general setter for date types
+func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
+	c.ml.Type = types.CellTypeDate
+	c.ml.Value = value.Format(convert.ISO8601)
+	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[t])
+	c.ml.Formula = nil
+	c.ml.InlineStr = nil
+}
+
+//SetDateTime sets a time value with number format for datetime
+func (c *Cell) SetDateTime(value time.Time) {
+	c.setDate(value, numberFormat.DateTime)
+}
+
+//SetDate sets a time value with number format for date
+func (c *Cell) SetDate(value time.Time) {
+	c.setDate(value, numberFormat.Date)
+}
+
+//SetTime sets a time value with number format for time
+func (c *Cell) SetTime(value time.Time) {
+	c.setDate(value, numberFormat.Time)
+}
+
+//SetDeltaTime sets a time value with number format for delta time
+func (c *Cell) SetDeltaTime(value time.Time) {
+	c.setDate(value, numberFormat.DeltaTime)
 }
 
 //SetValue sets a value
@@ -129,11 +231,23 @@ func (c *Cell) SetValue(value interface{}) {
 		c.SetString(t)
 	case []byte:
 		c.SetString(string(t))
+	case bool:
+		c.SetBool(bool(t))
+	case time.Time:
+		c.setDate(time.Time(t), numberFormat.DateTime)
 	case nil:
 		c.Reset()
 	default:
 		c.SetString(fmt.Sprintf("%v", value))
 	}
+}
+
+//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting
+func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
+
+	c.SetValue(value)
+	c.ml.Style = ml.StyleID(styleID)
 }
 
 //Reset resets current current cell information

@@ -24,6 +24,9 @@ type StyleSheet struct {
 	fontIndex   map[string]int
 	numberIndex map[string]int
 
+	//hash for typed number formats
+	typedStyles map[numberFormat.Type]format.StyleID
+
 	doc  *Spreadsheet
 	file *ooxml.PackageFile
 }
@@ -38,6 +41,7 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 		fillIndex:       make(map[string]int),
 		fontIndex:       make(map[string]int),
 		numberIndex:     make(map[string]int),
+		typedStyles:     make(map[numberFormat.Type]format.StyleID),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
@@ -53,6 +57,7 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	return ss
 }
 
+//adds a default items for new created xlsx
 func (ss *StyleSheet) addDefaults() {
 	//TODO: research more about default items for a new XLSX
 	//..
@@ -112,6 +117,48 @@ func (ss *StyleSheet) addDefaults() {
 	}}
 }
 
+//adds a number formats for each type of number format if required. These styles will be used by cell's typed SetXXX methods
+func (ss *StyleSheet) addTypedStylesIfRequired() {
+	if len(ss.typedStyles) == 0 {
+		for _, t := range []numberFormat.Type{
+			numberFormat.General,
+			numberFormat.Integer,
+			numberFormat.Float,
+			numberFormat.Date,
+			numberFormat.Time,
+			numberFormat.DateTime,
+			numberFormat.DeltaTime,
+		} {
+			id, _ := numberFormat.Default(t)
+			ss.typedStyles[t] = ss.addStyle(format.New(format.NumberFormatID(id)))
+		}
+
+		ss.file.MarkAsUpdated()
+	}
+}
+
+//resolveNumberFormat returns resolved NumberFormat code for styleID
+func (ss *StyleSheet) resolveNumberFormat(id ml.StyleID) string {
+	style := (*ss.ml.CellXfs)[id]
+
+	//return code for built-in number format
+	if number := numberFormat.Normalize(ml.NumberFormat{ID: style.NumFmtId}); len(number.Code) > 0 {
+		return number.Code
+	}
+
+	//try to lookup through custom formats and find same ID
+	for _, f := range *ss.ml.NumberFormats {
+		if style.NumFmtId == f.ID {
+			return f.Code
+		}
+	}
+
+	//N.B.: wtf is going on?! non built-in and not existing id?
+	_, code := numberFormat.Default(numberFormat.General)
+	return code
+}
+
+//build indexes for fonts
 func (ss *StyleSheet) buildFontIndexes() {
 	if ss.ml.Fonts == nil {
 		ss.ml.Fonts = &[]*ml.Font{}
@@ -122,6 +169,7 @@ func (ss *StyleSheet) buildFontIndexes() {
 	}
 }
 
+//build indexes for fill
 func (ss *StyleSheet) buildFillIndexes() {
 	if ss.ml.Fills == nil {
 		ss.ml.Fills = &[]*ml.Fill{}
@@ -132,6 +180,7 @@ func (ss *StyleSheet) buildFillIndexes() {
 	}
 }
 
+//build indexes for border
 func (ss *StyleSheet) buildBorderIndexes() {
 	if ss.ml.Borders == nil {
 		ss.ml.Borders = &[]*ml.Border{}
@@ -142,6 +191,7 @@ func (ss *StyleSheet) buildBorderIndexes() {
 	}
 }
 
+//build indexes for number formats
 func (ss *StyleSheet) buildNumberIndexes() {
 	if ss.ml.NumberFormats == nil {
 		ss.ml.NumberFormats = &[]*ml.NumberFormat{}
@@ -153,6 +203,7 @@ func (ss *StyleSheet) buildNumberIndexes() {
 	}
 }
 
+//build indexes for styles
 func (ss *StyleSheet) buildStyleIndexes() {
 	if ss.ml.CellXfs == nil {
 		ss.ml.CellXfs = &[]*ml.Style{}
@@ -163,6 +214,7 @@ func (ss *StyleSheet) buildStyleIndexes() {
 	}
 }
 
+//build indexes for differential styles
 func (ss *StyleSheet) buildDiffStyleIndexes() {
 	if ss.ml.Dxfs == nil {
 		ss.ml.Dxfs = &[]*ml.DiffStyle{}
@@ -173,7 +225,7 @@ func (ss *StyleSheet) buildDiffStyleIndexes() {
 	}
 }
 
-//buildIndexes process already existing styles and build indexed for it
+//build indexes for all indexes
 func (ss *StyleSheet) buildIndexes() {
 	ss.buildBorderIndexes()
 	ss.buildFillIndexes()
@@ -183,6 +235,7 @@ func (ss *StyleSheet) buildIndexes() {
 	ss.buildDiffStyleIndexes()
 }
 
+//adds a differential style
 func (ss *StyleSheet) addDiffStyle(f *format.StyleFormat) format.DiffStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
@@ -212,6 +265,7 @@ func (ss *StyleSheet) addDiffStyle(f *format.StyleFormat) format.DiffStyleID {
 	return nextID
 }
 
+//adds a style
 func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.StyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
@@ -260,6 +314,7 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.StyleID {
 	return nextID
 }
 
+//adds a new font if required
 func (ss *StyleSheet) addFontIfRequired(font *ml.Font) int {
 	//if there is no information, then use default
 	if font == nil {
@@ -280,6 +335,7 @@ func (ss *StyleSheet) addFontIfRequired(font *ml.Font) int {
 	return nextID
 }
 
+//adds a new fill if required
 func (ss *StyleSheet) addFillIfRequired(fill *ml.Fill) int {
 	//if there is no information, then use default
 	if fill == nil {
@@ -300,6 +356,7 @@ func (ss *StyleSheet) addFillIfRequired(fill *ml.Fill) int {
 	return nextID
 }
 
+//adds a new border if required
 func (ss *StyleSheet) addBorderIfRequired(border *ml.Border) int {
 	//if there is no information, then use default
 	if border == nil {
@@ -320,6 +377,7 @@ func (ss *StyleSheet) addBorderIfRequired(border *ml.Border) int {
 	return nextID
 }
 
+//adds a new number format if required
 func (ss *StyleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
 	//if there is no information, then use default
 	if number == nil {

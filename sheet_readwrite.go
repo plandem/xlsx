@@ -367,7 +367,13 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 
 //afterOpen is callback that will be called right after requesting an already existing sheet. By default, it does nothing
 func (s *sheetReadWrite) afterOpen() {
+	//make a grid
 	s.file.LoadIfRequired(s.expandOnInit)
+
+	//adds a styles for types
+	s.workbook.doc.styleSheet.addTypedStylesIfRequired()
+
+	//mark file as updated
 	s.file.MarkAsUpdated()
 }
 
@@ -378,4 +384,7 @@ func (s *sheetReadWrite) afterCreate(name string) {
 
 	//make a grid
 	s.expandOnInit()
+
+	//adds a styles for types
+	s.workbook.doc.styleSheet.addTypedStylesIfRequired()
 }

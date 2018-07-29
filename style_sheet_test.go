@@ -135,7 +135,7 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 
 	styleRef := xl.AddFormatting(style)
 	require.Equal(t, format.StyleID(7), styleRef)
-	require.Equal(t, 8, len(xl.styleSheet.styleIndex))
+	require.Equal(t, 14, len(xl.styleSheet.styleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -305,53 +305,88 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 				Locked: true,
 			},
 		},
+		//types styles for number format
+		{
+			XfId:              0,
+			FontId:            0,
+			FillId:            0,
+			BorderId:          0,
+			NumFmtId:          0x01,
+			ApplyNumberFormat: true,
+		},
+		{
+			XfId:              0,
+			FontId:            0,
+			FillId:            0,
+			BorderId:          0,
+			NumFmtId:          0x02,
+			ApplyNumberFormat: true,
+		},
+		{
+			XfId:              0,
+			FontId:            0,
+			FillId:            0,
+			BorderId:          0,
+			NumFmtId:          0x0e,
+			ApplyNumberFormat: true,
+		},
+		{
+			XfId:              0,
+			FontId:            0,
+			FillId:            0,
+			BorderId:          0,
+			NumFmtId:          0x14,
+			ApplyNumberFormat: true,
+		},
+		{
+			XfId:              0,
+			FontId:            0,
+			FillId:            0,
+			BorderId:          0,
+			NumFmtId:          0x16,
+			ApplyNumberFormat: true,
+		},
+		{
+			XfId:              0,
+			FontId:            0,
+			FillId:            0,
+			BorderId:          0,
+			NumFmtId:          0x2d,
+			ApplyNumberFormat: true,
+		},
 	}, xl.styleSheet.ml.CellXfs)
 }
 
-func TestStyleSheets(t *testing.T) {
-	testList := []struct {
-		name     string
-		onBefore func(fileName string, tt *testing.T) *Spreadsheet
-		onAfter  func(fileName string, xl *Spreadsheet, tt *testing.T)
-	}{
-		{
-			"create",
-			func(fileName string, tt *testing.T) *Spreadsheet {
-				xl := New()
-				styleRef := addNewStyles(xl, tt)
-				sheet := xl.AddSheet("test sheet")
-				sheet.Row(0).SetFormatting(styleRef)
-				return xl
-			},
-			func(fileName string, xl *Spreadsheet, tt *testing.T) {
-				xl.SaveAs(fileName)
-			},
-		},
-		{
-			"reopen",
-			func(fileName string, tt *testing.T) *Spreadsheet {
-				xl, err := Open(fileName)
-				require.Nil(tt, err)
-				return xl
-			},
-			func(fileName string, xl *Spreadsheet, tt *testing.T) {},
-		},
-	}
+func TestStyleSheets_create(t *testing.T) {
+	xl := New()
+	//after creating XLSX we must have only only default styles and new
+	styleRef := addNewStyles(xl, t)
 
-	for _, info := range testList {
-		t.Run(info.name, func(tt *testing.T) {
-			//create/load
-			xl := info.onBefore("./test_files/test_styles.xlsx", tt)
+	//after creating sheet we must have also 'typed' styles
+	sheet := xl.AddSheet("test sheet")
+	sheet.Row(0).SetFormatting(styleRef)
 
-			//try to add already existing styles
-			addExistingStyles(xl, tt)
+	//try to add already existing styles
+	addExistingStyles(xl, t)
 
-			//check stored information
-			checkStyles(xl, tt)
+	//check stored information, styles must be: default + new + typed
+	checkStyles(xl, t)
+	xl.SaveAs("./test_files/test_styles.xlsx")
+	xl.Close()
+}
 
-			//safe
-			info.onAfter("./test_files/test_styles.xlsx", xl, tt)
-			xl.Close()
-		})
-	}
+func TestStyleSheets_reopen(t *testing.T) {
+	xl, err := Open("./test_files/test_styles.xlsx")
+	require.Nil(t, err)
+
+	//after opening XLSX we must have only only saved styles
+	addExistingStyles(xl, t)
+
+	//after opening sheet we must have also 'typed' styles
+	sheet := xl.Sheet(0) //we need to add types styles
+	_ = sheet
+
+	//check stored information, styles must be: default + new + typed
+	checkStyles(xl, t)
+	xl.Close()
 }

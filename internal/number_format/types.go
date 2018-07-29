@@ -2,13 +2,14 @@ package numberFormat
 
 import (
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/types"
 )
 
 //Type of underlying value of built-in number format
 type Type byte
 
-//BuiltInFormat is wrapper around ml.NumberFormat that adds type of number
-type BuiltInFormat struct {
+//builtInFormat is wrapper around ml.NumberFormat that adds type of number
+type builtInFormat struct {
 	ml.NumberFormat
 	Type Type
 }
@@ -38,7 +39,7 @@ func IsBuiltIn(id int) bool {
 }
 
 //Resolve looks through built-in number formats and return related if there is any
-func Resolve(nf ml.NumberFormat) *BuiltInFormat {
+func Resolve(nf ml.NumberFormat) *builtInFormat {
 	//if id is one of built-in format, then try to resolve it via ID
 	if IsBuiltIn(nf.ID) {
 		if knownFormat, ok := builtIn[nf.ID]; ok {
@@ -47,7 +48,7 @@ func Resolve(nf ml.NumberFormat) *BuiltInFormat {
 		}
 
 		//general built-in format?
-		return &BuiltInFormat{ml.NumberFormat{ID: nf.ID, Code: builtIn[0x00].Code}, General}
+		return &builtInFormat{ml.NumberFormat{ID: nf.ID, Code: builtIn[0x00].Code}, General}
 	}
 
 	//if there is a known format code, then use that built-in format
@@ -73,4 +74,22 @@ func Normalize(nf ml.NumberFormat) ml.NumberFormat {
 
 	//looks like known ID was provided, so just use it as is
 	return nf
+}
+
+//Default returns default ID and code of number format for type
+func Default(t Type) (int, string) {
+	if id, ok := typeDefault[t]; ok {
+		if number, ok := builtIn[id]; ok {
+			return number.NumberFormat.ID, number.NumberFormat.Code
+		}
+	}
+
+	number := builtIn[typeDefault[General]]
+	return number.NumberFormat.ID, number.NumberFormat.Code
+}
+
+//Format tries to format value into required format code
+func Format(value, code string, t types.CellType) string {
+	//TODO: implement formatting based on code and type
+	return value
 }

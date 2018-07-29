@@ -16,7 +16,7 @@ func TestNumberFormat(t *testing.T) {
 	require.Equal(t, builtIn[0x00], Resolve(ml.NumberFormat{ID: 0, Code: "0.00"}))
 
 	//built-in ID was provided, ignore custom CODE and return general code/type
-	unknownBuiltIn := &BuiltInFormat{ml.NumberFormat{ID: 162, Code: "@"}, General}
+	unknownBuiltIn := &builtInFormat{ml.NumberFormat{ID: 162, Code: "@"}, General}
 	require.Equal(t, unknownBuiltIn, Resolve(ml.NumberFormat(ml.NumberFormat{ID: 162, Code: "abcd"})))
 
 	//built-in CODE was provided, ignore custom ID
