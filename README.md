@@ -123,7 +123,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] cell: hyperlinks
 - [ ] cell: comments
 - [ ] cell: formulas
-- [ ] cell: get/set for time.Time and bool values
+- [x] cell: typed getter/setter for values
 - [ ] cell: add/delete merged cells
 - [ ] other: conditional formatting
 - [ ] other: rich texts
