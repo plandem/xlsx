@@ -7,7 +7,8 @@ import (
 
 //Range is a object that provides some functionality for cells inside of range. E.g.: A1:D12
 type Range struct {
-	types.Bounds
+	//we don't want to pollute Range with bound's public properties
+	bounds types.Bounds
 	sheet Sheet
 }
 
@@ -27,6 +28,11 @@ func newRange(sheet Sheet, fromCol, toCol, fromRow, toRow int) *Range {
 	}
 }
 
+//Bounds returns bounds of range
+func (r *Range) Bounds() types.Bounds {
+	return r.bounds
+}
+
 //Reset resets each cell data into zero state
 func (r *Range) Reset() {
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) { c.Reset() })
@@ -44,7 +50,7 @@ func (r *Range) Cells() RangeIterator {
 
 //Values returns values for all cells in range
 func (r *Range) Values() []string {
-	width, height := r.Dimension()
+	width, height := r.bounds.Dimension()
 	values := make([]string, 0, width*height)
 
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
@@ -82,8 +88,8 @@ func (r *Range) CopyTo(cIdx, rIdx int) {
 	//TODO: check if sheet is opened as read stream and panic about
 
 	//ignore self-copying
-	if cIdx != r.FromCol || rIdx != r.FromRow {
-		cOffset, rOffset := cIdx-r.FromCol, rIdx-r.FromRow
+	if cIdx != r.bounds.FromCol || rIdx != r.bounds.FromRow {
+		cOffset, rOffset := cIdx-r.bounds.FromCol, rIdx-r.bounds.FromRow
 
 		r.Walk(func(idx, cIdxSource, rIdxSource int, source *Cell) {
 			//process only non empty cells
