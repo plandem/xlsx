@@ -252,7 +252,7 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 
 //Reset resets current current cell information
 func (c *Cell) Reset() {
-	*c.ml = ml.Cell{}
+	*c.ml = ml.Cell{ Ref: c.ml.Ref }
 }
 
 //Clear clears cell's value

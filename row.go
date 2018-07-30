@@ -14,7 +14,7 @@ type Row struct {
 
 //Cell returns cell of row at col with colIndex
 func (r *Row) Cell(colIndex int) *Cell {
-	return r.sheet.Cell(colIndex, r.FromRow)
+	return r.sheet.Cell(colIndex, r.bounds.FromRow)
 }
 
 //Set sets options for row
@@ -46,5 +46,5 @@ func (r *Row) CopyTo(rIdx int, withOptions bool) {
 	}
 
 	//copy cell data
-	r.Range.CopyTo(r.Range.FromCol, rIdx)
+	r.Range.CopyTo(r.Range.bounds.FromCol, rIdx)
 }
