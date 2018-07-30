@@ -21,11 +21,15 @@ func (s *sheetReadWrite) setDimension(cols, rows int, resize bool) {
 		rows = 1
 	}
 
+	//converts rows/cols into indexes
+	cols--
+	rows--
+
 	if resize {
-		s.expandIfRequired(cols-1, rows-1)
+		s.expandIfRequired(cols, rows)
 	}
 
-	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, cols-1, rows-1)}
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, cols, rows)}
 }
 
 //SetDimension sets total number of cols and rows in sheet
