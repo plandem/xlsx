@@ -12,6 +12,31 @@ type sheetReadWrite struct {
 
 var _ Sheet = (*sheetReadWrite)(nil)
 
+func (s *sheetReadWrite) setDimension(cols, rows int, resize bool) {
+	if cols <= 0 {
+		cols = 1
+	}
+
+	if rows <= 0 {
+		rows = 1
+	}
+
+	//converts rows/cols into indexes
+	cols--
+	rows--
+
+	if resize {
+		s.expandIfRequired(cols, rows)
+	}
+
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, cols, rows)}
+}
+
+//SetDimension sets total number of cols and rows in sheet
+func (s *sheetReadWrite) SetDimension(cols, rows int) {
+	s.setDimension(cols, rows, true)
+}
+
 //Cell returns a cell for 0-based indexes
 func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.expandIfRequired(colIndex, rowIndex)
@@ -107,7 +132,7 @@ func (s *sheetReadWrite) DeleteRow(index int) {
 
 	//update dimension for a new size
 	cols, rows := s.Dimension()
-	s.SetDimension(cols, rows-1)
+	s.setDimension(cols, rows-1, false)
 }
 
 //Col returns a col for 0-based index
@@ -192,7 +217,7 @@ func (s *sheetReadWrite) DeleteCol(index int) {
 
 	//update dimension for a new size
 	cols, rows := s.Dimension()
-	s.SetDimension(cols-1, rows)
+	s.setDimension(cols-1, rows, false)
 }
 
 //Range returns a range for ref
@@ -281,7 +306,7 @@ func (s *sheetReadWrite) expandOnInit() {
 
 	s.ml.SheetData = grid
 	s.isInitialized = true
-	s.SetDimension(nextWidth, nextHeight)
+	s.setDimension(nextWidth, nextHeight, false)
 }
 
 //expandIfRequired expands grid to required dimension
@@ -332,7 +357,7 @@ func (s *sheetReadWrite) expandIfRequired(colIndex, rowIndex int) {
 	}
 
 	//update dimension for a new size
-	s.SetDimension(nextWidth, nextHeight)
+	s.setDimension(nextWidth, nextHeight, false)
 }
 
 //shrinkIfRequired shrinks grid to minimal size and set actual dimension. Called right before packing sheet data.

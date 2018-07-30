@@ -152,19 +152,6 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	return
 }
 
-//SetDimension sets total number of cols and rows in sheet
-func (s *sheetInfo) SetDimension(cols, rows int) {
-	if cols <= 0 {
-		cols = 1
-	}
-
-	if rows <= 0 {
-		rows = 1
-	}
-
-	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, cols-1, rows-1)}
-}
-
 //Close frees allocated by sheet resources
 func (s *sheetInfo) Close() {
 
