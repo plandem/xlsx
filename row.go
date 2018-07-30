@@ -12,6 +12,11 @@ type Row struct {
 	*Range
 }
 
+//Cell returns cell of row at col with colIndex
+func (r *Row) Cell(colIndex int) *Cell {
+	return r.sheet.Cell(colIndex, r.FromRow)
+}
+
 //Set sets options for row
 func (r *Row) Set(o *options.RowOptions) {
 	if o.Height > 0 {
