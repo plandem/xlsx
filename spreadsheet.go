@@ -56,6 +56,7 @@ func (xl *Spreadsheet) Sheet(i int) Sheet {
 	}
 
 	si := xl.sheets[i]
+	si.sheetMode = sheetModeRead | sheetModeWrite
 
 	sheet := &sheetReadWrite{si}
 	si.sheet = sheet
@@ -72,6 +73,7 @@ func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
 	}
 
 	si := xl.sheets[i]
+	si.sheetMode = sheetModeRead | sheetModeStream
 	sheet := &sheetReadStream{sheetInfo: &(*si), multiPhase: multiPhase}
 	sheet.afterOpen()
 	return sheet
@@ -110,6 +112,7 @@ func (xl *Spreadsheet) AddSheet(name string) Sheet {
 	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
 		sheet := &sheetReadWrite{si}
 		si.sheet = sheet
+		si.sheetMode = sheetModeRead | sheetModeWrite
 		sheet.afterCreate(name)
 		return sheet
 	}

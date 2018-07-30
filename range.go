@@ -85,7 +85,10 @@ func (r *Range) CopyToRef(ref types.Ref) {
 //CopyTo copies range cells into another range starting indexes cIdx and rIdx
 //N.B.: Merged cells are not supported
 func (r *Range) CopyTo(cIdx, rIdx int) {
-	//TODO: check if sheet is opened as read stream and panic about
+	//result is unpredictable in stream mode
+	if mode := r.sheet.mode(); (mode & sheetModeStream) != 0 {
+		panic(errorNotSupportedStream)
+	}
 
 	//ignore self-copying
 	if cIdx != r.bounds.FromCol || rIdx != r.bounds.FromRow {

@@ -39,10 +39,9 @@ func (r *Row) SetFormatting(styleID format.StyleID) {
 //CopyTo copies row cells into another row with rIdx index.
 //N.B.: Merged cells are not supported
 func (r *Row) CopyTo(rIdx int, withOptions bool) {
-	//TODO: check if sheet is opened as read stream and panic about
-
 	if withOptions {
 		//TODO: copy row options
+		panic(errorNotSupported)
 	}
 
 	//copy cell data
