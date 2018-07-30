@@ -84,9 +84,7 @@ func (s *sheetReadWrite) InsertRow(index int) *Row {
 	copy(s.ml.SheetData[index+1:], s.ml.SheetData[index:])
 
 	//clear previous info at this index
-	for iCol := range s.ml.SheetData[index].Cells {
-		s.ml.SheetData[index].Cells[iCol] = nil
-	}
+	s.ml.SheetData[index] = &ml.Row{ Cells: make([]*ml.Cell, len(s.ml.SheetData[index].Cells))}
 
 	//refresh refs
 	s.refreshAllRefs(index)

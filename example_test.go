@@ -73,9 +73,17 @@ func Example_access() {
 	row := sheet.Row(9)
 	fmt.Println(strings.Join(row.Values(), ","))
 
+	// Get cell of row at 0-based col index
+	cell = row.Cell(0)
+	fmt.Println(cell.Value())
+
 	// Get col by 0-based index
 	col := sheet.Col(3)
 	fmt.Println(strings.Join(col.Values(), ","))
+
+	// Get cell of col at 0-based row index
+	cell = col.Cell(0)
+	fmt.Println(cell.Value())
 
 	// Get range by references
 	area := sheet.Range("D10:H13")
@@ -85,7 +93,9 @@ func Example_access() {
 	// last cell
 	// last cell
 	// ,,,1,2,3,4,5,,,,,,
+	//
 	// ,,,,,,,,,1,6,11,16,,,,,,,,,,,,,,,
+	//
 	// 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
 }
 
@@ -558,7 +568,7 @@ func Example_copy() {
 }
 
 // Demonstrates how to get/set value for cell
-func Example_gettersAndSetters() {
+func Example_getters_and_setters() {
 	xl := xlsx.New()
 	defer xl.Close()
 
