@@ -364,12 +364,6 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
-
-	//relationships must have at least one relation
-	if s.relationships != nil && s.relationships.Total() == 0 {
-		s.workbook.doc.pkg.Remove(s.relationships.FileName())
-	}
-
 	return &s.ml
 }
 
