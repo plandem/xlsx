@@ -21,6 +21,7 @@ type sheetInfo struct {
 	file          *ooxml.PackageFile
 	mergedCells   *mergedCellManager
 	sheet         Sheet
+	sheetMode     sheetMode
 }
 
 //isCellEmpty checks if cell is empty - has no value and any formatting
@@ -98,6 +99,10 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 	}
 
 	return sheet
+}
+
+func (s *sheetInfo) mode() sheetMode {
+	return s.sheetMode
 }
 
 //Name returns name of sheet

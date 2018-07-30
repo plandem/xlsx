@@ -141,7 +141,10 @@ func (c *Cell) SetString(value string) {
 		return
 	}
 
-	//TODO: check if sheet is opened as read stream and panic about
+	//we can update sharedStrings only when sheet is in write mode, to prevent pollution of sharedStrings with fake values
+	if (c.sheet.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
 
 	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
 	sid := c.sheet.workbook.doc.sharedStrings.add(c.truncateIfRequired(value))
@@ -244,6 +247,11 @@ func (c *Cell) SetValue(value interface{}) {
 
 //SetValueWithFormat is helper function that internally works as SetValue and SetFormatting
 func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
+	if (c.sheet.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
+
 	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
 
 	c.SetValue(value)

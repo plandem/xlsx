@@ -8,6 +8,16 @@ import (
 //max length of excel's sheet name
 const sheetNameLimit = 31
 const errorNotSupported = "not supported"
+const errorNotSupportedWrite = "not supported in read-only mode"
+const errorNotSupportedStream = "not supported in stream mode"
+
+type sheetMode byte
+const (
+	_ sheetMode = 1 << iota
+	sheetModeRead
+	sheetModeWrite
+	sheetModeStream
+)
 
 //Sheet is interface for a higher level object that wraps ml.Worksheet with functionality
 type Sheet interface {
@@ -47,4 +57,7 @@ type Sheet interface {
 	SetActive()
 	//Close frees allocated by sheet resources
 	Close()
+
+	//private method to use by internals only
+	mode() sheetMode
 }

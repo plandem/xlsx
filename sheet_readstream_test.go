@@ -167,3 +167,23 @@ func TestSheetReadStream_access(t *testing.T) {
 	require.Equal(t, "8", sheet.Cell(5, 10).Value())
 	require.Equal(t, []string{"", "", "", "", "", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"}, sheet.Range("D10:H13").Values())
 }
+
+func TestSheetReadStream_unsupported(t *testing.T) {
+	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
+	if err != nil {
+		panic(err)
+	}
+
+	defer xl.Close()
+	sheet := xl.SheetReader(0, true)
+	defer sheet.Close()
+
+	//SetString must not work in read-only mode
+	require.Panics(t, func() { sheet.CellByRef("A1").SetString("a") })
+
+	//SetValueWithFormat must not work in read-only mode
+	require.Panics(t, func() { sheet.CellByRef("A1").SetValueWithFormat("a", "@") })
+
+	//CopyTo/CopyToRef must not work in read-only mode
+	require.Panics(t, func() { sheet.Range("A1:B1").CopyToRef("C2") })
+}
