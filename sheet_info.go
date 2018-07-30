@@ -20,6 +20,8 @@ type sheetInfo struct {
 	index         int
 	file          *ooxml.PackageFile
 	mergedCells   *mergedCellManager
+	hyperlinks    *hyperlinkManager
+	relationships *ooxml.Relationships
 	sheet         Sheet
 }
 
@@ -95,6 +97,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 
 		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
 		sheet.mergedCells = newMergedCellManager(sheet)
+		sheet.hyperlinks = newHyperlinkManager(sheet)
 	}
 
 	return sheet
@@ -169,6 +172,19 @@ func (s *sheetInfo) Close() {
 
 //afterOpen is callback that will be called right after requesting an already existing sheet. By default, it does nothing
 func (s *sheetInfo) afterOpen() {
+	//TODO: open relations
+}
+
+func (s *sheetInfo) attachRelationshipsIfRequired() {
+	if s.relationships == nil {
+		fileName := fmt.Sprintf("/xl/worksheets/_rels/sheet%d.xml.rels", s.workbook.ml.Sheets[s.index].SheetID)
+
+		if file := s.workbook.doc.pkg.File(fileName); file != nil {
+			s.relationships = ooxml.NewRelationships(file, s.workbook.doc.pkg)
+		} else {
+			s.relationships = ooxml.NewRelationships(fileName, s.workbook.doc.pkg)
+		}
+	}
 }
 
 //afterCreate is callback that will be called right after creating a new sheet. By default, it registers sheet at spreadsheet

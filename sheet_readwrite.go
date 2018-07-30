@@ -76,6 +76,10 @@ func (s *sheetReadWrite) refreshColRefs(colIndex, rowIndex int) {
 func (s *sheetReadWrite) InsertRow(index int) *Row {
 	//getting current height
 	_, rows := s.Dimension()
+	//
+	//if rows <= 0 {
+	//	rows = 1
+	//}
 
 	//expand to a new height
 	s.expandIfRequired(0, rows)
@@ -362,6 +366,12 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
+
+	//relationships must have at least one relation
+	if s.relationships != nil && s.relationships.Total() == 0 {
+		s.workbook.doc.pkg.Remove(s.relationships.FileName())
+	}
+
 	return &s.ml
 }
 

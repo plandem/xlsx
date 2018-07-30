@@ -26,7 +26,7 @@ type Worksheet struct {
 	PhoneticPr            *ml.Reserved    `xml:"phoneticPr,omitempty"`
 	ConditionalFormatting *ml.Reserved    `xml:"conditionalFormatting,omitempty"`
 	DataValidations       *ml.Reserved    `xml:"dataValidations,omitempty"`
-	Hyperlinks            *ml.Reserved    `xml:"hyperlinks,omitempty"`
+	Hyperlinks            *[]*Hyperlink   `xml:"hyperlinks>hyperlink,omitempty"`
 	PrintOptions          *ml.Reserved    `xml:"printOptions,omitempty"`
 	PageMargins           *ml.Reserved    `xml:"pageMargins,omitempty"`
 	PageSetup             *ml.Reserved    `xml:"pageSetup,omitempty"`
@@ -151,4 +151,13 @@ type SheetView struct {
 	ZoomScaleSheetLayoutView uint          `xml:"zoomScaleSheetLayoutView,attr,omitempty"`
 	ZoomScalePageLayoutView  uint          `xml:"zoomScalePageLayoutView,attr,omitempty"`
 	WorkbookViewId           uint          `xml:"workbookViewId,attr"`
+}
+
+//Hyperlink is a direct mapping of XSD CT_Hyperlink
+type Hyperlink struct {
+	Bounds   types.Bounds `xml:"ref,attr"`
+	Location string       `xml:"location,attr,omitempty"`
+	Tooltip  string       `xml:"tooltip,attr,omitempty"`
+	Display  string       `xml:"display,attr,omitempty"`
+	RID      ml.RID       `xml:"id,attr,omitempty"`
 }

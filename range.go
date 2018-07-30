@@ -103,3 +103,8 @@ func (r *Range) CopyTo(cIdx, rIdx int) {
 		})
 	}
 }
+
+//SetHyperlink sets hyperlink for range
+func (r *Range) SetHyperlink() {
+	//TODO...
+}

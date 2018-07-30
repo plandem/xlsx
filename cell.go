@@ -271,7 +271,17 @@ func (c *Cell) HasFormatting() bool {
 	return c.ml.Style != 0
 }
 
+//HasHyperlink returns true if cell has hyperlink
+func (c *Cell) HasHyperlink() bool {
+	return false
+}
+
 //SetFormatting sets style format to requested styleID
 func (c *Cell) SetFormatting(styleID format.StyleID) {
 	c.ml.Style = ml.StyleID(styleID)
+}
+
+//SetHyperlink sets hyperlink for cell
+func (c *Cell) SetHyperlink() {
+	//TODO...
 }
