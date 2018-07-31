@@ -113,7 +113,7 @@ func (s *sheetReadWrite) InsertRow(index int) *Row {
 	copy(s.ml.SheetData[index+1:], s.ml.SheetData[index:])
 
 	//clear previous info at this index
-	s.ml.SheetData[index] = &ml.Row{ Cells: make([]*ml.Cell, len(s.ml.SheetData[index].Cells))}
+	s.ml.SheetData[index] = &ml.Row{Cells: make([]*ml.Cell, len(s.ml.SheetData[index].Cells))}
 
 	//refresh refs
 	s.refreshAllRefs(index)
@@ -389,6 +389,12 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
+
+	//hyperlinks must have at least one object
+	if s.ml.Hyperlinks != nil && len(*s.ml.Hyperlinks) == 0 {
+		s.ml.Hyperlinks = nil
+	}
+
 	return &s.ml
 }
 

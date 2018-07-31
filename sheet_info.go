@@ -37,7 +37,10 @@ func isCellEmpty(c *ml.Cell) bool {
 
 //isRowEmpty checks if row is empty (supposed that only non empty cells here) - has no cells
 func isRowEmpty(r *ml.Row) bool {
-	return r == nil || (len(r.Cells) == 0 && reflect.DeepEqual(r, &ml.Row{}))
+	return r == nil ||
+		reflect.DeepEqual(r, &ml.Row{Ref: r.Ref, Cells: []*ml.Cell{}}) ||
+		reflect.DeepEqual(r, &ml.Row{Ref: r.Ref}) ||
+		reflect.DeepEqual(r, &ml.Row{})
 }
 
 //newSheetInfo creates a new sheetInfo and link it with workbook
@@ -104,8 +107,13 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 	return sheet
 }
 
+//some private methods used objects that use Sheet implementation and have no access to internal information
 func (s *sheetInfo) mode() sheetMode {
 	return s.sheetMode
+}
+
+func (s *sheetInfo) info() *sheetInfo {
+	return s
 }
 
 //Name returns name of sheet

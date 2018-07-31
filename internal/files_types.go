@@ -10,6 +10,7 @@ const (
 	RelationTypeSharedStrings ml.RelationType = ml.NamespaceRelationships + "/sharedStrings"
 	RelationTypeWorksheet     ml.RelationType = ml.NamespaceRelationships + "/worksheet"
 	RelationTypeStyles        ml.RelationType = ml.NamespaceRelationships + "/styles"
+	RelationTypeHyperlink     ml.RelationType = ml.NamespaceRelationships + "/hyperlink"
 
 	ContentTypeWorkbook      ml.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"
 	ContentTypeSharedStrings ml.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"

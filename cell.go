@@ -157,7 +157,7 @@ func (c *Cell) SetString(value string) {
 func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.Itoa(value)
-	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer])
+	c.ml.Style = ml.DirectStyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer])
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 }
@@ -166,7 +166,7 @@ func (c *Cell) SetInt(value int) {
 func (c *Cell) SetFloat(value float64) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
-	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float])
+	c.ml.Style = ml.DirectStyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float])
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 }
@@ -188,7 +188,7 @@ func (c *Cell) SetBool(value bool) {
 func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
-	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[t])
+	c.ml.Style = ml.DirectStyleID(c.sheet.workbook.doc.styleSheet.typedStyles[t])
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 }
@@ -255,12 +255,12 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
 
 	c.SetValue(value)
-	c.ml.Style = ml.StyleID(styleID)
+	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
 //Reset resets current current cell information
 func (c *Cell) Reset() {
-	*c.ml = ml.Cell{ Ref: c.ml.Ref }
+	*c.ml = ml.Cell{Ref: c.ml.Ref}
 }
 
 //Clear clears cell's value
@@ -279,17 +279,24 @@ func (c *Cell) HasFormatting() bool {
 	return c.ml.Style != 0
 }
 
-//HasHyperlink returns true if cell has hyperlink
-func (c *Cell) HasHyperlink() bool {
-	return false
-}
-
 //SetFormatting sets style format to requested styleID
 func (c *Cell) SetFormatting(styleID format.StyleID) {
-	c.ml.Style = ml.StyleID(styleID)
+	c.ml.Style = ml.DirectStyleID(styleID)
+}
+
+//HasHyperlink returns true if cell has hyperlink
+func (c *Cell) HasHyperlink() bool {
+	//TODO: implement
+	panic(errorNotSupported)
 }
 
 //SetHyperlink sets hyperlink for cell
-func (c *Cell) SetHyperlink() {
-	//TODO...
+func (c *Cell) SetHyperlink(link interface{}) error {
+	if styleID, err := c.sheet.hyperlinks.add(types.RefFromCellRefs(c.ml.Ref, c.ml.Ref), link); err != nil {
+		return err
+	} else {
+		c.SetFormatting(styleID)
+	}
+
+	return nil
 }

@@ -12,6 +12,7 @@ const errorNotSupportedWrite = "not supported in read-only mode"
 const errorNotSupportedStream = "not supported in stream mode"
 
 type sheetMode byte
+
 const (
 	_ sheetMode = 1 << iota
 	sheetModeRead
@@ -58,6 +59,7 @@ type Sheet interface {
 	//Close frees allocated by sheet resources
 	Close()
 
-	//private method to use by internals only
+	//private methods to use by internals only
 	mode() sheetMode
+	info() *sheetInfo
 }

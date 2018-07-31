@@ -11,13 +11,14 @@ func TestStyleFormat_Settings(t *testing.T) {
 	style := New()
 
 	//empty
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.Nil(t, font)
 	require.Nil(t, fill)
 	require.Nil(t, alignment)
 	require.Nil(t, number)
 	require.Nil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	//full featured
 	style.Set(
@@ -59,7 +60,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 		Protection.Locked,
 	)
 
-	font, fill, alignment, number, protection, border = style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo = style.Settings()
 	require.NotNil(t, font)
 	require.NotNil(t, fill)
 	require.NotNil(t, alignment)
@@ -165,13 +166,14 @@ func TestStyleFormat_Settings_Alignment(t *testing.T) {
 		Alignment.ReadingOrder(4),
 	)
 
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.Nil(t, font)
 	require.Nil(t, fill)
 	require.NotNil(t, alignment)
 	require.Nil(t, number)
 	require.Nil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.CellAlignment{
 		Vertical:        VAlignBottom,
@@ -198,13 +200,14 @@ func TestStyleFormat_Settings_Border(t *testing.T) {
 		Border.Horizontal.Color("#FF00FF"),
 	)
 
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.Nil(t, font)
 	require.Nil(t, fill)
 	require.Nil(t, alignment)
 	require.Nil(t, number)
 	require.Nil(t, protection)
 	require.NotNil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.Border{
 		Left: &ml.BorderSegment{
@@ -245,13 +248,14 @@ func TestStyleFormat_Settings_Fill(t *testing.T) {
 		Fill.Background("#00FF00"),
 		Fill.Type(PatternTypeDarkDown),
 	)
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.Nil(t, font)
 	require.NotNil(t, fill)
 	require.Nil(t, alignment)
 	require.Nil(t, number)
 	require.Nil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.Fill{
 		Pattern: &ml.PatternFill{
@@ -272,13 +276,14 @@ func TestStyleFormat_Settings_Fill(t *testing.T) {
 		Fill.Gradient.Stop(100, "#FF00FF"),
 		Fill.Gradient.Stop(200, "#00FF00"),
 	)
-	font, fill, alignment, number, protection, border = style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo = style.Settings()
 	require.Nil(t, font)
 	require.NotNil(t, fill)
 	require.Nil(t, alignment)
 	require.Nil(t, number)
 	require.Nil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.Fill{
 		Gradient: &ml.GradientFill{
@@ -314,13 +319,14 @@ func TestStyleFormat_Settings_Font(t *testing.T) {
 		Font.Scheme(FontSchemeMinor),
 	)
 
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.NotNil(t, font)
 	require.Nil(t, fill)
 	require.Nil(t, alignment)
 	require.Nil(t, number)
 	require.Nil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.Font{
 		Name:      "Calibri",
@@ -343,13 +349,14 @@ func TestStyleFormat_Settings_Number(t *testing.T) {
 	style := New(
 		NumberFormatID(8),
 	)
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.Nil(t, font)
 	require.Nil(t, fill)
 	require.Nil(t, alignment)
 	require.NotNil(t, number)
 	require.Nil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.NumberFormat{
 		ID:   8,
@@ -362,13 +369,14 @@ func TestStyleFormat_Settings_Protection(t *testing.T) {
 		Protection.Hidden,
 		Protection.Locked,
 	)
-	font, fill, alignment, number, protection, border := style.Settings()
+	font, fill, alignment, number, protection, border, namedInfo := style.Settings()
 	require.Nil(t, font)
 	require.Nil(t, fill)
 	require.Nil(t, alignment)
 	require.Nil(t, number)
 	require.NotNil(t, protection)
 	require.Nil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.CellProtection{
 		Locked: true,
