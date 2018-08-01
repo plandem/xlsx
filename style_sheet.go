@@ -119,47 +119,6 @@ func (ss *StyleSheet) addDefaults() {
 	}}
 }
 
-//adds a number formats for each type of number format if required. These styles will be used by cell's typed SetXXX methods
-func (ss *StyleSheet) addTypedStylesIfRequired() {
-	if len(ss.typedStyles) == 0 {
-		for _, t := range []numberFormat.Type{
-			numberFormat.General,
-			numberFormat.Integer,
-			numberFormat.Float,
-			numberFormat.Date,
-			numberFormat.Time,
-			numberFormat.DateTime,
-			numberFormat.DeltaTime,
-		} {
-			id, _ := numberFormat.Default(t)
-			ss.typedStyles[t] = ss.addStyle(format.New(format.NumberFormatID(id)))
-		}
-
-		ss.file.MarkAsUpdated()
-	}
-}
-
-//resolveNumberFormat returns resolved NumberFormat code for styleID
-func (ss *StyleSheet) resolveNumberFormat(id ml.DirectStyleID) string {
-	style := (*ss.ml.CellXfs)[id]
-
-	//return code for built-in number format
-	if number := numberFormat.Normalize(ml.NumberFormat{ID: style.NumFmtId}); len(number.Code) > 0 {
-		return number.Code
-	}
-
-	//try to lookup through custom formats and find same ID
-	for _, f := range *ss.ml.NumberFormats {
-		if style.NumFmtId == f.ID {
-			return f.Code
-		}
-	}
-
-	//N.B.: wtf is going on?! non built-in and not existing id?
-	_, code := numberFormat.Default(numberFormat.General)
-	return code
-}
-
 //build indexes for fonts
 func (ss *StyleSheet) buildFontIndexes() {
 	if ss.ml.Fonts == nil {
@@ -247,6 +206,47 @@ func (ss *StyleSheet) buildIndexes() {
 	ss.buildNamedStyleIndexes()
 	ss.buildDirectStyleIndexes()
 	ss.buildDiffStyleIndexes()
+}
+
+//adds a number formats for each type of number format if required. These styles will be used by cell's typed SetXXX methods
+func (ss *StyleSheet) addTypedStylesIfRequired() {
+	if len(ss.typedStyles) == 0 {
+		for _, t := range []numberFormat.Type{
+			numberFormat.General,
+			numberFormat.Integer,
+			numberFormat.Float,
+			numberFormat.Date,
+			numberFormat.Time,
+			numberFormat.DateTime,
+			numberFormat.DeltaTime,
+		} {
+			id, _ := numberFormat.Default(t)
+			ss.typedStyles[t] = ss.addStyle(format.New(format.NumberFormatID(id)))
+		}
+
+		ss.file.MarkAsUpdated()
+	}
+}
+
+//resolveNumberFormat returns resolved NumberFormat code for styleID
+func (ss *StyleSheet) resolveNumberFormat(id ml.DirectStyleID) string {
+	style := (*ss.ml.CellXfs)[id]
+
+	//return code for built-in number format
+	if number := numberFormat.Normalize(ml.NumberFormat{ID: style.NumFmtId}); len(number.Code) > 0 {
+		return number.Code
+	}
+
+	//try to lookup through custom formats and find same ID
+	for _, f := range *ss.ml.NumberFormats {
+		if style.NumFmtId == f.ID {
+			return f.Code
+		}
+	}
+
+	//N.B.: wtf is going on?! non built-in and not existing id?
+	_, code := numberFormat.Default(numberFormat.General)
+	return code
 }
 
 //adds a differential style
