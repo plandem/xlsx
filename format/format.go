@@ -25,6 +25,7 @@ type StyleFormat struct {
 	numFormat  ml.NumberFormat
 	protection ml.CellProtection
 	border     ml.Border
+	namedInfo  ml.NamedStyleInfo
 }
 
 type option func(o *StyleFormat)
@@ -211,6 +212,12 @@ func (s *StyleFormat) Settings() (font *ml.Font, fill *ml.Fill, alignment *ml.Ce
 	if s.protection != (ml.CellProtection{}) {
 		protection = &ml.CellProtection{}
 		*protection = s.protection
+	}
+
+	//copy non-empty namedInfo
+	if s.namedInfo != (ml.NamedStyleInfo{}) {
+		namedInfo = &ml.NamedStyleInfo{}
+		*namedInfo = s.namedInfo
 	}
 
 	return
