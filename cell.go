@@ -245,19 +245,6 @@ func (c *Cell) SetValue(value interface{}) {
 	}
 }
 
-//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting
-func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
-	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
-	if (c.sheet.mode() & sheetModeWrite) == 0 {
-		panic(errorNotSupportedWrite)
-	}
-
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
-
-	c.SetValue(value)
-	c.ml.Style = ml.DirectStyleID(styleID)
-}
-
 //Reset resets current current cell information
 func (c *Cell) Reset() {
 	*c.ml = ml.Cell{Ref: c.ml.Ref}
@@ -273,10 +260,9 @@ func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
 }
 
-//HasFormatting returns true if cell has styles
-func (c *Cell) HasFormatting() bool {
-	//0 is default style
-	return c.ml.Style != 0
+//Formatting returns active format of cell or nil if there is no any styles
+func (c *Cell) Formatting() *format.StyleFormat {
+	return c.sheet.workbook.doc.styleSheet.resolveDirectStyle(c.ml.Style)
 }
 
 //SetFormatting sets style format to requested styleID
@@ -284,10 +270,22 @@ func (c *Cell) SetFormatting(styleID format.StyleID) {
 	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
+//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting
+func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
+	if (c.sheet.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
+
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
+
+	c.SetValue(value)
+	c.ml.Style = ml.DirectStyleID(styleID)
+}
+
 //HasHyperlink returns true if cell has hyperlink
-func (c *Cell) HasHyperlink() bool {
-	//TODO: implement
-	panic(errorNotSupported)
+func (c *Cell) Hyperlink() interface{} {
+	return c.sheet.hyperlinks.Resolve(c.ml.Ref)
 }
 
 //SetHyperlink sets hyperlink for cell
@@ -299,4 +297,15 @@ func (c *Cell) SetHyperlink(link interface{}) error {
 	}
 
 	return nil
+}
+
+//SetValueWithHyperlink is helper function that internally works as SetValue and SetHyperlink
+func (c *Cell) SetValueWithHyperlink(value interface{}, link interface{}) error {
+	err := c.SetHyperlink(link)
+
+	if err == nil {
+		c.SetValue(value)
+	}
+
+	return err
 }

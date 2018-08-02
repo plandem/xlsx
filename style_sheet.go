@@ -44,7 +44,7 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 		typedStyles:      make(map[numberFormat.Type]format.StyleID),
 	}
 
-	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
+	ss.file = ooxml.NewPackageFile(doc.pkg, f, ss, nil)
 
 	if ss.file.IsNew() {
 		ss.doc.pkg.ContentTypes().RegisterContent(ss.file.FileName(), internal.ContentTypeStyles)
@@ -249,6 +249,22 @@ func (ss *StyleSheet) resolveNumberFormat(id ml.DirectStyleID) string {
 	return code
 }
 
+//resolveDirectStyle returns resolved StyleFormat for DirectStyleID
+func (ss *StyleSheet) resolveDirectStyle(id ml.DirectStyleID) *format.StyleFormat {
+	if id == 0 {
+		return nil
+	}
+
+	cellStyle := (*ss.ml.CellXfs)[id]
+	style := &format.StyleFormat{}
+	_ = cellStyle
+
+	//TODO: Populate format.StyleFormat with required information
+	panic(errorNotSupported)
+
+	return style
+}
+
 //adds a differential style
 func (ss *StyleSheet) addDiffStyle(f *format.StyleFormat) format.DiffStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
@@ -279,26 +295,34 @@ func (ss *StyleSheet) addDiffStyle(f *format.StyleFormat) format.DiffStyleID {
 	return nextID
 }
 
-func (ss *StyleSheet) addNamedStyleIfRequired(style ml.Style) format.StyleID {
-	namedStyle := ml.NamedStyle(style)
-
-	//return id of already existing information
-	key := hash.NamedStyle(&namedStyle).Hash()
-	if id, ok := ss.namedStyleIndex[key]; ok {
-		return id
+//add a named style if required
+func (ss *StyleSheet) addNamedStyleIfRequired(namedInfo *ml.NamedStyleInfo, style ml.Style) ml.NamedStyleID {
+	if namedInfo == nil {
+		return 0
 	}
 
-	//add a new one and return related id
-	nextID := format.StyleID(len(*ss.ml.CellStyleXfs))
-	*ss.ml.CellStyleXfs = append(*ss.ml.CellStyleXfs, &namedStyle)
-	ss.namedStyleIndex[key] = nextID
-	ss.file.MarkAsUpdated()
-	return nextID
-}
+	namedStyle := ml.NamedStyle(style)
+	key := hash.NamedStyle(&namedStyle).Hash()
 
-//add a named info for named style
-func (ss *StyleSheet) addNamedInfoIfRequired(namedInfo *ml.NamedStyleInfo, XfId ml.NamedStyleID) {
-	panic(errorNotSupported)
+	//TODO: check if it's possible to have 2 same built-styles
+
+	//if there is already same styles, then use it
+	if id, ok := ss.namedStyleIndex[key]; ok {
+		namedInfo.XfId = ml.NamedStyleID(id)
+	} else {
+		//add a new style
+		nextID := format.StyleID(len(*ss.ml.CellStyleXfs))
+		*ss.ml.CellStyleXfs = append(*ss.ml.CellStyleXfs, &namedStyle)
+		ss.namedStyleIndex[key] = nextID
+
+		//add style info
+		namedInfo.XfId = ml.NamedStyleID(nextID)
+		*ss.ml.CellStyles = append(*ss.ml.CellStyles, namedInfo)
+	}
+
+	//add named info
+	ss.file.MarkAsUpdated()
+	return namedInfo.XfId
 }
 
 //adds a style. Style can be Direct or Named. Depends on settings.
@@ -315,9 +339,9 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.StyleID {
 	/*
 		Note to remember excel internals:
 		---
-		cell.s = cellXfs.index
-		cellXfs.xfId = cellStyleXf.index
-		cellStyle.xfId = cellStyleXf.index
+		cell.s = cellXfs.index  => DirectStyleID
+		cellXfs.xfId = cellStyleXf.index => NamedStyleID
+		cellStyle.xfId = cellStyleXf.index => NamedStyleID
 	*/
 
 	XfId := ml.NamedStyleID(0)
@@ -336,11 +360,8 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.StyleID {
 		ApplyProtection:   protection != nil,
 	}
 
-	//if there is a named style info, then add named style and get XfId for direct style
-	if namedInfo != nil {
-		XfId = ml.NamedStyleID(ss.addNamedStyleIfRequired(style))
-		ss.addNamedInfoIfRequired(namedInfo, XfId)
-	}
+	//add named style if required and get related XfId
+	XfId = ss.addNamedStyleIfRequired(namedInfo, style)
 
 	cellXf := &ml.DirectStyle{
 		XfId: XfId,
@@ -458,4 +479,24 @@ func (ss *StyleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
 	ss.numberIndex[key] = nextID
 	ss.file.MarkAsUpdated()
 	return nextID
+}
+
+//BeforeMarshalXML does final preparations before marshalling
+func (ss *StyleSheet) BeforeMarshalXML() interface{} {
+	//CellStyleXfs must have at least one object
+	if ss.ml.CellStyleXfs != nil && len(*ss.ml.CellStyleXfs) == 0 {
+		ss.ml.CellStyleXfs = nil
+	}
+
+	//CellStyles must have at least one object
+	if ss.ml.CellStyles!= nil && len(*ss.ml.CellStyles) == 0 {
+		ss.ml.CellStyles = nil
+	}
+
+	//CellXfs must have at least one object
+	if ss.ml.CellXfs!= nil && len(*ss.ml.CellXfs) == 0 {
+		ss.ml.CellXfs = nil
+	}
+
+	return &ss.ml
 }

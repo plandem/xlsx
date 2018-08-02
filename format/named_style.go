@@ -7,15 +7,10 @@ import (
 type namedStyleType int
 
 //List of all possible types for NamedStyle
-//
-//N.B.:
-// NamedStyleRowLevel and NamedStyleColLevel has default name only for first row and col.
-// If you want to add styles for other level, then you have to provide a name. E.g.: RowLevel_6
 const (
-	NamedStyleCustom namedStyleType = -1
 	NamedStyleNormal namedStyleType = iota
-	NamedStyleRowLevel
-	NamedStyleColLevel
+	_NamedStyleRowLevel
+	_NamedStyleColLevel
 	NamedStyleComma
 	NamedStyleCurrency
 	NamedStylePercent
@@ -67,6 +62,22 @@ const (
 	NamedStyleAccent6_40
 	NamedStyleAccent6_60
 	NamedStyleExplanatory
+	//pseudo styles for RowLevel 1 - 7
+	NamedStyleRowLevel1 = iota + (100 + _NamedStyleRowLevel)
+	NamedStyleRowLevel2
+	NamedStyleRowLevel3
+	NamedStyleRowLevel4
+	NamedStyleRowLevel5
+	NamedStyleRowLevel6
+	NamedStyleRowLevel7
+	//pseudo styles for ColLevel 1 - 7
+	NamedStyleColLevel1 = iota + (200 + _NamedStyleColLevel)
+	NamedStyleColLevel2
+	NamedStyleColLevel3
+	NamedStyleColLevel4
+	NamedStyleColLevel5
+	NamedStyleColLevel6
+	NamedStyleColLevel7
 )
 
 var (
@@ -76,8 +87,6 @@ var (
 func init() {
 	namedStyleNames = map[namedStyleType]string{
 		NamedStyleNormal:            "Normal",
-		NamedStyleRowLevel:          "RowLevel_1",
-		NamedStyleColLevel:          "ColLevel_1",
 		NamedStyleComma:             "Comma",
 		NamedStyleCurrency:          "Currency",
 		NamedStylePercent:           "Percent",
@@ -126,30 +135,54 @@ func init() {
 		NamedStyleAccent6_40:        "40% - Accent6",
 		NamedStyleAccent6_60:        "60% - Accent6",
 		NamedStyleExplanatory:       "Explanatory Text",
+
+		//pseudo types
+		NamedStyleRowLevel1: "RowLevel_1",
+		NamedStyleRowLevel2: "RowLevel_2",
+		NamedStyleRowLevel3: "RowLevel_3",
+		NamedStyleRowLevel4: "RowLevel_4",
+		NamedStyleRowLevel5: "RowLevel_5",
+		NamedStyleRowLevel6: "RowLevel_6",
+		NamedStyleRowLevel7: "RowLevel_7",
+		NamedStyleColLevel1: "ColLevel_1",
+		NamedStyleColLevel2: "ColLevel_2",
+		NamedStyleColLevel3: "ColLevel_3",
+		NamedStyleColLevel4: "ColLevel_4",
+		NamedStyleColLevel5: "ColLevel_5",
+		NamedStyleColLevel6: "ColLevel_6",
+		NamedStyleColLevel7: "ColLevel_7",
 	}
 }
 
 //NamedStyle is option to update StyleFormat with provided settings for NamedStyleInfo
-func NamedStyle(name string, t namedStyleType) func(*StyleFormat) {
+func NamedStyle(name interface{}) func(*StyleFormat) {
 	return func(s *StyleFormat) {
-		defaultName, ok := namedStyleNames[t]
-
-		if len(name) == 0 {
-			//non built-in styles must have name
-			if !ok {
-				panic("you must provide a name for named style")
+		if n, ok := name.(string); ok {
+			if len(n) == 0 {
+				panic("you must provide a name for custom named style")
 			}
 
-			name = defaultName
-		}
+			s.namedInfo.BuiltinId = nil
+			s.namedInfo.Name = n
+		} else if t, ok := name.(namedStyleType); ok {
+			//is known built-in style?
+			defaultName, known := namedStyleNames[t]
+			if !known {
+				panic("unknown ID of built-in named style")
+			}
 
-		s.namedInfo.Name = name
+			//fix our pseudo styles
+			if t >= NamedStyleRowLevel1 && t <= NamedStyleRowLevel7 {
+				t = _NamedStyleRowLevel
+			}
 
-		if ok {
+			if t >= NamedStyleColLevel1 && t <= NamedStyleColLevel7 {
+				t = _NamedStyleColLevel
+			}
+
 			builtInID := int(t)
 			s.namedInfo.BuiltinId = ml.OptionalIndex(&builtInID)
-		} else {
-			s.namedInfo.BuiltinId = nil
+			s.namedInfo.Name = defaultName
 		}
 	}
 }

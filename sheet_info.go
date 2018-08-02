@@ -176,7 +176,7 @@ func (s *sheetInfo) afterOpen() {
 
 func (s *sheetInfo) attachRelationshipsIfRequired() {
 	if s.relationships == nil {
-		fileName := fmt.Sprintf("/xl/worksheets/_rels/sheet%d.xml.rels", s.workbook.ml.Sheets[s.index].SheetID)
+		fileName := fmt.Sprintf("xl/worksheets/_rels/sheet%d.xml.rels", s.workbook.ml.Sheets[s.index].SheetID)
 
 		if file := s.workbook.doc.pkg.File(fileName); file != nil {
 			s.relationships = ooxml.NewRelationships(file, s.workbook.doc.pkg)
