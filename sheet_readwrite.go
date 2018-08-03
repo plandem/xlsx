@@ -41,7 +41,7 @@ func (s *sheetReadWrite) SetDimension(cols, rows int) {
 func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.expandIfRequired(colIndex, rowIndex)
 
-	colIndex, rowIndex = s.mergedCells.Resolve(colIndex, rowIndex)
+	colIndex, rowIndex = s.mergedCells.resolve(colIndex, rowIndex)
 	data := s.ml.SheetData[rowIndex].Cells[colIndex]
 
 	//if there is no any data for this cell, then create it

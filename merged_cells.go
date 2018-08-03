@@ -13,8 +13,8 @@ func newMergedCellManager(sheet *sheetInfo) *mergedCellManager {
 	}
 }
 
-//Resolve check if requested cIdx and rIdx related to merged range and if so, then translate indexes to valid values
-func (m *mergedCellManager) Resolve(cIdx, rIdx int) (int, int) {
+//resolve check if requested cIdx and rIdx related to merged range and if so, then translate indexes to valid values
+func (m *mergedCellManager) resolve(cIdx, rIdx int) (int, int) {
 	if m.sheet.ml.MergeCells != nil {
 		mergedCells := *m.sheet.ml.MergeCells
 		if len(mergedCells) > 0 {

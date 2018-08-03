@@ -22,7 +22,7 @@ var _ Sheet = (*sheetReadStream)(nil)
 func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	var data *ml.Cell
 
-	colIndex, rowIndex = s.mergedCells.Resolve(colIndex, rowIndex)
+	colIndex, rowIndex = s.mergedCells.resolve(colIndex, rowIndex)
 	row := s.Row(rowIndex)
 	data = row.ml.Cells[colIndex]
 
