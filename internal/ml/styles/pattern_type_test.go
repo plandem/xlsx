@@ -1,4 +1,4 @@
-package format_test
+package styles_test
 
 import (
 	"encoding/xml"

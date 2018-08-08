@@ -2,8 +2,8 @@ package types_test
 
 import (
 	"encoding/xml"
-	"github.com/plandem/xlsx/types"
 	"github.com/stretchr/testify/require"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"testing"
 )
 

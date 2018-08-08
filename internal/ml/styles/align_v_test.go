@@ -1,24 +1,26 @@
-package types_test
+package styles_test
 
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestCellFormulaType(t *testing.T) {
+func TestAlignV(t *testing.T) {
 	type Entity struct {
-		Attribute types.CellFormulaType `xml:"attribute,attr"`
+		Attribute styles.VAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]types.CellFormulaType{
-		"":          types.CellFormulaType(0),
-		"normal":    types.CellFormulaTypeNormal,
-		"array":     types.CellFormulaTypeArray,
-		"dataTable": types.CellFormulaTypeDataTable,
-		"shared":    types.CellFormulaTypeShared,
+	list := map[string]styles.VAlignType{
+		"":            styles.VAlignType(0),
+		"top":         format.VAlignTop,
+		"center":      format.VAlignCenter,
+		"bottom":      format.VAlignBottom,
+		"justify":     format.VAlignJustify,
+		"distributed": format.VAlignDistributed,
 	}
 
 	for s, v := range list {

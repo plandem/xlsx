@@ -2,7 +2,7 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 )
 
 //SharedStrings is a direct mapping of XSD CT_Sst

@@ -1,4 +1,4 @@
-package format_test
+package styles_test
 
 import (
 	"encoding/xml"
@@ -9,16 +9,16 @@ import (
 	"testing"
 )
 
-func TestFontScheme(t *testing.T) {
+func TestFontVAlign(t *testing.T) {
 	type Element struct {
-		Property styles.FontSchemeType `xml:"property,omitempty"`
+		Property styles.FontVAlignType `xml:"property,omitempty"`
 	}
 
-	list := map[string]styles.FontSchemeType{
-		"none":     format.FontSchemeNone,
-		"major":    format.FontSchemeMajor,
-		"minor":    format.FontSchemeMinor,
-		"schema-a": styles.FontSchemeType("schema-a"),
+	list := map[string]styles.FontVAlignType{
+		"baseline":    format.FontVAlignBaseline,
+		"superscript": format.FontVAlignSuperscript,
+		"subscript":   format.FontVAlignSubscript,
+		"align-a":     styles.FontVAlignType("align-a"),
 	}
 
 	for s, v := range list {

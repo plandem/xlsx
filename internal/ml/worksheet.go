@@ -3,6 +3,7 @@ package ml
 import (
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/types"
+	a "github.com/plandem/xlsx/internal/ml/types"
 )
 
 //Worksheet is a direct mapping of XSD CT_Worksheet
@@ -92,7 +93,7 @@ type Cell struct {
 	ExtLst    *ml.Reserved     `xml:"extLst,omitempty"`
 	Ref       types.CellRef    `xml:"r,attr"`
 	Style     StyleID          `xml:"s,attr,omitempty"`
-	Type      types.CellType   `xml:"t,attr,omitempty"`
+	Type      a.CellType   `xml:"t,attr,omitempty"`
 	Cm        ml.OptionalIndex `xml:"cm,attr,omitempty"`
 	Vm        ml.OptionalIndex `xml:"vm,attr,omitempty"`
 	Ph        bool             `xml:"ph,attr,omitempty"`
@@ -101,7 +102,7 @@ type Cell struct {
 //CellFormula is a direct mapping of XSD CT_CellFormula
 type CellFormula struct {
 	Content string                `xml:",chardata"`
-	T       types.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
+	T       a.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
 	Aca     bool                  `xml:"aca,attr,omitempty"`
 	Bounds  types.Bounds          `xml:"ref,attr,omitempty"`
 	Dt2D    bool                  `xml:"dt2D,attr,omitempty"`

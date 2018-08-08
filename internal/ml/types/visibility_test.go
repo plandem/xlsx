@@ -3,21 +3,22 @@ package types_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"github.com/plandem/xlsx/options"
 )
 
-func TestUpdateLinks(t *testing.T) {
+func TestVisibility(t *testing.T) {
 	type Entity struct {
-		Attribute types.UpdateLinksType `xml:"attribute,attr"`
+		Attribute types.VisibilityType `xml:"attribute,attr"`
 	}
 
-	list := map[string]types.UpdateLinksType{
-		"":        types.UpdateLinksType(0),
-		"userSet": types.UpdateLinksTypeUserSet,
-		"never":   types.UpdateLinksTypeNever,
-		"always":  types.UpdateLinksTypeAlways,
+	list := map[string]types.VisibilityType{
+		"":           types.VisibilityType(0),
+		"visible":    options.VisibilityTypeVisible,
+		"hidden":     options.VisibilityTypeHidden,
+		"veryHidden": options.VisibilityTypeVeryHidden,
 	}
 
 	for s, v := range list {

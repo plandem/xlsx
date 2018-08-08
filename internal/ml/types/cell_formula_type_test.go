@@ -1,29 +1,24 @@
-package format_test
+package types_test
 
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestAlignH(t *testing.T) {
+func TestCellFormulaType(t *testing.T) {
 	type Entity struct {
-		Attribute styles.HAlignType `xml:"attribute,attr"`
+		Attribute types.CellFormulaType `xml:"attribute,attr"`
 	}
 
-	list := map[string]styles.HAlignType{
-		"":                 styles.HAlignType(0),
-		"general":          format.HAlignGeneral,
-		"left":             format.HAlignLeft,
-		"center":           format.HAlignCenter,
-		"right":            format.HAlignRight,
-		"fill":             format.HAlignFill,
-		"justify":          format.HAlignJustify,
-		"centerContinuous": format.HAlignCenterContinuous,
-		"distributed":      format.HAlignDistributed,
+	list := map[string]types.CellFormulaType{
+		"":          types.CellFormulaType(0),
+		"normal":    types.CellFormulaTypeNormal,
+		"array":     types.CellFormulaTypeArray,
+		"dataTable": types.CellFormulaTypeDataTable,
+		"shared":    types.CellFormulaTypeShared,
 	}
 
 	for s, v := range list {

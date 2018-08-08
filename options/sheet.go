@@ -1,7 +1,7 @@
 package options
 
 import (
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 )
 
 type sheetOption func(co *SheetOptions)

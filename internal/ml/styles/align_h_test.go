@@ -1,23 +1,29 @@
-package types_test
+package styles_test
 
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal/ml/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestVisibility(t *testing.T) {
+func TestAlignH(t *testing.T) {
 	type Entity struct {
-		Attribute types.VisibilityType `xml:"attribute,attr"`
+		Attribute styles.HAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]types.VisibilityType{
-		"":           types.VisibilityType(0),
-		"visible":    types.VisibilityTypeVisible,
-		"hidden":     types.VisibilityTypeHidden,
-		"veryHidden": types.VisibilityTypeVeryHidden,
+	list := map[string]styles.HAlignType{
+		"":                 styles.HAlignType(0),
+		"general":          format.HAlignGeneral,
+		"left":             format.HAlignLeft,
+		"center":           format.HAlignCenter,
+		"right":            format.HAlignRight,
+		"fill":             format.HAlignFill,
+		"justify":          format.HAlignJustify,
+		"centerContinuous": format.HAlignCenterContinuous,
+		"distributed":      format.HAlignDistributed,
 	}
 
 	for s, v := range list {

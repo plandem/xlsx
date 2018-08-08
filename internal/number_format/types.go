@@ -2,7 +2,7 @@ package numberFormat
 
 import (
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 )
 
 //Type of underlying value of built-in number format

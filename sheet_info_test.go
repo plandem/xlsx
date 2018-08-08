@@ -3,7 +3,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -29,12 +29,12 @@ func TestSheetInfo(t *testing.T) {
 
 	//test options
 	o := options.NewSheetOptions(
-		options.Sheet.Visibility(types.VisibilityTypeVeryHidden),
+		options.Sheet.Visibility(options.VisibilityTypeVeryHidden),
 	)
 
 	require.Equal(t, types.VisibilityType(0), xl.workbook.ml.Sheets[0].State)
 	sheet.Set(o)
-	require.Equal(t, types.VisibilityTypeVeryHidden, xl.workbook.ml.Sheets[0].State)
+	require.Equal(t, options.VisibilityTypeVeryHidden, xl.workbook.ml.Sheets[0].State)
 
 	//test set active
 	require.Equal(t, 0, (*xl.workbook.ml.BookViews)[0].ActiveTab)

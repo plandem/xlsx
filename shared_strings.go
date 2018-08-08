@@ -4,7 +4,7 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 )
 
 //SharedStrings is a higher level object that wraps ml.SharedStrings with functionality

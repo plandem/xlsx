@@ -8,7 +8,6 @@ import (
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
-	"github.com/plandem/xlsx/types"
 	"math"
 	"reflect"
 )
@@ -118,7 +117,7 @@ func (s *sheetInfo) SetName(name string) {
 
 //Set sets options for sheet
 func (s *sheetInfo) Set(o *options.SheetOptions) {
-	if o.Visibility >= types.VisibilityTypeVisible && o.Visibility <= types.VisibilityTypeVeryHidden {
+	if o.Visibility >= options.VisibilityTypeVisible && o.Visibility <= options.VisibilityTypeVeryHidden {
 		s.workbook.ml.Sheets[s.index].State = o.Visibility
 		s.workbook.file.MarkAsUpdated()
 	}

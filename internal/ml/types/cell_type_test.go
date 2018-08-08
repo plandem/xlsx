@@ -3,21 +3,25 @@ package types_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestObjects(t *testing.T) {
+func TestCellType(t *testing.T) {
 	type Entity struct {
-		Attribute types.ObjectsType `xml:"attribute,attr"`
+		Attribute types.CellType `xml:"attribute,attr"`
 	}
 
-	list := map[string]types.ObjectsType{
-		"":             types.ObjectsType(0),
-		"all":          types.ObjectsTypeAll,
-		"placeholders": types.ObjectsTypePlaceholders,
-		"none":         types.ObjectsTypeNone,
+	list := map[string]types.CellType{
+		"":          types.CellTypeGeneral,
+		"b":         types.CellTypeBool,
+		"d":         types.CellTypeDate,
+		"n":         types.CellTypeNumber,
+		"e":         types.CellTypeError,
+		"s":         types.CellTypeSharedString,
+		"str":       types.CellTypeFormula,
+		"inlineStr": types.CellTypeInlineString,
 	}
 
 	for s, v := range list {
@@ -36,7 +40,12 @@ func TestObjects(t *testing.T) {
 			err = xml.Unmarshal(encoded, &decoded)
 			require.Empty(tt, err)
 
-			require.Equal(tt, entity, decoded)
+			if s == "" {
+				require.Equal(tt, Entity{}, decoded)
+			} else {
+				require.Equal(tt, entity, decoded)
+			}
+
 			require.Equal(tt, s, decoded.Attribute.String())
 		})
 	}

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
-	"github.com/plandem/xlsx/types"
 	"math"
 	"strconv"
 	"time"
@@ -260,7 +260,7 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 
 //Reset resets current current cell information
 func (c *Cell) Reset() {
-	*c.ml = ml.Cell{ Ref: c.ml.Ref }
+	*c.ml = ml.Cell{Ref: c.ml.Ref}
 }
 
 //Clear clears cell's value

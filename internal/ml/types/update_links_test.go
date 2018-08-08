@@ -1,26 +1,23 @@
-package format_test
+package types_test
 
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestAlignV(t *testing.T) {
+func TestUpdateLinks(t *testing.T) {
 	type Entity struct {
-		Attribute styles.VAlignType `xml:"attribute,attr"`
+		Attribute types.UpdateLinksType `xml:"attribute,attr"`
 	}
 
-	list := map[string]styles.VAlignType{
-		"":            styles.VAlignType(0),
-		"top":         format.VAlignTop,
-		"center":      format.VAlignCenter,
-		"bottom":      format.VAlignBottom,
-		"justify":     format.VAlignJustify,
-		"distributed": format.VAlignDistributed,
+	list := map[string]types.UpdateLinksType{
+		"":        types.UpdateLinksType(0),
+		"userSet": types.UpdateLinksTypeUserSet,
+		"never":   types.UpdateLinksTypeNever,
+		"always":  types.UpdateLinksTypeAlways,
 	}
 
 	for s, v := range list {
