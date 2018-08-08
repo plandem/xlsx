@@ -17,6 +17,14 @@ func (f *fontOption) Name(name string) option {
 	}
 }
 
+func (f *fontOption) Default(s *StyleFormat) {
+	s.font.Family = FontFamilySwiss
+	s.font.Scheme = FontSchemeMinor
+	s.font.Name = "Calibri"
+	s.font.Size = 11.0
+	//s.font.Color  =  Color{Theme: 1}
+}
+
 func (f *fontOption) Bold(s *StyleFormat) {
 	s.font.Bold = true
 }

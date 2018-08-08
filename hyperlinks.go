@@ -18,7 +18,9 @@ func newHyperlinkManager(sheet *sheetInfo) *hyperlinkManager {
 	//we need to add default named style for hyperlink
 	defaultStyleID := sheet.workbook.doc.AddFormatting(format.New(
 		format.NamedStyle(format.NamedStyleHyperlink),
+		format.Font.Default,
 		format.Font.Underline(format.UnderlineTypeSingle),
+		format.Font.Color("#0563C1"),
 	))
 
 	//attach hyperlinks object if required
@@ -34,7 +36,7 @@ func newHyperlinkManager(sheet *sheetInfo) *hyperlinkManager {
 }
 
 //if there is a hyperlink for provided ref, then return it.
-func (m *hyperlinkManager) Resolve(ref types.CellRef) int {
+func (m *hyperlinkManager) Get(ref types.CellRef) int {
 	panic(errorNotSupported)
 
 	if m.sheet.ml.Hyperlinks != nil {
@@ -57,7 +59,7 @@ func (m *hyperlinkManager) Resolve(ref types.CellRef) int {
 //Tooltip  string       `xml:"tooltip,attr,omitempty"`
 //Display  string       `xml:"display,attr,omitempty"`
 //RID      ml.RID       `xml:"id,attr,omitempty"`
-func (m *hyperlinkManager) add(ref types.Ref, link interface{}) (format.StyleID, error) {
+func (m *hyperlinkManager) Add(ref types.Ref, link interface{}) (format.StyleID, error) {
 	//var (
 	//location string
 	//tooltip  string
@@ -87,4 +89,8 @@ func (m *hyperlinkManager) add(ref types.Ref, link interface{}) (format.StyleID,
 	})
 
 	return m.defaultStyleID, nil
+}
+
+func (m *hyperlinkManager) Remove(ref types.CellRef) {
+
 }

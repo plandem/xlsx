@@ -115,7 +115,7 @@ func (r *Range) CopyTo(cIdx, rIdx int) {
 
 //SetHyperlink sets hyperlink for range
 func (r *Range) SetHyperlink(link interface{}) error {
-	if styleID, err := r.sheet.info().hyperlinks.add(r.bounds.ToRef(), link); err != nil {
+	if styleID, err := r.sheet.info().hyperlinks.Add(r.bounds.ToRef(), link); err != nil {
 		return err
 	} else {
 		r.Walk(func(idx, cIdx, rIdx int, c *Cell) { c.SetFormatting(styleID) })

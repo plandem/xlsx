@@ -117,6 +117,15 @@ func (ss *StyleSheet) addDefaults() {
 		XfId:      ml.NamedStyleID(0),
 		BuiltinId: &index,
 	}}
+
+
+	/*
+	TODO: replace hardcoded defaults with format
+	def := format.New(
+		format.NamedStyle(format.NamedStyleNormal),
+		format.Font.Default,
+	)
+	*/
 }
 
 //build indexes for fonts

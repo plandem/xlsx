@@ -285,12 +285,12 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 
 //HasHyperlink returns true if cell has hyperlink
 func (c *Cell) Hyperlink() interface{} {
-	return c.sheet.hyperlinks.Resolve(c.ml.Ref)
+	return c.sheet.hyperlinks.Get(c.ml.Ref)
 }
 
 //SetHyperlink sets hyperlink for cell
 func (c *Cell) SetHyperlink(link interface{}) error {
-	if styleID, err := c.sheet.hyperlinks.add(types.RefFromCellRefs(c.ml.Ref, c.ml.Ref), link); err != nil {
+	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromCellRefs(c.ml.Ref, c.ml.Ref), link); err != nil {
 		return err
 	} else {
 		c.SetFormatting(styleID)
