@@ -3,7 +3,7 @@ package format
 import (
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/color"
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 type fontOption byte
@@ -41,7 +41,7 @@ func (f *fontOption) Extend(s *StyleFormat) {
 	s.font.Extend = true
 }
 
-func (f *fontOption) Family(family styles.FontFamilyType) option {
+func (f *fontOption) Family(family primitives.FontFamilyType) option {
 	return func(s *StyleFormat) {
 		s.font.Family = family
 	}
@@ -59,19 +59,19 @@ func (f *fontOption) Size(size float64) option {
 	}
 }
 
-func (f *fontOption) Underline(ut styles.UnderlineType) option {
+func (f *fontOption) Underline(ut primitives.UnderlineType) option {
 	return func(s *StyleFormat) {
 		s.font.Underline = ut
 	}
 }
 
-func (f *fontOption) VAlign(va styles.FontVAlignType) option {
+func (f *fontOption) VAlign(va primitives.FontVAlignType) option {
 	return func(s *StyleFormat) {
 		s.font.VAlign = va
 	}
 }
 
-func (f *fontOption) Scheme(sn styles.FontSchemeType) option {
+func (f *fontOption) Scheme(sn primitives.FontSchemeType) option {
 	return func(s *StyleFormat) {
 		s.font.Scheme = sn
 	}
@@ -81,7 +81,7 @@ func (f *fontOption) Charset(charset FontCharsetType) option {
 	return func(s *StyleFormat) {
 		if charset >= FontCharsetANSI && charset <= FontCharsetOEM {
 			//FIXME: right now it's not possible to encode 'Ansi' charset with 'omitempty'
-			s.font.Charset = styles.FontCharsetType(charset)
+			s.font.Charset = primitives.FontCharsetType(charset)
 		}
 	}
 }

@@ -3,7 +3,7 @@ package ml
 import (
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/types"
-	a "github.com/plandem/xlsx/internal/ml/types"
+	a "github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //Worksheet is a direct mapping of XSD CT_Worksheet

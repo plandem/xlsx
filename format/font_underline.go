@@ -1,14 +1,14 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for UnderlineType
 const (
-	UnderlineTypeSingle           styles.UnderlineType = "single"
-	UnderlineTypeDouble           styles.UnderlineType = "double"
-	UnderlineTypeSingleAccounting styles.UnderlineType = "singleAccounting"
-	UnderlineTypeDoubleAccounting styles.UnderlineType = "doubleAccounting"
-	UnderlineTypeNone             styles.UnderlineType = "none"
+	UnderlineTypeSingle           primitives.UnderlineType = "single"
+	UnderlineTypeDouble           primitives.UnderlineType = "double"
+	UnderlineTypeSingleAccounting primitives.UnderlineType = "singleAccounting"
+	UnderlineTypeDoubleAccounting primitives.UnderlineType = "doubleAccounting"
+	UnderlineTypeNone             primitives.UnderlineType = "none"
 )

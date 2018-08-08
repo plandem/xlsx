@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/internal/ml/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
 	"math"
@@ -27,7 +27,7 @@ var (
 )
 
 //Type returns current type of cell
-func (c *Cell) Type() types.CellType {
+func (c *Cell) Type() primitives.CellType {
 	return c.ml.Type
 }
 
@@ -36,11 +36,11 @@ func (c *Cell) Value() string {
 	var value string
 
 	switch c.ml.Type {
-	case types.CellTypeInlineString:
+	case primitives.CellTypeInlineString:
 		if c.ml.InlineStr != nil {
 			value = string(c.ml.InlineStr.Text)
 		}
-	case types.CellTypeSharedString:
+	case primitives.CellTypeSharedString:
 		var sid int
 
 		if len(c.ml.Value) > 0 {
@@ -58,7 +58,7 @@ func (c *Cell) Value() string {
 //String returns formatted value as string respecting cell number format and type. Any errors ignored to conform String() interface.
 func (c *Cell) String() string {
 	//if cell has error, then just return value that Excel put here
-	if c.ml.Type == types.CellTypeError {
+	if c.ml.Type == primitives.CellTypeError {
 		return c.ml.Value
 	}
 
@@ -70,7 +70,7 @@ func (c *Cell) String() string {
 
 //Date try to convert and return current raw value as time.Time
 func (c *Cell) Date() (time.Time, error) {
-	if c.ml.Type == types.CellTypeDate || c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+	if c.ml.Type == primitives.CellTypeDate || c.ml.Type == primitives.CellTypeNumber || c.ml.Type == primitives.CellTypeGeneral {
 		return convert.ToDate(c.ml.Value)
 	}
 
@@ -79,7 +79,7 @@ func (c *Cell) Date() (time.Time, error) {
 
 //Int try to convert and return current raw value as int
 func (c *Cell) Int() (int, error) {
-	if c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+	if c.ml.Type == primitives.CellTypeNumber || c.ml.Type == primitives.CellTypeGeneral {
 		return convert.ToInt(c.ml.Value)
 	}
 
@@ -88,7 +88,7 @@ func (c *Cell) Int() (int, error) {
 
 //Float try to convert and return current raw value as float64
 func (c *Cell) Float() (float64, error) {
-	if c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+	if c.ml.Type == primitives.CellTypeNumber || c.ml.Type == primitives.CellTypeGeneral {
 		return convert.ToFloat(c.ml.Value)
 	}
 
@@ -97,7 +97,7 @@ func (c *Cell) Float() (float64, error) {
 
 //Bool try to convert and return current raw value as bool
 func (c *Cell) Bool() (bool, error) {
-	if c.ml.Type == types.CellTypeBool || c.ml.Type == types.CellTypeGeneral || c.ml.Type == types.CellTypeNumber {
+	if c.ml.Type == primitives.CellTypeBool || c.ml.Type == primitives.CellTypeGeneral || c.ml.Type == primitives.CellTypeNumber {
 		return convert.ToBool(c.ml.Value)
 	}
 
@@ -106,7 +106,7 @@ func (c *Cell) Bool() (bool, error) {
 
 //setGeneral sets the value as general type
 func (c *Cell) setGeneral(value string) {
-	c.ml.Type = types.CellTypeGeneral
+	c.ml.Type = primitives.CellTypeGeneral
 	c.ml.Value = value
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
@@ -128,10 +128,10 @@ func (c *Cell) SetInlineString(value string) {
 		return
 	}
 
-	c.ml.Type = types.CellTypeInlineString
+	c.ml.Type = primitives.CellTypeInlineString
 	c.ml.Value = ""
 	c.ml.Formula = nil
-	c.ml.InlineStr = &ml.StringItem{Text: types.Text(c.truncateIfRequired(value))}
+	c.ml.InlineStr = &ml.StringItem{Text: primitives.Text(c.truncateIfRequired(value))}
 }
 
 //SetString sets value as shared string
@@ -149,13 +149,13 @@ func (c *Cell) SetString(value string) {
 	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
 	sid := c.sheet.workbook.doc.sharedStrings.add(c.truncateIfRequired(value))
 	c.ml.Formula = nil
-	c.ml.Type = types.CellTypeSharedString
+	c.ml.Type = primitives.CellTypeSharedString
 	c.ml.Value = strconv.Itoa(sid)
 }
 
 //SetInt sets an integer value
 func (c *Cell) SetInt(value int) {
-	c.ml.Type = types.CellTypeNumber
+	c.ml.Type = primitives.CellTypeNumber
 	c.ml.Value = strconv.Itoa(value)
 	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer])
 	c.ml.Formula = nil
@@ -164,7 +164,7 @@ func (c *Cell) SetInt(value int) {
 
 //SetFloat sets a float value
 func (c *Cell) SetFloat(value float64) {
-	c.ml.Type = types.CellTypeNumber
+	c.ml.Type = primitives.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
 	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float])
 	c.ml.Formula = nil
@@ -173,7 +173,7 @@ func (c *Cell) SetFloat(value float64) {
 
 //SetBool sets a bool value
 func (c *Cell) SetBool(value bool) {
-	c.ml.Type = types.CellTypeBool
+	c.ml.Type = primitives.CellTypeBool
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 
@@ -186,7 +186,7 @@ func (c *Cell) SetBool(value bool) {
 
 //setDate is a general setter for date types
 func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
-	c.ml.Type = types.CellTypeDate
+	c.ml.Type = primitives.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
 	c.ml.Style = ml.StyleID(c.sheet.workbook.doc.styleSheet.typedStyles[t])
 	c.ml.Formula = nil

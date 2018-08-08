@@ -1,14 +1,14 @@
 package options
 
 import (
-	"github.com/plandem/xlsx/internal/ml/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 type sheetOption func(co *SheetOptions)
 
 //SheetOptions is a helper type to simplify process of settings options for sheet
 type SheetOptions struct {
-	Visibility types.VisibilityType
+	Visibility primitives.VisibilityType
 }
 
 //Sheet is a 'namespace' for all possible options for sheet
@@ -32,7 +32,7 @@ func (co *SheetOptions) Set(options ...sheetOption) {
 }
 
 //Visibility sets flag indicating if the affected column are hidden on this worksheet.
-func (o *sheetOption) Visibility(visibility types.VisibilityType) sheetOption {
+func (o *sheetOption) Visibility(visibility primitives.VisibilityType) sheetOption {
 	return func(co *SheetOptions) {
 		co.Visibility = visibility
 	}

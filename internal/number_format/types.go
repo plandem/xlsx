@@ -2,7 +2,7 @@ package numberFormat
 
 import (
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/internal/ml/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //Type of underlying value of built-in number format
@@ -89,7 +89,7 @@ func Default(t Type) (int, string) {
 }
 
 //Format tries to format value into required format code
-func Format(value, code string, t types.CellType) string {
+func Format(value, code string, t primitives.CellType) string {
 	//TODO: implement formatting based on code and type
 	return value
 }

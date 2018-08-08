@@ -2,7 +2,7 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //StyleID is helper alias type for ID of CT_Xf to make it easier to read/understand markup files
@@ -39,8 +39,8 @@ type NumberFormat struct {
 //Font is a direct mapping of XSD CT_Font
 type Font struct {
 	Name      ml.Property            `xml:"name,omitempty"`
-	Charset   styles.FontCharsetType `xml:"charset,omitempty"`
-	Family    styles.FontFamilyType  `xml:"family,omitempty"`
+	Charset   primitives.FontCharsetType `xml:"charset,omitempty"`
+	Family    primitives.FontFamilyType  `xml:"family,omitempty"`
 	Bold      ml.PropertyBool        `xml:"b,omitempty"`
 	Italic    ml.PropertyBool        `xml:"i,omitempty"`
 	Strike    ml.PropertyBool        `xml:"strike,omitempty"`
@@ -49,9 +49,9 @@ type Font struct {
 	Extend    ml.PropertyBool        `xml:"extend,omitempty"`
 	Color     *Color                 `xml:"color,omitempty"`
 	Size      ml.PropertyDouble      `xml:"sz,omitempty"`
-	Underline styles.UnderlineType   `xml:"u,omitempty"`
-	VAlign    styles.FontVAlignType  `xml:"vertAlign,omitempty"`
-	Scheme    styles.FontSchemeType  `xml:"scheme,omitempty"`
+	Underline primitives.UnderlineType   `xml:"u,omitempty"`
+	VAlign    primitives.FontVAlignType  `xml:"vertAlign,omitempty"`
+	Scheme    primitives.FontSchemeType  `xml:"scheme,omitempty"`
 }
 
 //Color is a direct mapping of XSD CT_Color
@@ -73,7 +73,7 @@ type Fill struct {
 type PatternFill struct {
 	Color      *Color             `xml:"fgColor,omitempty"`
 	Background *Color             `xml:"bgColor,omitempty"`
-	Type       styles.PatternType `xml:"patternType,attr,omitempty"`
+	Type       primitives.PatternType `xml:"patternType,attr,omitempty"`
 }
 
 //GradientFill is a direct mapping of XSD CT_GradientFill
@@ -84,7 +84,7 @@ type GradientFill struct {
 	Right  float64             `xml:"right,attr,omitempty"`  //default 0.0
 	Top    float64             `xml:"top,attr,omitempty"`    //default 0.0
 	Bottom float64             `xml:"bottom,attr,omitempty"` //default 0.0
-	Type   styles.GradientType `xml:"type,attr,omitempty"`   //default linear
+	Type   primitives.GradientType `xml:"type,attr,omitempty"`   //default linear
 }
 
 //GradientStop is a direct mapping of XSD CT_GradientStop
@@ -110,7 +110,7 @@ type Border struct {
 //BorderSegment is a direct mapping of XSD CT_BorderPr
 type BorderSegment struct {
 	Color *Color                 `xml:"color,omitempty"`
-	Type  styles.BorderStyleType `xml:"style,attr,omitempty"`
+	Type  primitives.BorderStyleType `xml:"style,attr,omitempty"`
 }
 
 //NamedStyle is a direct mapping of XSD CT_CellStyle
@@ -163,8 +163,8 @@ type CellProtection struct {
 
 //CellAlignment is a direct mapping of XSD CT_CellAlignment
 type CellAlignment struct {
-	Horizontal      styles.HAlignType `xml:"horizontal,attr,omitempty"`
-	Vertical        styles.VAlignType `xml:"vertical,attr,omitempty"`
+	Horizontal      primitives.HAlignType `xml:"horizontal,attr,omitempty"`
+	Vertical        primitives.VAlignType `xml:"vertical,attr,omitempty"`
 	TextRotation    int               `xml:"textRotation,attr,omitempty"`
 	WrapText        bool              `xml:"wrapText,attr,omitempty"`
 	Indent          int               `xml:"indent,attr,omitempty"`

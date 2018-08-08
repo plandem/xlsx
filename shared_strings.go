@@ -4,7 +4,7 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/internal/ml/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //SharedStrings is a higher level object that wraps ml.SharedStrings with functionality
@@ -61,7 +61,7 @@ func (ss *SharedStrings) add(value string) int {
 
 	//add a new one if there is no such string
 	sid := len(ss.ml.StringItem)
-	ss.ml.StringItem = append(ss.ml.StringItem, &ml.StringItem{Text: types.Text(value)})
+	ss.ml.StringItem = append(ss.ml.StringItem, &ml.StringItem{Text: primitives.Text(value)})
 	ss.index[value] = sid
 
 	ss.file.MarkAsUpdated()

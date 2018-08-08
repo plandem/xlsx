@@ -1,26 +1,26 @@
 package options
 
 import (
-	"github.com/plandem/xlsx/internal/ml/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for VisibilityType
 const (
-	_ types.VisibilityType = iota
+	_ primitives.VisibilityType = iota
 	VisibilityTypeVisible
 	VisibilityTypeHidden
 	VisibilityTypeVeryHidden
 )
 
 func init() {
-	types.FromVisibilityType = map[types.VisibilityType]string{
+	primitives.FromVisibilityType = map[primitives.VisibilityType]string{
 		VisibilityTypeVisible:    "visible",
 		VisibilityTypeHidden:     "hidden",
 		VisibilityTypeVeryHidden: "veryHidden",
 	}
 
-	types.ToVisibilityType = make(map[string]types.VisibilityType, len(types.FromVisibilityType))
-	for k, v := range types.FromVisibilityType {
-		types.ToVisibilityType[v] = k
+	primitives.ToVisibilityType = make(map[string]primitives.VisibilityType, len(primitives.FromVisibilityType))
+	for k, v := range primitives.FromVisibilityType {
+		primitives.ToVisibilityType[v] = k
 	}
 }
