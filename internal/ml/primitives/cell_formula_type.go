@@ -1,6 +1,8 @@
 package primitives
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 //CellFormulaType is a type to encode XSD ST_CellFormulaType
 type CellFormulaType byte

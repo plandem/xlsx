@@ -2,8 +2,8 @@ package primitives_test
 
 import (
 	"encoding/xml"
-	"github.com/stretchr/testify/require"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 

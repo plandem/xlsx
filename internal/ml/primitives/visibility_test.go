@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+	"github.com/plandem/xlsx/options"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"github.com/plandem/xlsx/options"
 )
 
 func TestVisibility(t *testing.T) {

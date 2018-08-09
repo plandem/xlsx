@@ -9,7 +9,7 @@ import (
 type Range struct {
 	//we don't want to pollute Range with bound's public properties
 	bounds types.Bounds
-	sheet Sheet
+	sheet  Sheet
 }
 
 //newRangeFromRef create and returns Range for requested ref

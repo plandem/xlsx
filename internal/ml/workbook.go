@@ -72,8 +72,8 @@ type BookView struct {
 	ShowSheetTabs          bool                      `xml:"showSheetTabs,attr,omitempty"`
 	XWindow                uint                      `xml:"xWindow,attr,omitempty"`
 	YWindow                uint                      `xml:"yWindow,attr,omitempty"`
-	WindowHeight           uint                 `xml:"windowHeight,attr,omitempty"`
-	WindowWidth            uint                 `xml:"windowWidth,attr,omitempty"`
+	WindowHeight           uint                      `xml:"windowHeight,attr,omitempty"`
+	WindowWidth            uint                      `xml:"windowWidth,attr,omitempty"`
 	TabRatio               uint                      `xml:"tabRatio,attr,omitempty"`
 	FirstSheet             uint                      `xml:"firstSheet,attr,omitempty"`
 	ActiveTab              int                       `xml:"activeTab,attr,omitempty"`

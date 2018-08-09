@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+	"github.com/plandem/xlsx/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -14,14 +15,14 @@ func TestCellType(t *testing.T) {
 	}
 
 	list := map[string]primitives.CellType{
-		"":          primitives.CellTypeGeneral,
-		"b":         primitives.CellTypeBool,
-		"d":         primitives.CellTypeDate,
-		"n":         primitives.CellTypeNumber,
-		"e":         primitives.CellTypeError,
-		"s":         primitives.CellTypeSharedString,
-		"str":       primitives.CellTypeFormula,
-		"inlineStr": primitives.CellTypeInlineString,
+		"":          types.CellTypeGeneral,
+		"b":         types.CellTypeBool,
+		"d":         types.CellTypeDate,
+		"n":         types.CellTypeNumber,
+		"e":         types.CellTypeError,
+		"s":         types.CellTypeSharedString,
+		"str":       types.CellTypeFormula,
+		"inlineStr": types.CellTypeInlineString,
 	}
 
 	for s, v := range list {
