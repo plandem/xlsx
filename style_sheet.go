@@ -138,7 +138,7 @@ func (ss *StyleSheet) addTypedStylesIfRequired() {
 }
 
 //resolveNumberFormat returns resolved NumberFormat code for styleID
-func (ss *StyleSheet) resolveNumberFormat(id ml.StyleID) string {
+func (ss *StyleSheet) resolveNumberFormat(id format.StyleID) string {
 	style := (*ss.ml.CellXfs)[id]
 
 	//return code for built-in number format

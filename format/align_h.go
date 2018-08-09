@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for HAlignType
 const (
-	_ styles.HAlignType = iota
+	_ primitives.HAlignType = iota
 	HAlignGeneral
 	HAlignLeft
 	HAlignCenter
@@ -18,7 +18,7 @@ const (
 )
 
 func init() {
-	styles.FromHAlignType = map[styles.HAlignType]string{
+	primitives.FromHAlignType = map[primitives.HAlignType]string{
 		HAlignGeneral:          "general",
 		HAlignLeft:             "left",
 		HAlignCenter:           "center",
@@ -29,8 +29,8 @@ func init() {
 		HAlignDistributed:      "distributed",
 	}
 
-	styles.ToHAlignType = make(map[string]styles.HAlignType, len(styles.FromHAlignType))
-	for k, v := range styles.FromHAlignType {
-		styles.ToHAlignType[v] = k
+	primitives.ToHAlignType = make(map[string]primitives.HAlignType, len(primitives.FromHAlignType))
+	for k, v := range primitives.FromHAlignType {
+		primitives.ToHAlignType[v] = k
 	}
 }

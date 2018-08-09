@@ -2,7 +2,7 @@ package format
 
 import (
 	"github.com/plandem/xlsx/internal/color"
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 type borderTopSegmentOption byte
@@ -38,7 +38,7 @@ func (b *borderOption) Outline(s *StyleFormat) {
 	s.border.Outline = true
 }
 
-func (b *borderOption) Type(t styles.BorderStyleType) option {
+func (b *borderOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Top.Type = t
 		s.border.Bottom.Type = t
@@ -57,7 +57,7 @@ func (b *borderOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderTopSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderTopSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Top.Type = t
 	}
@@ -69,7 +69,7 @@ func (b *borderTopSegmentOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderBottomSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderBottomSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Bottom.Type = t
 	}
@@ -81,7 +81,7 @@ func (b *borderBottomSegmentOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderLeftSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderLeftSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Left.Type = t
 	}
@@ -93,7 +93,7 @@ func (b *borderLeftSegmentOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderRightSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderRightSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Right.Type = t
 	}
@@ -105,7 +105,7 @@ func (b *borderRightSegmentOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderDiagonalSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderDiagonalSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Diagonal.Type = t
 	}
@@ -117,7 +117,7 @@ func (b *borderDiagonalSegmentOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderVerticalSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderVerticalSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Vertical.Type = t
 	}
@@ -129,7 +129,7 @@ func (b *borderVerticalSegmentOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderHorizontalSegmentOption) Type(t styles.BorderStyleType) option {
+func (b *borderHorizontalSegmentOption) Type(t primitives.BorderStyleType) option {
 	return func(s *StyleFormat) {
 		s.border.Horizontal.Type = t
 	}

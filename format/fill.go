@@ -3,7 +3,7 @@ package format
 import (
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 type patternOption byte
@@ -32,7 +32,7 @@ func (f *fillOption) Background(rgb string) option {
 	}
 }
 
-func (f *fillOption) Type(pt styles.PatternType) option {
+func (f *fillOption) Type(pt primitives.PatternType) option {
 	return func(s *StyleFormat) {
 		s.fill.Pattern.Type = pt
 		s.fill.Gradient = &ml.GradientFill{}
@@ -53,14 +53,14 @@ func (p *patternOption) Background(rgb string) option {
 	}
 }
 
-func (p *patternOption) Type(pt styles.PatternType) option {
+func (p *patternOption) Type(pt primitives.PatternType) option {
 	return func(s *StyleFormat) {
 		s.fill.Pattern.Type = pt
 		s.fill.Gradient = &ml.GradientFill{}
 	}
 }
 
-func (g *gradientOption) Type(gt styles.GradientType) option {
+func (g *gradientOption) Type(gt primitives.GradientType) option {
 	return func(s *StyleFormat) {
 		s.fill.Gradient.Type = gt
 		s.fill.Pattern = &ml.PatternFill{}

@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for VAlignType
 const (
-	_ styles.VAlignType = iota
+	_ primitives.VAlignType = iota
 	VAlignTop
 	VAlignCenter
 	VAlignBottom
@@ -15,7 +15,7 @@ const (
 )
 
 func init() {
-	styles.FromVAlignType = map[styles.VAlignType]string{
+	primitives.FromVAlignType = map[primitives.VAlignType]string{
 		VAlignTop:         "top",
 		VAlignCenter:      "center",
 		VAlignBottom:      "bottom",
@@ -23,8 +23,8 @@ func init() {
 		VAlignDistributed: "distributed",
 	}
 
-	styles.ToVAlignType = make(map[string]styles.VAlignType, len(styles.FromVAlignType))
-	for k, v := range styles.FromVAlignType {
-		styles.ToVAlignType[v] = k
+	primitives.ToVAlignType = make(map[string]primitives.VAlignType, len(primitives.FromVAlignType))
+	for k, v := range primitives.FromVAlignType {
+		primitives.ToVAlignType[v] = k
 	}
 }
