@@ -10,7 +10,7 @@ import (
 //TODO: implement remove/refresh functionality
 type hyperlinkManager struct {
 	sheet *sheetInfo
-	defaultStyleID format.StyleID
+	defaultStyleID format.DirectStyleID
 }
 
 //newHyperlinkManager creates an object that implements hyperlink cells functionality
@@ -59,7 +59,7 @@ func (m *hyperlinkManager) Get(ref types.CellRef) int {
 //Tooltip  string       `xml:"tooltip,attr,omitempty"`
 //Display  string       `xml:"display,attr,omitempty"`
 //RID      ml.RID       `xml:"id,attr,omitempty"`
-func (m *hyperlinkManager) Add(ref types.Ref, link interface{}) (format.StyleID, error) {
+func (m *hyperlinkManager) Add(ref types.Ref, link interface{}) (format.DirectStyleID, error) {
 	//var (
 	//location string
 	//tooltip  string

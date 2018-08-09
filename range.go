@@ -69,7 +69,7 @@ func (r *Range) Walk(cb func(idx, cIdx, rIdx int, c *Cell)) {
 }
 
 //SetFormatting sets style format to all cells in range
-func (r *Range) SetFormatting(styleID format.StyleID) {
+func (r *Range) SetFormatting(styleID format.DirectStyleID) {
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
 		c.SetFormatting(styleID)
 	})

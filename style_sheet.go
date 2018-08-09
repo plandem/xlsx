@@ -14,9 +14,9 @@ type StyleSheet struct {
 	ml ml.StyleSheet
 
 	//hash -> index for styles
-	directStyleIndex map[string]format.StyleID
+	directStyleIndex map[string]format.DirectStyleID
 	diffStyleIndex   map[string]format.DiffStyleID
-	namedStyleIndex  map[string]format.StyleID
+	namedStyleIndex  map[string]format.NamedStyleID
 
 	//hash -> index for types
 	borderIndex map[string]int
@@ -25,7 +25,7 @@ type StyleSheet struct {
 	numberIndex map[string]int
 
 	//hash for typed number formats
-	typedStyles map[numberFormat.Type]format.StyleID
+	typedStyles map[numberFormat.Type]format.DirectStyleID
 
 	doc  *Spreadsheet
 	file *ooxml.PackageFile
@@ -34,14 +34,14 @@ type StyleSheet struct {
 func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	ss := &StyleSheet{
 		doc:              doc,
-		directStyleIndex: make(map[string]format.StyleID),
+		directStyleIndex: make(map[string]format.DirectStyleID),
 		diffStyleIndex:   make(map[string]format.DiffStyleID),
-		namedStyleIndex:  make(map[string]format.StyleID),
+		namedStyleIndex:  make(map[string]format.NamedStyleID),
 		borderIndex:      make(map[string]int),
 		fillIndex:        make(map[string]int),
 		fontIndex:        make(map[string]int),
 		numberIndex:      make(map[string]int),
-		typedStyles:      make(map[numberFormat.Type]format.StyleID),
+		typedStyles:      make(map[numberFormat.Type]format.DirectStyleID),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, ss, nil)
@@ -180,7 +180,7 @@ func (ss *StyleSheet) buildNamedStyleIndexes() {
 	}
 
 	for id, xf := range *ss.ml.CellStyleXfs {
-		ss.namedStyleIndex[hash.NamedStyle(xf).Hash()] = format.StyleID(id)
+		ss.namedStyleIndex[hash.NamedStyle(xf).Hash()] = format.NamedStyleID(id)
 	}
 }
 
@@ -191,7 +191,7 @@ func (ss *StyleSheet) buildDirectStyleIndexes() {
 	}
 
 	for id, xf := range *ss.ml.CellXfs {
-		ss.directStyleIndex[hash.DirectStyle(xf).Hash()] = format.StyleID(id)
+		ss.directStyleIndex[hash.DirectStyle(xf).Hash()] = format.DirectStyleID(id)
 	}
 }
 
@@ -320,7 +320,7 @@ func (ss *StyleSheet) addNamedStyleIfRequired(namedInfo *ml.NamedStyleInfo, styl
 		namedInfo.XfId = ml.NamedStyleID(id)
 	} else {
 		//add a new style
-		nextID := format.StyleID(len(*ss.ml.CellStyleXfs))
+		nextID := format.NamedStyleID(len(*ss.ml.CellStyleXfs))
 		*ss.ml.CellStyleXfs = append(*ss.ml.CellStyleXfs, &namedStyle)
 		ss.namedStyleIndex[key] = nextID
 
@@ -335,7 +335,7 @@ func (ss *StyleSheet) addNamedStyleIfRequired(namedInfo *ml.NamedStyleInfo, styl
 }
 
 //adds a style. Style can be Direct or Named. Depends on settings.
-func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.StyleID {
+func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.DirectStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//get settings and add information if required
@@ -384,7 +384,7 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.StyleID {
 	}
 
 	//add a new one and return related id
-	nextID := format.StyleID(len(*ss.ml.CellXfs))
+	nextID := format.DirectStyleID(len(*ss.ml.CellXfs))
 	*ss.ml.CellXfs = append(*ss.ml.CellXfs, cellXf)
 	ss.directStyleIndex[key] = nextID
 	ss.file.MarkAsUpdated()

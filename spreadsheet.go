@@ -121,7 +121,7 @@ func (xl *Spreadsheet) AddSheet(name string) Sheet {
 }
 
 //AddFormatting adds a new style formatting to document and return related ID that can be used lately
-func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.StyleID {
+func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.DirectStyleID {
 	return xl.styleSheet.addStyle(style)
 }
 

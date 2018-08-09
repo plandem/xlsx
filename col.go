@@ -31,7 +31,7 @@ func (c *Col) Set(o *options.ColumnOptions) {
 }
 
 //SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
-func (c *Col) SetFormatting(styleID format.StyleID) {
+func (c *Col) SetFormatting(styleID format.DirectStyleID) {
 	c.ml.Style = styleID
 }
 

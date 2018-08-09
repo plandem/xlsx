@@ -156,7 +156,7 @@ type SheetView struct {
 
 //Hyperlink is a direct mapping of XSD CT_Hyperlink
 type Hyperlink struct {
-	Bounds   types.Bounds `xml:"ref,attr"`
+	Bounds   primitives.Bounds `xml:"ref,attr"`
 	Location string       `xml:"location,attr,omitempty"`
 	Tooltip  string       `xml:"tooltip,attr,omitempty"`
 	Display  string       `xml:"display,attr,omitempty"`

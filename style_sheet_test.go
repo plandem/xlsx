@@ -8,7 +8,7 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 )
 
-func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
+func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 	require.NotNil(t, xl)
 
 	require.Equal(t, 1, len(xl.styleSheet.directStyleIndex))
@@ -24,7 +24,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(1), styleRef)
+	require.Equal(t, format.DirectStyleID(1), styleRef)
 	require.Equal(t, 2, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
@@ -38,7 +38,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(2), styleRef)
+	require.Equal(t, format.DirectStyleID(2), styleRef)
 	require.Equal(t, 3, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -51,7 +51,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(3), styleRef)
+	require.Equal(t, format.DirectStyleID(3), styleRef)
 	require.Equal(t, 4, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -64,7 +64,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(4), styleRef)
+	require.Equal(t, format.DirectStyleID(4), styleRef)
 	require.Equal(t, 5, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -78,7 +78,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(5), styleRef)
+	require.Equal(t, format.DirectStyleID(5), styleRef)
 	require.Equal(t, 6, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -92,7 +92,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(6), styleRef)
+	require.Equal(t, format.DirectStyleID(6), styleRef)
 	require.Equal(t, 7, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -106,7 +106,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(7), styleRef)
+	require.Equal(t, format.DirectStyleID(7), styleRef)
 	require.Equal(t, 8, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -134,7 +134,7 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 	)
 
 	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(7), styleRef)
+	require.Equal(t, format.DirectStyleID(7), styleRef)
 	require.Equal(t, 14, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))

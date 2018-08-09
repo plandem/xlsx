@@ -265,9 +265,9 @@ func (c *Cell) Formatting() *format.StyleFormat {
 	return c.sheet.workbook.doc.styleSheet.resolveDirectStyle(c.ml.Style)
 }
 
-//SetFormatting sets style format to requested styleID
-func (c *Cell) SetFormatting(styleID format.StyleID) {
-	c.ml.Style = ml.DirectStyleID(styleID)
+//SetFormatting sets style format to requested DirectStyleID
+func (c *Cell) SetFormatting(styleID format.DirectStyleID) {
+	c.ml.Style = styleID
 }
 
 //SetValueWithFormat is helper function that internally works as SetValue and SetFormatting

@@ -5,12 +5,12 @@ import (
 	"reflect"
 )
 
-//StyleID is alias of original ml.StyleID type to:
+//DirectStyleID is alias of original ml.DirectStyleID type to:
 // 1) make it public
 // 2) forbid usage of integers directly
 // 3) getting valid ID for StyleFormat via style-sheet
 // 4) put everything related to stylesheet to same package
-type StyleID = ml.StyleID
+type DirectStyleID = ml.DirectStyleID
 
 //DiffStyleID is alias of original ml.DiffStyleID type to:
 // 1) make it public
