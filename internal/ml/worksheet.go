@@ -2,7 +2,7 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //Worksheet is a direct mapping of XSD CT_Worksheet
@@ -50,7 +50,7 @@ type Worksheet struct {
 
 //SheetDimension is a direct mapping of XSD CT_SheetDimension
 type SheetDimension struct {
-	Bounds types.Bounds `xml:"ref,attr"`
+	Bounds primitives.Bounds `xml:"ref,attr"`
 }
 
 //Col is a direct mapping of XSD CT_Col
@@ -87,38 +87,38 @@ type Row struct {
 
 //Cell is a direct mapping of XSD CT_Cell
 type Cell struct {
-	Formula   *CellFormula     `xml:"f,omitempty"`
-	Value     string           `xml:"v,omitempty"`
-	InlineStr *StringItem      `xml:"is,omitempty"`
-	ExtLst    *ml.Reserved     `xml:"extLst,omitempty"`
-	Ref       types.CellRef    `xml:"r,attr"`
-	Style     DirectStyleID    `xml:"s,attr,omitempty"`
-	Type      types.CellType   `xml:"t,attr,omitempty"`
-	Cm        ml.OptionalIndex `xml:"cm,attr,omitempty"`
-	Vm        ml.OptionalIndex `xml:"vm,attr,omitempty"`
-	Ph        bool             `xml:"ph,attr,omitempty"`
+	Formula   *CellFormula        `xml:"f,omitempty"`
+	Value     string              `xml:"v,omitempty"`
+	InlineStr *StringItem         `xml:"is,omitempty"`
+	ExtLst    *ml.Reserved        `xml:"extLst,omitempty"`
+	Ref       primitives.CellRef  `xml:"r,attr"`
+	Style     DirectStyleID             `xml:"s,attr,omitempty"`
+	Type      primitives.CellType `xml:"t,attr,omitempty"`
+	Cm        ml.OptionalIndex    `xml:"cm,attr,omitempty"`
+	Vm        ml.OptionalIndex    `xml:"vm,attr,omitempty"`
+	Ph        bool                `xml:"ph,attr,omitempty"`
 }
 
 //CellFormula is a direct mapping of XSD CT_CellFormula
 type CellFormula struct {
-	Content string                `xml:",chardata"`
-	T       types.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
-	Aca     bool                  `xml:"aca,attr,omitempty"`
-	Bounds  types.Bounds          `xml:"ref,attr,omitempty"`
-	Dt2D    bool                  `xml:"dt2D,attr,omitempty"`
-	Dtr     bool                  `xml:"dtr,attr,omitempty"`
-	Del1    bool                  `xml:"del1,attr,omitempty"`
-	Del2    bool                  `xml:"del2,attr,omitempty"`
-	R1      types.CellRef         `xml:"r1,attr,omitempty"`
-	R2      types.CellRef         `xml:"r2,attr,omitempty"`
-	Ca      bool                  `xml:"ca,attr,omitempty"`
-	Si      ml.OptionalIndex      `xml:"si,attr,omitempty"`
-	Bx      bool                  `xml:"bx,attr,omitempty"`
+	Content string                     `xml:",chardata"`
+	T       primitives.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
+	Aca     bool                       `xml:"aca,attr,omitempty"`
+	Bounds  primitives.Bounds          `xml:"ref,attr,omitempty"`
+	Dt2D    bool                       `xml:"dt2D,attr,omitempty"`
+	Dtr     bool                       `xml:"dtr,attr,omitempty"`
+	Del1    bool                       `xml:"del1,attr,omitempty"`
+	Del2    bool                       `xml:"del2,attr,omitempty"`
+	R1      primitives.CellRef         `xml:"r1,attr,omitempty"`
+	R2      primitives.CellRef         `xml:"r2,attr,omitempty"`
+	Ca      bool                       `xml:"ca,attr,omitempty"`
+	Si      ml.OptionalIndex           `xml:"si,attr,omitempty"`
+	Bx      bool                       `xml:"bx,attr,omitempty"`
 }
 
 //MergeCell is a direct mapping of XSD CT_MergeCell
 type MergeCell struct {
-	Bounds types.Bounds `xml:"ref,attr"`
+	Bounds primitives.Bounds `xml:"ref,attr"`
 }
 
 //SheetViews is a direct mapping of XSD CT_SheetViews
@@ -129,29 +129,29 @@ type SheetViews struct {
 
 //SheetView is a direct mapping of XSD CT_SheetView
 type SheetView struct {
-	Pane                     *ml.Reserved  `xml:"pane,omitempty"`
-	Selection                *ml.Reserved  `xml:"selection,omitempty"`
-	PivotSelection           *ml.Reserved  `xml:"pivotSelection,omitempty"`
-	ExtLst                   *ml.Reserved  `xml:"extLst,omitempty"`
-	WindowProtection         bool          `xml:"windowProtection,attr,omitempty"`
-	ShowFormulas             bool          `xml:"showFormulas,attr,omitempty"`
-	ShowGridLines            bool          `xml:"showGridLines,attr,omitempty"`
-	ShowRowColHeaders        bool          `xml:"showRowColHeaders,attr,omitempty"`
-	ShowZeros                bool          `xml:"showZeros,attr,omitempty"`
-	RightToLeft              bool          `xml:"rightToLeft,attr,omitempty"`
-	TabSelected              bool          `xml:"tabSelected,attr,omitempty"`
-	ShowRuler                bool          `xml:"showRuler,attr,omitempty"`
-	ShowOutlineSymbols       bool          `xml:"showOutlineSymbols,attr,omitempty"`
-	DefaultGridColor         bool          `xml:"defaultGridColor,attr,omitempty"`
-	ShowWhiteSpace           bool          `xml:"showWhiteSpace,attr,omitempty"`
-	View                     string        `xml:"view,attr,omitempty"` //ST_SheetViewType
-	TopLeftCell              types.CellRef `xml:"topLeftCell,attr,omitempty"`
-	ColorId                  uint          `xml:"colorId,attr,omitempty"`
-	ZoomScale                uint          `xml:"zoomScale,attr,omitempty"`
-	ZoomScaleNormal          uint          `xml:"zoomScaleNormal,attr,omitempty"`
-	ZoomScaleSheetLayoutView uint          `xml:"zoomScaleSheetLayoutView,attr,omitempty"`
-	ZoomScalePageLayoutView  uint          `xml:"zoomScalePageLayoutView,attr,omitempty"`
-	WorkbookViewId           uint          `xml:"workbookViewId,attr"`
+	Pane                     *ml.Reserved       `xml:"pane,omitempty"`
+	Selection                *ml.Reserved       `xml:"selection,omitempty"`
+	PivotSelection           *ml.Reserved       `xml:"pivotSelection,omitempty"`
+	ExtLst                   *ml.Reserved       `xml:"extLst,omitempty"`
+	WindowProtection         bool               `xml:"windowProtection,attr,omitempty"`
+	ShowFormulas             bool               `xml:"showFormulas,attr,omitempty"`
+	ShowGridLines            bool               `xml:"showGridLines,attr,omitempty"`
+	ShowRowColHeaders        bool               `xml:"showRowColHeaders,attr,omitempty"`
+	ShowZeros                bool               `xml:"showZeros,attr,omitempty"`
+	RightToLeft              bool               `xml:"rightToLeft,attr,omitempty"`
+	TabSelected              bool               `xml:"tabSelected,attr,omitempty"`
+	ShowRuler                bool               `xml:"showRuler,attr,omitempty"`
+	ShowOutlineSymbols       bool               `xml:"showOutlineSymbols,attr,omitempty"`
+	DefaultGridColor         bool               `xml:"defaultGridColor,attr,omitempty"`
+	ShowWhiteSpace           bool               `xml:"showWhiteSpace,attr,omitempty"`
+	View                     string             `xml:"view,attr,omitempty"` //ST_SheetViewType
+	TopLeftCell              primitives.CellRef `xml:"topLeftCell,attr,omitempty"`
+	ColorId                  uint               `xml:"colorId,attr,omitempty"`
+	ZoomScale                uint               `xml:"zoomScale,attr,omitempty"`
+	ZoomScaleNormal          uint               `xml:"zoomScaleNormal,attr,omitempty"`
+	ZoomScaleSheetLayoutView uint               `xml:"zoomScaleSheetLayoutView,attr,omitempty"`
+	ZoomScalePageLayoutView  uint               `xml:"zoomScalePageLayoutView,attr,omitempty"`
+	WorkbookViewId           uint               `xml:"workbookViewId,attr"`
 }
 
 //Hyperlink is a direct mapping of XSD CT_Hyperlink

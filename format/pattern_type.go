@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for PatternType
 const (
-	_ styles.PatternType = iota
+	_ primitives.PatternType = iota
 	PatternTypeNone
 	PatternTypeSolid
 	PatternTypeMediumGray
@@ -29,7 +29,7 @@ const (
 )
 
 func init() {
-	styles.FromPatternType = map[styles.PatternType]string{
+	primitives.FromPatternType = map[primitives.PatternType]string{
 		PatternTypeNone:            "none",
 		PatternTypeSolid:           "solid",
 		PatternTypeMediumGray:      "mediumGray",
@@ -51,8 +51,8 @@ func init() {
 		PatternTypeGray0625:        "gray0625",
 	}
 
-	styles.ToPatternType = make(map[string]styles.PatternType, len(styles.FromPatternType))
-	for k, v := range styles.FromPatternType {
-		styles.ToPatternType[v] = k
+	primitives.ToPatternType = make(map[string]primitives.PatternType, len(primitives.FromPatternType))
+	for k, v := range primitives.FromPatternType {
+		primitives.ToPatternType[v] = k
 	}
 }

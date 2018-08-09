@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for FontFamilyType
 const (
-	_ styles.FontFamilyType = iota
+	_ primitives.FontFamilyType = iota
 	FontFamilyRoman
 	FontFamilySwiss
 	FontFamilyModern

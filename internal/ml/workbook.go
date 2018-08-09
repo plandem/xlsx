@@ -2,7 +2,7 @@ package ml
 
 import (
 	"github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //Workbook is a direct mapping of XSD CT_Workbook
@@ -42,50 +42,50 @@ type FileVersion struct {
 
 //WorkbookPr is a direct mapping of XSD CT_WorkbookPr
 type WorkbookPr struct {
-	Date1904                   bool                  `xml:"date1904,attr,omitempty"`
-	ShowObjects                types.ObjectsType     `xml:"showObjects,attr,omitempty"`
-	ShowBorderUnselectedTables bool                  `xml:"showBorderUnselectedTables,attr,omitempty"`
-	FilterPrivacy              bool                  `xml:"filterPrivacy,attr,omitempty"`
-	PromptedSolutions          bool                  `xml:"promptedSolutions,attr,omitempty"`
-	ShowInkAnnotation          bool                  `xml:"showInkAnnotation,attr,omitempty"`
-	BackupFile                 bool                  `xml:"backupFile,attr,omitempty"`
-	SaveExternalLinkValues     bool                  `xml:"saveExternalLinkValues,attr,omitempty"`
-	UpdateLinks                types.UpdateLinksType `xml:"updateLinks,attr,omitempty"`
-	CodeName                   string                `xml:"codeName,attr,omitempty"`
-	HidePivotFieldList         bool                  `xml:"hidePivotFieldList,attr,omitempty"`
-	ShowPivotChartFilter       bool                  `xml:"showPivotChartFilter,attr,omitempty"`
-	AllowRefreshQuery          bool                  `xml:"allowRefreshQuery,attr,omitempty"`
-	PublishItems               bool                  `xml:"publishItems,attr,omitempty"`
-	CheckCompatibility         bool                  `xml:"checkCompatibility,attr,omitempty"`
-	AutoCompressPictures       bool                  `xml:"autoCompressPictures,attr,omitempty"`
-	RefreshAllConnections      bool                  `xml:"refreshAllConnections,attr,omitempty"`
-	DefaultThemeVersion        uint                  `xml:"defaultThemeVersion,attr,omitempty"`
+	Date1904                   bool                       `xml:"date1904,attr,omitempty"`
+	ShowObjects                primitives.ObjectsType     `xml:"showObjects,attr,omitempty"`
+	ShowBorderUnselectedTables bool                       `xml:"showBorderUnselectedTables,attr,omitempty"`
+	FilterPrivacy              bool                       `xml:"filterPrivacy,attr,omitempty"`
+	PromptedSolutions          bool                       `xml:"promptedSolutions,attr,omitempty"`
+	ShowInkAnnotation          bool                       `xml:"showInkAnnotation,attr,omitempty"`
+	BackupFile                 bool                       `xml:"backupFile,attr,omitempty"`
+	SaveExternalLinkValues     bool                       `xml:"saveExternalLinkValues,attr,omitempty"`
+	UpdateLinks                primitives.UpdateLinksType `xml:"updateLinks,attr,omitempty"`
+	CodeName                   string                     `xml:"codeName,attr,omitempty"`
+	HidePivotFieldList         bool                       `xml:"hidePivotFieldList,attr,omitempty"`
+	ShowPivotChartFilter       bool                       `xml:"showPivotChartFilter,attr,omitempty"`
+	AllowRefreshQuery          bool                       `xml:"allowRefreshQuery,attr,omitempty"`
+	PublishItems               bool                       `xml:"publishItems,attr,omitempty"`
+	CheckCompatibility         bool                       `xml:"checkCompatibility,attr,omitempty"`
+	AutoCompressPictures       bool                       `xml:"autoCompressPictures,attr,omitempty"`
+	RefreshAllConnections      bool                       `xml:"refreshAllConnections,attr,omitempty"`
+	DefaultThemeVersion        uint                       `xml:"defaultThemeVersion,attr,omitempty"`
 }
 
 //BookView is a direct mapping of XSD CT_BookView
 type BookView struct {
-	ExtLst                 *ml.Reserved         `xml:"extLst,omitempty"`
-	Visibility             types.VisibilityType `xml:"visibility,attr,omitempty"`
-	Minimized              bool                 `xml:"minimized,attr,omitempty"`
-	ShowHorizontalScroll   bool                 `xml:"showHorizontalScroll,attr,omitempty"`
-	ShowVerticalScroll     bool                 `xml:"showVerticalScroll,attr,omitempty"`
-	ShowSheetTabs          bool                 `xml:"showSheetTabs,attr,omitempty"`
-	XWindow                uint                 `xml:"xWindow,attr,omitempty"`
-	YWindow                uint                 `xml:"yWindow,attr,omitempty"`
-	WindowHeight           uint                 `xml:"windowHeight,attr,omitempty"`
-	WindowWidth            uint                 `xml:"windowWidth,attr,omitempty"`
-	TabRatio               uint                 `xml:"tabRatio,attr,omitempty"`
-	FirstSheet             uint                 `xml:"firstSheet,attr,omitempty"`
-	ActiveTab              int                  `xml:"activeTab,attr,omitempty"`
-	AutoFilterDateGrouping bool                 `xml:"autoFilterDateGrouping,attr,omitempty"`
+	ExtLst                 *ml.Reserved              `xml:"extLst,omitempty"`
+	Visibility             primitives.VisibilityType `xml:"visibility,attr,omitempty"`
+	Minimized              bool                      `xml:"minimized,attr,omitempty"`
+	ShowHorizontalScroll   bool                      `xml:"showHorizontalScroll,attr,omitempty"`
+	ShowVerticalScroll     bool                      `xml:"showVerticalScroll,attr,omitempty"`
+	ShowSheetTabs          bool                      `xml:"showSheetTabs,attr,omitempty"`
+	XWindow                uint                      `xml:"xWindow,attr,omitempty"`
+	YWindow                uint                      `xml:"yWindow,attr,omitempty"`
+	WindowHeight           uint                      `xml:"windowHeight,attr,omitempty"`
+	WindowWidth            uint                      `xml:"windowWidth,attr,omitempty"`
+	TabRatio               uint                      `xml:"tabRatio,attr,omitempty"`
+	FirstSheet             uint                      `xml:"firstSheet,attr,omitempty"`
+	ActiveTab              int                       `xml:"activeTab,attr,omitempty"`
+	AutoFilterDateGrouping bool                      `xml:"autoFilterDateGrouping,attr,omitempty"`
 }
 
 //Sheet is a direct mapping of XSD CT_Sheet
 type Sheet struct {
-	Name    string               `xml:"name,attr"`
-	SheetID uint                 `xml:"sheetId,attr"`
-	State   types.VisibilityType `xml:"state,attr,omitempty"`
-	RID     ml.RID               `xml:"id,attr"`
+	Name    string                    `xml:"name,attr"`
+	SheetID uint                      `xml:"sheetId,attr"`
+	State   primitives.VisibilityType `xml:"state,attr,omitempty"`
+	RID     ml.RID                    `xml:"id,attr"`
 }
 
 //ExternalReference is a direct mapping of XSD CT_ExternalReference

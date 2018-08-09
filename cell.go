@@ -157,7 +157,7 @@ func (c *Cell) SetString(value string) {
 func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.Itoa(value)
-	c.ml.Style = ml.DirectStyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer])
+	c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 }
@@ -166,7 +166,7 @@ func (c *Cell) SetInt(value int) {
 func (c *Cell) SetFloat(value float64) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
-	c.ml.Style = ml.DirectStyleID(c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float])
+	c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float]
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 }
@@ -188,7 +188,7 @@ func (c *Cell) SetBool(value bool) {
 func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
-	c.ml.Style = ml.DirectStyleID(c.sheet.workbook.doc.styleSheet.typedStyles[t])
+	c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[t]
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
 }

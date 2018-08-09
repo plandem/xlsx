@@ -1,12 +1,12 @@
 package format
 
 import (
-	"github.com/plandem/xlsx/internal/ml/styles"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //List of all possible values for BorderStyleType
 const (
-	_ styles.BorderStyleType = iota
+	_ primitives.BorderStyleType = iota
 	BorderStyleNone
 	BorderStyleThin
 	BorderStyleMedium
@@ -24,7 +24,7 @@ const (
 )
 
 func init() {
-	styles.FromBorderStyleType = map[styles.BorderStyleType]string{
+	primitives.FromBorderStyleType = map[primitives.BorderStyleType]string{
 		BorderStyleNone:             "none",
 		BorderStyleThin:             "thin",
 		BorderStyleMedium:           "medium",
@@ -41,8 +41,8 @@ func init() {
 		BorderStyleSlantDashDot:     "slantDashDot",
 	}
 
-	styles.ToBorderStyleType = make(map[string]styles.BorderStyleType, len(styles.FromBorderStyleType))
-	for k, v := range styles.FromBorderStyleType {
-		styles.ToBorderStyleType[v] = k
+	primitives.ToBorderStyleType = make(map[string]primitives.BorderStyleType, len(primitives.FromBorderStyleType))
+	for k, v := range primitives.FromBorderStyleType {
+		primitives.ToBorderStyleType[v] = k
 	}
 }
