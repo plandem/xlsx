@@ -5,6 +5,7 @@ import (
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/hash"
+	"github.com/plandem/xlsx/internal/helpers"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 )
@@ -118,13 +119,12 @@ func (ss *StyleSheet) addDefaults() {
 		BuiltinId: &index,
 	}}
 
-
 	/*
-	TODO: replace hardcoded defaults with format
-	def := format.New(
-		format.NamedStyle(format.NamedStyleNormal),
-		format.Font.Default,
-	)
+		TODO: replace hardcoded defaults with format
+		def := format.New(
+			format.NamedStyle(format.NamedStyleNormal),
+			format.Font.Default,
+		)
 	*/
 }
 
@@ -283,7 +283,7 @@ func (ss *StyleSheet) addDiffStyle(f *format.StyleFormat) format.DiffStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//get settings for style
-	font, fill, alignment, numFormat, protection, border, _ := f.Settings()
+	font, fill, alignment, numFormat, protection, border, _ := helpers.FromStyleFormat(f)
 
 	dXf := &ml.DiffStyle{
 		Font:         font,
@@ -343,7 +343,7 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.DirectStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//get settings and add information if required
-	font, fill, alignment, numFormat, protection, border, namedInfo := f.Settings()
+	font, fill, alignment, numFormat, protection, border, namedInfo := helpers.FromStyleFormat(f)
 	fontID := ss.addFontIfRequired(font)
 	fillID := ss.addFillIfRequired(fill)
 	borderID := ss.addBorderIfRequired(border)
@@ -377,7 +377,7 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.DirectStyleID {
 	XfId = ss.addNamedStyleIfRequired(namedInfo, style)
 
 	cellXf := &ml.DirectStyle{
-		XfId: XfId,
+		XfId:  XfId,
 		Style: style,
 	}
 
@@ -502,12 +502,12 @@ func (ss *StyleSheet) BeforeMarshalXML() interface{} {
 	}
 
 	//CellStyles must have at least one object
-	if ss.ml.CellStyles!= nil && len(*ss.ml.CellStyles) == 0 {
+	if ss.ml.CellStyles != nil && len(*ss.ml.CellStyles) == 0 {
 		ss.ml.CellStyles = nil
 	}
 
 	//CellXfs must have at least one object
-	if ss.ml.CellXfs!= nil && len(*ss.ml.CellXfs) == 0 {
+	if ss.ml.CellXfs != nil && len(*ss.ml.CellXfs) == 0 {
 		ss.ml.CellXfs = nil
 	}
 

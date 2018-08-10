@@ -9,7 +9,7 @@ import (
 
 //TODO: implement remove/refresh functionality
 type hyperlinkManager struct {
-	sheet *sheetInfo
+	sheet          *sheetInfo
 	defaultStyleID format.DirectStyleID
 }
 
@@ -21,11 +21,11 @@ func newHyperlinkManager(sheet *sheetInfo) *hyperlinkManager {
 		sheet.ml.Hyperlinks = &links
 	}
 
-	return &hyperlinkManager{ sheet: sheet, defaultStyleID: -1 }
+	return &hyperlinkManager{sheet: sheet, defaultStyleID: -1}
 }
 
 //if there is a hyperlink for provided ref, then return it.
-func (m *hyperlinkManager) Get(ref types.CellRef) int {
+func (m *hyperlinkManager) Get(ref types.CellRef) *types.HyperlinkInfo {
 	panic(errorNotSupported)
 
 	if m.sheet.ml.Hyperlinks != nil {
@@ -40,7 +40,7 @@ func (m *hyperlinkManager) Get(ref types.CellRef) int {
 		}
 	}
 
-	return 0
+	return nil
 }
 
 //Bounds   types.Bounds `xml:"ref,attr"`
@@ -86,8 +86,8 @@ func (m *hyperlinkManager) Add(ref types.Ref, link interface{}) (format.DirectSt
 	_ = rid
 
 	*m.sheet.ml.Hyperlinks = append(*m.sheet.ml.Hyperlinks, &ml.Hyperlink{
-		Bounds:   ref.ToBounds(),
-		RID:      rid,
+		Bounds: ref.ToBounds(),
+		RID:    rid,
 	})
 
 	return m.defaultStyleID, nil

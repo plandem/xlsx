@@ -92,7 +92,7 @@ type Cell struct {
 	InlineStr *StringItem         `xml:"is,omitempty"`
 	ExtLst    *ml.Reserved        `xml:"extLst,omitempty"`
 	Ref       primitives.CellRef  `xml:"r,attr"`
-	Style     DirectStyleID             `xml:"s,attr,omitempty"`
+	Style     DirectStyleID       `xml:"s,attr,omitempty"`
 	Type      primitives.CellType `xml:"t,attr,omitempty"`
 	Cm        ml.OptionalIndex    `xml:"cm,attr,omitempty"`
 	Vm        ml.OptionalIndex    `xml:"vm,attr,omitempty"`
@@ -157,8 +157,8 @@ type SheetView struct {
 //Hyperlink is a direct mapping of XSD CT_Hyperlink
 type Hyperlink struct {
 	Bounds   primitives.Bounds `xml:"ref,attr"`
-	Location string       `xml:"location,attr,omitempty"`
-	Tooltip  string       `xml:"tooltip,attr,omitempty"`
-	Display  string       `xml:"display,attr,omitempty"`
-	RID      ml.RID       `xml:"id,attr,omitempty"`
+	Location string            `xml:"location,attr,omitempty"`
+	Tooltip  string            `xml:"tooltip,attr,omitempty"`
+	Display  string            `xml:"display,attr,omitempty"`
+	RID      ml.RID            `xml:"id,attr,omitempty"`
 }

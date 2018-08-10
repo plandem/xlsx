@@ -283,8 +283,8 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
-//HasHyperlink returns true if cell has hyperlink
-func (c *Cell) Hyperlink() interface{} {
+//HasHyperlink returns resolved hyperlink if there is any or nil otherwise
+func (c *Cell) Hyperlink() *types.HyperlinkInfo {
 	return c.sheet.hyperlinks.Get(c.ml.Ref)
 }
 
