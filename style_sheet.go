@@ -44,7 +44,7 @@ func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 		typedStyles:      make(map[numberFormat.Type]format.DirectStyleID),
 	}
 
-	ss.file = ooxml.NewPackageFile(doc.pkg, f, ss, nil)
+	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
 
 	if ss.file.IsNew() {
 		ss.doc.pkg.ContentTypes().RegisterContent(ss.file.FileName(), internal.ContentTypeStyles)
@@ -177,6 +177,10 @@ func (ss *StyleSheet) buildNumberIndexes() {
 func (ss *StyleSheet) buildNamedStyleIndexes() {
 	if ss.ml.CellStyleXfs == nil {
 		ss.ml.CellStyleXfs = &[]*ml.NamedStyle{}
+	}
+
+	if ss.ml.CellStyles == nil {
+		ss.ml.CellStyles = &[]*ml.NamedStyleInfo{}
 	}
 
 	for id, xf := range *ss.ml.CellStyleXfs {

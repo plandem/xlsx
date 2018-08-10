@@ -15,24 +15,13 @@ type hyperlinkManager struct {
 
 //newHyperlinkManager creates an object that implements hyperlink cells functionality
 func newHyperlinkManager(sheet *sheetInfo) *hyperlinkManager {
-	//we need to add default named style for hyperlink
-	defaultStyleID := sheet.workbook.doc.AddFormatting(format.New(
-		format.NamedStyle(format.NamedStyleHyperlink),
-		format.Font.Default,
-		format.Font.Underline(format.UnderlineTypeSingle),
-		format.Font.Color("#0563C1"),
-	))
-
 	//attach hyperlinks object if required
 	if sheet.ml.Hyperlinks == nil {
 		var links []*ml.Hyperlink
 		sheet.ml.Hyperlinks = &links
 	}
 
-	return &hyperlinkManager{
-		sheet: sheet,
-		defaultStyleID: defaultStyleID,
-	}
+	return &hyperlinkManager{ sheet: sheet, defaultStyleID: -1 }
 }
 
 //if there is a hyperlink for provided ref, then return it.
@@ -60,6 +49,19 @@ func (m *hyperlinkManager) Get(ref types.CellRef) int {
 //Display  string       `xml:"display,attr,omitempty"`
 //RID      ml.RID       `xml:"id,attr,omitempty"`
 func (m *hyperlinkManager) Add(ref types.Ref, link interface{}) (format.DirectStyleID, error) {
+	//check if hyperlink has style and if not, then add default
+	if m.defaultStyleID == -1 {
+		//we need to add default named style for hyperlink
+		defaultStyleID := m.sheet.workbook.doc.AddFormatting(format.New(
+			format.NamedStyle(format.NamedStyleHyperlink),
+			format.Font.Default,
+			format.Font.Underline(format.UnderlineTypeSingle),
+			format.Font.Color("#0563C1"),
+		))
+
+		m.defaultStyleID = defaultStyleID
+	}
+
 	//var (
 	//location string
 	//tooltip  string
