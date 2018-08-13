@@ -30,7 +30,7 @@ const (
 //Hyperlink is a 'namespace' for all possible settings for hyperlink
 var Hyperlink hyperlinkOption
 
-//NewHyperlink
+//NewHyperlink creates and returns a new HyperlinkInfo object that holds settings for hyperlink and related styles
 func NewHyperlink(options ...hyperlinkOption) *HyperlinkInfo {
 	i := &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{},
@@ -116,9 +116,6 @@ func (o *hyperlinkOption) ToUrl(address string) hyperlinkOption {
 ../Budgets/Annual/Budget2010.xlsx#DeptTotals
 
 
-- file
-=HYPERLINK("D:\Word files\Price list.docx","Price list")
-
 -other sheet
 =HYPERLINK("#Sheet2!A1", "Sheet2")
 =HYPERLINK("#'Price list'!A1", "Price list")
@@ -139,6 +136,9 @@ func (o *hyperlinkOption) ToUrl(address string) hyperlinkOption {
 
 -email
 =HYPERLINK("mailto:support@ablebits.com","Drop us an email")
+
+- file
+=HYPERLINK("D:\Word files\Price list.docx","Price list")
 */
 func (o *hyperlinkOption) ToFile(fileName string) hyperlinkOption {
 	return func(i *HyperlinkInfo) {
