@@ -40,16 +40,16 @@ func TestFill(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, createAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Gradient = &ml.GradientFill{
-				Degree: 90,
-				Type:   GradientTypePath,
-				Left:   1,
-				Right:  2,
-				Top:    3,
-				Bottom: 4,
-				Stop: []*ml.GradientStop{
-					{Position: 100, Color: color.New("FFFF00FF")},
-					{Position: 200, Color: color.New("FF00FF00")},
-				},
+			Degree: 90,
+			Type:   GradientTypePath,
+			Left:   1,
+			Right:  2,
+			Top:    3,
+			Bottom: 4,
+			Stop: []*ml.GradientStop{
+				{Position: 100, Color: color.New("FFFF00FF")},
+				{Position: 200, Color: color.New("FF00FF00")},
+			},
 		}
 	}), style)
 
@@ -71,16 +71,16 @@ func TestFill(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, createAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Gradient = &ml.GradientFill{
-				Degree: 90,
-				Type:   GradientTypePath,
-				Left:   1,
-				Right:  2,
-				Top:    3,
-				Bottom: 4,
-				Stop: []*ml.GradientStop{
-					{Position: 100, Color: color.New("FFFF00FF")},
-					{Position: 200, Color: color.New("FF00FF00")},
-				},
+			Degree: 90,
+			Type:   GradientTypePath,
+			Left:   1,
+			Right:  2,
+			Top:    3,
+			Bottom: 4,
+			Stop: []*ml.GradientStop{
+				{Position: 100, Color: color.New("FFFF00FF")},
+				{Position: 200, Color: color.New("FF00FF00")},
+			},
 		}
 	}), style)
 
@@ -102,9 +102,9 @@ func TestFill(t *testing.T) {
 	require.IsType(t, &StyleFormat{}, style)
 	require.Equal(t, createAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Pattern = &ml.PatternFill{
-				Color:      color.New("FFFFFFFF"),
-				Background: color.New("FFFF0000"),
-				Type:       PatternTypeDarkDown,
+			Color:      color.New("FFFFFFFF"),
+			Background: color.New("FFFF0000"),
+			Type:       PatternTypeDarkDown,
 		}
 	}), style)
 }

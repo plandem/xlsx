@@ -12,7 +12,7 @@ func (r Ref) ToCellRefs() (from CellRef, to CellRef) {
 	cellRefs := strings.Split(string(r), ":")
 
 	if len(cellRefs) == 1 {
-		from = CellRef("A1")
+		from = CellRef(cellRefs[0])
 		to = CellRef(cellRefs[0])
 	} else {
 		from = CellRef(cellRefs[0])
@@ -38,4 +38,9 @@ func RefFromCellRefs(from CellRef, to CellRef) Ref {
 	}
 
 	return Ref(string(from) + ":" + string(to))
+}
+
+//RefFromCellRefs returns Ref for a CellRef of 0-based indexes
+func RefFromIndexes(colIndex, rowIndex int) Ref {
+	return Ref(CellRefFromIndexes(colIndex, rowIndex))
 }

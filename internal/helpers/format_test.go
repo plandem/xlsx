@@ -1,13 +1,13 @@
 package helpers_test
 
 import (
+	"encoding/xml"
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/helpers"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
-	"encoding/xml"
 )
 
 func TestStyleFormat_Settings(t *testing.T) {
@@ -380,10 +380,9 @@ func TestStyleFormat_Settings_Protection(t *testing.T) {
 	}, protection)
 }
 
-
 func TestFontMarshal(t *testing.T) {
 	//0 must be omitted
-	font, _,_,_,_,_,_ := helpers.FromStyleFormat(format.New(
+	font, _, _, _, _, _, _ := helpers.FromStyleFormat(format.New(
 		format.Font.Size(0),
 		format.Font.Family(0),
 		format.Font.Charset(0),
@@ -391,14 +390,14 @@ func TestFontMarshal(t *testing.T) {
 	require.Nil(t, font)
 
 	//simple version
-	font, _,_,_,_,_,_ = helpers.FromStyleFormat(format.New(
+	font, _, _, _, _, _, _ = helpers.FromStyleFormat(format.New(
 		format.Font.Name("Calibri"),
 	))
 	encoded, _ := xml.Marshal(font)
 	require.Equal(t, `<Font><name val="Calibri"></name></Font>`, string(encoded))
 
 	//full version
-	font, _,_,_,_,_,_ = helpers.FromStyleFormat(format.New(
+	font, _, _, _, _, _, _ = helpers.FromStyleFormat(format.New(
 		format.Font.Name("Calibri"),
 		format.Font.Size(10),
 		format.Font.Bold,
@@ -420,11 +419,11 @@ func TestFontMarshal(t *testing.T) {
 
 func TestFillMarshal(t *testing.T) {
 	//0 must be omitted
-	 _, fill,_,_,_,_,_ := helpers.FromStyleFormat(format.New())
+	_, fill, _, _, _, _, _ := helpers.FromStyleFormat(format.New())
 	require.Nil(t, fill)
 
 	//pattern version
-	_, fill,_,_,_,_,_ = helpers.FromStyleFormat(format.New(
+	_, fill, _, _, _, _, _ = helpers.FromStyleFormat(format.New(
 		format.Fill.Color("#FF00FF"),
 		format.Fill.Background("#00FF00"),
 		format.Fill.Type(format.PatternTypeDarkDown),
@@ -433,7 +432,7 @@ func TestFillMarshal(t *testing.T) {
 	require.Equal(t, `<Fill><patternFill patternType="darkDown"><fgColor indexed="6"></fgColor><bgColor indexed="3"></bgColor></patternFill></Fill>`, string(encoded))
 
 	//gradient version
-	_, fill,_,_,_,_,_ = helpers.FromStyleFormat(format.New(
+	_, fill, _, _, _, _, _ = helpers.FromStyleFormat(format.New(
 		format.Fill.Gradient.Degree(90),
 		format.Fill.Gradient.Type(format.GradientTypePath),
 		format.Fill.Gradient.Left(1),
@@ -449,18 +448,18 @@ func TestFillMarshal(t *testing.T) {
 
 func TestBorderMarshal(t *testing.T) {
 	//0 must be omitted
-	_, _,_,_,_,border,_ := helpers.FromStyleFormat(format.New())
+	_, _, _, _, _, border, _ := helpers.FromStyleFormat(format.New())
 	require.Nil(t, border)
 
 	//simple version
-	_, _,_,_,_,border,_ = helpers.FromStyleFormat(format.New(
+	_, _, _, _, _, border, _ = helpers.FromStyleFormat(format.New(
 		format.Border.Outline,
 	))
 	encoded, _ := xml.Marshal(border)
 	require.Equal(t, `<Border outline="true"></Border>`, string(encoded))
 
 	//full version
-	_, _,_,_,_,border,_ = helpers.FromStyleFormat(format.New(
+	_, _, _, _, _, border, _ = helpers.FromStyleFormat(format.New(
 		format.Border.Outline,
 		format.Border.DiagonalUp,
 		format.Border.DiagonalDown,

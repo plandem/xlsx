@@ -25,6 +25,24 @@ func FromStyleFormat(f *format.StyleFormat) (font *ml.Font, fill *ml.Fill, align
 		*alignment = *style.Alignment
 	}
 
+	//copy non-empty font
+	if (*style.Font != ml.Font{} && *style.Font != ml.Font{Size: 0, Family: 0, Charset: 0}) {
+		font = &ml.Font{}
+		*font = *style.Font
+	}
+
+	//copy non-empty numFormat
+	if *style.NumberFormat != (ml.NumberFormat{}) {
+		numFormat = &ml.NumberFormat{}
+		*numFormat = *style.NumberFormat
+	}
+
+	//copy non-empty protection
+	if *style.Protection != (ml.CellProtection{}) {
+		protection = &ml.CellProtection{}
+		*protection = *style.Protection
+	}
+
 	//copy non-empty border
 	border = &ml.Border{}
 	*border = *style.Border
@@ -78,6 +96,7 @@ func FromStyleFormat(f *format.StyleFormat) (font *ml.Font, fill *ml.Fill, align
 		*border.Horizontal = *style.Border.Horizontal
 	}
 
+	//if border is actually empty, then nil it
 	if *border == (ml.Border{}) {
 		border = nil
 	}
@@ -98,26 +117,9 @@ func FromStyleFormat(f *format.StyleFormat) (font *ml.Font, fill *ml.Fill, align
 		copy(fill.Gradient.Stop, style.Fill.Gradient.Stop)
 	}
 
+	//if fill is actually empty, then nil it
 	if *fill == (ml.Fill{}) {
 		fill = nil
-	}
-
-	//copy non-empty font
-	if (*style.Font != ml.Font{} && *style.Font != ml.Font{Size: 0, Family: 0, Charset: 0}) {
-		font = &ml.Font{}
-		*font = *style.Font
-	}
-
-	//copy non-empty numFormat
-	if *style.NumberFormat != (ml.NumberFormat{}) {
-		numFormat = &ml.NumberFormat{}
-		*numFormat = *style.NumberFormat
-	}
-
-	//copy non-empty protection
-	if *style.Protection != (ml.CellProtection{}) {
-		protection = &ml.CellProtection{}
-		*protection = *style.Protection
 	}
 
 	return
@@ -132,11 +134,13 @@ func ToStyleFormat(styleInfo *ml.DiffStyle, namedStyle *ml.DiffStyle, namedInfo 
 	ni := (*ml.NamedStyleInfo)(unsafe.Pointer(v.FieldByName("namedInfo").Pointer()))
 
 	//copy non-empty namedInfo
-	if namedInfo != nil {
+	if namedInfo != nil && namedInfo.BuiltinId != nil {
 		*ni = *namedInfo
 	}
 
 	if styleInfo != nil {
+		//TODO:
+		panic("not implemented yet")
 	}
 
 	//set fields

@@ -32,8 +32,8 @@ func TestBorder(t *testing.T) {
 				Type:  BorderStyleDashDot,
 				Color: color.New("#FF00FF"),
 			},
-			Diagonal: &ml.BorderSegment{},
-			Vertical: &ml.BorderSegment{},
+			Diagonal:   &ml.BorderSegment{},
+			Vertical:   &ml.BorderSegment{},
 			Horizontal: &ml.BorderSegment{},
 		}
 	}), style)

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
@@ -12,9 +13,6 @@ import (
 	"strconv"
 	"time"
 )
-
-//max length that excel cell can hold
-const cellStringValueLimit = 32767
 
 //Cell is a higher level object that wraps ml.Cell with functionality
 type Cell struct {
@@ -114,8 +112,8 @@ func (c *Cell) setGeneral(value string) {
 
 //truncateIfRequired truncate string is exceeded allowed size
 func (c *Cell) truncateIfRequired(value string) string {
-	if len(value) > cellStringValueLimit {
-		value = value[:cellStringValueLimit]
+	if len(value) > internal.ExcelCellLimit {
+		value = value[:internal.ExcelCellLimit]
 	}
 
 	return value
@@ -290,7 +288,7 @@ func (c *Cell) Hyperlink() *types.HyperlinkInfo {
 
 //SetHyperlink sets hyperlink for cell
 func (c *Cell) SetHyperlink(link interface{}) error {
-	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromCellRefs(c.ml.Ref, c.ml.Ref), link); err != nil {
+	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()), link); err != nil {
 		return err
 	} else {
 		c.SetFormatting(styleID)
