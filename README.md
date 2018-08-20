@@ -1,6 +1,7 @@
 # XLSX 
 [![Build Status](https://travis-ci.org/plandem/xlsx.svg?branch=master)](https://travis-ci.org/plandem/xlsx)
-[![Code Coverage](https://codecov.io/gh/plandem/xlsx/branch/master/graph/badge.svg)](https://codecov.io/gh/plandem/xlsx) 
+[![Code Coverage](https://codecov.io/gh/plandem/xlsx/branch/master/graph/badge.svg)](https://codecov.io/gh/plandem/xlsx) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fplandem%2Fxlsx.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fplandem%2Fxlsx?ref=badge_shield)
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/plandem/xlsx)](https://goreportcard.com/report/github.com/plandem/xlsx)
 [![GoDoc](https://godoc.org/github.com/plandem/xlsx?status.svg)](https://godoc.org/github.com/plandem/xlsx)
 [![License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/plandem/xlsx/master/LICENSE) 
@@ -138,3 +139,6 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 
 ### OOXML edition
 XML is compliant with part 1 of the [5th edition](http://www.ecma-international.org/publications/standards/Ecma-376.htm) of the ECMA-376 Standard for Office Open XML
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fplandem%2Fxlsx.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fplandem%2Fxlsx?ref=badge_large)
