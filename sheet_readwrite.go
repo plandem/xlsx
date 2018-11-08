@@ -41,7 +41,7 @@ func (s *sheetReadWrite) SetDimension(cols, rows int) {
 func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.expandIfRequired(colIndex, rowIndex)
 
-	colIndex, rowIndex = s.mergedCells.resolve(colIndex, rowIndex)
+	colIndex, rowIndex, _ = s.mergedCells.Resolve(colIndex, rowIndex)
 	data := s.ml.SheetData[rowIndex].Cells[colIndex]
 
 	//if there is no any data for this cell, then create it
@@ -216,11 +216,6 @@ func (s *sheetReadWrite) DeleteCol(index int) {
 	s.setDimension(cols-1, rows, false)
 }
 
-//Range returns a range for ref
-func (s *sheetReadWrite) Range(ref types.Ref) *Range {
-	return newRangeFromRef(s, ref)
-}
-
 //Cols returns iterator for all cols of sheet
 func (s *sheetReadWrite) Cols() ColIterator {
 	cols, rows := s.Dimension()
@@ -246,7 +241,7 @@ func (s *sheetReadWrite) resolveDimension(force bool) {
 	}
 
 	var (
-		maxWidth float64
+		maxWidth  float64
 		maxHeight float64
 	)
 
@@ -260,7 +255,7 @@ func (s *sheetReadWrite) resolveDimension(force bool) {
 		}
 	}
 
-	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, int(maxWidth), int(maxHeight) )}
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, int(maxWidth), int(maxHeight))}
 }
 
 //expandOnInit expands grid to required dimension and copy existing data

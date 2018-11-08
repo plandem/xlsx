@@ -268,7 +268,7 @@ func (c *Cell) SetFormatting(styleID format.DirectStyleID) {
 	c.ml.Style = styleID
 }
 
-//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting
+//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting with NumberFormat
 func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
@@ -281,12 +281,12 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
-//HasHyperlink returns resolved hyperlink if there is any or nil otherwise
+//Hyperlink returns resolved HyperlinkInfo if there is any hyperlink or nil otherwise
 func (c *Cell) Hyperlink() *types.HyperlinkInfo {
 	return c.sheet.hyperlinks.Get(c.ml.Ref)
 }
 
-//SetHyperlink sets hyperlink for cell
+//SetHyperlink sets hyperlink for cell, where link can be string or HyperlinkInfo
 func (c *Cell) SetHyperlink(link interface{}) error {
 	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()), link); err != nil {
 		return err
@@ -306,4 +306,9 @@ func (c *Cell) SetValueWithHyperlink(value interface{}, link interface{}) error 
 	}
 
 	return err
+}
+
+//RemoveHyperlink removes hyperlink from cell
+func (c *Cell) RemoveHyperlink() {
+	c.sheet.hyperlinks.Remove(c.ml.Ref)
 }

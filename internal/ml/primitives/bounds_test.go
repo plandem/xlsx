@@ -47,4 +47,22 @@ func TestBounds(t *testing.T) {
 
 	b1 := primitives.BoundsFromIndexes(10, 10, 0, 0)
 	require.Equal(t, b, b1)
+
+	require.Equal(t, true, b.Equals(b1))
+	require.Equal(t, false, b.Equals(primitives.BoundsFromIndexes(1, 1, 10, 10)))
+
+	require.Equal(t, true, b.Overlaps(b1))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(3, 3, 4, 4)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(10, 10, 20, 20)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(10, 0, 20, 20)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(0, 10, 20, 20)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(-20, -20, 0, 0)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(-20, -20, 0, 10)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(-20, -20, 10, 0)))
+	require.Equal(t, true, b.Overlaps(primitives.BoundsFromIndexes(-20, -20, 10, 0)))
+
+	require.Equal(t, false, b.Overlaps(primitives.BoundsFromIndexes(0, 11, 10, 12)))
+	require.Equal(t, false, b.Overlaps(primitives.BoundsFromIndexes(0, -2, 10, -1)))
+	require.Equal(t, false, b.Overlaps(primitives.BoundsFromIndexes(11, 0, 12, 10)))
+	require.Equal(t, false, b.Overlaps(primitives.BoundsFromIndexes(-2, 0, -1, 10)))
 }

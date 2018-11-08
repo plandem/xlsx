@@ -48,6 +48,14 @@ type Sheet interface {
 	InsertCol(index int) *Col
 	//DeleteCol deletes a col at 0-based index
 	DeleteCol(index int)
+	//MergeRows merges rows between fromIndex and toIndex
+	MergeRows(fromIndex, toIndex int) error
+	//MergeCols merges cols between fromIndex and toIndex
+	MergeCols(fromIndex, toIndex int) error
+	//SplitRows splits rows between fromIndex and toIndex
+	SplitRows(fromIndex, toIndex int)
+	//SplitCols splits cols between fromIndex and toIndex
+	SplitCols(fromIndex, toIndex int)
 	//Name returns name of sheet
 	Name() string
 	//SetName sets a name for sheet

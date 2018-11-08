@@ -75,6 +75,13 @@ func (r *Range) SetFormatting(styleID format.DirectStyleID) {
 	})
 }
 
+func (r *Range) ensureNotStream() {
+	//result is unpredictable in stream mode
+	if mode := r.sheet.mode(); (mode & sheetModeStream) != 0 {
+		panic(errorNotSupportedStream)
+	}
+}
+
 //CopyToRef copies range cells into another range starting with ref.
 //N.B.: Merged cells are not supported
 func (r *Range) CopyToRef(ref types.Ref) {
@@ -85,10 +92,8 @@ func (r *Range) CopyToRef(ref types.Ref) {
 //CopyTo copies range cells into another range starting indexes cIdx and rIdx
 //N.B.: Merged cells are not supported
 func (r *Range) CopyTo(cIdx, rIdx int) {
-	//result is unpredictable in stream mode
-	if mode := r.sheet.mode(); (mode & sheetModeStream) != 0 {
-		panic(errorNotSupportedStream)
-	}
+	//stream is not supported for copying cell's info
+	r.ensureNotStream()
 
 	//ignore self-copying
 	if cIdx != r.bounds.FromCol || rIdx != r.bounds.FromRow {
@@ -113,13 +118,57 @@ func (r *Range) CopyTo(cIdx, rIdx int) {
 	}
 }
 
-//SetHyperlink sets hyperlink for range
+//Merge merges range
+func (r *Range) Merge() error {
+	//stream is not supported for copying cell's info
+	r.ensureNotStream()
+
+	if err := r.sheet.info().mergedCells.Add(r.bounds); err != nil {
+		return err
+	}
+
+	//we should reset cells and copy first cell with value into the first cell of that range (Excel behavior)
+	copied := false
+	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
+		//if there is a value and it was not copied yet, then do it
+		if !copied && len(c.ml.Value) > 0 {
+			if idx > 0 {
+				target := r.sheet.Cell(r.bounds.FromCol, r.bounds.FromRow)
+				*target.ml = *c.ml
+				target.ml.Ref = types.CellRefFromIndexes(r.bounds.FromCol, r.bounds.FromRow)
+			}
+
+			copied = true
+		} else {
+			//cleanup rest info
+			c.Reset()
+		}
+	})
+
+	return nil
+}
+
+//Split splits cells in range
+func (r *Range) Split() {
+	r.sheet.info().mergedCells.Remove(r.bounds)
+}
+
+//SetHyperlink sets hyperlink for range, where link can be string or HyperlinkInfo
 func (r *Range) SetHyperlink(link interface{}) error {
 	if styleID, err := r.sheet.info().hyperlinks.Add(r.bounds.ToRef(), link); err != nil {
 		return err
 	} else {
-		r.Walk(func(idx, cIdx, rIdx int, c *Cell) { c.SetFormatting(styleID) })
+		r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
+			c.SetFormatting(styleID)
+		})
 	}
 
 	return nil
+}
+
+//RemoveHyperlink removes hyperlink from cell
+func (r *Range) RemoveHyperlink() {
+	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
+		r.sheet.info().hyperlinks.Remove(c.ml.Ref)
+	})
 }

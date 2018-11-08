@@ -44,6 +44,20 @@ func (b *Bounds) Contains(cIdx, rIdx int) bool {
 	return (cIdx >= b.FromCol && cIdx <= b.ToCol) && (rIdx >= b.FromRow && rIdx <= b.ToRow)
 }
 
+//Overlaps checks if bounds intersects with another bounds
+func (b *Bounds) Overlaps(a Bounds) bool {
+	return (a.ToCol >= b.FromCol) && (a.FromCol <= b.ToCol) && (a.ToRow >= b.FromRow) && (a.FromRow <= b.ToRow)
+}
+
+//Equals checks if bounds is same as other bounds
+func (b *Bounds) Equals(a Bounds) bool {
+	//supposed that 'a' already rebounded if required
+	return a.FromCol == b.FromCol &&
+		a.FromRow == b.FromRow &&
+		a.ToCol == b.ToCol &&
+		a.ToRow == b.ToRow
+}
+
 //Dimension returns total number of cols and rows in bounds
 func (b *Bounds) Dimension() (width int, height int) {
 	width = b.ToCol - b.FromCol + 1

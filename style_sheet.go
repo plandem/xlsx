@@ -5,10 +5,13 @@ import (
 	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/hash"
-	"github.com/plandem/xlsx/internal/helpers"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
+	_ "unsafe"
 )
+
+//go:linkname fromStyleFormat github.com/plandem/xlsx/format.fromStyleFormat
+func fromStyleFormat(f *format.StyleFormat) (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border, namedInfo *ml.NamedStyleInfo)
 
 //StyleSheet is a higher level object that wraps ml.StyleSheet with functionality
 type StyleSheet struct {
@@ -283,7 +286,7 @@ func (ss *StyleSheet) addDiffStyle(f *format.StyleFormat) format.DiffStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//get settings for style
-	font, fill, alignment, numFormat, protection, border, _ := helpers.FromStyleFormat(f)
+	font, fill, alignment, numFormat, protection, border, _ := fromStyleFormat(f)
 
 	dXf := &ml.DiffStyle{
 		Font:         font,
@@ -343,7 +346,7 @@ func (ss *StyleSheet) addStyle(f *format.StyleFormat) format.DirectStyleID {
 	ss.file.LoadIfRequired(ss.buildIndexes)
 
 	//get settings and add information if required
-	font, fill, alignment, numFormat, protection, border, namedInfo := helpers.FromStyleFormat(f)
+	font, fill, alignment, numFormat, protection, border, namedInfo := fromStyleFormat(f)
 	fontID := ss.addFontIfRequired(font)
 	fillID := ss.addFillIfRequired(fill)
 	borderID := ss.addBorderIfRequired(border)

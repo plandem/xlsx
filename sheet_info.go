@@ -8,6 +8,7 @@ import (
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types"
 	"math"
 	"reflect"
 )
@@ -18,8 +19,8 @@ type sheetInfo struct {
 	isInitialized bool
 	index         int
 	file          *ooxml.PackageFile
-	mergedCells   *mergedCellManager
-	hyperlinks    *hyperlinkManager
+	mergedCells   *mergedCells
+	hyperlinks    *hyperlinks
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
@@ -99,8 +100,8 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		}
 
 		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
-		sheet.mergedCells = newMergedCellManager(sheet)
-		sheet.hyperlinks = newHyperlinkManager(sheet)
+		sheet.mergedCells = newMergedCells(sheet)
+		sheet.hyperlinks = newHyperlinks(sheet)
 	}
 
 	return sheet
@@ -162,6 +163,43 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	//we can't use dimension of bounds, because it depends on fromCol, fromRow, but in case of sheet we need maximum dimension to fit content
 	cols, rows = s.ml.Dimension.Bounds.ToCol+1, s.ml.Dimension.Bounds.ToRow+1
 	return
+}
+
+//Range returns a range for ref
+func (s *sheetInfo) Range(ref types.Ref) *Range {
+	return newRangeFromRef(s.sheet, ref)
+}
+
+//MergeRows merges rows between fromIndex and toIndex
+func (s *sheetInfo) MergeRows(fromIndex, toIndex int) error {
+	return s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(0, fromIndex),
+		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
+	)).Merge()
+}
+
+//MergeCols merges cols between fromIndex and toIndex
+func (s *sheetInfo) MergeCols(fromIndex, toIndex int) error  {
+	return s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(fromIndex, 0),
+		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
+	)).Merge()
+}
+
+//SplitRows splits rows between fromIndex and toIndex
+func (s *sheetInfo) SplitRows(fromIndex, toIndex int) {
+	s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(0, fromIndex),
+		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
+	)).Split()
+}
+
+//SplitCols splits cols between fromIndex and toIndex
+func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
+	s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(fromIndex, 0),
+		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
+	)).Split()
 }
 
 //Close frees allocated by sheet resources
