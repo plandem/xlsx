@@ -382,6 +382,11 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 		s.ml.Hyperlinks = nil
 	}
 
+	//merged cells must have at least one object
+	if s.ml.MergeCells != nil && len(*s.ml.MergeCells) == 0 {
+		s.ml.MergeCells = nil
+	}
+
 	return &s.ml
 }
 

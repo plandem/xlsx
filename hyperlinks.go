@@ -32,8 +32,8 @@ func newHyperlinks(sheet *sheetInfo) *hyperlinks {
 	return &hyperlinks{sheet: sheet, defaultStyleID: -1}
 }
 
-//Add adds a new hyperlink info for provided ref, where link can be string or HyperlinkInfo
-func (h *hyperlinks) Add(ref types.Ref, link interface{}) (format.DirectStyleID, error) {
+//Add adds a new hyperlink info for provided bounds, where link can be string or HyperlinkInfo
+func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectStyleID, error) {
 	//check if hyperlink has style and if not, then add default
 	if h.defaultStyleID == -1 {
 		//we need to add default named style for hyperlink
@@ -57,6 +57,16 @@ func (h *hyperlinks) Add(ref types.Ref, link interface{}) (format.DirectStyleID,
 		object = &value
 	} else {
 		return format.DefaultDirectStyle, errors.New("unsupported type of hyperlink, only string or types.HyperlinkInfo is allowed")
+	}
+
+	//let's check existing hyperlinks for overlapping bounds
+	hyperlinkIndex := -1
+	for linkIndex, link := range *h.sheet.ml.Hyperlinks {
+		if link.Bounds.Equals(bounds) {
+			hyperlinkIndex = linkIndex
+		} else if link.Bounds.Overlaps(bounds) {
+			return format.DefaultDirectStyle, errors.New(fmt.Sprintf("intersection of different hyperlinks is not allowed, %s intersects with %s", link.Bounds, bounds))
+		}
 	}
 
 	//prepare hyperlink info
@@ -86,8 +96,14 @@ func (h *hyperlinks) Add(ref types.Ref, link interface{}) (format.DirectStyleID,
 	}
 
 	//add source Ref info
-	hyperlink.Bounds = ref.ToBounds()
-	*h.sheet.ml.Hyperlinks = append(*h.sheet.ml.Hyperlinks, hyperlink)
+	hyperlink.Bounds = bounds
+	if hyperlinkIndex == -1 {
+		//add a new hyperlink
+		*h.sheet.ml.Hyperlinks = append(*h.sheet.ml.Hyperlinks, hyperlink)
+	} else {
+		//update existing hyperlink
+		(*h.sheet.ml.Hyperlinks)[hyperlinkIndex] = hyperlink
+	}
 
 	//if there are custom styles, then use it otherwise use default hyperlink styles
 	if styleID == format.DefaultDirectStyle {
@@ -99,16 +115,14 @@ func (h *hyperlinks) Add(ref types.Ref, link interface{}) (format.DirectStyleID,
 
 //Get returns a resolved hyperlink info for provided ref or nil if there is no any hyperlink
 func (h *hyperlinks) Get(ref types.CellRef) *types.HyperlinkInfo {
-	if h.sheet.ml.Hyperlinks != nil {
-		links := *h.sheet.ml.Hyperlinks
-		if len(links) > 0 {
-			cIdx, rIdx := ref.ToIndexes()
-			for _, link := range links {
-				if link.Bounds.Contains(cIdx, rIdx) {
-					cell := h.sheet.sheet.CellByRef(ref)
-					styleID := cell.ml.Style
-					return toHyperlinkInfo(link, h.sheet.relationships.GetTargetById(string(link.RID)), styleID)
-				}
+	links := *h.sheet.ml.Hyperlinks
+	if len(links) > 0 {
+		cIdx, rIdx := ref.ToIndexes()
+		for _, link := range links {
+			if link.Bounds.Contains(cIdx, rIdx) {
+				cell := h.sheet.sheet.CellByRef(ref)
+				styleID := cell.ml.Style
+				return toHyperlinkInfo(link, h.sheet.relationships.GetTargetById(string(link.RID)), styleID)
 			}
 		}
 	}
@@ -116,18 +130,19 @@ func (h *hyperlinks) Get(ref types.CellRef) *types.HyperlinkInfo {
 	return nil
 }
 
-//Remove removes hyperlink from ref
-func (h *hyperlinks) Remove(ref types.CellRef) {
-	if h.sheet.ml.Hyperlinks != nil {
-		links := *h.sheet.ml.Hyperlinks
-		if len(links) > 0 {
-			cIdx, rIdx := ref.ToIndexes()
-			for _, link := range links {
-				if link.Bounds.Contains(cIdx, rIdx) {
-					//TODO: split range if required
-				}
+//Remove removes hyperlink info for bounds
+func (h *hyperlinks) Remove(bounds types.Bounds) {
+	links := *h.sheet.ml.Hyperlinks
+	if len(links) > 0 {
+		newLinks := make([]*ml.Hyperlink, 0, len(links))
+		for _, link := range links {
+			if !link.Bounds.Overlaps(bounds) {
+				//copy only non overlapping bounds
+				newLinks = append(newLinks, link)
 			}
 		}
+
+		h.sheet.ml.Hyperlinks = &newLinks
 	}
 }
 

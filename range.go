@@ -155,7 +155,7 @@ func (r *Range) Split() {
 
 //SetHyperlink sets hyperlink for range, where link can be string or HyperlinkInfo
 func (r *Range) SetHyperlink(link interface{}) error {
-	if styleID, err := r.sheet.info().hyperlinks.Add(r.bounds.ToRef(), link); err != nil {
+	if styleID, err := r.sheet.info().hyperlinks.Add(r.bounds, link); err != nil {
 		return err
 	} else {
 		r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
@@ -169,6 +169,6 @@ func (r *Range) SetHyperlink(link interface{}) error {
 //RemoveHyperlink removes hyperlink from cell
 func (r *Range) RemoveHyperlink() {
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
-		r.sheet.info().hyperlinks.Remove(c.ml.Ref)
+		r.sheet.info().hyperlinks.Remove(r.bounds)
 	})
 }

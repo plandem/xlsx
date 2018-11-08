@@ -288,7 +288,7 @@ func (c *Cell) Hyperlink() *types.HyperlinkInfo {
 
 //SetHyperlink sets hyperlink for cell, where link can be string or HyperlinkInfo
 func (c *Cell) SetHyperlink(link interface{}) error {
-	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()), link); err != nil {
+	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link); err != nil {
 		return err
 	} else {
 		c.SetFormatting(styleID)
@@ -310,5 +310,5 @@ func (c *Cell) SetValueWithHyperlink(value interface{}, link interface{}) error 
 
 //RemoveHyperlink removes hyperlink from cell
 func (c *Cell) RemoveHyperlink() {
-	c.sheet.hyperlinks.Remove(c.ml.Ref)
+	c.sheet.hyperlinks.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
 }
