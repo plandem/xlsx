@@ -195,7 +195,7 @@ func (s *sheetReadStream) afterOpen() {
 				}
 			}
 
-			//phase3 - reset pointer to rows amd clear current row info
+			//phase3 - reset pointer to rows and clear current row info
 			skip()
 			s.currentRow = nil
 		}

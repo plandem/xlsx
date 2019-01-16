@@ -123,7 +123,7 @@ func (s *sheetInfo) Name() string {
 
 //SetName sets a name for sheet
 func (s *sheetInfo) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), sheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), internal.ExcelSheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
@@ -179,7 +179,7 @@ func (s *sheetInfo) MergeRows(fromIndex, toIndex int) error {
 }
 
 //MergeCols merges cols between fromIndex and toIndex
-func (s *sheetInfo) MergeCols(fromIndex, toIndex int) error  {
+func (s *sheetInfo) MergeCols(fromIndex, toIndex int) error {
 	return s.Range(types.RefFromCellRefs(
 		types.CellRefFromIndexes(fromIndex, 0),
 		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
@@ -239,7 +239,7 @@ func (s *sheetInfo) BeforeMarshalXML() interface{} {
 		return prep.BeforeMarshalXML()
 	}
 
-	return s.ml
+	return &s.ml
 }
 
 func (s *sheetInfo) AfterMarshalXML(content []byte) []byte {

@@ -5,8 +5,6 @@ import (
 	"github.com/plandem/xlsx/types"
 )
 
-//max length of excel's sheet name
-const sheetNameLimit = 31
 const errorNotSupported = "not supported"
 const errorNotSupportedWrite = "not supported in read-only mode"
 const errorNotSupportedStream = "not supported in stream mode"
@@ -14,8 +12,8 @@ const errorNotSupportedStream = "not supported in stream mode"
 type sheetMode byte
 
 const (
-	_ sheetMode = 1 << iota
-	sheetModeRead
+	sheetModeUnknown sheetMode = 0
+	sheetModeRead    sheetMode = 1 << iota
 	sheetModeWrite
 	sheetModeStream
 )

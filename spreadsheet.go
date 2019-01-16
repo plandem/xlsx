@@ -56,12 +56,14 @@ func (xl *Spreadsheet) Sheet(i int) Sheet {
 	}
 
 	si := xl.sheets[i]
-	sheet := &sheetReadWrite{si}
+	if si.sheetMode == sheetModeUnknown {
+		sheet := &sheetReadWrite{si}
+		si.sheetMode = sheetModeRead | sheetModeWrite
+		si.sheet = sheet
+		sheet.afterOpen()
+	}
 
-	si.sheet = sheet
-	si.sheetMode = sheetModeRead | sheetModeWrite
-	sheet.afterOpen()
-	return sheet
+	return si.sheet
 }
 
 //SheetReader returns a sheet by 0-based index that opened in stream reading mode
@@ -72,12 +74,16 @@ func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
 		return nil
 	}
 
-	si := xl.sheets[i]
-	sheet := &sheetReadStream{sheetInfo: &(*si), multiPhase: multiPhase}
+	si := *xl.sheets[i]
+	if si.sheetMode != sheetModeUnknown {
+		panic("You can't open sheet in stream mode after it was opened in normal mode.")
+	}
 
-	si.sheet = sheet
+	sheet := &sheetReadStream{sheetInfo: &si, multiPhase: multiPhase}
 	si.sheetMode = sheetModeRead | sheetModeStream
+	si.sheet = sheet
 	sheet.afterOpen()
+
 	return sheet
 }
 
@@ -85,7 +91,6 @@ func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
 func (xl *Spreadsheet) AddSheet(name string) Sheet {
 	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
 		sheet := &sheetReadWrite{si}
-
 		si.sheet = sheet
 		si.sheetMode = sheetModeRead | sheetModeWrite
 		sheet.afterCreate(name)

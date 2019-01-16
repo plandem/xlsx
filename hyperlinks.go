@@ -145,4 +145,3 @@ func (h *hyperlinks) Remove(bounds types.Bounds) {
 		h.sheet.ml.Hyperlinks = &newLinks
 	}
 }
-

@@ -26,3 +26,6 @@ const ExcelHyperlinkLimit = 66530
 
 //Total number of characters that a url can contain
 const ExcelUrlLimit = 255
+
+//Total number of characters that a sheet name can contain
+const ExcelSheetNameLimit = 31
