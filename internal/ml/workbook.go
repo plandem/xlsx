@@ -70,8 +70,8 @@ type BookView struct {
 	ShowHorizontalScroll   bool                      `xml:"showHorizontalScroll,attr,omitempty"`
 	ShowVerticalScroll     bool                      `xml:"showVerticalScroll,attr,omitempty"`
 	ShowSheetTabs          bool                      `xml:"showSheetTabs,attr,omitempty"`
-	XWindow                uint                      `xml:"xWindow,attr,omitempty"`
-	YWindow                uint                      `xml:"yWindow,attr,omitempty"`
+	XWindow                int                       `xml:"xWindow,attr,omitempty"`
+	YWindow                int                       `xml:"yWindow,attr,omitempty"`
 	WindowHeight           uint                      `xml:"windowHeight,attr,omitempty"`
 	WindowWidth            uint                      `xml:"windowWidth,attr,omitempty"`
 	TabRatio               uint                      `xml:"tabRatio,attr,omitempty"`
