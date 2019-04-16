@@ -156,7 +156,7 @@ func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.Itoa(value)
 
-	if c.ml.Style == format.StyleID(0) {
+	if c.ml.Style == format.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
 	}
 
@@ -169,7 +169,7 @@ func (c *Cell) SetFloat(value float64) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
 
-	if c.ml.Style == format.StyleID(0) {
+	if c.ml.Style == format.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float]
 	}
 
@@ -195,7 +195,7 @@ func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
 
-	if c.ml.Style == format.StyleID(0) {
+	if c.ml.Style == format.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[t]
 	}
 
