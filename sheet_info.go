@@ -96,6 +96,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 
 		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
 		sheet.mergedCells = newMergedCellManager(sheet)
+		sheet.columns = newColumns(sheet)
 	}
 
 	return sheet

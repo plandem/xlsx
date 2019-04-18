@@ -135,36 +135,10 @@ func (s *sheetReadWrite) DeleteRow(index int) {
 func (s *sheetReadWrite) Col(index int) *Col {
 	s.expandIfRequired(index, 0)
 
-	if s.ml.Cols == nil {
-		s.ml.Cols = &[]*ml.Col{}
-	}
-
-	var data *ml.Col
-
-	//Cols has 1-based index, but we are using 0-based to unify all indexes at library
-	index++
-
-	for _, c := range *s.ml.Cols {
-		if c.Min == c.Max && c.Min == index {
-			data = c
-			break
-		}
-	}
-
-	if data == nil {
-		data = &ml.Col{
-			Min: index,
-			Max: index,
-		}
-
-		*s.ml.Cols = append(*s.ml.Cols, data)
-	}
-
 	_, rows := s.Dimension()
 
-	index--
 	return &Col{
-		data,
+		s.columns.Resolve(index),
 		newRange(s, index, index, 0, rows-1),
 	}
 }
@@ -194,14 +168,7 @@ func (s *sheetReadWrite) InsertCol(index int) *Col {
 //DeleteCol deletes a col at 0-based index
 func (s *sheetReadWrite) DeleteCol(index int) {
 	s.expandIfRequired(index, 0)
-
-	if s.ml.Cols != nil {
-		for _, c := range *s.ml.Cols {
-			if c.Min == c.Max && c.Min == index {
-				*s.ml.Cols = append((*s.ml.Cols)[:index], (*s.ml.Cols)[index+1:]...)
-			}
-		}
-	}
+	s.columns.Delete(index)
 
 	for iRow, row := range s.ml.SheetData {
 		//delete col
@@ -386,7 +353,7 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
 
-	//TODO: pack columns
+	s.ml.Cols = s.columns.BeforeMarshalXML()
 
 	return &s.ml
 }
