@@ -19,6 +19,7 @@ type sheetInfo struct {
 	index         int
 	file          *ooxml.PackageFile
 	mergedCells   *mergedCellManager
+	columns       *columns
 	sheet         Sheet
 	sheetMode     sheetMode
 }

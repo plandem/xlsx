@@ -385,6 +385,9 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
+
+	//TODO: pack columns
+
 	return &s.ml
 }
 
