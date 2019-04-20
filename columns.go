@@ -42,8 +42,6 @@ func (cols *columns) Resolve(index int) *ml.Col {
 				*data = *c
 				data.Min = index
 				data.Max = index
-				data.Updated = false
-				c.Updated = true
 				break
 			}
 		}
@@ -122,7 +120,6 @@ func (cols *columns) pack() *[]*ml.Col {
 			*prevCol = *col
 			prevCol.Min = idx
 			prevCol.Max = idx
-			prevCol.Updated = false
 			packed = append(packed, prevCol)
 		} else {
 			colA := *prevCol
@@ -131,8 +128,6 @@ func (cols *columns) pack() *[]*ml.Col {
 			colA.Max = 0
 			colB.Min = 0
 			colB.Max = 0
-			colA.Updated = false
-			colB.Updated = false
 
 			if colA == colB && idx == prevCol.Max+1 {
 				prevCol.Max++
@@ -141,7 +136,6 @@ func (cols *columns) pack() *[]*ml.Col {
 				*prevCol = *col
 				prevCol.Min = idx
 				prevCol.Max = idx
-				prevCol.Updated = false
 				packed = append(packed, prevCol)
 			}
 		}

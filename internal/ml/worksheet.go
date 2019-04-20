@@ -65,7 +65,6 @@ type Col struct {
 	Phonetic     bool          `xml:"phonetic,attr,omitempty"`
 	OutlineLevel uint8         `xml:"outlineLevel,attr,omitempty"`
 	Collapsed    bool          `xml:"collapsed,attr,omitempty"`
-	Updated      bool		   `xml:"-"` //for internal usage only
 }
 
 //Row is a direct mapping of XSD CT_Row
