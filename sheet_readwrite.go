@@ -353,7 +353,7 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
 
-	s.ml.Cols = s.columns.BeforeMarshalXML()
+	s.ml.Cols = s.columns.pack()
 
 	return &s.ml
 }
