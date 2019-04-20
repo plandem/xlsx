@@ -344,17 +344,9 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
 
-	//hyperlinks must have at least one object
-	if s.ml.Hyperlinks != nil && len(*s.ml.Hyperlinks) == 0 {
-		s.ml.Hyperlinks = nil
-	}
-
-	//merged cells must have at least one object
-	if s.ml.MergeCells != nil && len(*s.ml.MergeCells) == 0 {
-		s.ml.MergeCells = nil
-	}
-
-	s.ml.Cols = s.columns.pack()
+	s.hyperlinks.pack()
+	s.mergedCells.pack()
+	s.columns.pack()
 
 	return &s.ml
 }

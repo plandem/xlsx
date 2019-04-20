@@ -14,7 +14,6 @@ func TestColumns_Delete(t *testing.T) {
 	cols := xl.sheets[0].columns
 
 	//non grouped columns
-	require.NotNil(t, cols.sheet.ml.Cols)
 	cols.Resolve(0)
 	require.EqualValues(t, &[]*ml.Col{
 		{
@@ -124,7 +123,6 @@ func TestColumns_Resolve(t *testing.T) {
 	cols := xl.sheets[0].columns
 
 	//non grouped columns
-	require.NotNil(t, cols.sheet.ml.Cols)
 	cols.Resolve(0)
 	require.EqualValues(t, &[]*ml.Col{
 		{

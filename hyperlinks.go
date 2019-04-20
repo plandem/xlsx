@@ -23,17 +23,21 @@ type hyperlinks struct {
 
 //newHyperlinks creates an object that implements hyperlinks functionality
 func newHyperlinks(sheet *sheetInfo) *hyperlinks {
-	//attach hyperlinks object if required
-	if sheet.ml.Hyperlinks == nil {
-		var links []*ml.Hyperlink
-		sheet.ml.Hyperlinks = &links
-	}
-
 	return &hyperlinks{sheet: sheet, defaultStyleID: -1}
+}
+
+func (h *hyperlinks) initIfRequired() {
+	//attach hyperlinks object if required
+	if h.sheet.ml.Hyperlinks == nil {
+		var links []*ml.Hyperlink
+		h.sheet.ml.Hyperlinks = &links
+	}
 }
 
 //Add adds a new hyperlink info for provided bounds, where link can be string or HyperlinkInfo
 func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectStyleID, error) {
+	h.initIfRequired()
+
 	//check if hyperlink has style and if not, then add default
 	if h.defaultStyleID == -1 {
 		//we need to add default named style for hyperlink
@@ -115,6 +119,8 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 
 //Get returns a resolved hyperlink info for provided ref or nil if there is no any hyperlink
 func (h *hyperlinks) Get(ref types.CellRef) *types.HyperlinkInfo {
+	h.initIfRequired()
+
 	links := *h.sheet.ml.Hyperlinks
 	if len(links) > 0 {
 		cIdx, rIdx := ref.ToIndexes()
@@ -132,6 +138,8 @@ func (h *hyperlinks) Get(ref types.CellRef) *types.HyperlinkInfo {
 
 //Remove removes hyperlink info for bounds
 func (h *hyperlinks) Remove(bounds types.Bounds) {
+	h.initIfRequired()
+
 	links := *h.sheet.ml.Hyperlinks
 	if len(links) > 0 {
 		newLinks := make([]*ml.Hyperlink, 0, len(links))
@@ -144,4 +152,13 @@ func (h *hyperlinks) Remove(bounds types.Bounds) {
 
 		h.sheet.ml.Hyperlinks = &newLinks
 	}
+}
+
+func (h *hyperlinks) pack() *[]*ml.Hyperlink {
+	//hyperlinks must have at least one object
+	if h.sheet.ml.Hyperlinks != nil && len(*h.sheet.ml.Hyperlinks) == 0 {
+		h.sheet.ml.Hyperlinks = nil
+	}
+
+	return h.sheet.ml.Hyperlinks
 }

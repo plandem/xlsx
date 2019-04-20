@@ -11,16 +11,20 @@ type columns struct {
 
 //newColumns creates an object that implements columns functionality (don't miss with Col)
 func newColumns(sheet *sheetInfo) *columns {
-	//attach columns object if required
-	if sheet.ml.Cols == nil {
-		var cols []*ml.Col
-		sheet.ml.Cols = &cols
-	}
-
 	return &columns{sheet: sheet}
 }
 
+func (cols *columns) initIfRequired() {
+	//attach columns object if required
+	if cols.sheet.ml.Cols == nil {
+		var c []*ml.Col
+		cols.sheet.ml.Cols = &c
+	}
+}
+
 func (cols *columns) Resolve(index int) *ml.Col {
+	cols.initIfRequired()
+
 	var data *ml.Col
 
 	//Cols has 1-based index, but we are using 0-based to unify all indexes at library
@@ -61,6 +65,8 @@ func (cols *columns) Resolve(index int) *ml.Col {
 }
 
 func (cols *columns) Delete(index int) {
+	cols.initIfRequired()
+
 	//Cols has 1-based index, but we are using 0-based to unify all indexes at library
 	index++
 
@@ -77,6 +83,8 @@ func (cols *columns) Delete(index int) {
 }
 
 func (cols *columns) pack() *[]*ml.Col {
+	cols.initIfRequired()
+
 	//moving grouped column ahead
 	packed := *cols.sheet.ml.Cols
 	sort.Slice(packed, func(i, j int) bool { return packed[i].Min != packed[i].Max })
@@ -145,7 +153,7 @@ func (cols *columns) pack() *[]*ml.Col {
 
 	//columns must have at least one object
 	if len(packed) == 0 {
-		return nil
+		cols.sheet.ml.Cols = nil
 	}
 
 	return cols.sheet.ml.Cols
