@@ -19,6 +19,7 @@ type sheetInfo struct {
 	isInitialized bool
 	index         int
 	file          *ooxml.PackageFile
+	columns       *columns
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
 	relationships *ooxml.Relationships
@@ -100,6 +101,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		}
 
 		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
+		sheet.columns = newColumns(sheet)
 		sheet.mergedCells = newMergedCells(sheet)
 		sheet.hyperlinks = newHyperlinks(sheet)
 	}
