@@ -270,9 +270,9 @@ func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
 }
 
-//Formatting returns active format of cell or nil if there is no any styles
-func (c *Cell) Formatting() *format.StyleFormat {
-	return c.sheet.workbook.doc.styleSheet.resolveDirectStyle(c.ml.Style)
+//Formatting returns DirectStyleID of active format for cell
+func (c *Cell) Formatting() format.DirectStyleID {
+	return c.ml.Style
 }
 
 //SetFormatting sets style format to requested DirectStyleID

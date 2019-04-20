@@ -133,6 +133,11 @@ func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.DirectSty
 	return xl.styleSheet.addStyle(style)
 }
 
+//ResolveFormatting returns style formatting for styleID or nil if there is no any styles with such styleID
+func (xl *Spreadsheet) ResolveFormatting(styleID format.DirectStyleID) *format.StyleFormat {
+	return xl.workbook.doc.styleSheet.resolveDirectStyle(styleID)
+}
+
 //IsValid validates document and return error if there is any error. Using right before saving.
 func (xl *Spreadsheet) IsValid() error {
 	if len(xl.sheets) == 0 {
