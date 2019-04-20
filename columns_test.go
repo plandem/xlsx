@@ -67,7 +67,6 @@ func TestColumns_Delete(t *testing.T) {
 			Min:     1,
 			Max:     99,
 			Width:   32,
-			Updated: true,
 		},
 		{
 			Min:   1,
@@ -81,7 +80,6 @@ func TestColumns_Delete(t *testing.T) {
 			Min:     1,
 			Max:     98,
 			Width:   32,
-			Updated: true,
 		},
 	}, cols.sheet.ml.Cols)
 	cols.Resolve(0)
@@ -91,7 +89,6 @@ func TestColumns_Delete(t *testing.T) {
 			Min:     1,
 			Max:     98,
 			Width:   32,
-			Updated: true,
 		},
 		{
 			Min:   1,
@@ -110,7 +107,6 @@ func TestColumns_Delete(t *testing.T) {
 			Min:     1,
 			Max:     97,
 			Width:   32,
-			Updated: true,
 		},
 		{
 			Min:   1,
@@ -169,7 +165,6 @@ func TestColumns_Resolve(t *testing.T) {
 			Min:     1,
 			Max:     100,
 			Width:   32,
-			Updated: true,
 		},
 		{
 			Min:   1,
@@ -184,7 +179,6 @@ func TestColumns_Resolve(t *testing.T) {
 			Min:     1,
 			Max:     100,
 			Width:   32,
-			Updated: true,
 		},
 		{
 			Min:   1,
