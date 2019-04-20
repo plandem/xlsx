@@ -137,7 +137,8 @@ func (s *sheetReadStream) afterOpen() {
 					s.ml.Dimension = &ml.SheetDimension{}
 					decoder.DecodeElement(s.ml.Dimension, start)
 				case "mergeCells":
-					s.ml.MergeCells = &[]*ml.MergeCell{}
+					s.mergedCells = newMergedCells(s.sheetInfo)
+					s.mergedCells.initIfRequired()
 				case "mergeCell":
 					cell := &ml.MergeCell{}
 					decoder.DecodeElement(cell, start)

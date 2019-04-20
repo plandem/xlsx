@@ -13,8 +13,6 @@ type mergedCells struct {
 
 //newMergedCells creates an object that implements merged cells functionality
 func newMergedCells(sheet *sheetInfo) *mergedCells {
-
-
 	return &mergedCells{sheet: sheet}
 }
 

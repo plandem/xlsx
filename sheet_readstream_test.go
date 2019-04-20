@@ -109,15 +109,15 @@ func TestSpreadsheet(t *testing.T) {
 		open     beforeTestFn
 		callback testFn
 	}{
-		//{
-		//	"SheetReadStream_SinglePhased", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.SheetReader(0, false) }, testSheetReadLimited,
-		//},
+		{
+			"SheetReadStream_SinglePhased", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.SheetReader(0, false) }, testSheetReadLimited,
+		},
 		{
 			"SheetReadStream_MultiPhased", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.SheetReader(0, true) }, testSheetReadFull,
 		},
-		//{
-		//	"SheetReadWrite", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.Sheet(0) }, testSheetReadFull,
-		//},
+		{
+			"SheetReadWrite", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.Sheet(0) }, testSheetReadFull,
+		},
 	}
 
 	for _, info := range sheetTests {
