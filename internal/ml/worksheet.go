@@ -24,7 +24,7 @@ type Worksheet struct {
 	CustomSheetViews      *ml.Reserved    `xml:"customSheetViews,omitempty"`
 	MergeCells            *[]*MergeCell   `xml:"mergeCells>mergeCell,omitempty"`
 	PhoneticPr            *ml.Reserved    `xml:"phoneticPr,omitempty"`
-	ConditionalFormatting *ml.Reserved    `xml:"conditionalFormatting,omitempty"`
+	ConditionalFormatting *[]*ml.Reserved `xml:"conditionalFormatting,omitempty"`
 	DataValidations       *ml.Reserved    `xml:"dataValidations,omitempty"`
 	Hyperlinks            *ml.Reserved    `xml:"hyperlinks,omitempty"`
 	PrintOptions          *ml.Reserved    `xml:"printOptions,omitempty"`
