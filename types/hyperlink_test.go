@@ -3,6 +3,7 @@ package types
 import (
 	"fmt"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"strings"
@@ -41,7 +42,7 @@ func TestHyperlinkOption_ToMail(t *testing.T) {
 
 	//loo large
 	link.Set(
-		Hyperlink.ToMail(fmt.Sprintf("spa%sm@spam.it", strings.Repeat("a", 255)), ""),
+		Hyperlink.ToMail(fmt.Sprintf("spa%sm@spam.it", strings.Repeat("a", internal.UrlLimit)), ""),
 	)
 	require.NotNil(t, link.Validate())
 }
@@ -76,7 +77,7 @@ func TestHyperlinkOption_ToUrl(t *testing.T) {
 
 	//loo large
 	link.Set(
-		Hyperlink.ToUrl(fmt.Sprintf("http://g%sgle.com", strings.Repeat("o", 255))),
+		Hyperlink.ToUrl(fmt.Sprintf("http://g%sgle.com", strings.Repeat("o", internal.UrlLimit))),
 	)
 	require.NotNil(t, link.Validate())
 }
@@ -182,7 +183,7 @@ func TestHyperlinkOption_ToFile(t *testing.T) {
 
 	//loo large
 	link.Set(
-		Hyperlink.ToFile(fmt.Sprintf("c:\temp\f%s.doc", strings.Repeat("o", 255))),
+		Hyperlink.ToFile(fmt.Sprintf("c:\temp\f%s.doc", strings.Repeat("o", internal.FilePathLimit))),
 	)
 	require.NotNil(t, link.Validate())
 }

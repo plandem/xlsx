@@ -24,8 +24,17 @@ const ExcelHeaderFooterLimit = 255
 //Total number of hyperlinks in a worksheet
 const ExcelHyperlinkLimit = 66530
 
-//Total number of characters that a url can contain
-const ExcelUrlLimit = 255
-
 //Total number of characters that a sheet name can contain
 const ExcelSheetNameLimit = 31
+
+//Total number of characters that a cell formula can contain
+const ExcelFormulaLimit = 255
+
+//Total number of characters that an url can contain
+// https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
+const UrlLimit = 2000
+
+//Total number of characters that a file path can contain
+// http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
+const FilePathLimit = 32767
+
