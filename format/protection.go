@@ -6,9 +6,9 @@ type protectionOption byte
 var Protection protectionOption
 
 func (p *protectionOption) Hidden(s *StyleFormat) {
-	s.protection.Hidden = true
+	s.styleInfo.Protection.Hidden = true
 }
 
 func (p *protectionOption) Locked(s *StyleFormat) {
-	s.protection.Locked = true
+	s.styleInfo.Protection.Locked = true
 }

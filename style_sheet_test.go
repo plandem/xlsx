@@ -8,10 +8,10 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 )
 
-func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
+func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 	require.NotNil(t, xl)
 
-	require.Equal(t, 1, len(xl.styleSheet.styleIndex))
+	require.Equal(t, 1, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 1, len(xl.styleSheet.fontIndex))
@@ -24,8 +24,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(1), styleRef)
-	require.Equal(t, 2, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(1), styleRef)
+	require.Equal(t, 2, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -38,8 +38,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(2), styleRef)
-	require.Equal(t, 3, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(2), styleRef)
+	require.Equal(t, 3, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -51,8 +51,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(3), styleRef)
-	require.Equal(t, 4, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(3), styleRef)
+	require.Equal(t, 4, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -64,8 +64,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(4), styleRef)
-	require.Equal(t, 5, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(4), styleRef)
+	require.Equal(t, 5, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -78,8 +78,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(5), styleRef)
-	require.Equal(t, 6, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(5), styleRef)
+	require.Equal(t, 6, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -92,8 +92,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(6), styleRef)
-	require.Equal(t, 7, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(6), styleRef)
+	require.Equal(t, 7, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -106,8 +106,8 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.StyleID {
 	)
 
 	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(7), styleRef)
-	require.Equal(t, 8, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(7), styleRef)
+	require.Equal(t, 8, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -134,8 +134,8 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 	)
 
 	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.StyleID(7), styleRef)
-	require.Equal(t, 14, len(xl.styleSheet.styleIndex))
+	require.Equal(t, format.DirectStyleID(7), styleRef)
+	require.Equal(t, 14, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
@@ -210,149 +210,177 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 	}, xl.styleSheet.ml.Borders)
 
 	//validate stored Xf
-	require.Equal(t, &[]*ml.Style{
+	require.Equal(t, &[]*ml.DirectStyle{
 		//default xf
 		{
-			XfId:     0,
-			FontId:   0,
-			FillId:   0,
-			BorderId: 0,
-			NumFmtId: 0,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:   0,
+				FillId:   0,
+				BorderId: 0,
+				NumFmtId: 0,
+			},
 		},
 		//new xf
 		{
-			XfId:      0,
-			FontId:    1,
-			FillId:    0,
-			BorderId:  0,
-			NumFmtId:  0,
-			ApplyFont: true,
-		},
-		{
-			XfId:      0,
-			FontId:    1,
-			FillId:    2,
-			BorderId:  0,
-			NumFmtId:  0,
-			ApplyFont: true,
-			ApplyFill: true,
-		},
-		{
-			XfId:              0,
-			FontId:            1,
-			FillId:            2,
-			BorderId:          0,
-			NumFmtId:          45,
-			ApplyFont:         true,
-			ApplyFill:         true,
-			ApplyNumberFormat: true,
-		},
-		{
-			XfId:              0,
-			FontId:            1,
-			FillId:            2,
-			BorderId:          0,
-			NumFmtId:          164,
-			ApplyFont:         true,
-			ApplyFill:         true,
-			ApplyNumberFormat: true,
-		},
-		{
-			XfId:              0,
-			FontId:            1,
-			FillId:            2,
-			BorderId:          1,
-			NumFmtId:          164,
-			ApplyFont:         true,
-			ApplyFill:         true,
-			ApplyNumberFormat: true,
-			ApplyBorder:       true,
-		},
-		{
-			XfId:              0,
-			FontId:            1,
-			FillId:            2,
-			BorderId:          1,
-			NumFmtId:          164,
-			ApplyFont:         true,
-			ApplyFill:         true,
-			ApplyNumberFormat: true,
-			ApplyBorder:       true,
-			ApplyAlignment:    true,
-			Alignment: &ml.CellAlignment{
-				Vertical:   format.VAlignBottom,
-				Horizontal: format.HAlignFill,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:    1,
+				FillId:    0,
+				BorderId:  0,
+				NumFmtId:  0,
+				ApplyFont: true,
 			},
 		},
 		{
-			XfId:              0,
-			FontId:            1,
-			FillId:            2,
-			BorderId:          1,
-			NumFmtId:          164,
-			ApplyFont:         true,
-			ApplyFill:         true,
-			ApplyNumberFormat: true,
-			ApplyBorder:       true,
-			ApplyAlignment:    true,
-			ApplyProtection:   true,
-			Alignment: &ml.CellAlignment{
-				Vertical:   format.VAlignBottom,
-				Horizontal: format.HAlignFill,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:    1,
+				FillId:    2,
+				BorderId:  0,
+				NumFmtId:  0,
+				ApplyFont: true,
+				ApplyFill: true,
 			},
-			Protection: &ml.CellProtection{
-				Hidden: true,
-				Locked: true,
+		},
+		{
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            1,
+				FillId:            2,
+				BorderId:          0,
+				NumFmtId:          45,
+				ApplyFont:         true,
+				ApplyFill:         true,
+				ApplyNumberFormat: true,
+			},
+		},
+		{
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            1,
+				FillId:            2,
+				BorderId:          0,
+				NumFmtId:          164,
+				ApplyFont:         true,
+				ApplyFill:         true,
+				ApplyNumberFormat: true,
+			},
+		},
+		{
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            1,
+				FillId:            2,
+				BorderId:          1,
+				NumFmtId:          164,
+				ApplyFont:         true,
+				ApplyFill:         true,
+				ApplyNumberFormat: true,
+				ApplyBorder:       true,
+			},
+		},
+		{
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            1,
+				FillId:            2,
+				BorderId:          1,
+				NumFmtId:          164,
+				ApplyFont:         true,
+				ApplyFill:         true,
+				ApplyNumberFormat: true,
+				ApplyBorder:       true,
+				ApplyAlignment:    true,
+				Alignment: &ml.CellAlignment{
+					Vertical:   format.VAlignBottom,
+					Horizontal: format.HAlignFill,
+				},
+			},
+		},
+		{
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            1,
+				FillId:            2,
+				BorderId:          1,
+				NumFmtId:          164,
+				ApplyFont:         true,
+				ApplyFill:         true,
+				ApplyNumberFormat: true,
+				ApplyBorder:       true,
+				ApplyAlignment:    true,
+				ApplyProtection:   true,
+				Alignment: &ml.CellAlignment{
+					Vertical:   format.VAlignBottom,
+					Horizontal: format.HAlignFill,
+				},
+				Protection: &ml.CellProtection{
+					Hidden: true,
+					Locked: true,
+				},
 			},
 		},
 		//types styles for number format
 		{
-			XfId:              0,
-			FontId:            0,
-			FillId:            0,
-			BorderId:          0,
-			NumFmtId:          0x01,
-			ApplyNumberFormat: true,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            0,
+				FillId:            0,
+				BorderId:          0,
+				NumFmtId:          0x01,
+				ApplyNumberFormat: true,
+			},
 		},
 		{
-			XfId:              0,
-			FontId:            0,
-			FillId:            0,
-			BorderId:          0,
-			NumFmtId:          0x02,
-			ApplyNumberFormat: true,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            0,
+				FillId:            0,
+				BorderId:          0,
+				NumFmtId:          0x02,
+				ApplyNumberFormat: true,
+			},
 		},
 		{
-			XfId:              0,
-			FontId:            0,
-			FillId:            0,
-			BorderId:          0,
-			NumFmtId:          0x0e,
-			ApplyNumberFormat: true,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            0,
+				FillId:            0,
+				BorderId:          0,
+				NumFmtId:          0x0e,
+				ApplyNumberFormat: true,
+			},
 		},
 		{
-			XfId:              0,
-			FontId:            0,
-			FillId:            0,
-			BorderId:          0,
-			NumFmtId:          0x14,
-			ApplyNumberFormat: true,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            0,
+				FillId:            0,
+				BorderId:          0,
+				NumFmtId:          0x14,
+				ApplyNumberFormat: true,
+			},
 		},
 		{
-			XfId:              0,
-			FontId:            0,
-			FillId:            0,
-			BorderId:          0,
-			NumFmtId:          0x16,
-			ApplyNumberFormat: true,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            0,
+				FillId:            0,
+				BorderId:          0,
+				NumFmtId:          0x16,
+				ApplyNumberFormat: true,
+			},
 		},
 		{
-			XfId:              0,
-			FontId:            0,
-			FillId:            0,
-			BorderId:          0,
-			NumFmtId:          0x2d,
-			ApplyNumberFormat: true,
+			XfId: 0,
+			Style: ml.Style{
+				FontId:            0,
+				FillId:            0,
+				BorderId:          0,
+				NumFmtId:          0x2d,
+				ApplyNumberFormat: true,
+			},
 		},
 	}, xl.styleSheet.ml.CellXfs)
 }

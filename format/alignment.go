@@ -11,48 +11,48 @@ var Alignment alignmentOption
 
 func (f *alignmentOption) VAlign(va primitives.VAlignType) option {
 	return func(s *StyleFormat) {
-		s.alignment.Vertical = va
+		s.styleInfo.Alignment.Vertical = va
 	}
 }
 
 func (f *alignmentOption) HAlign(ha primitives.HAlignType) option {
 	return func(s *StyleFormat) {
-		s.alignment.Horizontal = ha
+		s.styleInfo.Alignment.Horizontal = ha
 	}
 }
 
 func (f *alignmentOption) TextRotation(angle int) option {
 	return func(s *StyleFormat) {
-		s.alignment.TextRotation = angle
+		s.styleInfo.Alignment.TextRotation = angle
 	}
 }
 
 func (f *alignmentOption) WrapText(s *StyleFormat) {
-	s.alignment.WrapText = true
+	s.styleInfo.Alignment.WrapText = true
 }
 
 func (f *alignmentOption) Indent(i int) option {
 	return func(s *StyleFormat) {
-		s.alignment.Indent = i
+		s.styleInfo.Alignment.Indent = i
 	}
 }
 
 func (f *alignmentOption) RelativeIndent(i int) option {
 	return func(s *StyleFormat) {
-		s.alignment.RelativeIndent = i
+		s.styleInfo.Alignment.RelativeIndent = i
 	}
 }
 
 func (f *alignmentOption) JustifyLastLine(s *StyleFormat) {
-	s.alignment.JustifyLastLine = true
+	s.styleInfo.Alignment.JustifyLastLine = true
 }
 
 func (f *alignmentOption) ShrinkToFit(s *StyleFormat) {
-	s.alignment.ShrinkToFit = true
+	s.styleInfo.Alignment.ShrinkToFit = true
 }
 
 func (f *alignmentOption) ReadingOrder(i int) option {
 	return func(s *StyleFormat) {
-		s.alignment.ReadingOrder = i
+		s.styleInfo.Alignment.ReadingOrder = i
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
@@ -12,9 +13,6 @@ import (
 	"strconv"
 	"time"
 )
-
-//max length that excel cell can hold
-const cellStringValueLimit = 32767
 
 //Cell is a higher level object that wraps ml.Cell with functionality
 type Cell struct {
@@ -114,8 +112,8 @@ func (c *Cell) setGeneral(value string) {
 
 //truncateIfRequired truncate string is exceeded allowed size
 func (c *Cell) truncateIfRequired(value string) string {
-	if len(value) > cellStringValueLimit {
-		value = value[:cellStringValueLimit]
+	if len(value) > internal.ExcelCellLimit {
+		value = value[:internal.ExcelCellLimit]
 	}
 
 	return value
@@ -158,7 +156,7 @@ func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.Itoa(value)
 
-	if c.ml.Style == format.StyleID(0) {
+	if c.ml.Style == format.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
 	}
 
@@ -171,7 +169,7 @@ func (c *Cell) SetFloat(value float64) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
 
-	if c.ml.Style == format.StyleID(0) {
+	if c.ml.Style == format.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float]
 	}
 
@@ -197,7 +195,7 @@ func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
 
-	if c.ml.Style == format.StyleID(0) {
+	if c.ml.Style == format.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[t]
 	}
 
@@ -257,19 +255,6 @@ func (c *Cell) SetValue(value interface{}) {
 	}
 }
 
-//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting
-func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
-	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
-	if (c.sheet.mode() & sheetModeWrite) == 0 {
-		panic(errorNotSupportedWrite)
-	}
-
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
-
-	c.SetValue(value)
-	c.ml.Style = styleID
-}
-
 //Reset resets current current cell information
 func (c *Cell) Reset() {
 	*c.ml = ml.Cell{Ref: c.ml.Ref}
@@ -285,13 +270,57 @@ func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
 }
 
-//HasFormatting returns true if cell has styles
-func (c *Cell) HasFormatting() bool {
-	//0 is default style
-	return c.ml.Style != 0
+//Formatting returns DirectStyleID of active format for cell
+func (c *Cell) Formatting() format.DirectStyleID {
+	return c.ml.Style
 }
 
-//SetFormatting sets style format to requested styleID
-func (c *Cell) SetFormatting(styleID format.StyleID) {
+//SetFormatting sets style format to requested DirectStyleID
+func (c *Cell) SetFormatting(styleID format.DirectStyleID) {
 	c.ml.Style = styleID
+}
+
+//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting with NumberFormat
+func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
+	if (c.sheet.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
+
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
+
+	c.SetValue(value)
+	c.ml.Style = ml.DirectStyleID(styleID)
+}
+
+//Hyperlink returns resolved HyperlinkInfo if there is any hyperlink or nil otherwise
+func (c *Cell) Hyperlink() *types.HyperlinkInfo {
+	return c.sheet.hyperlinks.Get(c.ml.Ref)
+}
+
+//SetHyperlink sets hyperlink for cell, where link can be string or HyperlinkInfo
+func (c *Cell) SetHyperlink(link interface{}) error {
+	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link); err != nil {
+		return err
+	} else {
+		c.SetFormatting(styleID)
+	}
+
+	return nil
+}
+
+//SetValueWithHyperlink is helper function that internally works as SetValue and SetHyperlink
+func (c *Cell) SetValueWithHyperlink(value interface{}, link interface{}) error {
+	err := c.SetHyperlink(link)
+
+	if err == nil {
+		c.SetValue(value)
+	}
+
+	return err
+}
+
+//RemoveHyperlink removes hyperlink from cell
+func (c *Cell) RemoveHyperlink() {
+	c.sheet.hyperlinks.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
 }

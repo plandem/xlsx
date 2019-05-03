@@ -41,7 +41,7 @@ func (s *sheetReadWrite) SetDimension(cols, rows int) {
 func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	s.expandIfRequired(colIndex, rowIndex)
 
-	colIndex, rowIndex = s.mergedCells.Resolve(colIndex, rowIndex)
+	colIndex, rowIndex, _ = s.mergedCells.Resolve(colIndex, rowIndex)
 	data := s.ml.SheetData[rowIndex].Cells[colIndex]
 
 	//if there is no any data for this cell, then create it
@@ -183,11 +183,6 @@ func (s *sheetReadWrite) DeleteCol(index int) {
 	s.setDimension(cols-1, rows, false)
 }
 
-//Range returns a range for ref
-func (s *sheetReadWrite) Range(ref types.Ref) *Range {
-	return newRangeFromRef(s, ref)
-}
-
 //Cols returns iterator for all cols of sheet
 func (s *sheetReadWrite) Cols() ColIterator {
 	cols, rows := s.Dimension()
@@ -205,33 +200,29 @@ func (s *sheetReadWrite) Rows() RowIterator {
 //resolveDimension check if there is a 'dimension' information(optional) and if there is no any, then calculate it from existing data
 func (s *sheetReadWrite) resolveDimension(force bool) {
 	if !force && (s.ml.Dimension != nil && !s.ml.Dimension.Bounds.IsEmpty()) {
+		// We need to fix 'optimized' case, when Dimension holds only last part of Ref (e.g., C10 instead of instead of A1:C10).
+		// Normally such Ref means cell ref, but dimension is always a range
+		s.ml.Dimension.Bounds.FromRow = 0
+		s.ml.Dimension.Bounds.FromCol = 0
 		return
 	}
 
 	var (
-		maxWidth float64
-		minWidth = math.MaxFloat64
-
+		maxWidth  float64
 		maxHeight float64
-		minHeight = math.MaxFloat64
 	)
 
 	//supposed that grid holds rows/cells with valid refs
 	for _, row := range s.ml.SheetData {
 		maxHeight = math.Max(maxHeight, float64(row.Ref)-1)
-		minHeight = math.Min(minHeight, float64(row.Ref)-1)
 
 		for _, cell := range row.Cells {
 			colIndex, _ := types.CellRef(cell.Ref).ToIndexes()
 			maxWidth = math.Max(maxWidth, float64(colIndex))
-			minWidth = math.Min(minWidth, float64(colIndex))
 		}
 	}
 
-	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(
-		int(math.Min(minWidth, 0)), int(math.Min(minHeight, 0)),
-		int(maxWidth), int(maxHeight),
-	)}
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, int(maxWidth), int(maxHeight))}
 }
 
 //expandOnInit expands grid to required dimension and copy existing data
@@ -353,7 +344,9 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
 
-	s.ml.Cols = s.columns.pack()
+	s.hyperlinks.pack()
+	s.mergedCells.pack()
+	s.columns.pack()
 
 	return &s.ml
 }

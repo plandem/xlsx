@@ -22,7 +22,7 @@ var _ Sheet = (*sheetReadStream)(nil)
 func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	var data *ml.Cell
 
-	colIndex, rowIndex = s.mergedCells.Resolve(colIndex, rowIndex)
+	colIndex, rowIndex, _ = s.mergedCells.Resolve(colIndex, rowIndex)
 	row := s.Row(rowIndex)
 	data = row.ml.Cells[colIndex]
 
@@ -38,10 +38,6 @@ func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 func (s *sheetReadStream) CellByRef(cellRef types.CellRef) *Cell {
 	cid, rid := cellRef.ToIndexes()
 	return s.Cell(cid, rid)
-}
-
-func (s *sheetReadStream) Range(ref types.Ref) *Range {
-	return newRangeFromRef(s, ref)
 }
 
 func (s *sheetReadStream) Row(index int) *Row {
@@ -141,7 +137,8 @@ func (s *sheetReadStream) afterOpen() {
 					s.ml.Dimension = &ml.SheetDimension{}
 					decoder.DecodeElement(s.ml.Dimension, start)
 				case "mergeCells":
-					s.ml.MergeCells = &[]*ml.MergeCell{}
+					s.mergedCells = newMergedCells(s.sheetInfo)
+					s.mergedCells.initIfRequired()
 				case "mergeCell":
 					cell := &ml.MergeCell{}
 					decoder.DecodeElement(cell, start)
@@ -199,7 +196,7 @@ func (s *sheetReadStream) afterOpen() {
 				}
 			}
 
-			//phase3 - reset pointer to rows amd clear current row info
+			//phase3 - reset pointer to rows and clear current row info
 			skip()
 			s.currentRow = nil
 		}

@@ -56,12 +56,14 @@ func (xl *Spreadsheet) Sheet(i int) Sheet {
 	}
 
 	si := xl.sheets[i]
-	si.sheetMode = sheetModeRead | sheetModeWrite
+	if si.sheetMode == sheetModeUnknown {
+		sheet := &sheetReadWrite{si}
+		si.sheetMode = sheetModeRead | sheetModeWrite
+		si.sheet = sheet
+		sheet.afterOpen()
+	}
 
-	sheet := &sheetReadWrite{si}
-	si.sheet = sheet
-	sheet.afterOpen()
-	return sheet
+	return si.sheet
 }
 
 //SheetReader returns a sheet by 0-based index that opened in stream reading mode
@@ -72,11 +74,30 @@ func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
 		return nil
 	}
 
-	si := xl.sheets[i]
+	si := *xl.sheets[i]
+	if si.sheetMode != sheetModeUnknown {
+		panic("You can't open sheet in stream mode after it was opened in normal mode.")
+	}
+
+	sheet := &sheetReadStream{sheetInfo: &si, multiPhase: multiPhase}
 	si.sheetMode = sheetModeRead | sheetModeStream
-	sheet := &sheetReadStream{sheetInfo: &(*si), multiPhase: multiPhase}
+	si.sheet = sheet
 	sheet.afterOpen()
+
 	return sheet
+}
+
+//AddSheet adds a new sheet with name to document
+func (xl *Spreadsheet) AddSheet(name string) Sheet {
+	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
+		sheet := &sheetReadWrite{si}
+		si.sheet = sheet
+		si.sheetMode = sheetModeRead | sheetModeWrite
+		sheet.afterCreate(name)
+		return sheet
+	}
+
+	return nil
 }
 
 //Sheets returns iterator for all sheets of Spreadsheet
@@ -107,22 +128,14 @@ func (xl *Spreadsheet) DeleteSheet(i int) {
 	}
 }
 
-//AddSheet adds a new sheet with name to document
-func (xl *Spreadsheet) AddSheet(name string) Sheet {
-	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
-		sheet := &sheetReadWrite{si}
-		si.sheet = sheet
-		si.sheetMode = sheetModeRead | sheetModeWrite
-		sheet.afterCreate(name)
-		return sheet
-	}
-
-	return nil
+//AddFormatting adds a new style formatting to document and return related ID that can be used lately
+func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.DirectStyleID {
+	return xl.styleSheet.addStyle(style)
 }
 
-//AddFormatting adds a new style formatting to document and return related ID that can be used lately
-func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.StyleID {
-	return xl.styleSheet.addStyle(style)
+//ResolveFormatting returns style formatting for styleID or nil if there is no any styles with such styleID
+func (xl *Spreadsheet) ResolveFormatting(styleID format.DirectStyleID) *format.StyleFormat {
+	return xl.workbook.doc.styleSheet.resolveDirectStyle(styleID)
 }
 
 //IsValid validates document and return error if there is any error. Using right before saving.

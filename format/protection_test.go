@@ -13,11 +13,10 @@ func TestProtection(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, &StyleFormat{
-		protection: ml.CellProtection{
+	require.Equal(t, createAndFill(func(f *StyleFormat) {
+		f.styleInfo.Protection = &ml.CellProtection{
 			Locked: true,
 			Hidden: true,
-		},
-	}, style)
-
+		}
+	}), style)
 }

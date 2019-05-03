@@ -30,8 +30,13 @@ func (r *Row) Set(o *options.RowOptions) {
 	r.ml.Phonetic = o.Phonetic
 }
 
+//Formatting returns DirectStyleID of default format for row
+func (r *Row) Formatting() format.DirectStyleID {
+	return r.ml.Style
+}
+
 //SetFormatting sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.
-func (r *Row) SetFormatting(styleID format.StyleID) {
+func (r *Row) SetFormatting(styleID format.DirectStyleID) {
 	r.ml.CustomFormat = true
 	r.ml.Style = styleID
 }

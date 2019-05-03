@@ -5,8 +5,6 @@ import (
 	"github.com/plandem/xlsx/types"
 )
 
-//max length of excel's sheet name
-const sheetNameLimit = 31
 const errorNotSupported = "not supported"
 const errorNotSupportedWrite = "not supported in read-only mode"
 const errorNotSupportedStream = "not supported in stream mode"
@@ -14,8 +12,8 @@ const errorNotSupportedStream = "not supported in stream mode"
 type sheetMode byte
 
 const (
-	_ sheetMode = 1 << iota
-	sheetModeRead
+	sheetModeUnknown sheetMode = 0
+	sheetModeRead    sheetMode = 1 << iota
 	sheetModeWrite
 	sheetModeStream
 )
@@ -48,6 +46,14 @@ type Sheet interface {
 	InsertCol(index int) *Col
 	//DeleteCol deletes a col at 0-based index
 	DeleteCol(index int)
+	//MergeRows merges rows between fromIndex and toIndex
+	MergeRows(fromIndex, toIndex int) error
+	//MergeCols merges cols between fromIndex and toIndex
+	MergeCols(fromIndex, toIndex int) error
+	//SplitRows splits rows between fromIndex and toIndex
+	SplitRows(fromIndex, toIndex int)
+	//SplitCols splits cols between fromIndex and toIndex
+	SplitCols(fromIndex, toIndex int)
 	//Name returns name of sheet
 	Name() string
 	//SetName sets a name for sheet
@@ -59,6 +65,7 @@ type Sheet interface {
 	//Close frees allocated by sheet resources
 	Close()
 
-	//private method to use by internals only
+	//private methods to use by internals only
 	mode() sheetMode
+	info() *sheetInfo
 }
