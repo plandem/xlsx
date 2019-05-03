@@ -92,7 +92,7 @@ func main() {
 	))
 	
 	_ = sheet.CellByRef("B5").SetValueWithHyperlink("Link To File", types.NewHyperlink(
-		types.Hyperlink.ToFile("./example_simple.xlsx#Sheet1!C3"),
+		types.Hyperlink.ToFile("./example_simple.xlsx"),
 		types.Hyperlink.ToRef("C3", "Sheet1"),
 	))
 
