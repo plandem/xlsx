@@ -23,7 +23,9 @@ func main() {
 		panic(err)
 	}
 
-	defer xl.Close()
+	defer func() {
+		_ = xl.Close()
+	}()
 
 	redBoldYellow := xl.AddFormatting(
 		format.New(
@@ -68,43 +70,35 @@ func main() {
 		})
  	}
 
-	//Hyperlinks via string
-	_ = sheet.CellByRef("A1").SetValueWithHyperlink("Link To Cell", "#C3")
-	_ = sheet.CellByRef("A2").SetValueWithHyperlink("Link To Sheet", "#'The first sheet'!C3")
-	_ = sheet.CellByRef("A3").SetValueWithHyperlink("Link To Google", "http://google.com")
-	_ = sheet.CellByRef("A4").SetValueWithHyperlink("Link To Email", "spam@spam.it")
-	_ = sheet.CellByRef("A5").SetValueWithHyperlink("Link To File", "./example_simple.xlsx#Sheet1!C3")
-
-	//Hyperlinks via helper type
-	_ = sheet.CellByRef("B1").SetValueWithHyperlink("Link To Cell", types.NewHyperlink(
-		types.Hyperlink.ToRef("C3", ""),
-	))
-	_ = sheet.CellByRef("B2").SetValueWithHyperlink("Link To Sheet", types.NewHyperlink(
-		types.Hyperlink.ToRef("C3", "The first sheet"),
-	))
-
-	_ = sheet.CellByRef("B3").SetValueWithHyperlink("Link To Google", types.NewHyperlink(
-		types.Hyperlink.ToUrl("http://google.com"),
-	))
-
-	_ = sheet.CellByRef("B4").SetValueWithHyperlink("Link To Email", types.NewHyperlink(
-		types.Hyperlink.ToMail("spam@spam.it", ""),
-	))
+	//Add hyperlink and set value same time
+	_ = sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
 	
-	_ = sheet.CellByRef("B5").SetValueWithHyperlink("Link To File", types.NewHyperlink(
+	//Add hyperlink as string
+	_ = sheet.Range("B1:C3").SetHyperlink("#C3")
+	_ = sheet.Row(5).SetHyperlink("#C3")
+	_ = sheet.Col(5).SetHyperlink("#C3")
+	_ = sheet.CellByRef("A2").SetHyperlink("#C3")
+	
+	_ = sheet.CellByRef("A3").SetHyperlink("#'The first sheet'!C3")
+	_ = sheet.CellByRef("A4").SetHyperlink("http://google.com")
+	_ = sheet.CellByRef("A5").SetHyperlink("spam@spam.it")
+	_ = sheet.CellByRef("A6").SetHyperlink("./example_simple.xlsx#Sheet1!C3")
+
+	//Add hyperlink via helper type for advanced settings
+	_ = sheet.CellByRef("A7").SetHyperlink(types.NewHyperlink(
 		types.Hyperlink.ToFile("./example_simple.xlsx"),
 		types.Hyperlink.ToRef("C3", "Sheet1"),
+		types.Hyperlink.Tooltip("That's a tooltip"),
+		types.Hyperlink.Display("Something to display"), //Cell still holds own value
 	))
 
-	//Hyperlinks for range
-	_= sheet.Range("A1:C3").SetHyperlink("http://google.com")
-	sheet.Range("A1:C3").RemoveHyperlink()
+	sheet.CellByRef("A1").RemoveHyperlink()
 	
 	//Merged Cells
 	_= sheet.Range("A1:C3").Merge()
 	sheet.Range("A1:C3").Split()
 	
-	xl.SaveAs("test1.xlsx")
+	_= xl.SaveAs("test1.xlsx")
 }
 ```
 
@@ -157,14 +151,11 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] sheet: copy
 - [x] sheet: read as stream
 - [ ] sheet: write as stream
+- [x] merged cells: merge/split for ranges, cols, rows
+- [x] hyperlinks: for cells, ranges, cols, rows
 - [x] range: copy
-- [x] range: hyperlinks
-- [x] range: merge/split cells
 - [x] row: copy
-- [x] row: merge/split rows
 - [x] col: copy
-- [x] col: merge/split cols
-- [x] cell: hyperlinks
 - [ ] cell: comments
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
