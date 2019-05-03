@@ -6,6 +6,50 @@ import (
 	"testing"
 )
 
+func TestIsUrl(t *testing.T) {
+	t.Parallel()
+
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"https", false},
+		{"https://", false},
+		{"/absolute-path", false},
+		{"./relative-path", false},
+		{"testing-path", false},
+		{"alskjff#?asf//dfas", false},
+		{"http://foobar.com", true},
+		{"https://foobar.com", true},
+		{"http://foobar.org/", true},
+		{"http://foobar.ORG", true},
+		{"http://foobar.org:8080/", true},
+		{"http://user:pass@www.foobar.com/", true},
+		{"http://user:pass@www.foobar.com/path/file", true},
+		{"http://127.0.0.1/", true},
+		{"http://foobar.com/?q=%2F", true},
+		{"http://localhost", true},
+		{"http://localhost:3000/", true},
+		{"http://foobar.com/?foo=bar#baz=qux", true},
+		{"http://foobar.com?foo=bar", true},
+		{"http://user:pass@foo_bar_bar.bar_foo.com", true},
+		{".com", false},
+		{"rtmp://foobar.com", true},
+		{"http://localhost:3000/", true},
+		{"http://foobar.com#baz=qux", false},
+		{"http://foobar.com/#baz=qux", true},
+		{"http://foo bar.org", false},
+		{"http://foo.bar.org", true},
+		{"http://www.foo.bar.org", true},
+		{"http:::/not.valid/a//a??a?b=&&c#hi", false},
+	}
+
+	for _, test := range tests {
+		assert.Equal(t, test.expected, validator.IsURL(test.param), "IsURL(%q) should be %v", test.param, test.expected)
+	}
+}
+
 func TestIsEmail(t *testing.T) {
 	t.Parallel()
 
@@ -39,59 +83,28 @@ func TestIsEmail(t *testing.T) {
 	}
 }
 
-func TestIsUrl(t *testing.T) {
-	t.Parallel()
-
-	var tests = []struct {
-		param    string
-		expected bool
-	}{
-		{"", false},
-		{"http://foobar.com", true},
-		{"https://foobar.com", true},
-		{"http://foobar.org/", true},
-		{"http://foobar.ORG", true},
-		{"http://foobar.org:8080/", true},
-		{"http://user:pass@www.foobar.com/", true},
-		{"http://user:pass@www.foobar.com/path/file", true},
-		{"http://127.0.0.1/", true},
-		{"http://foobar.com/?q=%2F", true},
-		{"http://localhost:3000/", true},
-		{"http://foobar.com/?foo=bar#baz=qux", true},
-		{"http://foobar.com?foo=bar", true},
-		{"http://user:pass@foo_bar_bar.bar_foo.com", true},
-		{".com", false},
-		{"rtmp://foobar.com", false},
-		{"http://localhost:3000/", true},
-		{"http://foobar.com#baz=qux", true},
-		{"http://foo bar.org", false},
-		{"http://foo.bar.org", true},
-		{"http://www.foo.bar.org", true},
-	}
-
-	for _, test := range tests {
-		assert.Equal(t, test.expected, validator.IsURL(test.param), "IsURL(%q) should be %v", test.param, test.expected)
-	}
-}
-
 func TestIsMailTo(t *testing.T) {
 	t.Parallel()
 
 	var tests = []struct {
 		param    string
 		expected bool
+		result map[string]string
 	}{
-		{"", false},
-		{"spam@spam.it", false},
-		{"mailto:spam@spam.it?", true},
-		{"mailto:spam@spam.it?spam", true},
-		{"mailto:spam@spam.it?spam=", true},
-		{"mailto:spam@spam.it?subject", true},
-		{"mailto:spam@spam.it?subject=", true},
-		{"mailto:spam@spam.it?subject=spam", true},
+		{"", false, map[string]string{}},
+		{"spam@spam.it", false, map[string]string{}},
+		{"mailto:spam@spam.it?", false, map[string]string{}},
+		{"mailto:spam@spam.it?spam", false, map[string]string{}},
+		{"mailto:spam@spam.it?spam=", false, map[string]string{}},
+		{"mailto:spam@spam.it?subject", false, map[string]string{}},
+		{"mailto:spam@spam.it", true, map[string]string{"email": "spam@spam.it", "subject":""}},
+		{"mailto:spam@spam.it?subject=", true, map[string]string{"email": "spam@spam.it", "subject":""}},
+		{"mailto:spam@spam.it?subject=the_spam", true, map[string]string{"email": "spam@spam.it", "subject":"the_spam"}},
 	}
 
 	for _, test := range tests {
-		assert.Equal(t, test.expected, validator.IsMailTo(test.param), "IsMailTo(%q) should be %v", test.param, test.expected)
+		r1, r2 := validator.IsMailTo(test.param)
+		assert.Equal(t, test.expected, r1, "IsMailTo(%q) should be %v", test.param, test.expected)
+		assert.Equal(t, test.result, r2, "IsMailTo(%q) should be %v", test.param, test.result)
 	}
 }

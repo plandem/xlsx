@@ -3,10 +3,22 @@ package validator
 import (
 	"github.com/plandem/xlsx/internal"
 	"net/url"
-	"path/filepath"
-	"strings"
+	"regexp"
 	"unicode/utf8"
 )
+
+func FindNamedMatches(pattern *regexp.Regexp, str string) map[string]string {
+	match := pattern.FindStringSubmatch(str)
+	results := make(map[string]string)
+
+	for i, value := range match {
+		if name := pattern.SubexpNames()[i]; name != "" {
+			results[name] = value
+		}
+	}
+
+	return results
+}
 
 // IsFilePath check is a str is Win or Unix file
 func IsFilePath(str string) bool {
@@ -26,31 +38,13 @@ func IsFilePath(str string) bool {
 
 // IsURL check if the str is an URL
 func IsURL(str string) bool {
-	if str == "" || utf8.RuneCountInString(str) >= internal.UrlLimit || len(str) <= 3 || strings.HasPrefix(str, ".") {
+	if utf8.RuneCountInString(str) >= internal.UrlLimit {
 		return false
 	}
 
-	strTemp := str
-	if strings.Contains(str, ":") && !strings.Contains(str, "://") {
-		// support no indicated urlscheme but with colon for port number
-		// http:// is appended so url.Parse will succeed, strTemp used so it does not impact rxURL.MatchString
-		strTemp = "http://" + str
-	}
-
-	u, err := url.Parse(strTemp)
-	if err != nil {
-		return false
-	}
-
-	if strings.HasPrefix(u.Host, ".") {
-		return false
-	}
-
-	if u.Host == "" && (u.Path != "" && !strings.Contains(u.Path, ".")) {
-		return false
-	}
-
-	return regURL.MatchString(str)
+	//for XLSX we need more strict rules for url
+	u, err := url.ParseRequestURI(str)
+	return err == nil && u.Scheme != "" && u.Host != ""
 }
 
 // IsEmail check if the str is an email
@@ -58,20 +52,8 @@ func IsEmail(str string) bool {
 	return regEmail.MatchString(str)
 }
 
-// IsExcelFile check if str is path to excel file
-func IsExcelFile(str string) bool {
-	if !IsFilePath(str)	{
-		return false
-	}
-
-	if ext := filepath.Ext(str); ext == ".xlsx" || ext == ".xls" {
-		return true
-	}
-
-	return false
-}
-
 // IsMailTo check if the str is an mailto format
-func IsMailTo(str string) bool {
-	return IsURL(str) && strings.HasPrefix(str, "mailto:")
+func IsMailTo(str string) (bool, map[string]string) {
+	results := FindNamedMatches(regMailTo, str)
+	return len(results) > 0, results
 }

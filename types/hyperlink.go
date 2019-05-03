@@ -9,12 +9,48 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/validator"
 	"log"
-	"net/url"
-	"path/filepath"
 	"regexp"
 	"strings"
 )
 
+/*
+HyperlinkInfo is very close to HYPERLINK function of Excel, but with human way to set information of hyperlink
+ https://support.office.com/en-us/article/hyperlink-function-333c7ce6-c5ae-4164-9c47-7de9b76f577f
+
+	a) to resource: "resource" or "[resource]"
+	b) to location at resource: "[resource]location" or "resource#location"
+
+Here are some examples of supported values:
+	- same file, same sheet
+	=HYPERLINK("A1", "Reference to same sheet")
+	=HYPERLINK("#A1", "Reference to same sheet")
+
+	- same file, other sheet
+	=HYPERLINK("SheetName!A1", "Reference to sheet without space in name")
+	=HYPERLINK("#SheetName!A1", "Reference to sheet without space in name")
+	=HYPERLINK("#'Name with space'!A1", "Reference to sheet with space in name")
+	=HYPERLINK("'Name with space'!A1", "Reference to sheet with space in name")
+
+	- other local file
+	=HYPERLINK("D:\Folder\File.docx","Word file")
+	=HYPERLINK("D:\Folder\File.docx#Bookmark","Local Word file with bookmark")
+	=HYPERLINK("D:\Folder\File.xlsx#Sheet1!A1","Local Excel file with reference")
+	=HYPERLINK("[D:\Folder\File.xlsx]Sheet1!A1","Local Excel file with reference")
+
+	- other remote file
+	=HYPERLINK("\\SERVER\Folder\File.doc", "Remote Word file")
+	=HYPERLINK("\\SERVER\Folder\File.xlsx#Sheet4!A1", "Remote Excel file with reference")
+	=HYPERLINK("[\\SERVER\Folder\File.xlsx]Sheet4!A1", "Remote Excel file with reference")
+
+	- url
+	=HYPERLINK("https://www.spam.it","Website without bookmark")
+	=HYPERLINK("https://www.spam.it/#bookmark","Website with bookmark")
+	=HYPERLINK("[https://www.spam.it/]bookmark","Website with bookmark")
+
+	-email
+	=HYPERLINK("mailto:spam@spam.it","Email without subject")
+	=HYPERLINK("mailto:spam@spam.it?subject=topic","Email with subject")
+*/
 type HyperlinkInfo struct {
 	hyperlink *ml.Hyperlink
 	styleID   format.DirectStyleID
@@ -26,7 +62,6 @@ type hyperlinkType byte
 
 const (
 	hyperlinkTypeUnknown hyperlinkType = iota
-	hyperlinkTypeWorkbook
 	hyperlinkTypeWeb
 	hyperlinkTypeEmail
 	hyperlinkTypeFile
@@ -51,65 +86,77 @@ func (i *HyperlinkInfo) Set(options ...hyperlinkOption) {
 	}
 }
 
+//Validate validates hyperlink info and return error in case of invalid settings
 func (i *HyperlinkInfo) Validate() error {
-	//TODO: add validators here
 	switch i.linkType {
 	case hyperlinkTypeUnknown:
-		return errors.New("unknown type of hyperlink")
-	case hyperlinkTypeWorkbook:
 		if len(i.hyperlink.Location) == 0 {
-			return errors.New("unknown location at target workbook")
+			return errors.New("unknown type of hyperlink")
 		}
 	case hyperlinkTypeWeb:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
 			return errors.New(fmt.Sprintf("url exceeded maximum allowed length (%d chars)", internal.UrlLimit))
 		}
+
+		if len(i.hyperlink.RID) <= 3 {
+			return errors.New("url is too short")
+		}
+
+		if strings.Contains(string(i.hyperlink.RID), "#") {
+			return errors.New("url contains a pound sign (#)")
+		}
+
+		if !validator.IsURL(string(i.hyperlink.RID)) {
+			return errors.New("url is not valid")
+		}
 	case hyperlinkTypeEmail:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
 			return errors.New(fmt.Sprintf("email exceeded maximum allowed length (%d chars)", internal.UrlLimit))
 		}
+
+		if !validator.IsEmail(string(i.hyperlink.RID)) {
+			if ok, info := validator.IsMailTo(string(i.hyperlink.RID)); ok && validator.IsEmail(info["email"]) {
+				break
+			}
+
+			return errors.New("email is not valid")
+		}
 	case hyperlinkTypeFile:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
 			return errors.New(fmt.Sprintf("link to file exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+		}
+
+		if len(i.hyperlink.RID) <= 3 {
+			return errors.New("filename is too short")
+		}
+
+		if strings.Contains(string(i.hyperlink.RID), "#") {
+			return errors.New("filename contains a pound sign (#)")
 		}
 	}
 
 	return nil
 }
 
+//Formatting returns style that will be used by hyperlink
 func (i *HyperlinkInfo) Formatting() format.DirectStyleID {
 	return i.styleID
 }
 
-func (i *HyperlinkInfo) Target() string {
-	switch i.linkType {
-	case hyperlinkTypeFile:
-		fallthrough
-	case hyperlinkTypeEmail:
-		return string(i.hyperlink.RID)
-	case hyperlinkTypeWeb:
-		if len(i.hyperlink.Location) > 0 {
-			return fmt.Sprintf("%s#%s", i.hyperlink.RID, i.hyperlink.Location)
-		}
+//String returns text version of hyperlink info
+func (i *HyperlinkInfo) String() string {
+	target := string(i.hyperlink.RID)
+	location := i.hyperlink.Location
 
-		return string(i.hyperlink.RID)
-
-	case hyperlinkTypeWorkbook:
-		path := string(i.hyperlink.RID)
-		location := i.hyperlink.Location
-
-		if len(location) > 0 && location[0] == '#' {
-			location = location[1:]
-		}
-
-		if len(location) > 0 {
-			return fmt.Sprintf("%s#%s", path, location)
-		}
-
-		return path
+	if len(location) > 0 && location[0] == '#' {
+		location = location[1:]
 	}
 
-	return ""
+	if len(location) > 0 {
+		return fmt.Sprintf("%s#%s", target, location)
+	}
+
+	return target
 }
 
 func (o *hyperlinkOption) Formatting(styleID format.DirectStyleID) hyperlinkOption {
@@ -130,6 +177,7 @@ func (o *hyperlinkOption) Display(display string) hyperlinkOption {
 	}
 }
 
+//ToMail sets target to email
 func (o *hyperlinkOption) ToMail(address, subject string) hyperlinkOption {
 	return func(i *HyperlinkInfo) {
 		if len(subject) > 0 {
@@ -142,24 +190,19 @@ func (o *hyperlinkOption) ToMail(address, subject string) hyperlinkOption {
 	}
 }
 
+//ToUrl sets target to web site
 func (o *hyperlinkOption) ToUrl(address string) hyperlinkOption {
 	return func(i *HyperlinkInfo) {
-		if u, err := url.Parse(address); err == nil {
-			if u.Fragment != "" {
-				i.hyperlink.Location = u.Fragment
-				u.Fragment = ""
-			}
-
-			i.hyperlink.RID = sharedML.RID(u.String())
-			i.linkType = hyperlinkTypeWeb
-		}
+		i.hyperlink.RID = sharedML.RID(escapeTarget(address))
+		i.linkType = hyperlinkTypeWeb
 	}
 }
 
+//ToFile sets target to external file
 func (o *hyperlinkOption) ToFile(fileName string) hyperlinkOption {
 	return func(i *HyperlinkInfo) {
 		//change the directory separator from Unix to DOS
-		fileName = strings.Replace(fileName, "/", "\\", -1)
+		fileName = strings.Replace(fileName, `/`, `\`, -1)
 
 		//add the file:/// URI to the url for Windows style "C:/" link and network shares
 		if matched, err := regexp.MatchString(`^((\w+:.*)|(\\))`, fileName); matched && err == nil {
@@ -170,107 +213,33 @@ func (o *hyperlinkOption) ToFile(fileName string) hyperlinkOption {
 		re := regexp.MustCompile(`^\.\\`)
 		fileName = re.ReplaceAllString(fileName, "")
 
-		i.hyperlink.RID = sharedML.RID(fileName)
-
-		//workbook can be internal(same) or external
-		if ext := filepath.Ext(fileName); ext == ".xlsx" || ext == ".xls" {
-			i.linkType = hyperlinkTypeWorkbook
-		} else {
-			i.linkType = hyperlinkTypeFile
-		}
+		i.hyperlink.RID = sharedML.RID(escapeTarget(fileName))
+		i.linkType = hyperlinkTypeFile
 	}
 }
 
+//ToRef sets target to ref of sheet with sheetName. Omit sheetName to set location to ref of active sheet
 func (o *hyperlinkOption) ToRef(ref Ref, sheetName string) hyperlinkOption {
 	return func(i *HyperlinkInfo) {
-		i.linkType = hyperlinkTypeWorkbook
-
 		if len(ref) > 0 {
 			if len(sheetName) > 0 {
 				//sheet + ref
 				i.hyperlink.Location = fmt.Sprintf("#%s!%s", escapeLocation(sheetName), ref)
 			} else {
-				//ref only, cell be cell or bookmark
-				i.hyperlink.Location = fmt.Sprintf("#%s", escapeLocation(string(ref)))
+				//ref only, can be cell or bookmark
+				i.hyperlink.Location = fmt.Sprintf("#%s", ref)
 			}
 		}
 	}
 }
 
-/*
-
-../Budgets/Annual/Budget2010.xlsx
-../Budgets/Annual/Budget2010.xlsx#'Sheet3'
-../Budgets/Annual/Budget2010.xlsx#'Sheet3'!G43
-../Budgets/Annual/Budget2010.xlsx#DeptTotals
-
-
-		-other sheet
-		=HYPERLINK("#Sheet2!A1", "Sheet2")
-		=HYPERLINK("#'Price list'!A1", "Price list")
-
-		-same sheet
-		=HYPERLINK("#A1", "Go to cell A1")
-
-		-other local workbook
-		=HYPERLINK("D:\Source data\Book3.xlsx", "Book3")
-		=HYPERLINK("[D:\Source data\Book3.xlsx]Sheet2!A1", "Book3")
-
-		-other network workbook
-		=HYPERLINK("\\SERVER1\Svetlana\Price list.xlsx", "Price list")
-		=HYPERLINK("[\\SERVER1\Svetlana\Price list.xlsx]Sheet4!A1", "Price list")
-
-		- url
-		=HYPERLINK("https://www.ablebits.com","Go to Ablebits.com")
-
-		-email
-		=HYPERLINK("mailto:support@ablebits.com","Drop us an email")
-
-		- file
-		=HYPERLINK("D:\Word files\Price list.docx","Price list")
-*/
-
-//ToTarget is very close to HYPERLINK function of Excel
-// https://support.office.com/en-us/article/hyperlink-function-333c7ce6-c5ae-4164-9c47-7de9b76f577f
-//
-// a) to resource:
-//	"location" or "[location]"
-// b) to target at resource
-//	"[location]target or "location#target"
-// Here are some examples of supported values
-//	=HYPERLINK("http://example.microsoft.com/report/budget report.xlsx", "Click for report")
-//	=HYPERLINK("[http://example.microsoft.com/report/budget report.xlsx]Annual!F10", D1)
-//	=HYPERLINK("[http://example.microsoft.com/report/budget report.xlsx]'First Quarter'!DeptTotal", "Click to see First Quarter Department Total")
-//	=HYPERLINK("[http://example.microsoft.com/Annual Report.docx]QrtlyProfits", "Quarterly Profit Report")
-//	=HYPERLINK("\\FINANCE\Statements\1stqtr.xlsx", D5)
-//	=HYPERLINK("D:\FINANCE\1stqtr.xlsx", H10)
-//	=HYPERLINK("[C:\My Documents\Mybook.xlsx]Totals")
-//	=HYPERLINK("[Book1.xlsx]Sheet1!A10","Go to Sheet1 > A10")
-//	=HYPERLINK("[Book1.xlsx]January!A10","Go to January > A10")
-func (o *hyperlinkOption) ToTarget(target string) hyperlinkOption {
+//ToBookmark sets target to bookmark, that can be named region in xlsx, bookmark of remote file or even site
+func (o *hyperlinkOption) ToBookmark(location string) hyperlinkOption {
 	return func(i *HyperlinkInfo) {
-		if validator.IsURL(target) {
-			log.Printf("url => %s", target)
-			i.Set(Hyperlink.ToUrl(target))
-		} else if validator.IsMailTo(target) {
-			email, subject := "", ""
-			log.Printf("mailto => %s", target)
-			i.Set(Hyperlink.ToMail(email, subject))
-		} else if validator.IsEmail(target) {
-			log.Printf("email => %s", target)
-			i.Set(Hyperlink.ToMail(target, ""))
-		} else if validator.IsFilePath(target) {
-			log.Printf("file => %s", target)
-			i.Set(Hyperlink.ToFile(target))
-		}
+		//ref only, can be cell or bookmark
+		i.hyperlink.Location = fmt.Sprintf("#%s", escapeLocation(location))
 	}
 }
-//
-//func (o *hyperlinkOption) ToLocation(location string) hyperlinkOption {
-//	return func(i *HyperlinkInfo) {
-//
-//	}
-//}
 
 //private method used by hyperlinks manager to unpack HyperlinkInfo
 func fromHyperlinkInfo(info *HyperlinkInfo) (hyperlink *ml.Hyperlink, styleID format.DirectStyleID, err error) {
@@ -284,14 +253,51 @@ func fromHyperlinkInfo(info *HyperlinkInfo) (hyperlink *ml.Hyperlink, styleID fo
 }
 
 //private method used by hyperlinks manager to pack HyperlinkInfo
-func toHyperlinkInfo(hyperlink *ml.Hyperlink, targetInfo string, styleID format.DirectStyleID) *HyperlinkInfo {
-	return NewHyperlink(
+func toHyperlinkInfo(link *ml.Hyperlink, target string, styleID format.DirectStyleID) *HyperlinkInfo {
+	info := NewHyperlink(
 		Hyperlink.Formatting(styleID),
-		Hyperlink.ToTarget(targetInfo+hyperlink.Location),
+		Hyperlink.Display(link.Display),
+		Hyperlink.Tooltip(link.Tooltip),
 	)
+
+	//normalize location
+	location := link.Location
+	if len(location) > 0 && location[0] != '#' {
+		location = "#" + location
+	}
+
+	if len(location) > 0 {
+		info.hyperlink.Location = location
+	}
+
+	//detect type of link and set related type
+	if len(target) > 0 {
+		if validator.IsURL(target) {
+			log.Printf("url => %s", target)
+			info.Set(Hyperlink.ToUrl(target))
+		} else if ok, mail := validator.IsMailTo(target); ok {
+			log.Printf("mailto => %s, %+v", target, info)
+			info.Set(Hyperlink.ToMail(mail["email"], mail["subject"]))
+		} else if validator.IsEmail(target) {
+			log.Printf("email => %s", target)
+			info.Set(Hyperlink.ToMail(target, ""))
+		} else if validator.IsFilePath(target) {
+			log.Printf("file => %s", target)
+			info.Set(Hyperlink.ToFile(target))
+		} else {
+			panic("Can't detect type of hyperlink.")
+		}
+	}
+
+	return info
 }
 
 func escapeLocation(location string) string {
 	// TODO: escape location (research what kind of escaping Excel is expecting)
 	return `'` + strings.Replace(location, `'`, `\'`, -1) + `'`
+}
+
+func escapeTarget(target string) string {
+	//pound symbol (#) is not allowed in target
+	return strings.Replace(target, `#`, `%23`, -1)
 }
