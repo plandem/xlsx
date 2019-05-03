@@ -55,17 +55,17 @@ func TestColumns_Delete(t *testing.T) {
 	cols.Delete(0)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     99,
-			Width:   32,
+			Min:   1,
+			Max:   99,
+			Width: 32,
 		},
 	}, cols.sheet.ml.Cols)
 	cols.Resolve(0)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     99,
-			Width:   32,
+			Min:   1,
+			Max:   99,
+			Width: 32,
 		},
 		{
 			Min:   1,
@@ -76,18 +76,18 @@ func TestColumns_Delete(t *testing.T) {
 	cols.Delete(0)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     98,
-			Width:   32,
+			Min:   1,
+			Max:   98,
+			Width: 32,
 		},
 	}, cols.sheet.ml.Cols)
 	cols.Resolve(0)
 	cols.Resolve(5)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     98,
-			Width:   32,
+			Min:   1,
+			Max:   98,
+			Width: 32,
 		},
 		{
 			Min:   1,
@@ -103,9 +103,9 @@ func TestColumns_Delete(t *testing.T) {
 	cols.Delete(5)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     97,
-			Width:   32,
+			Min:   1,
+			Max:   97,
+			Width: 32,
 		},
 		{
 			Min:   1,
@@ -160,9 +160,9 @@ func TestColumns_Resolve(t *testing.T) {
 	cols.Resolve(0)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     100,
-			Width:   32,
+			Min:   1,
+			Max:   100,
+			Width: 32,
 		},
 		{
 			Min:   1,
@@ -174,9 +174,9 @@ func TestColumns_Resolve(t *testing.T) {
 	cols.Resolve(5)
 	require.EqualValues(t, &[]*ml.Col{
 		{
-			Min:     1,
-			Max:     100,
-			Width:   32,
+			Min:   1,
+			Max:   100,
+			Width: 32,
 		},
 		{
 			Min:   1,

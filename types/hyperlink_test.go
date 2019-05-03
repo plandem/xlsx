@@ -69,7 +69,7 @@ func TestHyperlinkOption_ToUrl(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			RID:      "http://google.com/%23anchor",
+			RID: "http://google.com/%23anchor",
 		},
 		linkType: hyperlinkTypeWeb,
 	}, link)
@@ -111,7 +111,7 @@ func TestHyperlinkOption_ToFile(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			RID: `file:///\Users\andrey\foo.txt`,
+			RID: `\Users\andrey\foo.txt`,
 		},
 		linkType: hyperlinkTypeFile,
 	}, link)
@@ -161,7 +161,7 @@ func TestHyperlinkOption_ToFile(t *testing.T) {
 
 	//filename with pound sign(#)
 	link.Set(
-		Hyperlink.ToFile(`./temp/foo#bar.txt`),
+		Hyperlink.ToFile(`temp\foo#bar.txt`),
 	)
 
 	require.IsType(t, &HyperlinkInfo{}, link)
@@ -175,7 +175,7 @@ func TestHyperlinkOption_ToFile(t *testing.T) {
 
 	//too large
 	link.Set(
-		Hyperlink.ToFile(fmt.Sprintf("c:\temp\f%s.doc", strings.Repeat("o", internal.FilePathLimit))),
+		Hyperlink.ToFile(fmt.Sprintf(`c:\temp\f%s.doc`, strings.Repeat("o", internal.FilePathLimit))),
 	)
 	require.NotNil(t, link.Validate())
 
@@ -195,7 +195,7 @@ func TestHyperlinkOption_ToRef(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: "#A1",
+			Location: "A1",
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -209,7 +209,7 @@ func TestHyperlinkOption_ToRef(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: "#'Sheet1'!A1",
+			Location: "'Sheet1'!A1",
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -223,7 +223,7 @@ func TestHyperlinkOption_ToRef(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: "#'Sheet 1'!A1",
+			Location: "'Sheet 1'!A1",
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -237,7 +237,7 @@ func TestHyperlinkOption_ToRef(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: `#'Sheet\'1'!A1`,
+			Location: `'Sheet\'1'!A1`,
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -300,7 +300,7 @@ func TestHyperlinkOption_ToBookmark(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: "#'Bookmark'",
+			Location: "'Bookmark'",
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -314,7 +314,7 @@ func TestHyperlinkOption_ToBookmark(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: "#'Bookmark Name'",
+			Location: "'Bookmark Name'",
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -328,7 +328,7 @@ func TestHyperlinkOption_ToBookmark(t *testing.T) {
 	require.IsType(t, &HyperlinkInfo{}, link)
 	require.Equal(t, &HyperlinkInfo{
 		hyperlink: &ml.Hyperlink{
-			Location: `#'Bookmark\'1'`,
+			Location: `'Bookmark\'1'`,
 		},
 		linkType: hyperlinkTypeUnknown,
 	}, link)
@@ -338,76 +338,273 @@ func TestHyperlinkOption_ToBookmark(t *testing.T) {
 func TestHyperlinkInfo_String(t *testing.T) {
 	//#'Bookmark' - bookmark without space
 	link := NewHyperlink(
-		Hyperlink.ToBookmark("Bookmark"),
+		Hyperlink.ToBookmark(`Bookmark`),
 	)
-	require.Equal(t, "#'Bookmark'", link.String())
+	require.Equal(t, `#'Bookmark'`, link.String())
 
 	//#'Bookmark Name' - bookmark with space
 	link = NewHyperlink(
-		Hyperlink.ToBookmark("Bookmark Name"),
+		Hyperlink.ToBookmark(`Bookmark Name`),
 	)
-	require.Equal(t, "#'Bookmark Name'", link.String())
+	require.Equal(t, `#'Bookmark Name'`, link.String())
 
 	//#A1 - ref without sheet
 	link = NewHyperlink(
-		Hyperlink.ToRef("A1", ""),
+		Hyperlink.ToRef(`A1`, ``),
 	)
-	require.Equal(t, "#A1", link.String())
+	require.Equal(t, `#A1`, link.String())
 
 	//#'Sheet Name'!A1 - ref with sheet
 	link = NewHyperlink(
-		Hyperlink.ToRef("A1", "Sheet Name"),
+		Hyperlink.ToRef(`A1`, `Sheet Name`),
 	)
-	require.Equal(t, "#'Sheet Name'!A1", link.String())
+	require.Equal(t, `#'Sheet Name'!A1`, link.String())
 
 	//mailto:spam@spam.it - without subject
 	link = NewHyperlink(
-		Hyperlink.ToMail("spam@spam.it", ""),
+		Hyperlink.ToMail(`spam@spam.it`, ``),
 	)
-	require.Equal(t, "mailto:spam@spam.it", link.String())
-
+	require.Equal(t, `mailto:spam@spam.it`, link.String())
 
 	//mailto:spam@spam.it?subject=topic - with subject
 	link = NewHyperlink(
-		Hyperlink.ToMail("spam@spam.it", "topic"),
+		Hyperlink.ToMail(`spam@spam.it`, `topic`),
 	)
-	require.Equal(t, "mailto:spam@spam.it?subject=topic", link.String())
+	require.Equal(t, `mailto:spam@spam.it?subject=topic`, link.String())
 
 	//http://google.com - without hash
 	link = NewHyperlink(
-		Hyperlink.ToUrl("http://google.com"),
+		Hyperlink.ToUrl(`http://google.com`),
 	)
-	require.Equal(t, "http://google.com", link.String())
+	require.Equal(t, `http://google.com`, link.String())
 
 	//http://google.com/%23hash - with hash
 	link = NewHyperlink(
-		Hyperlink.ToUrl("http://google.com/#hash"),
+		Hyperlink.ToUrl(`http://google.com/#hash`),
 	)
-	require.Equal(t, "http://google.com/%23hash", link.String())
+	require.Equal(t, `http://google.com/%23hash`, link.String())
+
+	//http://google.com/file.xlsx#bookmark' - with bookmark
+	link = NewHyperlink(
+		Hyperlink.ToUrl(`http://google.com/file.xlsx`),
+		Hyperlink.ToBookmark(`bookmark`),
+	)
+	require.Equal(t, `http://google.com/file.xlsx#'bookmark'`, link.String())
 
 	//http://google.com/%23hash#'bookmark' - with hash and bookmark
 	link = NewHyperlink(
-		Hyperlink.ToUrl("http://google.com/#hash"),
-		Hyperlink.ToBookmark("bookmark"),
+		Hyperlink.ToUrl(`http://google.com/#hash`),
+		Hyperlink.ToBookmark(`bookmark`),
 	)
-	require.Equal(t, "http://google.com/%23hash#'bookmark'", link.String())
+	require.Equal(t, `http://google.com/%23hash#'bookmark'`, link.String())
 
-	//file://Users\abc\test.xls - without hash
+	//\Users\abc\test.xlsx - without hash
 	link = NewHyperlink(
-		Hyperlink.ToFile("/Users/abc/test.xlsx"),
+		Hyperlink.ToFile(`/Users/abc/test.xlsx`),
 	)
-	require.Equal(t, `file:///\Users\abc\test.xlsx`, link.String())
+	require.Equal(t, `\Users\abc\test.xlsx`, link.String())
 
-	//file://Users\abc\test%23hash.xls - with hash
+	//\Users\abc\test%23hash.xlsx - with hash
 	link = NewHyperlink(
-		Hyperlink.ToFile("/Users/abc/test#hash.xlsx"),
+		Hyperlink.ToFile(`/Users/abc/test#hash.xlsx`),
 	)
-	require.Equal(t, `file:///\Users\abc\test%23hash.xlsx`, link.String())
+	require.Equal(t, `\Users\abc\test%23hash.xlsx`, link.String())
 
-	//file://Users\abc\test%23hash.xls#'bookmark' - with hash and bookmark
+	//\Users\abc\test%23hash.xlsx#'bookmark' - with hash and bookmark
 	link = NewHyperlink(
-		Hyperlink.ToFile("/Users/abc/test#hash.xlsx"),
-		Hyperlink.ToBookmark("bookmark"),
+		Hyperlink.ToFile(`/Users/abc/test#hash.xlsx`),
+		Hyperlink.ToBookmark(`bookmark`),
 	)
-	require.Equal(t, `file:///\Users\abc\test%23hash.xlsx#'bookmark'`, link.String())
+	require.Equal(t, `\Users\abc\test%23hash.xlsx#'bookmark'`, link.String())
+
+	//file:///C:\Users\abc\test.xlsx - without hash
+	link = NewHyperlink(
+		Hyperlink.ToFile(`C:\Users\abc\test.xlsx`),
+	)
+	require.Equal(t, `file:///C:\Users\abc\test.xlsx`, link.String())
+
+	//file:///C:\Users\abc\test%23hash.xlsx - with hash
+	link = NewHyperlink(
+		Hyperlink.ToFile(`C:\Users\abc\test#hash.xlsx`),
+	)
+	require.Equal(t, `file:///C:\Users\abc\test%23hash.xlsx`, link.String())
+
+	//file:///C:\Users\abc\test%23hash.xlsx#'bookmark' - with hash and bookmark
+	link = NewHyperlink(
+		Hyperlink.ToFile(`C:\Users\abc\test#hash.xlsx`),
+		Hyperlink.ToBookmark(`bookmark`),
+	)
+	require.Equal(t, `file:///C:\Users\abc\test%23hash.xlsx#'bookmark'`, link.String())
+
+	//file:///\\Users\abc\test.xlsx - without hash
+	link = NewHyperlink(
+		Hyperlink.ToFile(`\\Users\abc\test.xlsx`),
+	)
+	require.Equal(t, `file:///\\Users\abc\test.xlsx`, link.String())
+
+	//file:///\\Users\abc\test%23hash.xlsx - with hash
+	link = NewHyperlink(
+		Hyperlink.ToFile(`\\Users\abc\test#hash.xlsx`),
+	)
+	require.Equal(t, `file:///\\Users\abc\test%23hash.xlsx`, link.String())
+
+	//file:///\\Users\abc\test%23hash.xlsx#'bookmark' - with hash and bookmark
+	link = NewHyperlink(
+		Hyperlink.ToFile(`\\Users\abc\test#hash.xlsx`),
+		Hyperlink.ToBookmark(`bookmark`),
+	)
+	require.Equal(t, `file:///\\Users\abc\test%23hash.xlsx#'bookmark'`, link.String())
+}
+
+func TestHyperlinkOption_ToTarget(t *testing.T) {
+	//t.Parallel()
+
+	var tests = []struct {
+		target   string
+		expected *HyperlinkInfo
+	}{
+		{`#A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				Location: `A1`,
+			},
+			linkType: hyperlinkTypeUnknown,
+		}},
+		{`#SheetName!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				Location: `SheetName!A1`,
+			},
+			linkType: hyperlinkTypeUnknown,
+		}},
+		{`#'Sheet Name'!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				Location: `'Sheet Name'!A1`,
+			},
+			linkType: hyperlinkTypeUnknown,
+		}},
+		{`D:\Folder\File.docx`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID: `file:///D:\Folder\File.docx`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`D:\Folder\File.docx#Bookmark`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///D:\Folder\File.docx`,
+				Location: `Bookmark`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`D:\Folder\File.xlsx#SheetName!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///D:\Folder\File.xlsx`,
+				Location: `SheetName!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`D:\Folder\File.xlsx#'Sheet Name'!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///D:\Folder\File.xlsx`,
+				Location: `'Sheet Name'!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`[D:\Folder\File.docx]`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID: `file:///D:\Folder\File.docx`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`[D:\Folder\File.docx]Bookmark`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///D:\Folder\File.docx`,
+				Location: `Bookmark`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`[D:\Folder\File.xlsx]SheetName!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///D:\Folder\File.xlsx`,
+				Location: `SheetName!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`[D:\Folder\File.xlsx]'Sheet Name'!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///D:\Folder\File.xlsx`,
+				Location: `'Sheet Name'!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`\\SERVER\Folder\File.doc`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID: `file:///\\SERVER\Folder\File.doc`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`\\SERVER\Folder\File.xlsx#SheetName!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///\\SERVER\Folder\File.xlsx`,
+				Location: `SheetName!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+
+		{`\\SERVER\Folder\File.xlsx#'Sheet Name'!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///\\SERVER\Folder\File.xlsx`,
+				Location: `'Sheet Name'!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`[\\SERVER\Folder\File.xlsx]SheetName!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///\\SERVER\Folder\File.xlsx`,
+				Location: `SheetName!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`[\\SERVER\Folder\File.xlsx]'Sheet Name'!A1`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `file:///\\SERVER\Folder\File.xlsx`,
+				Location: `'Sheet Name'!A1`,
+			},
+			linkType: hyperlinkTypeFile,
+		}},
+		{`https://www.spam.it`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID: `https://www.spam.it`,
+			},
+			linkType: hyperlinkTypeWeb,
+		}},
+		{`https://www.spam.it/#bookmark`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `https://www.spam.it`,
+				Location: `bookmark`,
+			},
+			linkType: hyperlinkTypeWeb,
+		}},
+		{`[https://www.spam.it]bookmark`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID:      `https://www.spam.it`,
+				Location: `bookmark`,
+			},
+			linkType: hyperlinkTypeWeb,
+		}},
+		{"spam@spam.it", &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID: `mailto:spam@spam.it`,
+			},
+			linkType: hyperlinkTypeEmail,
+		}},
+		{`mailto:spam@spam.it?subject=topic`, &HyperlinkInfo{
+			hyperlink: &ml.Hyperlink{
+				RID: `mailto:spam@spam.it?subject=topic`,
+			},
+			linkType: hyperlinkTypeEmail,
+		}},
+	}
+
+	for _, test := range tests {
+		require.Equal(t, test.expected, NewHyperlink(Hyperlink.ToTarget(test.target)), "ToTarget(%q) should be %v", test.target, test.expected)
+	}
 }

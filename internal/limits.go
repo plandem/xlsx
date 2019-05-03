@@ -37,4 +37,3 @@ const UrlLimit = 2000
 //Total number of characters that a file path can contain
 // http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
 const FilePathLimit = 32767
-

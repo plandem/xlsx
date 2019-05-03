@@ -65,7 +65,7 @@ func BenchmarkLibsRandomGet(b *testing.B) {
 	}{
 		{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string, maxCols, maxRows int) {
 			xl := f.(*excelize.File)
-			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1 + rand.Intn(maxRows))
+			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1+rand.Intn(maxRows))
 			*value, _ = xl.GetCellValue("Sheet1", axis)
 		}},
 		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string, maxCols, maxRows int) {
@@ -101,7 +101,7 @@ func BenchmarkLibsRandomSet(b *testing.B) {
 	}{
 		{"excelize", excelizeOpen, func(f interface{}, s interface{}, value *string, maxCols, maxRows int) {
 			xl := f.(*excelize.File)
-			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1 + rand.Intn(maxRows))
+			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1+rand.Intn(maxRows))
 			xl.SetCellValue("Sheet1", axis, rand.Intn(100))
 		}},
 		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string, maxCols, maxRows int) {
@@ -148,7 +148,7 @@ func BenchmarkLibsRandomSetStyle(b *testing.B) {
 			xl := f.(*excelize.File)
 			styleId := ss.(int)
 
-			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1 + rand.Intn(maxRows))
+			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1+rand.Intn(maxRows))
 			xl.SetCellStyle("Sheet1", axis, axis, styleId)
 		}},
 		{"tealeg", tealegOpen, func(f interface{}) interface{} {

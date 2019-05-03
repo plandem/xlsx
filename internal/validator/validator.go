@@ -20,20 +20,28 @@ func FindNamedMatches(pattern *regexp.Regexp, str string) map[string]string {
 	return results
 }
 
-// IsFilePath check is a str is Win or Unix file
-func IsFilePath(str string) bool {
+// IsWinPath check is a str is Win file
+func IsWinPath(str string) bool {
 	if regWinPath.MatchString(str) {
 		//check windows path limit see:
-		if len(str[3:]) > internal.FilePathLimit {
+		if len(str) > internal.FilePathLimit {
 			return false
 		}
 
 		return true
-	} else if regUnixPath.MatchString(str) {
-		return true
 	}
 
 	return false
+}
+
+// IsUnixPath check is a str is Unix file
+func IsUnixPath(str string) bool {
+	return regUnixPath.MatchString(str)
+}
+
+// IsFilePath check is a str is Win or Unix file
+func IsFilePath(str string) bool {
+	return IsWinPath(str) || IsUnixPath(str)
 }
 
 // IsURL check if the str is an URL

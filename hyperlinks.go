@@ -53,8 +53,8 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 
 	//resolve HyperlinkInfo if required
 	var object *types.HyperlinkInfo
-	if url, ok := link.(string); ok {
-		object = types.NewHyperlink(types.Hyperlink.ToUrl(url))
+	if target, ok := link.(string); ok {
+		object = types.NewHyperlink(types.Hyperlink.ToTarget(target))
 	} else if pointer, ok := link.(*types.HyperlinkInfo); ok {
 		object = pointer
 	} else if value, ok := link.(types.HyperlinkInfo); ok {
