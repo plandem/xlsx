@@ -186,3 +186,25 @@ func TestSheetReadStream_unsupported(t *testing.T) {
 	//CopyTo/CopyToRef must not work in read-only mode
 	require.Panics(t, func() { sheet.Range("A1:B1").CopyToRef("C2") })
 }
+
+func TestSheetReadStream_modes(t *testing.T) {
+	xl, err := xlsx.Open("./test_files/example_simple.xlsx")
+	if err != nil {
+		panic(err)
+	}
+
+	//open as read-write and after as read-stream
+	sheet := xl.Sheet(0)
+	require.Panics(t, func() { xl.SheetReader(0, true) })
+	xl.Close()
+
+	xl, err = xlsx.Open("./test_files/example_simple.xlsx")
+	if err != nil {
+		panic(err)
+	}
+	defer xl.Close()
+
+	//open as read-stream and after as read-write
+	sheet = xl.SheetReader(0, true)
+	defer sheet.Close()
+}

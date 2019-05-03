@@ -21,6 +21,11 @@ func RefFromCellRefs(from CellRef, to CellRef) Ref {
 	return primitives.RefFromCellRefs(from, to)
 }
 
+//RefFromIndexes is alias of original primitives.RefFromIndexes to make it public
+func RefFromIndexes(colIndex, rowIndex int) Ref {
+	return primitives.RefFromIndexes(colIndex, rowIndex)
+}
+
 //CellRefFromIndexes is alias of original primitives.CellRefFromIndexes to make it public
 func CellRefFromIndexes(colIndex, rowIndex int) CellRef {
 	return primitives.CellRefFromIndexes(colIndex, rowIndex)

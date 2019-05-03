@@ -8,6 +8,7 @@ import (
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types"
 	"math"
 	"reflect"
 )
@@ -18,8 +19,10 @@ type sheetInfo struct {
 	isInitialized bool
 	index         int
 	file          *ooxml.PackageFile
-	mergedCells   *mergedCellManager
 	columns       *columns
+	mergedCells   *mergedCells
+	hyperlinks    *hyperlinks
+	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
 }
@@ -35,7 +38,10 @@ func isCellEmpty(c *ml.Cell) bool {
 
 //isRowEmpty checks if row is empty (supposed that only non empty cells here) - has no cells
 func isRowEmpty(r *ml.Row) bool {
-	return r == nil || (len(r.Cells) == 0 && reflect.DeepEqual(r, &ml.Row{}))
+	return r == nil ||
+		reflect.DeepEqual(r, &ml.Row{Ref: r.Ref, Cells: []*ml.Cell{}}) ||
+		reflect.DeepEqual(r, &ml.Row{Ref: r.Ref}) ||
+		reflect.DeepEqual(r, &ml.Row{})
 }
 
 //newSheetInfo creates a new sheetInfo and link it with workbook
@@ -95,15 +101,21 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		}
 
 		sheet.file = ooxml.NewPackageFile(doc.pkg, f, &sheet.ml, sheet)
-		sheet.mergedCells = newMergedCellManager(sheet)
 		sheet.columns = newColumns(sheet)
+		sheet.mergedCells = newMergedCells(sheet)
+		sheet.hyperlinks = newHyperlinks(sheet)
 	}
 
 	return sheet
 }
 
+//some private methods used objects that use Sheet implementation and have no access to internal information
 func (s *sheetInfo) mode() sheetMode {
 	return s.sheetMode
+}
+
+func (s *sheetInfo) info() *sheetInfo {
+	return s
 }
 
 //Name returns name of sheet
@@ -113,7 +125,7 @@ func (s *sheetInfo) Name() string {
 
 //SetName sets a name for sheet
 func (s *sheetInfo) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), sheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), internal.ExcelSheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
@@ -155,6 +167,43 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	return
 }
 
+//Range returns a range for ref
+func (s *sheetInfo) Range(ref types.Ref) *Range {
+	return newRangeFromRef(s.sheet, ref)
+}
+
+//MergeRows merges rows between fromIndex and toIndex
+func (s *sheetInfo) MergeRows(fromIndex, toIndex int) error {
+	return s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(0, fromIndex),
+		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
+	)).Merge()
+}
+
+//MergeCols merges cols between fromIndex and toIndex
+func (s *sheetInfo) MergeCols(fromIndex, toIndex int) error {
+	return s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(fromIndex, 0),
+		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
+	)).Merge()
+}
+
+//SplitRows splits rows between fromIndex and toIndex
+func (s *sheetInfo) SplitRows(fromIndex, toIndex int) {
+	s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(0, fromIndex),
+		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
+	)).Split()
+}
+
+//SplitCols splits cols between fromIndex and toIndex
+func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
+	s.Range(types.RefFromCellRefs(
+		types.CellRefFromIndexes(fromIndex, 0),
+		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
+	)).Split()
+}
+
 //Close frees allocated by sheet resources
 func (s *sheetInfo) Close() {
 
@@ -162,6 +211,18 @@ func (s *sheetInfo) Close() {
 
 //afterOpen is callback that will be called right after requesting an already existing sheet. By default, it does nothing
 func (s *sheetInfo) afterOpen() {
+}
+
+func (s *sheetInfo) attachRelationshipsIfRequired() {
+	if s.relationships == nil {
+		fileName := fmt.Sprintf("xl/worksheets/_rels/sheet%d.xml.rels", s.workbook.ml.Sheets[s.index].SheetID)
+
+		if file := s.workbook.doc.pkg.File(fileName); file != nil {
+			s.relationships = ooxml.NewRelationships(file, s.workbook.doc.pkg)
+		} else {
+			s.relationships = ooxml.NewRelationships(fileName, s.workbook.doc.pkg)
+		}
+	}
 }
 
 //afterCreate is callback that will be called right after creating a new sheet. By default, it registers sheet at spreadsheet
@@ -180,7 +241,7 @@ func (s *sheetInfo) BeforeMarshalXML() interface{} {
 		return prep.BeforeMarshalXML()
 	}
 
-	return s.ml
+	return &s.ml
 }
 
 func (s *sheetInfo) AfterMarshalXML(content []byte) []byte {

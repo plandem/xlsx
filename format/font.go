@@ -13,67 +13,75 @@ var Font fontOption
 
 func (f *fontOption) Name(name string) option {
 	return func(s *StyleFormat) {
-		s.font.Name = ml.Property(name)
+		s.styleInfo.Font.Name = ml.Property(name)
 	}
 }
 
+func (f *fontOption) Default(s *StyleFormat) {
+	s.styleInfo.Font.Family = FontFamilySwiss
+	s.styleInfo.Font.Scheme = FontSchemeMinor
+	s.styleInfo.Font.Name = "Calibri"
+	s.styleInfo.Font.Size = 11.0
+	//s.font.Color  =  Color{Theme: 1}
+}
+
 func (f *fontOption) Bold(s *StyleFormat) {
-	s.font.Bold = true
+	s.styleInfo.Font.Bold = true
 }
 
 func (f *fontOption) Italic(s *StyleFormat) {
-	s.font.Italic = true
+	s.styleInfo.Font.Italic = true
 }
 
 func (f *fontOption) Strikeout(s *StyleFormat) {
-	s.font.Strike = true
+	s.styleInfo.Font.Strike = true
 }
 
 func (f *fontOption) Shadow(s *StyleFormat) {
-	s.font.Shadow = true
+	s.styleInfo.Font.Shadow = true
 }
 
 func (f *fontOption) Condense(s *StyleFormat) {
-	s.font.Condense = true
+	s.styleInfo.Font.Condense = true
 }
 
 func (f *fontOption) Extend(s *StyleFormat) {
-	s.font.Extend = true
+	s.styleInfo.Font.Extend = true
 }
 
 func (f *fontOption) Family(family primitives.FontFamilyType) option {
 	return func(s *StyleFormat) {
-		s.font.Family = family
+		s.styleInfo.Font.Family = family
 	}
 }
 
 func (f *fontOption) Color(rgb string) option {
 	return func(s *StyleFormat) {
-		s.font.Color = color.New(rgb)
+		s.styleInfo.Font.Color = color.New(rgb)
 	}
 }
 
 func (f *fontOption) Size(size float64) option {
 	return func(s *StyleFormat) {
-		s.font.Size = ml.PropertyDouble(size)
+		s.styleInfo.Font.Size = ml.PropertyDouble(size)
 	}
 }
 
 func (f *fontOption) Underline(ut primitives.UnderlineType) option {
 	return func(s *StyleFormat) {
-		s.font.Underline = ut
+		s.styleInfo.Font.Underline = ut
 	}
 }
 
 func (f *fontOption) VAlign(va primitives.FontVAlignType) option {
 	return func(s *StyleFormat) {
-		s.font.VAlign = va
+		s.styleInfo.Font.VAlign = va
 	}
 }
 
 func (f *fontOption) Scheme(sn primitives.FontSchemeType) option {
 	return func(s *StyleFormat) {
-		s.font.Scheme = sn
+		s.styleInfo.Font.Scheme = sn
 	}
 }
 
@@ -81,7 +89,7 @@ func (f *fontOption) Charset(charset FontCharsetType) option {
 	return func(s *StyleFormat) {
 		if charset >= FontCharsetANSI && charset <= FontCharsetOEM {
 			//FIXME: right now it's not possible to encode 'Ansi' charset with 'omitempty'
-			s.font.Charset = primitives.FontCharsetType(charset)
+			s.styleInfo.Font.Charset = primitives.FontCharsetType(charset)
 		}
 	}
 }

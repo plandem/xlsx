@@ -12,21 +12,21 @@ func TestNumberFormat(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, &StyleFormat{
-		numFormat: ml.NumberFormat{
+	require.Equal(t, createAndFill(func(f *StyleFormat) {
+		f.styleInfo.NumberFormat = &ml.NumberFormat{
 			ID:   8,
 			Code: "($#,##0.00_);[RED]($#,##0.00_)",
-		},
-	}, style)
+		}
+	}), style)
 
 	style = New(
 		NumberFormat(`$0.00" usd"`),
 	)
 
-	require.Equal(t, &StyleFormat{
-		numFormat: ml.NumberFormat{
+	require.Equal(t, createAndFill(func(f *StyleFormat) {
+		f.styleInfo.NumberFormat = &ml.NumberFormat{
 			ID:   -1,
 			Code: `$0.00" usd"`,
-		},
-	}, style)
+		}
+	}), style)
 }

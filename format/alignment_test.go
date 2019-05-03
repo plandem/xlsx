@@ -21,8 +21,8 @@ func TestAlignment(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, &StyleFormat{
-		alignment: ml.CellAlignment{
+	require.Equal(t, createAndFill(func(f *StyleFormat) {
+		f.styleInfo.Alignment = &ml.CellAlignment{
 			Vertical:        VAlignBottom,
 			Horizontal:      HAlignFill,
 			TextRotation:    90,
@@ -32,8 +32,8 @@ func TestAlignment(t *testing.T) {
 			JustifyLastLine: true,
 			ShrinkToFit:     true,
 			ReadingOrder:    4,
-		},
-	}, style)
+		}
+	}), style)
 }
 
 func TestAlignmentMarshal(t *testing.T) {
@@ -44,7 +44,7 @@ func TestAlignmentMarshal(t *testing.T) {
 		Alignment.RelativeIndent(0),
 		Alignment.ReadingOrder(0),
 	)
-	encoded, err := xml.Marshal(&style.alignment)
+	encoded, err := xml.Marshal(&style.styleInfo.Alignment)
 	require.Empty(t, err)
 	require.Equal(t, `<CellAlignment></CellAlignment>`, string(encoded))
 
@@ -52,7 +52,7 @@ func TestAlignmentMarshal(t *testing.T) {
 	style = New(
 		Alignment.WrapText,
 	)
-	encoded, _ = xml.Marshal(&style.alignment)
+	encoded, _ = xml.Marshal(&style.styleInfo.Alignment)
 	require.Equal(t, `<CellAlignment wrapText="true"></CellAlignment>`, string(encoded))
 
 	//full version
@@ -67,6 +67,6 @@ func TestAlignmentMarshal(t *testing.T) {
 		Alignment.ShrinkToFit,
 		Alignment.ReadingOrder(4),
 	)
-	encoded, _ = xml.Marshal(&style.alignment)
+	encoded, _ = xml.Marshal(&style.styleInfo.Alignment)
 	require.Equal(t, `<CellAlignment horizontal="fill" vertical="bottom" textRotation="90" wrapText="true" indent="10" relativeIndent="5" justifyLastLine="true" shrinkToFit="true" readingOrder="4"></CellAlignment>`, string(encoded))
 }

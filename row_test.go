@@ -34,7 +34,7 @@ func TestRow(t *testing.T) {
 	require.Equal(t, r.ml.Height, float32(0.0))
 	require.Equal(t, r.ml.CustomHeight, false)
 	require.Equal(t, r.ml.CustomFormat, false)
-	require.Equal(t, r.ml.Style, format.StyleID(0))
+	require.Equal(t, r.ml.Style, format.DirectStyleID(0))
 
 	o = options.NewRowOptions(
 		options.Row.Height(100.0),
@@ -48,7 +48,7 @@ func TestRow(t *testing.T) {
 	require.Equal(t, r.ml.Height, float32(100.0))
 	require.Equal(t, r.ml.CustomHeight, true)
 	require.Equal(t, r.ml.CustomFormat, false)
-	require.Equal(t, r.ml.Style, format.StyleID(0))
+	require.Equal(t, r.ml.Style, format.DirectStyleID(0))
 
 	style := format.New(
 		format.Font.Name("Calibri"),
@@ -59,5 +59,5 @@ func TestRow(t *testing.T) {
 	r.SetFormatting(styleRef)
 
 	require.Equal(t, r.ml.CustomFormat, true)
-	require.Equal(t, r.ml.Style, format.StyleID(styleRef))
+	require.Equal(t, r.ml.Style, format.DirectStyleID(styleRef))
 }

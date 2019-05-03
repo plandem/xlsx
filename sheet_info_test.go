@@ -16,6 +16,8 @@ func TestSheetInfo(t *testing.T) {
 
 	require.Equal(t, true, isRowEmpty(nil))
 	require.Equal(t, true, isRowEmpty(&ml.Row{}))
+	require.Equal(t, true, isRowEmpty(&ml.Row{Ref: 1}))
+	require.Equal(t, true, isRowEmpty(&ml.Row{Ref: 1, Cells: []*ml.Cell{}}))
 	require.Equal(t, false, isRowEmpty(&ml.Row{Cells: []*ml.Cell{{}}}))
 	require.Equal(t, false, isRowEmpty(&ml.Row{CustomHeight: true}))
 

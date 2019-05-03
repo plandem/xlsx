@@ -8,6 +8,7 @@ import (
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
 	XMLName               ml.Name         `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
+	RIDName               ml.RIDName      `xml:",attr"`
 	SheetPr               *ml.Reserved    `xml:"sheetPr,omitempty"`
 	Dimension             *SheetDimension `xml:"dimension,omitempty"`
 	SheetViews            *SheetViews     `xml:"sheetViews,omitempty"`
@@ -26,7 +27,7 @@ type Worksheet struct {
 	PhoneticPr            *ml.Reserved    `xml:"phoneticPr,omitempty"`
 	ConditionalFormatting *[]*ml.Reserved `xml:"conditionalFormatting,omitempty"`
 	DataValidations       *ml.Reserved    `xml:"dataValidations,omitempty"`
-	Hyperlinks            *ml.Reserved    `xml:"hyperlinks,omitempty"`
+	Hyperlinks            *[]*Hyperlink   `xml:"hyperlinks>hyperlink,omitempty"`
 	PrintOptions          *ml.Reserved    `xml:"printOptions,omitempty"`
 	PageMargins           *ml.Reserved    `xml:"pageMargins,omitempty"`
 	PageSetup             *ml.Reserved    `xml:"pageSetup,omitempty"`
@@ -54,34 +55,34 @@ type SheetDimension struct {
 
 //Col is a direct mapping of XSD CT_Col
 type Col struct {
-	Min          int     `xml:"min,attr"`
-	Max          int     `xml:"max,attr"`
-	Width        float32 `xml:"width,attr,omitempty"`
-	Style        StyleID `xml:"style,attr,omitempty"`
-	Hidden       bool    `xml:"hidden,attr,omitempty"`
-	BestFit      bool    `xml:"bestFit,attr,omitempty"`
-	CustomWidth  bool    `xml:"customWidth,attr,omitempty"`
-	Phonetic     bool    `xml:"phonetic,attr,omitempty"`
-	OutlineLevel uint8   `xml:"outlineLevel,attr,omitempty"`
-	Collapsed    bool    `xml:"collapsed,attr,omitempty"`
+	Min          int           `xml:"min,attr"`
+	Max          int           `xml:"max,attr"`
+	Width        float32       `xml:"width,attr,omitempty"`
+	Style        DirectStyleID `xml:"style,attr,omitempty"`
+	Hidden       bool          `xml:"hidden,attr,omitempty"`
+	BestFit      bool          `xml:"bestFit,attr,omitempty"`
+	CustomWidth  bool          `xml:"customWidth,attr,omitempty"`
+	Phonetic     bool          `xml:"phonetic,attr,omitempty"`
+	OutlineLevel uint8         `xml:"outlineLevel,attr,omitempty"`
+	Collapsed    bool          `xml:"collapsed,attr,omitempty"`
 }
 
 //Row is a direct mapping of XSD CT_Row
 type Row struct {
-	Cells        []*Cell      `xml:"c"`
-	ExtLst       *ml.Reserved `xml:"extLst,omitempty"`
-	Ref          int          `xml:"r,attr,omitempty"` //1-based index
-	Spans        string       `xml:"spans,attr,omitempty"`
-	Style        StyleID      `xml:"s,attr,omitempty"`
-	CustomFormat bool         `xml:"customFormat,attr,omitempty"`
-	Height       float32      `xml:"ht,attr,omitempty"`
-	Hidden       bool         `xml:"hidden,attr,omitempty"`
-	CustomHeight bool         `xml:"customHeight,attr,omitempty"`
-	OutlineLevel uint8        `xml:"outlineLevel,attr,omitempty"`
-	Collapsed    bool         `xml:"collapsed,attr,omitempty"`
-	ThickTop     bool         `xml:"thickTop,attr,omitempty"`
-	ThickBot     bool         `xml:"thickBot,attr,omitempty"`
-	Phonetic     bool         `xml:"ph,attr,omitempty"`
+	Cells        []*Cell       `xml:"c"`
+	ExtLst       *ml.Reserved  `xml:"extLst,omitempty"`
+	Ref          int           `xml:"r,attr,omitempty"` //1-based index
+	Spans        string        `xml:"spans,attr,omitempty"`
+	Style        DirectStyleID `xml:"s,attr,omitempty"`
+	CustomFormat bool          `xml:"customFormat,attr,omitempty"`
+	Height       float32       `xml:"ht,attr,omitempty"`
+	Hidden       bool          `xml:"hidden,attr,omitempty"`
+	CustomHeight bool          `xml:"customHeight,attr,omitempty"`
+	OutlineLevel uint8         `xml:"outlineLevel,attr,omitempty"`
+	Collapsed    bool          `xml:"collapsed,attr,omitempty"`
+	ThickTop     bool          `xml:"thickTop,attr,omitempty"`
+	ThickBot     bool          `xml:"thickBot,attr,omitempty"`
+	Phonetic     bool          `xml:"ph,attr,omitempty"`
 }
 
 //Cell is a direct mapping of XSD CT_Cell
@@ -91,7 +92,7 @@ type Cell struct {
 	InlineStr *StringItem         `xml:"is,omitempty"`
 	ExtLst    *ml.Reserved        `xml:"extLst,omitempty"`
 	Ref       primitives.CellRef  `xml:"r,attr"`
-	Style     StyleID             `xml:"s,attr,omitempty"`
+	Style     DirectStyleID       `xml:"s,attr,omitempty"`
 	Type      primitives.CellType `xml:"t,attr,omitempty"`
 	Cm        ml.OptionalIndex    `xml:"cm,attr,omitempty"`
 	Vm        ml.OptionalIndex    `xml:"vm,attr,omitempty"`
@@ -151,4 +152,13 @@ type SheetView struct {
 	ZoomScaleSheetLayoutView uint               `xml:"zoomScaleSheetLayoutView,attr,omitempty"`
 	ZoomScalePageLayoutView  uint               `xml:"zoomScalePageLayoutView,attr,omitempty"`
 	WorkbookViewId           uint               `xml:"workbookViewId,attr"`
+}
+
+//Hyperlink is a direct mapping of XSD CT_Hyperlink
+type Hyperlink struct {
+	Bounds   primitives.Bounds `xml:"ref,attr"`
+	Location string            `xml:"location,attr,omitempty"`
+	Tooltip  string            `xml:"tooltip,attr,omitempty"`
+	Display  string            `xml:"display,attr,omitempty"`
+	RID      ml.RID            `xml:"id,attr,omitempty"`
 }
