@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/types"
 )
 
 func main() {
@@ -66,7 +67,43 @@ func main() {
 			}
 		})
  	}
-    		
+
+	//Hyperlinks via string
+	_ = sheet.CellByRef("A1").SetValueWithHyperlink("Link To Cell", "#C3")
+	_ = sheet.CellByRef("A2").SetValueWithHyperlink("Link To Sheet", "#'The first sheet'!C3")
+	_ = sheet.CellByRef("A3").SetValueWithHyperlink("Link To Google", "http://google.com")
+	_ = sheet.CellByRef("A4").SetValueWithHyperlink("Link To Email", "spam@spam.it")
+	_ = sheet.CellByRef("A5").SetValueWithHyperlink("Link To File", "./example_simple.xlsx#Sheet1!C3")
+
+	//Hyperlinks via helper type
+	_ = sheet.CellByRef("B1").SetValueWithHyperlink("Link To Cell", types.NewHyperlink(
+		types.Hyperlink.ToRef("C3", ""),
+	))
+	_ = sheet.CellByRef("B2").SetValueWithHyperlink("Link To Sheet", types.NewHyperlink(
+		types.Hyperlink.ToRef("C3", "The first sheet"),
+	))
+
+	_ = sheet.CellByRef("B3").SetValueWithHyperlink("Link To Google", types.NewHyperlink(
+		types.Hyperlink.ToUrl("http://google.com"),
+	))
+
+	_ = sheet.CellByRef("B4").SetValueWithHyperlink("Link To Email", types.NewHyperlink(
+		types.Hyperlink.ToMail("spam@spam.it", ""),
+	))
+	
+	_ = sheet.CellByRef("B5").SetValueWithHyperlink("Link To File", types.NewHyperlink(
+		types.Hyperlink.ToFile("./example_simple.xlsx#Sheet1!C3"),
+		types.Hyperlink.ToRef("C3", "Sheet1"),
+	))
+
+	//Hyperlinks for range
+	_= sheet.Range("A1:C3").SetHyperlink("http://google.com")
+	sheet.Range("A1:C3").RemoveHyperlink()
+	
+	//Merged Cells
+	_= sheet.Range("A1:C3").Merge()
+	sheet.Range("A1:C3").Split()
+	
 	xl.SaveAs("test1.xlsx")
 }
 ```
@@ -121,11 +158,11 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [x] range: copy
 - [x] row: copy
 - [x] col: copy
-- [ ] cell: hyperlinks
+- [x] cell: hyperlinks
 - [ ] cell: comments
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
-- [ ] cell: add/delete merged cells
+- [x] cell: add/delete merged cells
 - [ ] other: conditional formatting
 - [ ] other: rich texts
 - [ ] other: drawing
