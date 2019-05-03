@@ -476,7 +476,7 @@ func Example_streams() {
 
 	// Open sheet in stream reading mode with single phase.
 	// Some meta information is NOT available (e.g. merged cells).
-	sheet := xl.SheetReader(0, false)
+	sheet := xl.Sheet(0, xlsx.SheetModeStream)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))
@@ -485,7 +485,7 @@ func Example_streams() {
 
 	// Open sheet in stream reading mode with multi phases.
 	// Meta information is available.
-	sheet = xl.SheetReader(0, true)
+	sheet = xl.Sheet(0,  xlsx.SheetModeStream,  xlsx.SheetModeMultiPhase)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))

@@ -199,7 +199,7 @@ func (s *sheetReadWrite) Rows() RowIterator {
 
 //resolveDimension check if there is a 'dimension' information(optional) and if there is no any, then calculate it from existing data
 func (s *sheetReadWrite) resolveDimension(force bool) {
-	if !force && (s.ml.Dimension != nil && !s.ml.Dimension.Bounds.IsEmpty()) {
+	if (s.sheetMode & SheetModeIgnoreDimension) == 0 && !force && (s.ml.Dimension != nil && !s.ml.Dimension.Bounds.IsEmpty()) {
 		// We need to fix 'optimized' case, when Dimension holds only last part of Ref (e.g., C10 instead of instead of A1:C10).
 		// Normally such Ref means cell ref, but dimension is always a range
 		s.ml.Dimension.Bounds.FromRow = 0

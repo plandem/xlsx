@@ -49,41 +49,46 @@ func (xl *Spreadsheet) GetSheetNames() []string {
 	return sheetNames
 }
 
-//Sheet returns a sheet by 0-based index
-func (xl *Spreadsheet) Sheet(i int) Sheet {
+//Sheet returns a sheet by 0-based index with required open mode options
+func (xl *Spreadsheet) Sheet(i int, options ...sheetMode) Sheet {
 	if i >= len(xl.sheets) {
 		return nil
 	}
 
-	si := xl.sheets[i]
-	if si.sheetMode == sheetModeUnknown {
-		sheet := &sheetReadWrite{si}
-		si.sheetMode = sheetModeRead | sheetModeWrite
+	mode := sheetModeRead
+	for _, m := range options {
+		mode |= m
+	}
+
+	prevMode := xl.sheets[i].sheetMode
+
+	//stream mode
+	if (mode & SheetModeStream) != 0 {
+		//stream can be opened only if sheet was not opened in normal mode before
+		if (prevMode & sheetModeRead) != 0 {
+			panic("You can't open sheet in stream mode after it was opened in normal mode.")
+		}
+
+		//for stream mode we create a copy of sheetInfo to prevent pollution
+		si := *xl.sheets[i]
+		sheet := &sheetReadStream{sheetInfo: &si}
 		si.sheet = sheet
+		si.sheetMode = mode
 		sheet.afterOpen()
+		return sheet
 	}
 
-	return si.sheet
-}
-
-//SheetReader returns a sheet by 0-based index that opened in stream reading mode
-//In stream reading mode only forward reading is allowed and no updates will be applied
-//For multi phase mode sheet will be iterated two times: first one to load meta information (e.g. merged cells) and another one for sheet data
-func (xl *Spreadsheet) SheetReader(i int, multiPhase bool) Sheet {
-	if i >= len(xl.sheets) {
-		return nil
+	//normal mode
+	if prevMode == sheetModeUnknown {
+		//to prevent mess with opening same sheet with different modes, we always use same mode as used first time
+		prevMode = mode | sheetModeWrite
 	}
 
-	si := *xl.sheets[i]
-	if si.sheetMode != sheetModeUnknown {
-		panic("You can't open sheet in stream mode after it was opened in normal mode.")
-	}
-
-	sheet := &sheetReadStream{sheetInfo: &si, multiPhase: multiPhase}
-	si.sheetMode = sheetModeRead | sheetModeStream
+	si :=  xl.sheets[i]
+	sheet := &sheetReadWrite{ si}
 	si.sheet = sheet
+	si.sheetMode = prevMode
 	sheet.afterOpen()
-
 	return sheet
 }
 

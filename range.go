@@ -77,7 +77,7 @@ func (r *Range) SetFormatting(styleID format.DirectStyleID) {
 
 func (r *Range) ensureNotStream() {
 	//result is unpredictable in stream mode
-	if mode := r.sheet.mode(); (mode & sheetModeStream) != 0 {
+	if mode := r.sheet.mode(); (mode & SheetModeStream) != 0 {
 		panic(errorNotSupportedStream)
 	}
 }

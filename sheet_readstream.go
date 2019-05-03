@@ -14,7 +14,6 @@ type sheetReadStream struct {
 	rowReader  ooxml.StreamReaderIterator
 	mergedRows map[int]*Row
 	currentRow *ml.Row
-	multiPhase bool
 }
 
 var _ Sheet = (*sheetReadStream)(nil)
@@ -85,7 +84,7 @@ func (s *sheetReadStream) Row(index int) *Row {
 func (s *sheetReadStream) nextRow(decoder *xml.Decoder, start *xml.StartElement) bool {
 	if start != nil && start.Name.Local == "row" {
 		row := &ml.Row{}
-		decoder.DecodeElement(row, start)
+		_ = decoder.DecodeElement(row, start)
 
 		//expand row dimension to required width
 		width, _ := s.Dimension()
@@ -113,7 +112,7 @@ func (s *sheetReadStream) Rows() RowIterator {
 
 //Close frees allocated by sheet resources
 func (s *sheetReadStream) Close() {
-	s.stream.Close()
+	_ = s.stream.Close()
 }
 
 func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
@@ -126,6 +125,9 @@ func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 
 //afterOpen loads worksheet data and initializes it if required
 func (s *sheetReadStream) afterOpen() {
+
+	muliPhase := (s.sheetMode & SheetModeMultiPhase) != 0
+
 	if s.currentRow == nil {
 		s.stream = s.file.ReadStream()
 
@@ -135,16 +137,16 @@ func (s *sheetReadStream) afterOpen() {
 				switch start.Name.Local {
 				case "dimension":
 					s.ml.Dimension = &ml.SheetDimension{}
-					decoder.DecodeElement(s.ml.Dimension, start)
+					_ = decoder.DecodeElement(s.ml.Dimension, start)
 				case "mergeCells":
 					s.mergedCells = newMergedCells(s.sheetInfo)
 					s.mergedCells.initIfRequired()
 				case "mergeCell":
 					cell := &ml.MergeCell{}
-					decoder.DecodeElement(cell, start)
+					_ = decoder.DecodeElement(cell, start)
 					*s.ml.MergeCells = append(*s.ml.MergeCells, cell)
 				case "row":
-					if s.multiPhase {
+					if muliPhase {
 						//skip row data, because 'mergeCell' is going after row data
 						return true
 					}
@@ -159,11 +161,11 @@ func (s *sheetReadStream) afterOpen() {
 		}
 
 		// multi phased?
-		if s.multiPhase {
+		if muliPhase {
 			//skip is func to skip any info till first row
 			skip := func() {
 				//close previous opened stream
-				s.stream.Close()
+				_= s.stream.Close()
 
 				//re-open stream again and cache skip any info till first row
 				s.stream = s.file.ReadStream()

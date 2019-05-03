@@ -54,7 +54,7 @@ func xlsxReadStream(fileName string) (interface{}, interface{}) {
 		panic(err)
 	}
 
-	return xl, xl.SheetReader(0, false)
+	return xl, xl.Sheet(0, ooxml.SheetModeStream)
 }
 
 func BenchmarkLibsRandomGet(b *testing.B) {
@@ -149,7 +149,7 @@ func BenchmarkLibsRandomSetStyle(b *testing.B) {
 			styleId := ss.(int)
 
 			axis, _ := excelize.CoordinatesToCellName(rand.Intn(maxCols), 1+rand.Intn(maxRows))
-			xl.SetCellStyle("Sheet1", axis, axis, styleId)
+			_ = xl.SetCellStyle("Sheet1", axis, axis, styleId)
 		}},
 		{"tealeg", tealegOpen, func(f interface{}) interface{} {
 			style := xlsx.NewStyle()
@@ -330,7 +330,7 @@ func BenchmarkLibsUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*excelize.File)
-			xl.SaveAs("saved_big_excelize.xlsx")
+			_= xl.SaveAs("saved_big_excelize.xlsx")
 		}},
 		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*xlsx.Sheet)
@@ -339,7 +339,7 @@ func BenchmarkLibsUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*xlsx.File)
-			xl.Save("saved_big_tealeg.xlsx")
+			_= xl.Save("saved_big_tealeg.xlsx")
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(ooxml.Sheet)
@@ -349,7 +349,7 @@ func BenchmarkLibsUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*ooxml.Spreadsheet)
-			xl.SaveAs("saved_big_xlsx.xlsx")
+			_= xl.SaveAs("saved_big_xlsx.xlsx")
 		}},
 	}
 
@@ -382,7 +382,7 @@ func BenchmarkLibsUpdateHugeFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*excelize.File)
-			xl.SaveAs("saved_huge_excelize.xlsx")
+			_= xl.SaveAs("saved_huge_excelize.xlsx")
 		}},
 		//{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
 		//	sheet := s.(*xlsx.Sheet)
@@ -401,7 +401,7 @@ func BenchmarkLibsUpdateHugeFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*ooxml.Spreadsheet)
-			xl.SaveAs("saved_huge_xlsx.xlsx")
+			_= xl.SaveAs("saved_huge_xlsx.xlsx")
 		}},
 	}
 

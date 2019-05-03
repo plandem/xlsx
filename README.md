@@ -155,17 +155,23 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 
 # Roadmap
 - [ ] sheet: copy
+- [x] sheet: read as stream
+- [ ] sheet: write as stream
 - [x] range: copy
+- [x] range: hyperlinks
+- [x] range: merge/split cells
 - [x] row: copy
+- [x] row: merge/split rows
 - [x] col: copy
+- [x] col: merge/split cols
 - [x] cell: hyperlinks
 - [ ] cell: comments
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
-- [x] cell: add/delete merged cells
 - [ ] other: conditional formatting
 - [ ] other: rich texts
 - [ ] other: drawing
+- [ ] other: unpack package to temp folder to reduce memory usage
 - [x] other: more tests
 
 # Contribution 
