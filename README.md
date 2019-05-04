@@ -97,9 +97,9 @@ func main() {
 		format.New(
 			format.Font.Bold,
 			format.Font.Color("#ff0000"),
-         ),
-         "red bold text",
-         "another plain text",
+		),
+		"red bold text",
+		"another plain text",
 	)
 	
 	_= xl.SaveAs("test1.xlsx")
