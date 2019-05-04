@@ -202,4 +202,3 @@ func toRichFont(f *StyleFormat) *ml.RichFont {
 
 	return nil
 }
-

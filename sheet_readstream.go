@@ -168,7 +168,7 @@ func (s *sheetReadStream) afterOpen() {
 			//skip is func to skip any info till first row
 			skip := func() {
 				//close previous opened stream
-				_= s.stream.Close()
+				_ = s.stream.Close()
 
 				//re-open stream again and cache skip any info till first row
 				s.stream = s.file.ReadStream()

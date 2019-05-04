@@ -485,7 +485,7 @@ func Example_streams() {
 
 	// Open sheet in stream reading mode with multi phases.
 	// Meta information is available.
-	sheet = xl.Sheet(0,  xlsx.SheetModeStream,  xlsx.SheetModeMultiPhase)
+	sheet = xl.Sheet(0, xlsx.SheetModeStream, xlsx.SheetModeMultiPhase)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()
 		fmt.Println(strings.Join(row.Values(), ","))

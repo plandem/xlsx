@@ -1,17 +1,15 @@
 package hash
 
 import (
-	"crypto/md5"
-	"fmt"
-	"io"
+	"hash/fnv"
 )
 
 //Key is alias type for string to provide Hash method
 type Key string
 
-//Hash returns md5 hash of key
-func (k Key) Hash() string {
-	h := md5.New()
-	io.WriteString(h, string(k))
-	return fmt.Sprintf("%x", h.Sum(nil))
+//Hash returns FNV1 hash of key
+func (k Key) Hash() uint64 {
+	h := fnv.New64()
+	h.Write([]byte(string(k)))
+	return h.Sum64()
 }

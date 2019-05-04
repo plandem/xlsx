@@ -54,7 +54,7 @@ func TestToRichText(t *testing.T) {
 			{
 				Text: "1",
 				Font: &ml.RichFont{
-					Color: &ml.Color{RGB:"FFFF1122"},
+					Color: &ml.Color{RGB: "FFFF1122"},
 				},
 			},
 			{
@@ -69,7 +69,7 @@ func TestToRichText(t *testing.T) {
 
 	text, err = toRichText("1", "2", "3", format.New(
 		format.Font.Color("#FF3344"),
-	),format.New(
+	), format.New(
 		format.Font.Color("#FF3344"),
 	), "4")
 

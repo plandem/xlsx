@@ -19,8 +19,8 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 
 	if len(parts) > 0 {
 		//if last part is format, then remove it
-		if _, lastIsFormat := parts[len(parts) - 1].(*format.StyleFormat); lastIsFormat {
-			parts = parts[:len(parts) - 1]
+		if _, lastIsFormat := parts[len(parts)-1].(*format.StyleFormat); lastIsFormat {
+			parts = parts[:len(parts)-1]
 		}
 
 		richText := make([]*ml.RichText, 0)

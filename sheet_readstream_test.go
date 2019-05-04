@@ -113,7 +113,9 @@ func TestSpreadsheet(t *testing.T) {
 			"SheetReadStream_SinglePhased", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.Sheet(0, xlsx.SheetModeStream) }, testSheetReadLimited,
 		},
 		{
-			"SheetReadStream_MultiPhased", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.Sheet(0, xlsx.SheetModeStream, xlsx.SheetModeMultiPhase) }, testSheetReadFull,
+			"SheetReadStream_MultiPhased", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet {
+				return xl.Sheet(0, xlsx.SheetModeStream, xlsx.SheetModeMultiPhase)
+			}, testSheetReadFull,
 		},
 		{
 			"SheetReadWrite", func(t *testing.T, xl *xlsx.Spreadsheet) xlsx.Sheet { return xl.Sheet(0) }, testSheetReadFull,
