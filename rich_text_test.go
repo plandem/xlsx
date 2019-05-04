@@ -93,4 +93,6 @@ func TestFromRichText(t *testing.T) {
 
 	require.Nil(t, err)
 	require.Equal(t, "12", fromRichText(text))
+
+	require.Equal(t, "", fromRichText(nil))
 }
