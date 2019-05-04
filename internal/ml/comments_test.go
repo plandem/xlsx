@@ -36,6 +36,7 @@ func TestComments(t *testing.T) {
 		</comments>
 	`)
 
+	shapeID := 0
 	decoder := xml.NewDecoder(bytes.NewReader([]byte(data)))
 	comments := &ml.Comments{}
 	err := decoder.DecodeElement(comments, nil)
@@ -52,7 +53,7 @@ func TestComments(t *testing.T) {
 			{
 				Ref: primitives.Ref("C6").ToBounds(),
 				AuthorID: 0,
-				ShapeID: 0,
+				ShapeID: &shapeID,
 				Text: &ml.StringItem{
 					Text: "",
 					RichText: &[]*ml.RichText{
