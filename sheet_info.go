@@ -22,6 +22,7 @@ type sheetInfo struct {
 	columns       *columns
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
+	comments      *comments
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
@@ -104,6 +105,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.columns = newColumns(sheet)
 		sheet.mergedCells = newMergedCells(sheet)
 		sheet.hyperlinks = newHyperlinks(sheet)
+		sheet.comments = newComments(sheet)
 	}
 
 	return sheet
