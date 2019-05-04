@@ -138,6 +138,9 @@ func (s *sheetReadStream) afterOpen() {
 				case "dimension":
 					s.ml.Dimension = &ml.SheetDimension{}
 					_ = decoder.DecodeElement(s.ml.Dimension, start)
+				case "hyperlinks":
+					s.hyperlinks = newHyperlinks(s.sheetInfo)
+					s.hyperlinks.initIfRequired()
 				case "mergeCells":
 					s.mergedCells = newMergedCells(s.sheetInfo)
 					s.mergedCells.initIfRequired()

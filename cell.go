@@ -36,7 +36,7 @@ func (c *Cell) Value() string {
 	switch c.ml.Type {
 	case types.CellTypeInlineString:
 		if c.ml.InlineStr != nil {
-			value = string(c.ml.InlineStr.Text)
+			value = fromRichText(c.ml.InlineStr)
 		}
 	case types.CellTypeSharedString:
 		var sid int
@@ -45,7 +45,7 @@ func (c *Cell) Value() string {
 			sid, _ = strconv.Atoi(c.ml.Value)
 		}
 
-		value = c.sheet.workbook.doc.sharedStrings.get(sid)
+		value = fromRichText(c.sheet.workbook.doc.sharedStrings.get(sid))
 	default:
 		value = c.ml.Value
 	}
@@ -145,10 +145,43 @@ func (c *Cell) SetString(value string) {
 	}
 
 	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
-	sid := c.sheet.workbook.doc.sharedStrings.add(c.truncateIfRequired(value))
+	sid := c.sheet.workbook.doc.sharedStrings.addString(c.truncateIfRequired(value))
 	c.ml.Formula = nil
 	c.ml.Type = types.CellTypeSharedString
 	c.ml.Value = strconv.Itoa(sid)
+}
+
+//SetString sets shared rich text
+func (c *Cell) SetText(parts ...interface{}) error {
+	//we can update sharedStrings only when sheet is in write mode, to prevent pollution of sharedStrings with fake values
+	if (c.sheet.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
+
+	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
+	text, err := toRichText(parts...)
+	if err == nil {
+		sid := c.sheet.workbook.doc.sharedStrings.addText(text)
+		c.ml.Formula = nil
+		c.ml.Type = types.CellTypeSharedString
+		c.ml.Value = strconv.Itoa(sid)
+	}
+
+	return err
+}
+
+//SetInlineText sets inline rich text
+func (c *Cell) SetInlineText(parts ...interface{}) error {
+	text, err := toRichText(parts...)
+
+	if err == nil {
+		c.ml.Type = types.CellTypeInlineString
+		c.ml.Value = ""
+		c.ml.Formula = nil
+		c.ml.InlineStr = text
+	}
+
+	return err
 }
 
 //SetInt sets an integer value
@@ -225,29 +258,31 @@ func (c *Cell) SetDeltaTime(value time.Time) {
 
 //SetValue sets a value
 func (c *Cell) SetValue(value interface{}) {
-	switch t := value.(type) {
+	switch v := value.(type) {
 	case int:
-		c.SetInt(value.(int))
+		c.SetInt(v)
 	case int8:
-		c.SetInt(int(value.(int8)))
+		c.SetInt(int(v))
 	case int16:
-		c.SetInt(int(value.(int16)))
+		c.SetInt(int(v))
 	case int32:
-		c.SetInt(int(value.(int32)))
+		c.SetInt(int(v))
 	case int64:
-		c.SetInt(int(value.(int64)))
+		c.SetInt(int(v))
 	case float32:
-		c.SetFloat(float64(value.(float32)))
+		c.SetFloat(float64(v))
 	case float64:
-		c.SetFloat(value.(float64))
+		c.SetFloat(v)
 	case string:
-		c.SetString(t)
+		c.SetString(v)
 	case []byte:
-		c.SetString(string(t))
+		c.SetString(string(v))
 	case bool:
-		c.SetBool(bool(t))
+		c.SetBool(v)
 	case time.Time:
-		c.setDate(time.Time(t), numberFormat.DateTime)
+		c.setDate(v, numberFormat.DateTime)
+	case []interface{}:
+		_ = c.SetText(v...)
 	case nil:
 		c.Reset()
 	default:

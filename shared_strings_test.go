@@ -20,18 +20,18 @@ func TestSharedStrings(t *testing.T) {
 	require.NotNil(t, ss)
 
 	require.Equal(t, 0, len(ss.index))
-	require.Equal(t, 0, ss.add("new value"))
+	require.Equal(t, 0, ss.addString("new value"))
 	require.Equal(t, 1, len(ss.index))
-	require.Equal(t, 0, ss.add("new value"))
-	require.Equal(t, 0, ss.add("new value"))
-	require.Equal(t, 0, ss.add("new value"))
+	require.Equal(t, 0, ss.addString("new value"))
+	require.Equal(t, 0, ss.addString("new value"))
+	require.Equal(t, 0, ss.addString("new value"))
 	require.Equal(t, 1, len(ss.index))
 	require.Equal(t, map[string]int{"new value": 0}, ss.index)
 
-	require.Equal(t, 1, ss.add("another value"))
+	require.Equal(t, 1, ss.addString("another value"))
 	require.Equal(t, 2, len(ss.index))
 	require.Equal(t, map[string]int{"new value": 0, "another value": 1}, ss.index)
 
-	require.Equal(t, "new value", ss.get(0))
-	require.Equal(t, "another value", ss.get(1))
+	require.Equal(t, "new value", fromRichText(ss.get(0)))
+	require.Equal(t, "another value", fromRichText(ss.get(1)))
 }

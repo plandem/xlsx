@@ -38,20 +38,19 @@ func (ss *SharedStrings) afterLoad() {
 	}
 }
 
-//get returns string stored at index
-func (ss *SharedStrings) get(index int) string {
+//get returns string item stored at index
+func (ss *SharedStrings) get(index int) *ml.StringItem {
 	ss.file.LoadIfRequired(ss.afterLoad)
 
-	var value string
 	if index < len(ss.ml.StringItem) {
-		value = string(ss.ml.StringItem[index].Text)
+		return ss.ml.StringItem[index]
 	}
 
-	return value
+	return nil
 }
 
 //add add a new value and return index for it
-func (ss *SharedStrings) add(value string) int {
+func (ss *SharedStrings) addString(value string) int {
 	ss.file.LoadIfRequired(ss.afterLoad)
 
 	//return sid if already exists
@@ -63,6 +62,19 @@ func (ss *SharedStrings) add(value string) int {
 	sid := len(ss.ml.StringItem)
 	ss.ml.StringItem = append(ss.ml.StringItem, &ml.StringItem{Text: primitives.Text(value)})
 	ss.index[value] = sid
+
+	ss.file.MarkAsUpdated()
+
+	return sid
+}
+
+//add add a new value and return index for it
+func (ss *SharedStrings) addText(value *ml.StringItem) int {
+	ss.file.LoadIfRequired(ss.afterLoad)
+
+	//TODO: implement a mechanism for finding unique rich text
+	sid := len(ss.ml.StringItem)
+	ss.ml.StringItem = append(ss.ml.StringItem, value)
 
 	ss.file.MarkAsUpdated()
 

@@ -98,6 +98,16 @@ func main() {
 	_= sheet.Range("A1:C3").Merge()
 	sheet.Range("A1:C3").Split()
 	
+	//Rich Text
+	_= sheet.CellByRef("F10").SetText(
+		"default text", 
+		format.New(
+			format.Font.Bold,
+			format.Font.Color("#ff0000"),
+         ),
+         "red bold text",
+	)
+	
 	_= xl.SaveAs("test1.xlsx")
 }
 ```
@@ -160,7 +170,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
 - [ ] other: conditional formatting
-- [ ] other: rich texts
+- [x] other: rich texts
 - [ ] other: drawing
 - [ ] other: unpack package to temp folder to reduce memory usage
 - [x] other: more tests

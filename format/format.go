@@ -189,3 +189,17 @@ func fromStyleFormat(f *StyleFormat) (font *ml.Font, fill *ml.Fill, alignment *m
 
 	return
 }
+
+//private method used by to convert StyleFormat to ml.RichFont
+func toRichFont(f *StyleFormat) *ml.RichFont {
+	style := f.styleInfo
+
+	//copy non-empty font
+	if (*style.Font != ml.Font{} && *style.Font != ml.Font{Size: 0, Family: 0, Charset: 0}) {
+		font := ml.RichFont(*style.Font)
+		return &font
+	}
+
+	return nil
+}
+

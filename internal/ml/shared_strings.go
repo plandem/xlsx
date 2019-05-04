@@ -16,8 +16,33 @@ type SharedStrings struct {
 
 //StringItem is a direct mapping of XSD CT_Rst
 type StringItem struct {
-	Text       primitives.Text `xml:"t,omitempty"`
-	R          *ml.Reserved    `xml:"r,omitempty"`
-	RPh        *ml.Reserved    `xml:"rPh,omitempty"`
+	Text       primitives.Text `xml:"t,omitempty"` //optional
+	RichText   *[]*RichText    `xml:"r,omitempty"` //optional
+	RPh        *[]*ml.Reserved `xml:"rPh,omitempty"`
 	PhoneticPr *ml.Reserved    `xml:"phoneticPr,omitempty"`
+}
+
+//RichText is a direct mapping of XSD CT_RElt
+type RichText struct {
+	Font *RichFont       `xml:"rPr,omitempty"`
+	Text primitives.Text `xml:"t"` //required
+}
+
+//RichFont is a direct mapping of XSD CT_RPrElt
+//N.B.: it's weird, but CT_RPrElt is clone CT_Font, except different tag for 'Name' field
+type RichFont struct {
+	Name      ml.Property                `xml:"rFont,omitempty"`
+	Charset   primitives.FontCharsetType `xml:"charset,omitempty"`
+	Family    primitives.FontFamilyType  `xml:"family,omitempty"`
+	Bold      ml.PropertyBool            `xml:"b,omitempty"`
+	Italic    ml.PropertyBool            `xml:"i,omitempty"`
+	Strike    ml.PropertyBool            `xml:"strike,omitempty"`
+	Shadow    ml.PropertyBool            `xml:"shadow,omitempty"`
+	Condense  ml.PropertyBool            `xml:"condense,omitempty"`
+	Extend    ml.PropertyBool            `xml:"extend,omitempty"`
+	Color     *Color                     `xml:"color,omitempty"`
+	Size      ml.PropertyDouble          `xml:"sz,omitempty"`
+	Underline primitives.UnderlineType   `xml:"u,omitempty"`
+	VAlign    primitives.FontVAlignType  `xml:"vertAlign,omitempty"`
+	Scheme    primitives.FontSchemeType  `xml:"scheme,omitempty"`
 }
