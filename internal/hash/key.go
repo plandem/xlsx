@@ -4,12 +4,15 @@ import (
 	"hash/fnv"
 )
 
-//Key is alias type for string to provide Hash method
+//Key is string type to provide Hash method
 type Key string
 
+//Code is alias type for result of Hash method to unify logic around
+type Code = uint64
+
 //Hash returns FNV1 hash of key
-func (k Key) Hash() uint64 {
-	h := fnv.New64()
+func (k Key) Hash() Code {
+	h := fnv.New64a()
 	h.Write([]byte(string(k)))
-	return h.Sum64()
+	return Code(h.Sum64())
 }

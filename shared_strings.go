@@ -11,7 +11,7 @@ import (
 //SharedStrings is a higher level object that wraps ml.SharedStrings with functionality
 type SharedStrings struct {
 	ml    ml.SharedStrings
-	index map[uint64]int
+	index map[hash.Code]int
 	doc   *Spreadsheet
 	file  *ooxml.PackageFile
 }
@@ -19,7 +19,7 @@ type SharedStrings struct {
 func newSharedStrings(f interface{}, doc *Spreadsheet) *SharedStrings {
 	ss := &SharedStrings{
 		doc:   doc,
-		index: make(map[uint64]int),
+		index: make(map[hash.Code]int),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)

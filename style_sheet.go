@@ -18,15 +18,15 @@ type StyleSheet struct {
 	ml ml.StyleSheet
 
 	//hash -> index for styles
-	directStyleIndex map[uint64]format.DirectStyleID
-	diffStyleIndex   map[uint64]format.DiffStyleID
-	namedStyleIndex  map[uint64]format.NamedStyleID
+	directStyleIndex map[hash.Code]format.DirectStyleID
+	diffStyleIndex   map[hash.Code]format.DiffStyleID
+	namedStyleIndex  map[hash.Code]format.NamedStyleID
 
 	//hash -> index for types
-	borderIndex map[uint64]int
-	fillIndex   map[uint64]int
-	fontIndex   map[uint64]int
-	numberIndex map[uint64]int
+	borderIndex map[hash.Code]int
+	fillIndex   map[hash.Code]int
+	fontIndex   map[hash.Code]int
+	numberIndex map[hash.Code]int
 
 	//hash for typed number formats
 	typedStyles map[numberFormat.Type]format.DirectStyleID
@@ -38,13 +38,13 @@ type StyleSheet struct {
 func newStyleSheet(f interface{}, doc *Spreadsheet) *StyleSheet {
 	ss := &StyleSheet{
 		doc:              doc,
-		directStyleIndex: make(map[uint64]format.DirectStyleID),
-		diffStyleIndex:   make(map[uint64]format.DiffStyleID),
-		namedStyleIndex:  make(map[uint64]format.NamedStyleID),
-		borderIndex:      make(map[uint64]int),
-		fillIndex:        make(map[uint64]int),
-		fontIndex:        make(map[uint64]int),
-		numberIndex:      make(map[uint64]int),
+		directStyleIndex: make(map[hash.Code]format.DirectStyleID),
+		diffStyleIndex:   make(map[hash.Code]format.DiffStyleID),
+		namedStyleIndex:  make(map[hash.Code]format.NamedStyleID),
+		borderIndex:      make(map[hash.Code]int),
+		fillIndex:        make(map[hash.Code]int),
+		fontIndex:        make(map[hash.Code]int),
+		numberIndex:      make(map[hash.Code]int),
 		typedStyles:      make(map[numberFormat.Type]format.DirectStyleID),
 	}
 

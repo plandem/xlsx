@@ -199,68 +199,131 @@ func TestProtection(t *testing.T) {
 	require.Equal(t, hash.Key("true:true"), hash.Protection(&ml.CellProtection{Locked: true, Hidden: true}))
 }
 
-//func TestStyle(t *testing.T) {
-//	require.Equal(t, "21d6729c08385ca7078ba2ee04554513", hash.Style(nil, nil, nil, nil, nil, nil))
-//	require.Equal(t, "64c32acf26863461b038d6c769699673", hash.Style(
-//		&ml.Font{
-//			Scheme:    format.FontSchemeMajor,
-//			VAlign:    format.FontVAlignSubscript,
-//			Underline: format.UnderlineTypeDoubleAccounting,
-//			Size:      2.2,
-//			Color:     &ml.Color{RGB: "112233"},
-//			Extend:    true,
-//			Condense:  true,
-//			Shadow:    true,
-//			Strike:    true,
-//			Italic:    true,
-//			Bold:      true,
-//			Family:    format.FontFamilyRoman,
-//			Charset:   1,
-//			Name:      "calibri",
-//		},
-//		&ml.Fill{
-//			Gradient: &ml.GradientFill{
-//				Type:   format.GradientTypePath,
-//				Degree: 90,
-//				Left:   1.1,
-//				Right:  2.2,
-//				Top:    3.3,
-//				Bottom: 4.4,
-//				Stop: []*ml.GradientStop{
-//					{Color: &ml.Color{RGB: "112233"}, Position: 1.1},
-//					{Color: &ml.Color{RGB: "AABBCC"}, Position: 2.2},
-//				},
-//			},
-//			Pattern: &ml.PatternFill{
-//				Type:       format.PatternTypeDarkTrellis,
-//				Background: &ml.Color{RGB: "112233"},
-//				Color:      &ml.Color{RGB: "112233"},
-//			},
-//		},
-//		&ml.CellAlignment{
-//			Horizontal:      format.HAlignDistributed,
-//			Vertical:        format.VAlignBottom,
-//			ReadingOrder:    13,
-//			TextRotation:    90,
-//			ShrinkToFit:     true,
-//			JustifyLastLine: true,
-//			WrapText:        true,
-//			Indent:          10,
-//			RelativeIndent:  12,
-//		},
-//		&ml.NumberFormat{ID: 1, Code: "aaa"},
-//		&ml.CellProtection{Locked: true, Hidden: true},
-//		&ml.Border{
-//			Outline:      true,
-//			DiagonalDown: true,
-//			DiagonalUp:   true,
-//			Horizontal:   &ml.BorderSegment{Color: &ml.Color{RGB: "111111"}, Type: format.BorderStyleMedium},
-//			Vertical:     &ml.BorderSegment{Color: &ml.Color{RGB: "222222"}, Type: format.BorderStyleDashDot},
-//			Diagonal:     &ml.BorderSegment{Color: &ml.Color{RGB: "333333"}, Type: format.BorderStyleDotted},
-//			Bottom:       &ml.BorderSegment{Color: &ml.Color{RGB: "444444"}, Type: format.BorderStyleHair},
-//			Top:          &ml.BorderSegment{Color: &ml.Color{RGB: "555555"}, Type: format.BorderStyleThick},
-//			Right:        &ml.BorderSegment{Color: &ml.Color{RGB: "666666"}, Type: format.BorderStyleThin},
-//			Left:         &ml.BorderSegment{Color: &ml.Color{RGB: "777777"}, Type: format.BorderStyleSlantDashDot},
-//		},
-//	))
-//}
+func TestDirectStyle(t *testing.T) {
+	require.Equal(t, hash.Key("0:0:0:0:false:false:false:false:false:false:false:false:0:0:0:false:0:0:false:false:0:false:false::0"), hash.DirectStyle(nil))
+	require.Equal(t, hash.Key("-1:-2:-3:-4:true:true:true:true:true:true:true:true:8:3:90:true:10:12:true:true:13:true:true::-10"), hash.DirectStyle(&ml.DirectStyle{
+		Style: ml.Style{
+			NumFmtId:          -1,
+			FontId:            -2,
+			FillId:            -3,
+			BorderId:          -4,
+			QuotePrefix:       true,
+			PivotButton:       true,
+			ApplyNumberFormat: true,
+			ApplyFont:         true,
+			ApplyFill:         true,
+			ApplyBorder:       true,
+			ApplyAlignment:    true,
+			ApplyProtection:   true,
+			Alignment: &ml.CellAlignment{
+				Horizontal:      format.HAlignDistributed,
+				Vertical:        format.VAlignBottom,
+				ReadingOrder:    13,
+				TextRotation:    90,
+				ShrinkToFit:     true,
+				JustifyLastLine: true,
+				WrapText:        true,
+				Indent:          10,
+				RelativeIndent:  12,
+			},
+			Protection: &ml.CellProtection{Locked: true, Hidden: true},
+		},
+		XfId: -10,
+	}))
+}
+
+func TestNamedStyle(t *testing.T) {
+	require.Equal(t, hash.Key("0:0:0:0:false:false:false:false:false:false:false:false:0:0:0:false:0:0:false:false:0:false:false:"), hash.NamedStyle(nil))
+	require.Equal(t, hash.Key("-1:-2:-3:-4:true:true:true:true:true:true:true:true:8:3:90:true:10:12:true:true:13:true:true:"), hash.NamedStyle(&ml.NamedStyle{
+		NumFmtId:          -1,
+		FontId:            -2,
+		FillId:            -3,
+		BorderId:          -4,
+		QuotePrefix:       true,
+		PivotButton:       true,
+		ApplyNumberFormat: true,
+		ApplyFont:         true,
+		ApplyFill:         true,
+		ApplyBorder:       true,
+		ApplyAlignment:    true,
+		ApplyProtection:   true,
+		Alignment: &ml.CellAlignment{
+			Horizontal:      format.HAlignDistributed,
+			Vertical:        format.VAlignBottom,
+			ReadingOrder:    13,
+			TextRotation:    90,
+			ShrinkToFit:     true,
+			JustifyLastLine: true,
+			WrapText:        true,
+			Indent:          10,
+			RelativeIndent:  12,
+		},
+		Protection: &ml.CellProtection{Locked: true, Hidden: true},
+	}))
+}
+
+func TestDiffStyle(t *testing.T) {
+	require.Equal(t, hash.Key("false::0::::false::0::::false::0::::false::0::::false::0::::false::0::::false::0::::false:false:false:0:false::0:::false::0:::0:0:0:0:0:0::0:0:false:false:false:false:false:false:false::0:::0::::0::0:0:0:false:0:0:false:false:0:false:false:"), hash.DiffStyle(nil))
+	require.Equal(t, hash.Key("false:777777:0:::slantDashDot:false:666666:0:::thin:false:555555:0:::thick:false:444444:0:::hair:false:333333:0:::dotted:false:222222:0:::dashDot:false:111111:0:::medium:true:true:true:11:false:112233:0:::false:112233:0:::1:90:1.1:2.2:3.3:4.4:1.1:false:112233:0:::2.2:false:AABBCC:0:::calibri:1:1:true:true:true:true:true:true:false:112233:0:::2.2:doubleAccounting:subscript:major:1:aaa:8:3:90:true:10:12:true:true:13:true:true:"), hash.DiffStyle(&ml.DiffStyle{
+		Font: &ml.Font{
+			Scheme:    format.FontSchemeMajor,
+			VAlign:    format.FontVAlignSubscript,
+			Underline: format.UnderlineTypeDoubleAccounting,
+			Size:      2.2,
+			Color:     &ml.Color{RGB: "112233"},
+			Extend:    true,
+			Condense:  true,
+			Shadow:    true,
+			Strike:    true,
+			Italic:    true,
+			Bold:      true,
+			Family:    format.FontFamilyRoman,
+			Charset:   1,
+			Name:      "calibri",
+		},
+		Fill: &ml.Fill{
+			Gradient: &ml.GradientFill{
+				Type:   format.GradientTypePath,
+				Degree: 90,
+				Left:   1.1,
+				Right:  2.2,
+				Top:    3.3,
+				Bottom: 4.4,
+				Stop: []*ml.GradientStop{
+					{Color: &ml.Color{RGB: "112233"}, Position: 1.1},
+					{Color: &ml.Color{RGB: "AABBCC"}, Position: 2.2},
+				},
+			},
+			Pattern: &ml.PatternFill{
+				Type:       format.PatternTypeDarkTrellis,
+				Background: &ml.Color{RGB: "112233"},
+				Color:      &ml.Color{RGB: "112233"},
+			},
+		},
+		Alignment: &ml.CellAlignment{
+			Horizontal:      format.HAlignDistributed,
+			Vertical:        format.VAlignBottom,
+			ReadingOrder:    13,
+			TextRotation:    90,
+			ShrinkToFit:     true,
+			JustifyLastLine: true,
+			WrapText:        true,
+			Indent:          10,
+			RelativeIndent:  12,
+		},
+		NumberFormat: &ml.NumberFormat{ID: 1, Code: "aaa"},
+		Protection:   &ml.CellProtection{Locked: true, Hidden: true},
+		Border: &ml.Border{
+			Outline:      true,
+			DiagonalDown: true,
+			DiagonalUp:   true,
+			Horizontal:   &ml.BorderSegment{Color: &ml.Color{RGB: "111111"}, Type: format.BorderStyleMedium},
+			Vertical:     &ml.BorderSegment{Color: &ml.Color{RGB: "222222"}, Type: format.BorderStyleDashDot},
+			Diagonal:     &ml.BorderSegment{Color: &ml.Color{RGB: "333333"}, Type: format.BorderStyleDotted},
+			Bottom:       &ml.BorderSegment{Color: &ml.Color{RGB: "444444"}, Type: format.BorderStyleHair},
+			Top:          &ml.BorderSegment{Color: &ml.Color{RGB: "555555"}, Type: format.BorderStyleThick},
+			Right:        &ml.BorderSegment{Color: &ml.Color{RGB: "666666"}, Type: format.BorderStyleThin},
+			Left:         &ml.BorderSegment{Color: &ml.Color{RGB: "777777"}, Type: format.BorderStyleSlantDashDot},
+		}},
+	))
+}
