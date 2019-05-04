@@ -74,15 +74,7 @@ func main() {
 	_ = sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
 	
 	//Add hyperlink as string
-	_ = sheet.Range("B1:C3").SetHyperlink("#C3")
-	_ = sheet.Row(5).SetHyperlink("#C3")
-	_ = sheet.Col(5).SetHyperlink("#C3")
-	_ = sheet.CellByRef("A2").SetHyperlink("#C3")
-	
-	_ = sheet.CellByRef("A3").SetHyperlink("#'The first sheet'!C3")
-	_ = sheet.CellByRef("A4").SetHyperlink("http://google.com")
-	_ = sheet.CellByRef("A5").SetHyperlink("spam@spam.it")
-	_ = sheet.CellByRef("A6").SetHyperlink("./example_simple.xlsx#Sheet1!C3")
+	_ = sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
 
 	//Add hyperlink via helper type for advanced settings
 	_ = sheet.CellByRef("A7").SetHyperlink(types.NewHyperlink(
@@ -90,6 +82,7 @@ func main() {
 		types.Hyperlink.ToRef("C3", "Sheet1"),
 		types.Hyperlink.Tooltip("That's a tooltip"),
 		types.Hyperlink.Display("Something to display"), //Cell still holds own value
+		types.Hyperlink.Formatting(redBoldYellow),
 	))
 
 	sheet.CellByRef("A1").RemoveHyperlink()
@@ -100,12 +93,13 @@ func main() {
 	
 	//Rich Text
 	_= sheet.CellByRef("F10").SetText(
-		"default text", 
+		"plain text", 
 		format.New(
 			format.Font.Bold,
 			format.Font.Color("#ff0000"),
-         ),
-         "red bold text",
+		),
+		"red bold text",
+		"another plain text",
 	)
 	
 	_= xl.SaveAs("test1.xlsx")
