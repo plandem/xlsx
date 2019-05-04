@@ -14,18 +14,18 @@ func TestSpreadsheet_Sheet(t *testing.T) {
 	defer xl.Close()
 
 	//stream mode should be new each time
-	sheet := xl.Sheet(0, SheetModeStream | SheetModeMultiPhase)
-	assert.Equal(t, sheetModeRead | SheetModeStream | SheetModeMultiPhase, sheet.mode())
+	sheet := xl.Sheet(0, SheetModeStream|SheetModeMultiPhase)
+	assert.Equal(t, sheetModeRead|SheetModeStream|SheetModeMultiPhase, sheet.mode())
 
-	sheet = xl.Sheet(0, SheetModeStream | SheetModeIgnoreDimension)
-	assert.Equal(t, sheetModeRead | SheetModeStream | SheetModeIgnoreDimension, sheet.mode())
+	sheet = xl.Sheet(0, SheetModeStream|SheetModeIgnoreDimension)
+	assert.Equal(t, sheetModeRead|SheetModeStream|SheetModeIgnoreDimension, sheet.mode())
 
 	//normal mode should not be changed
 	sheet = xl.Sheet(0, SheetModeIgnoreDimension)
-	assert.Equal(t, sheetModeRead | sheetModeWrite | SheetModeIgnoreDimension, sheet.mode())
+	assert.Equal(t, sheetModeRead|sheetModeWrite|SheetModeIgnoreDimension, sheet.mode())
 
 	sheet = xl.Sheet(0)
-	assert.Equal(t, sheetModeRead | sheetModeWrite | SheetModeIgnoreDimension, sheet.mode())
+	assert.Equal(t, sheetModeRead|sheetModeWrite|SheetModeIgnoreDimension, sheet.mode())
 
 	//stream mode should not work after normal mode
 	assert.Panics(t, func() {
@@ -33,12 +33,12 @@ func TestSpreadsheet_Sheet(t *testing.T) {
 	})
 
 	sheet = xl.AddSheet("a new sheet")
-	assert.Equal(t, sheetModeRead | sheetModeWrite, sheet.mode())
+	assert.Equal(t, sheetModeRead|sheetModeWrite, sheet.mode())
 
 	sheet = xl.Sheet(1)
-	assert.Equal(t, sheetModeRead | sheetModeWrite, sheet.mode())
+	assert.Equal(t, sheetModeRead|sheetModeWrite, sheet.mode())
 
 	sheet = xl.Sheet(1, SheetModeIgnoreDimension)
-	assert.Equal(t, sheetModeRead | sheetModeWrite, sheet.mode())
+	assert.Equal(t, sheetModeRead|sheetModeWrite, sheet.mode())
 
 }

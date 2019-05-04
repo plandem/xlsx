@@ -16,9 +16,9 @@ const (
 	sheetModeUnknown sheetMode = 0
 	sheetModeRead    sheetMode = 1 << iota
 	sheetModeWrite
-	SheetModeStream           //In stream mode only forward reading/writing is allowed
-	SheetModeMultiPhase       //Sheet will be iterated two times: first one to load meta information (e.g. merged cells) and another one for sheet data. Only for SheetModeStream mode.
-	SheetModeIgnoreDimension  //Ignore dimension information during reading or skip it during writing
+	SheetModeStream          //In stream mode only forward reading/writing is allowed
+	SheetModeMultiPhase      //Sheet will be iterated two times: first one to load meta information (e.g. merged cells) and another one for sheet data. Only for SheetModeStream mode.
+	SheetModeIgnoreDimension //Ignore dimension information during reading or skip it during writing
 )
 
 //Sheet is interface for a higher level object that wraps ml.Worksheet with functionality

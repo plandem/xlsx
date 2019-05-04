@@ -330,7 +330,7 @@ func BenchmarkLibsUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*excelize.File)
-			_= xl.SaveAs("saved_big_excelize.xlsx")
+			_ = xl.SaveAs("saved_big_excelize.xlsx")
 		}},
 		{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(*xlsx.Sheet)
@@ -339,7 +339,7 @@ func BenchmarkLibsUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*xlsx.File)
-			_= xl.Save("saved_big_tealeg.xlsx")
+			_ = xl.Save("saved_big_tealeg.xlsx")
 		}},
 		{"xlsx", xlsxOpen, func(f interface{}, s interface{}, value *string) {
 			sheet := s.(ooxml.Sheet)
@@ -349,7 +349,7 @@ func BenchmarkLibsUpdateBigFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*ooxml.Spreadsheet)
-			_= xl.SaveAs("saved_big_xlsx.xlsx")
+			_ = xl.SaveAs("saved_big_xlsx.xlsx")
 		}},
 	}
 
@@ -382,7 +382,7 @@ func BenchmarkLibsUpdateHugeFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*excelize.File)
-			_= xl.SaveAs("saved_huge_excelize.xlsx")
+			_ = xl.SaveAs("saved_huge_excelize.xlsx")
 		}},
 		//{"tealeg", tealegOpen, func(f interface{}, s interface{}, value *string) {
 		//	sheet := s.(*xlsx.Sheet)
@@ -401,7 +401,7 @@ func BenchmarkLibsUpdateHugeFile(b *testing.B) {
 			}
 		}, func(f interface{}) {
 			xl := f.(*ooxml.Spreadsheet)
-			_= xl.SaveAs("saved_huge_xlsx.xlsx")
+			_ = xl.SaveAs("saved_huge_xlsx.xlsx")
 		}},
 	}
 

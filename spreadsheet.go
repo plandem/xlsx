@@ -84,8 +84,8 @@ func (xl *Spreadsheet) Sheet(i int, options ...sheetMode) Sheet {
 		prevMode = mode | sheetModeWrite
 	}
 
-	si :=  xl.sheets[i]
-	sheet := &sheetReadWrite{ si}
+	si := xl.sheets[i]
+	sheet := &sheetReadWrite{si}
 	si.sheet = sheet
 	si.sheetMode = prevMode
 	sheet.afterOpen()
