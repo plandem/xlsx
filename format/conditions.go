@@ -69,6 +69,20 @@ func (f *ConditionalFormat) Validate() error {
 		if r.rule.Type == ConditionTypeTimePeriod && r.rule.TimePeriod == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: no time period", i))
 		}
+
+		if r.rule.ColorScale != nil {
+			if len(r.rule.ColorScale.Values) != len(r.rule.ColorScale.Colors) {
+				return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have equal numbers of colors and values", i))
+			}
+
+			if len(r.rule.ColorScale.Values) < 2 {
+				return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have at least 2 values", i))
+			}
+		}
+
+		if r.rule.IconSet != nil && (len(r.rule.IconSet.Values) < 2) {
+			return errors.New(fmt.Sprintf("conditional rule#%d: icon set should have at least 2 values", i))
+		}
 	}
 
 	return nil

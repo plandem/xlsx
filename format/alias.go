@@ -37,3 +37,9 @@ type TimePeriodType = primitives.TimePeriodType
 
 //Formula is alias of original primitives.Formula
 type Formula = primitives.Formula
+
+//ConditionValueType is alias of original primitives.ConditionValueType
+type ConditionValueType = primitives.ConditionValueType
+
+//IconSetType is alias of original primitives.IconSetType
+type IconSetType = primitives.IconSetType

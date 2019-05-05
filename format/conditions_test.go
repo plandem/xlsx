@@ -151,4 +151,97 @@ func TestConditionalFormat_Validate(t *testing.T) {
 			Condition.TimePeriod(TimePeriodLastMonth),
 		),
 	).Validate())
+
+	require.NotNil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.ColorScale(),
+		),
+	).Validate())
+
+	require.NotNil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.ColorScale(
+				ConditionValue(ConditionValueTypePercent, "10", false),
+				"#112233",
+			),
+		),
+	).Validate())
+
+	require.NotNil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.ColorScale(
+				ConditionValue(ConditionValueTypePercent, "10", false),
+				ConditionValue(ConditionValueTypePercent, "50", false),
+				"#112233",
+			),
+		),
+	).Validate())
+
+	require.NotNil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.ColorScale(
+				ConditionValue(ConditionValueTypePercent, "50", false),
+				"#112233",
+				"#334455",
+			),
+		),
+	).Validate())
+
+	require.Nil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.ColorScale(
+				ConditionValue(ConditionValueTypePercent, "10", false),
+				ConditionValue(ConditionValueTypePercent, "50", false),
+				"#112233",
+				"#334455",
+			),
+		),
+	).Validate())
+
+	require.NotNil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.IconSet(IconSetType3Arrows, true, true, true),
+		),
+	).Validate())
+
+	require.NotNil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.IconSet(IconSetType3Arrows, true, true, true,
+				ConditionValue(ConditionValueTypePercent, "10", false),
+			),
+		),
+	).Validate())
+
+	require.Nil(t, NewConditions(
+		Conditions.Refs("A10:B20"),
+		Conditions.Rule(
+			Condition.Type(ConditionTypeAboveAverage),
+			Condition.Priority(1),
+			Condition.IconSet(IconSetType3Arrows, true, true, true,
+				ConditionValue(ConditionValueTypePercent, "10", false),
+				ConditionValue(ConditionValueTypePercent, "50", false),
+			),
+		),
+	).Validate())
 }

@@ -1,6 +1,7 @@
 package format
 
 import (
+	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
 )
 
@@ -97,5 +98,64 @@ func (co *conditionalRuleOption) Rank(rank uint) conditionalRuleOption {
 func (co *conditionalRuleOption) Formula(formula Formula) conditionalRuleOption {
 	return func(r *conditionalRule) {
 		r.rule.Formula = formula
+	}
+}
+
+func (co *conditionalRuleOption) ColorScale(pairs ...interface{}) conditionalRuleOption {
+	return func(r *conditionalRule) {
+		colorScale := &ml.ColorScale{}
+
+		for _, p := range pairs {
+			switch v := p.(type) {
+			case string:
+				colorScale.Colors = append(colorScale.Colors, color.New(v))
+			case *conditionValue:
+				colorScale.Values = append(colorScale.Values, &v.value)
+			}
+		}
+
+		r.rule.ColorScale = colorScale
+	}
+}
+
+func (co *conditionalRuleOption) IconSet(t IconSetType, percent bool, reverse bool, showValue bool, values ...*conditionValue) conditionalRuleOption {
+	return func(r *conditionalRule) {
+		iconSet := &ml.IconSet{
+			Type:      t,
+			Percent:   percent,
+			Reverse:   reverse,
+			ShowValue: showValue,
+		}
+
+		for _, v := range values {
+			iconSet.Values = append(iconSet.Values, &v.value)
+		}
+
+		r.rule.IconSet = iconSet
+	}
+}
+
+func (co *conditionalRuleOption) DataBar(min *conditionValue, minLength uint, max *conditionValue, maxLength uint, rgb string, showValue bool) conditionalRuleOption {
+	return func(r *conditionalRule) {
+		if min == nil {
+			min = &conditionValue{}
+		}
+
+		if max == nil {
+			max = &conditionValue{}
+		}
+
+		dataBar := &ml.DataBar{
+			Values: []*ml.ConditionValue{
+				&min.value,
+				&max.value,
+			},
+			MinLength: minLength,
+			MaxLength: maxLength,
+			Color:     color.New(rgb),
+			ShowValue: showValue,
+		}
+
+		r.rule.DataBar = dataBar
 	}
 }

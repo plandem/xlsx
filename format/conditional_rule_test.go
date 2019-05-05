@@ -24,11 +24,99 @@ func TestConditionalRule_Set(t *testing.T) {
 		Condition.TimePeriod(TimePeriodLastMonth),
 		Condition.Rank(10),
 		Condition.Formula("formula"),
+		Condition.ColorScale(
+			ConditionValue(ConditionValueTypePercent, "10", false),
+			ConditionValue(ConditionValueTypePercent, "50", false),
+			ConditionValue(ConditionValueTypePercent, "90", true),
+			"#112233",
+			"#223344",
+			"#334455",
+		),
+		Condition.DataBar(
+			ConditionValue(ConditionValueTypeMin, "10", false), 10,
+			ConditionValue(ConditionValueTypeMax, "90", true), 20,
+			"#112233", true,
+		),
+		Condition.IconSet(IconSetType3Arrows, true, true, true,
+			ConditionValue(ConditionValueTypePercent, "10", false),
+			ConditionValue(ConditionValueTypePercent, "50", false),
+			ConditionValue(ConditionValueTypePercent, "90", true),
+		),
 	)
 
 	require.Equal(t, &conditionalRule{
 		rule: &ml.ConditionalRule{
 			Formula:      "formula",
+			ColorScale: &ml.ColorScale{
+				Values: []*ml.ConditionValue{
+					{
+						Type: ConditionValueTypePercent,
+						Value: "10",
+					},
+					{
+						Type: ConditionValueTypePercent,
+						Value: "50",
+						GreaterOrEqual: false,
+					},
+					{
+						Type: ConditionValueTypePercent,
+						Value: "90",
+						GreaterOrEqual: true,
+					},
+				},
+				Colors: []*ml.Color{
+					{
+						RGB: "FF112233",
+					},
+					{
+						RGB: "FF223344",
+					},
+					{
+						RGB: "FF334455",
+					},
+				},
+			},
+			DataBar: &ml.DataBar{
+				Values: []*ml.ConditionValue{
+					{
+						Type: ConditionValueTypeMin,
+						Value: "10",
+					},
+					{
+						Type: ConditionValueTypeMax,
+						Value: "90",
+						GreaterOrEqual: true,
+					},
+				},
+				MinLength: 10,
+				MaxLength: 20,
+				ShowValue: true,
+				Color: &ml.Color{
+					RGB: "FF112233",
+				},
+			},
+			IconSet: &ml.IconSet{
+				Type: IconSetType3Arrows,
+				Percent: true,
+				ShowValue: true,
+				Reverse: true,
+				Values: []*ml.ConditionValue{
+					{
+						Type: ConditionValueTypePercent,
+						Value: "10",
+					},
+					{
+						Type: ConditionValueTypePercent,
+						Value: "50",
+						GreaterOrEqual: false,
+					},
+					{
+						Type: ConditionValueTypePercent,
+						Value: "90",
+						GreaterOrEqual: true,
+					},
+				},
+			},
 			Type:         ConditionTypeCellIs,
 			Priority:     10,
 			StopIfTrue:   true,

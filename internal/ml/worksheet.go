@@ -197,7 +197,7 @@ type ConditionValue struct {
 //ColorScale is a direct mapping of XSD CT_ColorScale
 type ColorScale struct {
 	Values []*ConditionValue `xml:"cfvo"`  //minimum 2 values
-	Color  []*Color          `xml:"color"` //minimum 2 values
+	Colors []*Color          `xml:"color"` //minimum 2 values
 }
 
 //DataBar is a direct mapping of XSD CT_DataBar
