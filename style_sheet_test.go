@@ -146,7 +146,7 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 	require.NotNil(t, xl)
 
 	//validate stored fonts
-	require.Equal(t, &[]*ml.Font{
+	require.Equal(t, []*ml.Font{
 		//default font
 		{
 			Name:   "Calibri",
@@ -159,10 +159,10 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 			Size:  8,
 			Color: &ml.Color{RGB: "FFFF1122"},
 		},
-	}, xl.styleSheet.ml.Fonts)
+	}, xl.styleSheet.ml.Fonts.Items)
 
 	//validate stored fills
-	require.Equal(t, &[]*ml.Fill{
+	require.Equal(t, []*ml.Fill{
 		//default fill
 		{
 			Pattern: &ml.PatternFill{
@@ -181,18 +181,18 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 				Background: &ml.Color{RGB: "FFEFF142"},
 			},
 		},
-	}, xl.styleSheet.ml.Fills)
+	}, xl.styleSheet.ml.Fills.Items)
 
 	//validate stored number
-	require.Equal(t, &[]*ml.NumberFormat{
+	require.Equal(t, []*ml.NumberFormat{
 		{
 			ID:   164,
 			Code: `$0.00" usd"`,
 		},
-	}, xl.styleSheet.ml.NumberFormats)
+	}, xl.styleSheet.ml.NumberFormats.Items)
 
 	//validate stored border
-	require.Equal(t, &[]*ml.Border{
+	require.Equal(t, []*ml.Border{
 		//default border
 		{
 			Left:   &ml.BorderSegment{},
@@ -207,10 +207,10 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 			Top:    &ml.BorderSegment{Type: format.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
 			Bottom: &ml.BorderSegment{Type: format.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
 		},
-	}, xl.styleSheet.ml.Borders)
+	}, xl.styleSheet.ml.Borders.Items)
 
 	//validate stored Xf
-	require.Equal(t, &[]*ml.DirectStyle{
+	require.Equal(t, []*ml.DirectStyle{
 		//default xf
 		{
 			XfId: 0,
@@ -382,7 +382,7 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 				ApplyNumberFormat: true,
 			},
 		},
-	}, xl.styleSheet.ml.CellXfs)
+	}, xl.styleSheet.ml.CellXfs.Items)
 }
 
 func TestStyleSheets_create(t *testing.T) {
