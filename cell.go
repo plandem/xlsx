@@ -306,18 +306,18 @@ func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
 }
 
-//Formatting returns DirectStyleID of active format for cell
-func (c *Cell) Formatting() styles.DirectStyleID {
+//Styles returns DirectStyleID of active format for cell
+func (c *Cell) Styles() styles.DirectStyleID {
 	return c.ml.Style
 }
 
-//SetFormatting sets style format to requested DirectStyleID
-func (c *Cell) SetFormatting(styleID styles.DirectStyleID) {
+//SetStyles sets style format to requested DirectStyleID
+func (c *Cell) SetStyles(styleID styles.DirectStyleID) {
 	c.ml.Style = styleID
 }
 
-//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting with NumberFormat
-func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+//SetValueWithStyles is helper function that internally works as SetValue and SetStyles with NumberFormat
+func (c *Cell) SetValueWithStyles(value interface{}, formatCode string) {
 	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
 		panic(errorNotSupportedWrite)
@@ -339,7 +339,7 @@ func (c *Cell) SetHyperlink(link interface{}) error {
 	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link); err != nil {
 		return err
 	} else {
-		c.SetFormatting(styleID)
+		c.SetStyles(styleID)
 	}
 
 	return nil

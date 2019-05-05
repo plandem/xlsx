@@ -26,7 +26,7 @@ func TestRange(t *testing.T) {
 	)
 
 	styleRef := xl.AddStyles(style)
-	r.SetFormatting(styleRef)
+	r.SetStyles(styleRef)
 
 	require.Equal(t, styles.DirectStyleID(styleRef), sheet.CellByRef("D10").ml.Style)
 	require.Equal(t, styles.DirectStyleID(styleRef), sheet.CellByRef("E10").ml.Style)

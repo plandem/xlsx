@@ -54,7 +54,7 @@ func TestCol(t *testing.T) {
 	)
 
 	styleRef := xl.AddStyles(style)
-	c.SetFormatting(styleRef)
+	c.SetStyles(styleRef)
 
 	require.Equal(t, c.ml.Style, styles.DirectStyleID(styleRef))
 }

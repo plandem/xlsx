@@ -98,8 +98,8 @@ func (i *Info) Validate() error {
 	return nil
 }
 
-//Formatting returns style that will be used by hyperlink
-func (i *Info) Formatting() styles.DirectStyleID {
+//Styles returns style that will be used by hyperlink
+func (i *Info) Styles() styles.DirectStyleID {
 	return i.styleID
 }
 
@@ -107,10 +107,6 @@ func (i *Info) Formatting() styles.DirectStyleID {
 func (i *Info) String() string {
 	target := string(i.hyperlink.RID)
 	location := i.hyperlink.Location
-	//
-	//if len(location) > 0 && location[0] == '#' {
-	//	location = location[1:]
-	//}
 
 	if len(location) > 0 {
 		return fmt.Sprintf("%s#%s", target, location)
@@ -119,7 +115,7 @@ func (i *Info) String() string {
 	return target
 }
 
-func Formatting(styleID styles.DirectStyleID) Option {
+func Styles(styleID styles.DirectStyleID) Option {
 	return func(i *Info) {
 		i.styleID = styleID
 	}
@@ -304,7 +300,7 @@ func to(link *ml.Hyperlink, target string, styleID styles.DirectStyleID) *Info {
 	}
 
 	return New(
-		Formatting(styleID),
+		Styles(styleID),
 		Display(link.Display),
 		Tooltip(link.Tooltip),
 		ToTarget(target+location),

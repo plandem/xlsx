@@ -276,9 +276,9 @@ func TestHyperlinkOption_Formatting(t *testing.T) {
 	link := New(
 		ToMail("spam@spam.it", "My subject"),
 	)
-	require.Equal(t, styles.DefaultDirectStyle, link.Formatting())
+	require.Equal(t, styles.DefaultDirectStyle, link.Styles())
 
-	link.Set(Formatting(1))
+	link.Set(Styles(1))
 	require.IsType(t, &Info{}, link)
 	require.Equal(t, &Info{
 		hyperlink: &ml.Hyperlink{
@@ -288,7 +288,7 @@ func TestHyperlinkOption_Formatting(t *testing.T) {
 		linkType: hyperlinkTypeEmail,
 	}, link)
 
-	require.Equal(t, styles.DirectStyleID(1), link.Formatting())
+	require.Equal(t, styles.DirectStyleID(1), link.Styles())
 }
 
 func TestHyperlinkOption_ToBookmark(t *testing.T) {

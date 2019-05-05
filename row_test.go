@@ -56,7 +56,7 @@ func TestRow(t *testing.T) {
 	)
 
 	styleRef := xl.AddStyles(style)
-	r.SetFormatting(styleRef)
+	r.SetStyles(styleRef)
 
 	require.Equal(t, r.ml.CustomFormat, true)
 	require.Equal(t, r.ml.Style, styles.DirectStyleID(styleRef))

@@ -68,10 +68,10 @@ func (r *Range) Walk(cb func(idx, cIdx, rIdx int, c *Cell)) {
 	}
 }
 
-//SetFormatting sets style format to all cells in range
-func (r *Range) SetFormatting(styleID styles.DirectStyleID) {
+//SetStyles sets style format to all cells in range
+func (r *Range) SetStyles(styleID styles.DirectStyleID) {
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
-		c.SetFormatting(styleID)
+		c.SetStyles(styleID)
 	})
 }
 
@@ -159,7 +159,7 @@ func (r *Range) SetHyperlink(link interface{}) error {
 		return err
 	} else {
 		r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
-			c.SetFormatting(styleID)
+			c.SetStyles(styleID)
 		})
 	}
 

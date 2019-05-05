@@ -198,7 +198,7 @@ func BenchmarkLibsRandomSetStyle(b *testing.B) {
 		}, func(f interface{}, s interface{}, ss interface{}, maxCols, maxRows int) {
 			sheet := s.(ooxml.Sheet)
 			styleId := ss.(styles.DirectStyleID)
-			sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).SetFormatting(styleId)
+			sheet.Cell(rand.Intn(maxCols), rand.Intn(maxRows)).SetStyles(styleId)
 		}},
 	}
 

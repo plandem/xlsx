@@ -30,13 +30,13 @@ func (c *Col) Set(o *options.ColumnOptions) {
 	c.ml.Phonetic = o.Phonetic
 }
 
-//Formatting returns DirectStyleID of default format for column
-func (c *Col) Formatting() styles.DirectStyleID {
+//Styles returns DirectStyleID of default format for column
+func (c *Col) Styles() styles.DirectStyleID {
 	return c.ml.Style
 }
 
-//SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
-func (c *Col) SetFormatting(styleID styles.DirectStyleID) {
+//SetStyles sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
+func (c *Col) SetStyles(styleID styles.DirectStyleID) {
 	c.ml.Style = styleID
 }
 

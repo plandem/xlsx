@@ -392,7 +392,7 @@ func TestStyleSheets_create(t *testing.T) {
 
 	//after creating sheet we must have also 'typed' styles
 	sheet := xl.AddSheet("test sheet")
-	sheet.Row(0).SetFormatting(styleRef)
+	sheet.Row(0).SetStyles(styleRef)
 
 	//try to add already existing styles
 	addExistingStyles(xl, t)

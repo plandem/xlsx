@@ -298,18 +298,18 @@ func Example_formatting() {
 	sheet := xl.Sheet(0)
 
 	// Set formatting for cell
-	sheet.CellByRef("N28").SetFormatting(styleId)
+	sheet.CellByRef("N28").SetStyles(styleId)
 
 	// Set DEFAULT formatting for row. Affects cells not yet allocated in the row.
 	// In other words, this style applies to new cells.
-	sheet.Row(9).SetFormatting(styleId)
+	sheet.Row(9).SetStyles(styleId)
 
 	// Set DEFAULT formatting for col. Affects cells not yet allocated in the col.
 	// In other words, this style applies to new cells.
-	sheet.Col(3).SetFormatting(styleId)
+	sheet.Col(3).SetStyles(styleId)
 
 	//set formatting for all cells in range
-	sheet.Range("D10:H13").SetFormatting(styleId)
+	sheet.Range("D10:H13").SetStyles(styleId)
 }
 
 // Demonstrates how to set options of rows/cols/sheets

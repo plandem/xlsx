@@ -45,7 +45,7 @@ func main() {
 		for iCol := 0; iCol < iMaxCol; iCol++ {
 			if iRow % 2 == 0 && iCol % 2 == 0 {
 				cell := sheet.Cell(iCol, iRow)
-				cell.SetFormatting(redBoldYellow)
+				cell.SetStyles(redBoldYellow)
 			}
 		}
 	}
@@ -57,7 +57,7 @@ func main() {
 		for cells := row.Cells(); cells.HasNext(); {
 			iCol, iRow, cell := cells.Next()
 			if iRow % 2 == 0 && iCol % 2 == 0 {
-				cell.SetFormatting(redBoldYellow)
+				cell.SetStyles(redBoldYellow)
 			}
 		}
 	}
@@ -67,7 +67,7 @@ func main() {
 		_, row := rows.Next()
 		row.Walk(func(idx, iCol, iRow int, cell *xlsx.Cell) {
 			if iRow % 2 == 0 && iCol % 2 == 0 {
-				cell.SetFormatting(redBoldYellow)
+				cell.SetStyles(redBoldYellow)
 			}
 		})
  	}
@@ -84,7 +84,7 @@ func main() {
 		hyperlink.ToRef("C3", "Sheet1"),
 		hyperlink.Tooltip("That's a tooltip"),
 		hyperlink.Display("Something to display"), //Cell still holds own value
-		hyperlink.Formatting(redBoldYellow),
+		hyperlink.Styles(redBoldYellow),
 	))
 
 	sheet.CellByRef("A1").RemoveHyperlink()
