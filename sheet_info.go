@@ -11,6 +11,7 @@ import (
 	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
 	"math"
+	"path/filepath"
 	"reflect"
 )
 
@@ -228,7 +229,8 @@ func (s *sheetInfo) afterOpen() {
 
 func (s *sheetInfo) attachRelationshipsIfRequired() {
 	if s.relationships == nil {
-		fileName := fmt.Sprintf("xl/worksheets/_rels/sheet%d.xml.rels", s.workbook.ml.Sheets[s.index].SheetID)
+		fileName := s.workbook.doc.relationships.GetTargetById(string(s.workbook.ml.Sheets[s.index].RID))
+		fileName = fmt.Sprintf("xl/worksheets/_rels/%s.rels", filepath.Base(fileName))
 
 		if file := s.workbook.doc.pkg.File(fileName); file != nil {
 			s.relationships = ooxml.NewRelationships(file, s.workbook.doc.pkg)
