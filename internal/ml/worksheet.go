@@ -177,17 +177,17 @@ type ConditionalRule struct {
 	DataBar      *ml.Reserved                     `xml:"dataBar,omitempty"`
 	IconSet      *ml.Reserved                     `xml:"iconSet,omitempty"`
 	ExtLst       *ml.Reserved                     `xml:"extLst,omitempty"`
-	Type         primitives.ConditionType         `xml:"type,attr"`
-	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
-	Priority     int                              `xml:"priority,attr"`
-	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
-	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"`
-	Percent      bool                             `xml:"percent,attr,omitempty"`
-	Bottom       bool                             `xml:"bottom,attr,omitempty"`
-	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`
-	Text         string                           `xml:"text,attr,omitempty"`
-	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`
-	Rank         uint                             `xml:"rank,attr,omitempty"`
+	Type         primitives.ConditionType         `xml:"type,attr"`                   //
+	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`        //
+	Priority     int                              `xml:"priority,attr"`               //
+	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`   //
+	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"` //
+	Percent      bool                             `xml:"percent,attr,omitempty"`      //
+	Bottom       bool                             `xml:"bottom,attr,omitempty"`       //
+	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`     //
+	Text         string                           `xml:"text,attr,omitempty"`         //
+	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`   //
+	Rank         uint                             `xml:"rank,attr,omitempty"`         //
 	StdDev       int                              `xml:"stdDev,attr,omitempty"`
-	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"`
+	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"` //
 }

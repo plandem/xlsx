@@ -14,7 +14,7 @@ func TestBorder(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Border = &ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
@@ -55,7 +55,7 @@ func TestBorder(t *testing.T) {
 		Border.Horizontal.Color("#FF00FF"),
 	)
 
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Border = &ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,

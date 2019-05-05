@@ -3,6 +3,7 @@ package xlsx
 import (
 	"encoding/xml"
 	"github.com/plandem/ooxml"
+	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
@@ -126,7 +127,8 @@ func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 //afterOpen loads worksheet data and initializes it if required
 func (s *sheetReadStream) afterOpen() {
 
-	muliPhase := (s.sheetMode & SheetModeMultiPhase) != 0
+	multiPhase := (s.sheetMode & SheetModeMultiPhase) != 0
+	conditionalsInited := false
 
 	if s.currentRow == nil {
 		s.stream = s.file.ReadStream()
@@ -141,6 +143,13 @@ func (s *sheetReadStream) afterOpen() {
 				case "hyperlinks":
 					s.hyperlinks = newHyperlinks(s.sheetInfo)
 					s.hyperlinks.initIfRequired()
+				case "conditionalFormatting":
+					if !conditionalsInited {
+						//N.B.: conditionalFormatting is not nested, so we have to use flag to init once only
+						s.conditionals = newConditionals(s.sheetInfo)
+						s.conditionals.initIfRequired()
+						conditionalsInited = true
+					}
 				case "mergeCells":
 					s.mergedCells = newMergedCells(s.sheetInfo)
 					s.mergedCells.initIfRequired()
@@ -149,7 +158,7 @@ func (s *sheetReadStream) afterOpen() {
 					_ = decoder.DecodeElement(cell, start)
 					*s.ml.MergeCells = append(*s.ml.MergeCells, cell)
 				case "row":
-					if muliPhase {
+					if multiPhase {
 						//skip row data, because 'mergeCell' is going after row data
 						return true
 					}
@@ -164,7 +173,7 @@ func (s *sheetReadStream) afterOpen() {
 		}
 
 		// multi phased?
-		if muliPhase {
+		if multiPhase {
 			//skip is func to skip any info till first row
 			skip := func() {
 				//close previous opened stream
@@ -246,5 +255,29 @@ func (s *sheetReadStream) Set(o *options.SheetOptions) {
 }
 
 func (s *sheetReadStream) SetName(name string) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) MergeRows(fromIndex, toIndex int) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) MergeCols(fromIndex, toIndex int) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) SplitRows(fromIndex, toIndex int) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) SplitCols(fromIndex, toIndex int) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) DeleteConditional(refs ...types.Ref) {
 	panic(errorNotSupported)
 }

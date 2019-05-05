@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func createAndFill(callback func(*StyleFormat)) *StyleFormat {
+func createStylesAndFill(callback func(*StyleFormat)) *StyleFormat {
 	f := NewStyles()
 	callback(f)
 	return f

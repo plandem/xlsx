@@ -16,7 +16,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Pattern = &ml.PatternFill{
 			Color:      color.New("FFFFFFFF"),
 			Background: color.New("FFFF0000"),
@@ -38,7 +38,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Gradient = &ml.GradientFill{
 			Degree: 90,
 			Type:   GradientTypePath,
@@ -69,7 +69,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Gradient = &ml.GradientFill{
 			Degree: 90,
 			Type:   GradientTypePath,
@@ -100,7 +100,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Pattern = &ml.PatternFill{
 			Color:      color.New("FFFFFFFF"),
 			Background: color.New("FFFF0000"),

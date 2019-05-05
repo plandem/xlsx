@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	sharedML "github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
@@ -22,6 +23,7 @@ type sheetInfo struct {
 	columns       *columns
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
+	conditionals  *conditionals
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
@@ -104,6 +106,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.columns = newColumns(sheet)
 		sheet.mergedCells = newMergedCells(sheet)
 		sheet.hyperlinks = newHyperlinks(sheet)
+		sheet.conditionals = newConditionals(sheet)
 	}
 
 	return sheet
@@ -202,6 +205,16 @@ func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
 		types.CellRefFromIndexes(fromIndex, 0),
 		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
 	)).Split()
+}
+
+//AddConditional adds a new conditional formatting with additional refs if required
+func (s *sheetInfo) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+	return s.conditionals.Add(conditional, refs)
+}
+
+//DeleteConditional deletes a conditional formatting from refs
+func (s *sheetInfo) DeleteConditional(refs ...types.Ref) {
+	s.conditionals.Remove(refs)
 }
 
 //Close frees allocated by sheet resources

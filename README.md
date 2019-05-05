@@ -102,6 +102,20 @@ func main() {
 		"another plain text",
 	)
 	
+	//Conditional formatting
+	_= sheet.AddConditional(format.NewConditions(
+		format.Conditions.Rule(
+			format.Condition.Type(format.ConditionTypeCellIs),
+			format.Condition.Operator(format.ConditionOperatorLessThanOrEqual),
+			format.Condition.Priority(2),
+			format.Condition.Formula("500"),
+			format.Condition.Style(format.NewStyles(
+				format.Font.Bold,
+				format.Font.Color("#FF0000"),
+			)),
+		),
+	), "A1:A10", "B2", "C1:C10")
+    	
 	_= xl.SaveAs("test1.xlsx")
 }
 ```

@@ -7,46 +7,46 @@ import (
 //List of all possible values for ConditionType
 const (
 	_ primitives.ConditionType = iota
-	ConditionExpression
-	ConditionCellIs
-	ConditionColorScale
-	ConditionDataBar
-	ConditionIconSet
-	ConditionTop10
-	ConditionUniqueValues
-	ConditionDuplicateValues
-	ConditionContainsText
-	ConditionNotContainsText
-	ConditionBeginsWith
-	ConditionEndsWith
-	ConditionContainsBlanks
-	ConditionNotContainsBlanks
-	ConditionContainsErrors
-	ConditionNotContainsErrors
-	ConditionTimePeriod
-	ConditionAboveAverage
+	ConditionTypeExpression
+	ConditionTypeCellIs
+	ConditionTypeColorScale
+	ConditionTypeDataBar
+	ConditionTypeIconSet
+	ConditionTypeTop10
+	ConditionTypeUniqueValues
+	ConditionTypeDuplicateValues
+	ConditionTypeContainsText
+	ConditionTypeNotContainsText
+	ConditionTypeBeginsWith
+	ConditionTypeEndsWith
+	ConditionTypeContainsBlanks
+	ConditionTypeNotContainsBlanks
+	ConditionTypeContainsErrors
+	ConditionTypeNotContainsErrors
+	ConditionTypeTimePeriod
+	ConditionTypeAboveAverage
 )
 
 func init() {
 	primitives.FromConditionType = map[primitives.ConditionType]string{
-		ConditionExpression:        "expression",
-		ConditionCellIs:            "cellIs",
-		ConditionColorScale:        "colorScale",
-		ConditionDataBar:           "dataBar",
-		ConditionIconSet:           "iconSet",
-		ConditionTop10:             "top10",
-		ConditionUniqueValues:      "uniqueValues",
-		ConditionDuplicateValues:   "duplicateValues",
-		ConditionContainsText:      "containsText",
-		ConditionNotContainsText:   "notContainsText",
-		ConditionBeginsWith:        "beginsWith",
-		ConditionEndsWith:          "endsWith",
-		ConditionContainsBlanks:    "containsBlanks",
-		ConditionNotContainsBlanks: "notContainsBlanks",
-		ConditionContainsErrors:    "containsErrors",
-		ConditionNotContainsErrors: "notContainsErrors",
-		ConditionTimePeriod:        "timePeriod",
-		ConditionAboveAverage:      "aboveAverage",
+		ConditionTypeExpression:        "expression",
+		ConditionTypeCellIs:            "cellIs",
+		ConditionTypeColorScale:        "colorScale",
+		ConditionTypeDataBar:           "dataBar",
+		ConditionTypeIconSet:           "iconSet",
+		ConditionTypeTop10:             "top10",
+		ConditionTypeUniqueValues:      "uniqueValues",
+		ConditionTypeDuplicateValues:   "duplicateValues",
+		ConditionTypeContainsText:      "containsText",
+		ConditionTypeNotContainsText:   "notContainsText",
+		ConditionTypeBeginsWith:        "beginsWith",
+		ConditionTypeEndsWith:          "endsWith",
+		ConditionTypeContainsBlanks:    "containsBlanks",
+		ConditionTypeNotContainsBlanks: "notContainsBlanks",
+		ConditionTypeContainsErrors:    "containsErrors",
+		ConditionTypeNotContainsErrors: "notContainsErrors",
+		ConditionTypeTimePeriod:        "timePeriod",
+		ConditionTypeAboveAverage:      "aboveAverage",
 	}
 
 	primitives.ToConditionType = make(map[string]primitives.ConditionType, len(primitives.FromConditionType))
