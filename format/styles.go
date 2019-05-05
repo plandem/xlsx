@@ -36,10 +36,10 @@ type StyleFormat struct {
 	namedInfo *ml.NamedStyleInfo
 }
 
-type option func(o *StyleFormat)
+type styleOption func(o *StyleFormat)
 
-//New creates and returns StyleFormat object with requested options
-func New(options ...option) *StyleFormat {
+//NewStyles creates and returns StyleFormat object with requested options
+func NewStyles(options ...styleOption) *StyleFormat {
 	s := &StyleFormat{
 		&ml.DiffStyle{
 			NumberFormat: &ml.NumberFormat{},
@@ -67,7 +67,7 @@ func New(options ...option) *StyleFormat {
 }
 
 //Set sets new options for style
-func (s *StyleFormat) Set(options ...option) {
+func (s *StyleFormat) Set(options ...styleOption) {
 	for _, o := range options {
 		o(s)
 	}

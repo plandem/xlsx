@@ -173,7 +173,7 @@ func BenchmarkLibsRandomSetStyle(b *testing.B) {
 		{"xlsx", xlsxOpen, func(f interface{}) interface{} {
 			xl := f.(*ooxml.Spreadsheet)
 
-			style := format.New(
+			style := format.NewStyles(
 				format.Font.Name("Calibri"),
 				format.Font.Size(12),
 				format.Font.Color("#FF0000"),

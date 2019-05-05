@@ -285,7 +285,7 @@ func Example_formatting() {
 	defer xl.Close()
 
 	// Create a new format for a bold font with red color and yellow solid background
-	redBold := format.New(
+	redBold := format.NewStyles(
 		format.Font.Bold,
 		format.Font.Color("#ff0000"),
 		format.Fill.Background("#ffff00"),

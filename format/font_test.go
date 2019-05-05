@@ -8,7 +8,7 @@ import (
 )
 
 func TestFont(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		Font.Name("Calibri"),
 		Font.Size(10),
 		Font.Bold,

@@ -7,7 +7,7 @@ import (
 )
 
 func TestNumberFormat(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		NumberFormatID(8),
 	)
 
@@ -19,7 +19,7 @@ func TestNumberFormat(t *testing.T) {
 		}
 	}), style)
 
-	style = New(
+	style = NewStyles(
 		NumberFormat(`$0.00" usd"`),
 	)
 

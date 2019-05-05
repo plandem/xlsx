@@ -41,7 +41,7 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 	//check if hyperlink has style and if not, then add default
 	if h.defaultStyleID == -1 {
 		//we need to add default named style for hyperlink
-		defaultStyleID := h.sheet.workbook.doc.AddFormatting(format.New(
+		defaultStyleID := h.sheet.workbook.doc.AddFormatting(format.NewStyles(
 			format.NamedStyle(format.NamedStyleHyperlink),
 			format.Font.Default,
 			format.Font.Underline(format.UnderlineTypeSingle),

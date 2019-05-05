@@ -124,7 +124,7 @@ func (ss *StyleSheet) addDefaults() {
 
 	/*
 		TODO: replace hardcoded defaults with format
-		def := format.New(
+		def := format.NewStyles(
 			format.NamedStyle(format.NamedStyleNormal),
 			format.Font.Default,
 		)
@@ -237,7 +237,7 @@ func (ss *StyleSheet) addTypedStylesIfRequired() {
 			numberFormat.DeltaTime,
 		} {
 			id, _ := numberFormat.Default(t)
-			ss.typedStyles[t] = ss.addStyle(format.New(format.NumberFormatID(id)))
+			ss.typedStyles[t] = ss.addStyle(format.NewStyles(format.NumberFormatID(id)))
 		}
 
 		ss.file.MarkAsUpdated()

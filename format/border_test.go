@@ -8,7 +8,7 @@ import (
 )
 
 func TestBorder(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		Border.Type(BorderStyleDashDot),
 		Border.Color("#FF00FF"),
 	)
@@ -38,7 +38,7 @@ func TestBorder(t *testing.T) {
 		}
 	}), style)
 
-	style = New(
+	style = NewStyles(
 		Border.Left.Type(BorderStyleDashDot),
 		Border.Left.Color("#FF00FF"),
 		Border.Right.Type(BorderStyleDashDot),

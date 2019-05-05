@@ -7,7 +7,7 @@ import (
 )
 
 func TestProtection(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		Protection.Hidden,
 		Protection.Locked,
 	)

@@ -18,7 +18,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 	require.Equal(t, 0, len(xl.styleSheet.numberIndex))
 
 	//add font
-	style := format.New(
+	style := format.NewStyles(
 		format.Font.Size(8),
 		format.Font.Color("#FF1122"),
 	)
@@ -119,7 +119,7 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 	require.NotNil(t, xl)
 
-	style := format.New(
+	style := format.NewStyles(
 		format.Font.Size(8),
 		format.Font.Color("#FF1122"),
 		format.Fill.Type(format.PatternTypeLightGrid),

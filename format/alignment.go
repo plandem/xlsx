@@ -9,19 +9,19 @@ type alignmentOption byte
 //Alignment is a 'namespace' for all possible settings for alignment
 var Alignment alignmentOption
 
-func (f *alignmentOption) VAlign(va primitives.VAlignType) option {
+func (f *alignmentOption) VAlign(va primitives.VAlignType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Alignment.Vertical = va
 	}
 }
 
-func (f *alignmentOption) HAlign(ha primitives.HAlignType) option {
+func (f *alignmentOption) HAlign(ha primitives.HAlignType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Alignment.Horizontal = ha
 	}
 }
 
-func (f *alignmentOption) TextRotation(angle int) option {
+func (f *alignmentOption) TextRotation(angle int) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Alignment.TextRotation = angle
 	}
@@ -31,13 +31,13 @@ func (f *alignmentOption) WrapText(s *StyleFormat) {
 	s.styleInfo.Alignment.WrapText = true
 }
 
-func (f *alignmentOption) Indent(i int) option {
+func (f *alignmentOption) Indent(i int) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Alignment.Indent = i
 	}
 }
 
-func (f *alignmentOption) RelativeIndent(i int) option {
+func (f *alignmentOption) RelativeIndent(i int) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Alignment.RelativeIndent = i
 	}
@@ -51,7 +51,7 @@ func (f *alignmentOption) ShrinkToFit(s *StyleFormat) {
 	s.styleInfo.Alignment.ShrinkToFit = true
 }
 
-func (f *alignmentOption) ReadingOrder(i int) option {
+func (f *alignmentOption) ReadingOrder(i int) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Alignment.ReadingOrder = i
 	}

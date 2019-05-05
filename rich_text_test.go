@@ -8,7 +8,7 @@ import (
 )
 
 func TestToRichFont(t *testing.T) {
-	style := format.New(
+	style := format.NewStyles(
 		format.Font.Size(8),
 		format.Font.Color("#FF1122"),
 	)
@@ -23,7 +23,7 @@ func TestToRichFont(t *testing.T) {
 }
 
 func TestToRichText(t *testing.T) {
-	text, err := toRichText("1", "2", "3", format.New(
+	text, err := toRichText("1", "2", "3", format.NewStyles(
 		format.Font.Color("#FF3344"),
 	))
 	require.Nil(t, err)
@@ -41,9 +41,9 @@ func TestToRichText(t *testing.T) {
 		},
 	}, text)
 
-	text, err = toRichText(format.New(
+	text, err = toRichText(format.NewStyles(
 		format.Font.Color("#FF1122"),
-	), "1", format.New(
+	), "1", format.NewStyles(
 		format.Font.Size(8),
 		format.Font.Color("#FF3344"),
 	), "2")
@@ -67,9 +67,9 @@ func TestToRichText(t *testing.T) {
 		},
 	}, text)
 
-	text, err = toRichText("1", "2", "3", format.New(
+	text, err = toRichText("1", "2", "3", format.NewStyles(
 		format.Font.Color("#FF3344"),
-	), format.New(
+	), format.NewStyles(
 		format.Font.Color("#FF3344"),
 	), "4")
 
@@ -78,15 +78,15 @@ func TestToRichText(t *testing.T) {
 }
 
 func TestFromRichText(t *testing.T) {
-	text, err := toRichText("1", "2", "3", format.New(
+	text, err := toRichText("1", "2", "3", format.NewStyles(
 		format.Font.Color("#FF3344"),
 	))
 	require.Nil(t, err)
 	require.Equal(t, "123", fromRichText(text))
 
-	text, err = toRichText(format.New(
+	text, err = toRichText(format.NewStyles(
 		format.Font.Color("#FF1122"),
-	), "1", format.New(
+	), "1", format.NewStyles(
 		format.Font.Size(8),
 		format.Font.Color("#FF3344"),
 	), "2")

@@ -7,45 +7,45 @@ import (
 
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
-	XMLName               ml.Name         `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
-	RIDName               ml.RIDName      `xml:",attr"`
-	SheetPr               *ml.Reserved    `xml:"sheetPr,omitempty"`
-	Dimension             *SheetDimension `xml:"dimension,omitempty"`
-	SheetViews            *SheetViews     `xml:"sheetViews,omitempty"`
-	SheetFormatPr         *ml.Reserved    `xml:"sheetFormatPr,omitempty"`
-	Cols                  *[]*Col         `xml:"cols>col,omitempty"` //we HAVE TO remove 'cols' if there is no any 'col'
-	SheetData             []*Row          `xml:"sheetData>row"`
-	SheetCalcPr           *ml.Reserved    `xml:"sheetCalcPr,omitempty"`
-	SheetProtection       *ml.Reserved    `xml:"sheetProtection,omitempty"`
-	ProtectedRanges       *ml.Reserved    `xml:"protectedRanges,omitempty"`
-	Scenarios             *ml.Reserved    `xml:"scenarios,omitempty"`
-	AutoFilter            *ml.Reserved    `xml:"autoFilter,omitempty"`
-	SortState             *ml.Reserved    `xml:"sortState,omitempty"`
-	DataConsolidate       *ml.Reserved    `xml:"dataConsolidate,omitempty"`
-	CustomSheetViews      *ml.Reserved    `xml:"customSheetViews,omitempty"`
-	MergeCells            *[]*MergeCell   `xml:"mergeCells>mergeCell,omitempty"`
-	PhoneticPr            *ml.Reserved    `xml:"phoneticPr,omitempty"`
-	ConditionalFormatting *[]*ml.Reserved `xml:"conditionalFormatting,omitempty"`
-	DataValidations       *ml.Reserved    `xml:"dataValidations,omitempty"`
-	Hyperlinks            *[]*Hyperlink   `xml:"hyperlinks>hyperlink,omitempty"`
-	PrintOptions          *ml.Reserved    `xml:"printOptions,omitempty"`
-	PageMargins           *ml.Reserved    `xml:"pageMargins,omitempty"`
-	PageSetup             *ml.Reserved    `xml:"pageSetup,omitempty"`
-	HeaderFooter          *ml.Reserved    `xml:"headerFooter,omitempty"`
-	RowBreaks             *ml.Reserved    `xml:"rowBreaks,omitempty"`
-	ColBreaks             *ml.Reserved    `xml:"colBreaks,omitempty"`
-	CustomProperties      *ml.Reserved    `xml:"customProperties,omitempty"`
-	CellWatches           *ml.Reserved    `xml:"cellWatches,omitempty"`
-	IgnoredErrors         *ml.Reserved    `xml:"ignoredErrors,omitempty"`
-	SmartTags             *ml.Reserved    `xml:"smartTags,omitempty"`
-	Drawing               *ml.Reserved    `xml:"drawing,omitempty"`
-	DrawingHF             *ml.Reserved    `xml:"drawingHF,omitempty"`
-	Picture               *ml.Reserved    `xml:"picture,omitempty"`
-	OleObjects            *ml.Reserved    `xml:"oleObjects,omitempty"`
-	Controls              *ml.Reserved    `xml:"controls,omitempty"`
-	WebPublishItems       *ml.Reserved    `xml:"webPublishItems,omitempty"`
-	TableParts            *ml.Reserved    `xml:"tableParts,omitempty"`
-	ExtLst                *ml.Reserved    `xml:"extLst,omitempty"`
+	XMLName               ml.Name                   `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
+	RIDName               ml.RIDName                `xml:",attr"`
+	SheetPr               *ml.Reserved              `xml:"sheetPr,omitempty"`
+	Dimension             *SheetDimension           `xml:"dimension,omitempty"`
+	SheetViews            *SheetViews               `xml:"sheetViews,omitempty"`
+	SheetFormatPr         *ml.Reserved              `xml:"sheetFormatPr,omitempty"`
+	Cols                  *[]*Col                   `xml:"cols>col,omitempty"` //we HAVE TO remove 'cols' if there is no any 'col'
+	SheetData             []*Row                    `xml:"sheetData>row"`
+	SheetCalcPr           *ml.Reserved              `xml:"sheetCalcPr,omitempty"`
+	SheetProtection       *ml.Reserved              `xml:"sheetProtection,omitempty"`
+	ProtectedRanges       *ml.Reserved              `xml:"protectedRanges,omitempty"`
+	Scenarios             *ml.Reserved              `xml:"scenarios,omitempty"`
+	AutoFilter            *ml.Reserved              `xml:"autoFilter,omitempty"`
+	SortState             *ml.Reserved              `xml:"sortState,omitempty"`
+	DataConsolidate       *ml.Reserved              `xml:"dataConsolidate,omitempty"`
+	CustomSheetViews      *ml.Reserved              `xml:"customSheetViews,omitempty"`
+	MergeCells            *[]*MergeCell             `xml:"mergeCells>mergeCell,omitempty"`
+	PhoneticPr            *ml.Reserved              `xml:"phoneticPr,omitempty"`
+	ConditionalFormatting *[]*ConditionalFormatting `xml:"conditionalFormatting,omitempty"`
+	DataValidations       *ml.Reserved              `xml:"dataValidations,omitempty"`
+	Hyperlinks            *[]*Hyperlink             `xml:"hyperlinks>hyperlink,omitempty"`
+	PrintOptions          *ml.Reserved              `xml:"printOptions,omitempty"`
+	PageMargins           *ml.Reserved              `xml:"pageMargins,omitempty"`
+	PageSetup             *ml.Reserved              `xml:"pageSetup,omitempty"`
+	HeaderFooter          *ml.Reserved              `xml:"headerFooter,omitempty"`
+	RowBreaks             *ml.Reserved              `xml:"rowBreaks,omitempty"`
+	ColBreaks             *ml.Reserved              `xml:"colBreaks,omitempty"`
+	CustomProperties      *ml.Reserved              `xml:"customProperties,omitempty"`
+	CellWatches           *ml.Reserved              `xml:"cellWatches,omitempty"`
+	IgnoredErrors         *ml.Reserved              `xml:"ignoredErrors,omitempty"`
+	SmartTags             *ml.Reserved              `xml:"smartTags,omitempty"`
+	Drawing               *ml.Reserved              `xml:"drawing,omitempty"`
+	DrawingHF             *ml.Reserved              `xml:"drawingHF,omitempty"`
+	Picture               *ml.Reserved              `xml:"picture,omitempty"`
+	OleObjects            *ml.Reserved              `xml:"oleObjects,omitempty"`
+	Controls              *ml.Reserved              `xml:"controls,omitempty"`
+	WebPublishItems       *ml.Reserved              `xml:"webPublishItems,omitempty"`
+	TableParts            *ml.Reserved              `xml:"tableParts,omitempty"`
+	ExtLst                *ml.Reserved              `xml:"extLst,omitempty"`
 }
 
 //SheetDimension is a direct mapping of XSD CT_SheetDimension
@@ -161,4 +161,33 @@ type Hyperlink struct {
 	Tooltip  string            `xml:"tooltip,attr,omitempty"`
 	Display  string            `xml:"display,attr,omitempty"`
 	RID      ml.RID            `xml:"id,attr,omitempty"`
+}
+
+type ConditionalFormatting struct {
+	Pivot  bool                  `xml:"pivot,attr,omitempty"`
+	Bounds primitives.BoundsList `xml:"sqref,attr"`
+	Rules  []*ConditionalRule    `xml:"cfRule"`
+	ExtLst *ml.Reserved          `xml:"extLst,omitempty"`
+}
+
+//ConditionalRule is a direct mapping of XSD CT_CfRule
+type ConditionalRule struct {
+	Formula      primitives.Formula               `xml:"formula,omitempty"`
+	ColorScale   *ml.Reserved                     `xml:"colorScale,omitempty"`
+	DataBar      *ml.Reserved                     `xml:"dataBar,omitempty"`
+	IconSet      *ml.Reserved                     `xml:"iconSet,omitempty"`
+	ExtLst       *ml.Reserved                     `xml:"extLst,omitempty"`
+	Type         primitives.ConditionType         `xml:"type,attr"`
+	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
+	Priority     int                              `xml:"priority,attr"`
+	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
+	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"`
+	Percent      bool                             `xml:"percent,attr,omitempty"`
+	Bottom       bool                             `xml:"bottom,attr,omitempty"`
+	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`
+	Text         string                           `xml:"text,attr,omitempty"`
+	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`
+	Rank         uint                             `xml:"rank,attr,omitempty"`
+	StdDev       int                              `xml:"stdDev,attr,omitempty"`
+	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"`
 }

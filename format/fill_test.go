@@ -9,7 +9,7 @@ import (
 
 func TestFill(t *testing.T) {
 	//pattern only
-	style := New(
+	style := NewStyles(
 		Fill.Pattern.Type(PatternTypeDarkDown),
 		Fill.Pattern.Color("#FFFFFF"),
 		Fill.Pattern.Background("#FF0000"),
@@ -26,7 +26,7 @@ func TestFill(t *testing.T) {
 	}), style)
 
 	//gradient only
-	style = New(
+	style = NewStyles(
 		Fill.Gradient.Degree(90),
 		Fill.Gradient.Type(GradientTypePath),
 		Fill.Gradient.Left(1),
@@ -54,7 +54,7 @@ func TestFill(t *testing.T) {
 	}), style)
 
 	//pattern override by gradient
-	style = New(
+	style = NewStyles(
 		Fill.Pattern.Type(PatternTypeDarkDown),
 		Fill.Pattern.Color("#FFFFFF"),
 		Fill.Pattern.Background("#FF0000"),
@@ -85,7 +85,7 @@ func TestFill(t *testing.T) {
 	}), style)
 
 	//gradient override by pattern
-	style = New(
+	style = NewStyles(
 		Fill.Gradient.Degree(90),
 		Fill.Gradient.Type(GradientTypePath),
 		Fill.Gradient.Left(1),

@@ -28,7 +28,7 @@ func main() {
 	}()
 
 	redBoldYellow := xl.AddFormatting(
-		format.New(
+		format.NewStyles(
 			format.Font.Bold,
 			format.Font.Color("#ff0000"),
 			format.Fill.Type(format.PatternTypeSolid),
@@ -94,7 +94,7 @@ func main() {
 	//Rich Text
 	_= sheet.CellByRef("F10").SetText(
 		"plain text", 
-		format.New(
+		format.NewStyles(
 			format.Font.Bold,
 			format.Font.Color("#ff0000"),
 		),
@@ -163,7 +163,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] cell: comments
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
-- [ ] other: conditional formatting
+- [x] other: conditional formatting
 - [x] other: rich texts
 - [ ] other: drawing
 - [ ] other: unpack package to temp folder to reduce memory usage
