@@ -143,17 +143,17 @@ func (s *sheetInfo) Set(o *options.SheetOptions) {
 //SetActive sets the sheet as active
 func (s *sheetInfo) SetActive() {
 	//set activate from workbook side
-	if s.workbook.ml.BookViews == nil || len(*s.workbook.ml.BookViews) == 0 {
-		s.workbook.ml.BookViews = &[]*ml.BookView{{
+	if len(s.workbook.ml.BookViews.Items) == 0 {
+		s.workbook.ml.BookViews.Items = append(s.workbook.ml.BookViews.Items, &ml.BookView{
 			ActiveTab: s.index,
-		}}
+		})
 	} else {
-		(*s.workbook.ml.BookViews)[0].ActiveTab = s.index
+		s.workbook.ml.BookViews.Items[0].ActiveTab = s.index
 	}
 
 	//set active from worksheet side
-	if s.ml.SheetViews != nil && len(s.ml.SheetViews.SheetView) > 0 {
-		s.ml.SheetViews.SheetView[0].TabSelected = true
+	if len(s.ml.SheetViews.Items) > 0 {
+		s.ml.SheetViews.Items[0].TabSelected = true
 	}
 
 	s.workbook.file.MarkAsUpdated()

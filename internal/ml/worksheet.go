@@ -11,9 +11,9 @@ type Worksheet struct {
 	RIDName               ml.RIDName                `xml:",attr"`
 	SheetPr               *ml.Reserved              `xml:"sheetPr,omitempty"`
 	Dimension             *SheetDimension           `xml:"dimension,omitempty"`
-	SheetViews            *SheetViews               `xml:"sheetViews,omitempty"`
+	SheetViews            SheetViewList             `xml:"sheetViews"`
 	SheetFormatPr         *ml.Reserved              `xml:"sheetFormatPr,omitempty"`
-	Cols                  *[]*Col                   `xml:"cols>col,omitempty"` //we HAVE TO remove 'cols' if there is no any 'col'
+	Cols                  ColList                   `xml:"cols"`
 	SheetData             []*Row                    `xml:"sheetData>row"`
 	SheetCalcPr           *ml.Reserved              `xml:"sheetCalcPr,omitempty"`
 	SheetProtection       *ml.Reserved              `xml:"sheetProtection,omitempty"`
@@ -23,11 +23,11 @@ type Worksheet struct {
 	SortState             *ml.Reserved              `xml:"sortState,omitempty"`
 	DataConsolidate       *ml.Reserved              `xml:"dataConsolidate,omitempty"`
 	CustomSheetViews      *ml.Reserved              `xml:"customSheetViews,omitempty"`
-	MergeCells            *[]*MergeCell             `xml:"mergeCells>mergeCell,omitempty"`
+	MergeCells            MergedCellList            `xml:"mergeCells"`
 	PhoneticPr            *ml.Reserved              `xml:"phoneticPr,omitempty"`
 	ConditionalFormatting *[]*ConditionalFormatting `xml:"conditionalFormatting,omitempty"`
 	DataValidations       *ml.Reserved              `xml:"dataValidations,omitempty"`
-	Hyperlinks            *[]*Hyperlink             `xml:"hyperlinks>hyperlink,omitempty"`
+	Hyperlinks            HyperlinkList             `xml:"hyperlinks"`
 	PrintOptions          *ml.Reserved              `xml:"printOptions,omitempty"`
 	PageMargins           *ml.Reserved              `xml:"pageMargins,omitempty"`
 	PageSetup             *ml.Reserved              `xml:"pageSetup,omitempty"`
@@ -119,12 +119,6 @@ type CellFormula struct {
 //MergeCell is a direct mapping of XSD CT_MergeCell
 type MergeCell struct {
 	Bounds primitives.Bounds `xml:"ref,attr"`
-}
-
-//SheetViews is a direct mapping of XSD CT_SheetViews
-type SheetViews struct {
-	SheetView []*SheetView `xml:"sheetView,omitempty"`
-	ExtLst    *ml.Reserved `xml:"extLst,omitempty"`
 }
 
 //SheetView is a direct mapping of XSD CT_SheetView

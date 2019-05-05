@@ -142,7 +142,6 @@ func (s *sheetReadStream) afterOpen() {
 					_ = decoder.DecodeElement(s.ml.Dimension, start)
 				case "hyperlinks":
 					s.hyperlinks = newHyperlinks(s.sheetInfo)
-					s.hyperlinks.initIfRequired()
 				case "conditionalFormatting":
 					if !conditionalsInited {
 						//N.B.: conditionalFormatting is not nested, so we have to use flag to init once only
@@ -152,11 +151,10 @@ func (s *sheetReadStream) afterOpen() {
 					}
 				case "mergeCells":
 					s.mergedCells = newMergedCells(s.sheetInfo)
-					s.mergedCells.initIfRequired()
 				case "mergeCell":
 					cell := &ml.MergeCell{}
 					_ = decoder.DecodeElement(cell, start)
-					*s.ml.MergeCells = append(*s.ml.MergeCells, cell)
+					s.ml.MergeCells.Items = append(s.ml.MergeCells.Items, cell)
 				case "row":
 					if multiPhase {
 						//skip row data, because 'mergeCell' is going after row data
@@ -202,7 +200,7 @@ func (s *sheetReadStream) afterOpen() {
 			for rows := s.Rows(); rows.HasNext(); {
 				rIdx, row := rows.Next()
 
-				for _, mc := range *s.ml.MergeCells {
+				for _, mc := range s.ml.MergeCells.Items {
 					if rIdx >= mc.Bounds.FromRow && rIdx <= mc.Bounds.ToRow {
 						s.mergedRows[rIdx] = row
 						break

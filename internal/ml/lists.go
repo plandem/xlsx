@@ -2,6 +2,7 @@ package ml
 
 import (
 	"encoding/xml"
+	"github.com/plandem/ooxml/ml"
 )
 
 //DiffStyleList is a direct mapping of XSD CT_Dxfs
@@ -50,6 +51,33 @@ type FillList struct {
 type NumberFormatList struct {
 	Count int             `xml:"count,attr"`
 	Items []*NumberFormat `xml:"numFmt,omitempty"`
+}
+
+//HyperlinkList is a direct mapping of XSD CT_Hyperlinks
+type HyperlinkList struct {
+	Items []*Hyperlink `xml:"hyperlink,omitempty"`
+}
+
+//MergedCellList is a direct mapping of XSD CT_MergeCells
+type MergedCellList struct {
+	Count int          `xml:"count,attr"`
+	Items []*MergeCell `xml:"mergeCell,omitempty"`
+}
+
+//SheetViewList is a direct mapping of XSD CT_SheetViews
+type SheetViewList struct {
+	Items  []*SheetView `xml:"sheetView,omitempty"`
+	ExtLst *ml.Reserved `xml:"extLst,omitempty"`
+}
+
+//BookViewList is a direct mapping of XSD CT_BookViews
+type BookViewList struct {
+	Items []*BookView `xml:"workbookView,omitempty"`
+}
+
+//ExternalReferenceList is a direct mapping of XSD CT_ExternalReferences
+type ExternalReferenceList struct {
+	Items []*ExternalReference `xml:"workbookView,omitempty"`
 }
 
 func (r *DiffStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -110,6 +138,46 @@ func (r *FillList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (r *NumberFormatList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}
+
+func (r *HyperlinkList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if len(r.Items) > 0 {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}
+
+func (r *MergedCellList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if r.Count = len(r.Items); r.Count > 0 {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}
+
+func (r *SheetViewList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if len(r.Items) > 0 {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}
+
+func (r *BookViewList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if len(r.Items) > 0 {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}
+
+func (r *ExternalReferenceList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if len(r.Items) > 0 {
 		return e.EncodeElement(*r, start)
 	}
 

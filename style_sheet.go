@@ -131,65 +131,43 @@ func (ss *StyleSheet) addDefaults() {
 	*/
 }
 
-//build indexes for fonts
-func (ss *StyleSheet) buildFontIndexes() {
+//build indexes for all indexes
+func (ss *StyleSheet) buildIndexes() {
+	//build indexes for fonts
 	for id, f := range ss.ml.Fonts.Items {
 		ss.fontIndex[hash.Font(f).Hash()] = id
 	}
-}
 
-//build indexes for fill
-func (ss *StyleSheet) buildFillIndexes() {
+	//build indexes for fill
 	for id, f := range ss.ml.Fills.Items {
 		ss.fillIndex[hash.Fill(f).Hash()] = id
 	}
-}
 
-//build indexes for border
-func (ss *StyleSheet) buildBorderIndexes() {
+	//build indexes for border
 	for id, f := range ss.ml.Borders.Items {
 		ss.borderIndex[hash.Border(f).Hash()] = id
 	}
-}
 
-//build indexes for number formats
-func (ss *StyleSheet) buildNumberIndexes() {
-	//N.B.: NumberFormat uses ID, not indexes
+	//build indexes for number formats
 	for _, f := range ss.ml.NumberFormats.Items {
+		//N.B.: NumberFormat uses ID, not indexes
 		ss.numberIndex[hash.NumberFormat(f).Hash()] = f.ID
 	}
-}
 
-//build indexes for named styles
-func (ss *StyleSheet) buildNamedStyleIndexes() {
+	//build indexes for named styles
 	for id, xf := range ss.ml.CellStyleXfs.Items {
 		ss.namedStyleIndex[hash.NamedStyle(xf).Hash()] = format.NamedStyleID(id)
 	}
-}
 
-//build indexes for direct styles
-func (ss *StyleSheet) buildDirectStyleIndexes() {
+	//build indexes for direct styles
 	for id, xf := range ss.ml.CellXfs.Items {
 		ss.directStyleIndex[hash.DirectStyle(xf).Hash()] = format.DirectStyleID(id)
 	}
-}
 
-//build indexes for differential styles
-func (ss *StyleSheet) buildDiffStyleIndexes() {
+	//build indexes for differential styles
 	for id, dxf := range ss.ml.Dxfs.Items {
 		ss.diffStyleIndex[hash.DiffStyle(dxf).Hash()] = format.DiffStyleID(id)
 	}
-}
-
-//build indexes for all indexes
-func (ss *StyleSheet) buildIndexes() {
-	ss.buildBorderIndexes()
-	ss.buildFillIndexes()
-	ss.buildFontIndexes()
-	ss.buildNumberIndexes()
-	ss.buildNamedStyleIndexes()
-	ss.buildDirectStyleIndexes()
-	ss.buildDiffStyleIndexes()
 }
 
 //adds a number formats for each type of number format if required. These styles will be used by cell's typed SetXXX methods

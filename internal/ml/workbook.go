@@ -13,10 +13,10 @@ type Workbook struct {
 	FileSharing         *ml.Reserved          `xml:"fileSharing,omitempty"`
 	WorkbookPr          *WorkbookPr           `xml:"workbookPr,omitempty"`
 	WorkbookProtection  *ml.Reserved          `xml:"workbookProtection,omitempty"`
-	BookViews           *[]*BookView          `xml:"bookViews>workbookView"` //we HAVE TO remove 'bookViews' if there is no 'bookView'
+	BookViews           BookViewList          `xml:"bookViews"`
 	Sheets              []*Sheet              `xml:"sheets>sheet"`
 	FunctionGroups      *ml.Reserved          `xml:"functionGroups,omitempty"`
-	ExternalReferences  *[]*ExternalReference `xml:"externalReferences>externalReference"` //we HAVE TO remove 'externalReferences' if there is no 'externalReference'
+	ExternalReferences  ExternalReferenceList `xml:"externalReferences"`
 	DefinedNames        *ml.Reserved          `xml:"definedNames,omitempty"`
 	CalcPr              *ml.Reserved          `xml:"calcPr,omitempty"`
 	OleSize             *ml.Reserved          `xml:"oleSize,omitempty"`

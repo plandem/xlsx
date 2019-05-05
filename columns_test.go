@@ -1,6 +1,7 @@
 package xlsx
 
 import (
+	"encoding/xml"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -15,18 +16,18 @@ func TestColumns_Delete(t *testing.T) {
 
 	//non grouped columns
 	cols.Resolve(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min: 1,
 			Max: 1,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Delete(0)
-	require.EqualValues(t, &[]*ml.Col{}, cols.sheet.ml.Cols)
+	require.EqualValues(t, []*ml.Col{}, cols.sheet.ml.Cols.Items)
 
 	cols.Resolve(0)
 	cols.Resolve(5)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min: 1,
 			Max: 1,
@@ -35,17 +36,17 @@ func TestColumns_Delete(t *testing.T) {
 			Min: 6,
 			Max: 6,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Delete(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min: 6,
 			Max: 6,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 
 	//grouped columns
-	cols.sheet.ml.Cols = &[]*ml.Col{
+	cols.sheet.ml.Cols.Items = []*ml.Col{
 		{
 			Min:   1,
 			Max:   100,
@@ -53,15 +54,15 @@ func TestColumns_Delete(t *testing.T) {
 		},
 	}
 	cols.Delete(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   99,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Resolve(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   99,
@@ -72,18 +73,18 @@ func TestColumns_Delete(t *testing.T) {
 			Max:   1,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Delete(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   98,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Resolve(0)
 	cols.Resolve(5)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   98,
@@ -99,9 +100,9 @@ func TestColumns_Delete(t *testing.T) {
 			Max:   6,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Delete(5)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   97,
@@ -112,7 +113,7 @@ func TestColumns_Delete(t *testing.T) {
 			Max:   1,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 }
 
 func TestColumns_Resolve(t *testing.T) {
@@ -124,21 +125,21 @@ func TestColumns_Resolve(t *testing.T) {
 
 	//non grouped columns
 	cols.Resolve(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min: 1,
 			Max: 1,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Resolve(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min: 1,
 			Max: 1,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 	cols.Resolve(5)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min: 1,
 			Max: 1,
@@ -147,10 +148,10 @@ func TestColumns_Resolve(t *testing.T) {
 			Min: 6,
 			Max: 6,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 
 	//grouped columns
-	cols.sheet.ml.Cols = &[]*ml.Col{
+	cols.sheet.ml.Cols.Items = []*ml.Col{
 		{
 			Min:   1,
 			Max:   100,
@@ -158,7 +159,7 @@ func TestColumns_Resolve(t *testing.T) {
 		},
 	}
 	cols.Resolve(0)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   100,
@@ -169,10 +170,10 @@ func TestColumns_Resolve(t *testing.T) {
 			Max:   1,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 
 	cols.Resolve(5)
-	require.EqualValues(t, &[]*ml.Col{
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   100,
@@ -188,7 +189,7 @@ func TestColumns_Resolve(t *testing.T) {
 			Max:   6,
 			Width: 32,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 }
 
 func TestColumns_pack(t *testing.T) {
@@ -202,7 +203,9 @@ func TestColumns_pack(t *testing.T) {
 	cols.Resolve(0)
 	cols.Resolve(5)
 	cols.Resolve(10)
-	require.Nil(t, cols.pack())
+
+	_, _ = xml.Marshal(&cols.sheet.ml.Cols)
+	require.Equal(t, 0, len(cols.sheet.ml.Cols.Items))
 
 	//serial cols with same settings should be merged
 	colsIdx := []int{10, 2, 0, 5, 1}
@@ -211,8 +214,9 @@ func TestColumns_pack(t *testing.T) {
 		c.Width = 100
 	}
 
-	require.NotNil(t, cols.pack())
-	require.EqualValues(t, &[]*ml.Col{
+
+	_, _ = xml.Marshal(&cols.sheet.ml.Cols)
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   3,
@@ -228,10 +232,10 @@ func TestColumns_pack(t *testing.T) {
 			Max:   11,
 			Width: 100,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 
 	//serial and grouped, same data
-	cols.sheet.ml.Cols = &[]*ml.Col{
+	cols.sheet.ml.Cols.Items = []*ml.Col{
 		{
 			Min:   1,
 			Max:   10,
@@ -243,8 +247,9 @@ func TestColumns_pack(t *testing.T) {
 		c := cols.Resolve(idx)
 		c.Width = 100
 	}
-	require.NotNil(t, cols.pack())
-	require.EqualValues(t, &[]*ml.Col{
+
+	_, _ = xml.Marshal(&cols.sheet.ml.Cols)
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   12,
@@ -255,10 +260,10 @@ func TestColumns_pack(t *testing.T) {
 			Max:   16,
 			Width: 100,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 
 	//serial and grouped, different data
-	cols.sheet.ml.Cols = &[]*ml.Col{
+	cols.sheet.ml.Cols.Items = []*ml.Col{
 		{
 			Min:   1,
 			Max:   10,
@@ -270,8 +275,9 @@ func TestColumns_pack(t *testing.T) {
 		c := cols.Resolve(idx)
 		c.Width = 200
 	}
-	require.NotNil(t, cols.pack())
-	require.EqualValues(t, &[]*ml.Col{
+
+	_, _ = xml.Marshal(&cols.sheet.ml.Cols)
+	require.EqualValues(t, []*ml.Col{
 		{
 			Min:   1,
 			Max:   2,
@@ -297,5 +303,5 @@ func TestColumns_pack(t *testing.T) {
 			Max:   16,
 			Width: 200,
 		},
-	}, cols.sheet.ml.Cols)
+	}, cols.sheet.ml.Cols.Items)
 }
