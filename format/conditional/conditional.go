@@ -111,13 +111,13 @@ func from(f *Info) (*ml.ConditionalFormatting, []*styles.Info) {
 	}
 
 	rules := make([]*ml.ConditionalRule, len(f.rules))
-	styles := make([]*styles.Info, len(f.rules))
+	si := make([]*styles.Info, len(f.rules))
 
 	for i, r := range f.rules {
 		rules[i] = r.rule
-		styles[i] = r.style
+		si[i] = r.style
 	}
 
 	f.info.Rules = rules
-	return f.info, styles
+	return f.info, si
 }
