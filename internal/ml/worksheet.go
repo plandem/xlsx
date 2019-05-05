@@ -167,21 +167,53 @@ type ConditionalFormatting struct {
 //ConditionalRule is a direct mapping of XSD CT_CfRule
 type ConditionalRule struct {
 	Formula      primitives.Formula               `xml:"formula,omitempty"`
-	ColorScale   *ml.Reserved                     `xml:"colorScale,omitempty"`
-	DataBar      *ml.Reserved                     `xml:"dataBar,omitempty"`
-	IconSet      *ml.Reserved                     `xml:"iconSet,omitempty"`
+	ColorScale   *ColorScale                      `xml:"colorScale,omitempty"`
+	DataBar      *DataBar                         `xml:"dataBar,omitempty"`
+	IconSet      *IconSet                         `xml:"iconSet,omitempty"`
 	ExtLst       *ml.Reserved                     `xml:"extLst,omitempty"`
-	Type         primitives.ConditionType         `xml:"type,attr"`                   //
-	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`        //
-	Priority     int                              `xml:"priority,attr"`               //
-	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`   //
-	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"` //
-	Percent      bool                             `xml:"percent,attr,omitempty"`      //
-	Bottom       bool                             `xml:"bottom,attr,omitempty"`       //
-	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`     //
-	Text         string                           `xml:"text,attr,omitempty"`         //
-	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`   //
-	Rank         uint                             `xml:"rank,attr,omitempty"`         //
+	Type         primitives.ConditionType         `xml:"type,attr"`
+	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
+	Priority     int                              `xml:"priority,attr"`
+	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
+	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"`
+	Percent      bool                             `xml:"percent,attr,omitempty"`
+	Bottom       bool                             `xml:"bottom,attr,omitempty"`
+	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`
+	Text         string                           `xml:"text,attr,omitempty"`
+	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`
+	Rank         uint                             `xml:"rank,attr,omitempty"`
 	StdDev       int                              `xml:"stdDev,attr,omitempty"`
-	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"` //
+	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"`
+}
+
+//ConditionValue is a direct mapping of XSD CT_Cfvo
+type ConditionValue struct {
+	ExtLst         *ml.Reserved                  `xml:"extLst,omitempty"`
+	Type           primitives.ConditionValueType `xml:"ST_CfvoType,attr"`
+	Value          string                        `xml:"val,attr,omitempty"`
+	GreaterOrEqual bool                          `xml:"gte,attr,omitempty"`
+}
+
+//ColorScale is a direct mapping of XSD CT_ColorScale
+type ColorScale struct {
+	Values []*ConditionValue `xml:"cfvo"`  //minimum 2 values
+	Color  []*Color          `xml:"color"` //minimum 2 values
+}
+
+//DataBar is a direct mapping of XSD CT_DataBar
+type DataBar struct {
+	Values    []*ConditionValue `xml:"cfvo"` //2 values only
+	Color     *Color            `xml:"color"`
+	MinLength uint              `xml:"minLength,attr,omitempty"`
+	MaxLength uint              `xml:"maxLength,attr,omitempty"`
+	ShowValue bool              `xml:"showValue,attr,omitempty"`
+}
+
+//IconSet is a direct mapping of XSD ST_IconSetType
+type IconSet struct {
+	Values    []*ConditionValue      `xml:"cfvo"` //minimum 2 values
+	Type      primitives.IconSetType `xml:"iconSet,attr,omitempty"`
+	ShowValue bool                   `xml:"showValue,attr,omitempty"`
+	Percent   bool                   `xml:"percent,attr,omitempty"`
+	Reverse   bool                   `xml:"reverse,attr,omitempty"`
 }
