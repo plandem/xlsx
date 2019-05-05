@@ -25,9 +25,7 @@ func main() {
 		panic(err)
 	}
 
-	defer func() {
-		_ = xl.Close()
-	}()
+	defer xl.Close()
 
 	redBoldYellow := xl.AddStyles(
 		styles.New(
@@ -73,10 +71,10 @@ func main() {
  	}
 
 	//Add hyperlink and set value same time
-	_ = sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
+	sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
 	
 	//Add hyperlink as string
-	_ = sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
+	sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
 
 	//Add hyperlink via helper type for advanced settings
 	sheet.CellByRef("A7").SetHyperlink(hyperlink.New(
