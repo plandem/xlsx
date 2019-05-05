@@ -1,14 +1,14 @@
 package xlsx
 
 import (
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 
-	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml"
 )
 
-func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
+func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 	require.NotNil(t, xl)
 
 	require.Equal(t, 1, len(xl.styleSheet.directStyleIndex))
@@ -18,13 +18,13 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 	require.Equal(t, 0, len(xl.styleSheet.numberIndex))
 
 	//add font
-	style := format.NewStyles(
-		format.Font.Size(8),
-		format.Font.Color("#FF1122"),
+	style := styles.New(
+		styles.Font.Size(8),
+		styles.Font.Color("#FF1122"),
 	)
 
-	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(1), styleRef)
+	styleRef := xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(1), styleRef)
 	require.Equal(t, 2, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
@@ -33,12 +33,12 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 
 	//add fill
 	style.Set(
-		format.Fill.Type(format.PatternTypeLightGrid),
-		format.Fill.Background("#EFF142"),
+		styles.Fill.Type(styles.PatternTypeLightGrid),
+		styles.Fill.Background("#EFF142"),
 	)
 
-	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(2), styleRef)
+	styleRef = xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(2), styleRef)
 	require.Equal(t, 3, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -47,11 +47,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 
 	//add built-in number
 	style.Set(
-		format.NumberFormatID(45),
+		styles.NumberFormatID(45),
 	)
 
-	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(3), styleRef)
+	styleRef = xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(3), styleRef)
 	require.Equal(t, 4, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -60,11 +60,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 
 	//add custom number
 	style.Set(
-		format.NumberFormat(`$0.00" usd"`),
+		styles.NumberFormat(`$0.00" usd"`),
 	)
 
-	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(4), styleRef)
+	styleRef = xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(4), styleRef)
 	require.Equal(t, 5, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -73,12 +73,12 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 
 	//add border
 	style.Set(
-		format.Border.Color("#1122FF"),
-		format.Border.Type(format.BorderStyleDashDot),
+		styles.Border.Color("#1122FF"),
+		styles.Border.Type(styles.BorderStyleDashDot),
 	)
 
-	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(5), styleRef)
+	styleRef = xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(5), styleRef)
 	require.Equal(t, 6, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -87,12 +87,12 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 
 	//add alignment
 	style.Set(
-		format.Alignment.VAlign(format.VAlignBottom),
-		format.Alignment.HAlign(format.HAlignFill),
+		styles.Alignment.VAlign(styles.VAlignBottom),
+		styles.Alignment.HAlign(styles.HAlignFill),
 	)
 
-	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(6), styleRef)
+	styleRef = xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(6), styleRef)
 	require.Equal(t, 7, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -101,12 +101,12 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 
 	//add protection
 	style.Set(
-		format.Protection.Hidden,
-		format.Protection.Locked,
+		styles.Protection.Hidden,
+		styles.Protection.Locked,
 	)
 
-	styleRef = xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(7), styleRef)
+	styleRef = xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(7), styleRef)
 	require.Equal(t, 8, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -119,22 +119,22 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) format.DirectStyleID {
 func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 	require.NotNil(t, xl)
 
-	style := format.NewStyles(
-		format.Font.Size(8),
-		format.Font.Color("#FF1122"),
-		format.Fill.Type(format.PatternTypeLightGrid),
-		format.Fill.Background("#EFF142"),
-		format.NumberFormat(`$0.00" usd"`),
-		format.Border.Color("#1122FF"),
-		format.Border.Type(format.BorderStyleDashDot),
-		format.Alignment.VAlign(format.VAlignBottom),
-		format.Alignment.HAlign(format.HAlignFill),
-		format.Protection.Hidden,
-		format.Protection.Locked,
+	style := styles.New(
+		styles.Font.Size(8),
+		styles.Font.Color("#FF1122"),
+		styles.Fill.Type(styles.PatternTypeLightGrid),
+		styles.Fill.Background("#EFF142"),
+		styles.NumberFormat(`$0.00" usd"`),
+		styles.Border.Color("#1122FF"),
+		styles.Border.Type(styles.BorderStyleDashDot),
+		styles.Alignment.VAlign(styles.VAlignBottom),
+		styles.Alignment.HAlign(styles.HAlignFill),
+		styles.Protection.Hidden,
+		styles.Protection.Locked,
 	)
 
-	styleRef := xl.AddFormatting(style)
-	require.Equal(t, format.DirectStyleID(7), styleRef)
+	styleRef := xl.AddStyles(style)
+	require.Equal(t, styles.DirectStyleID(7), styleRef)
 	require.Equal(t, 14, len(xl.styleSheet.directStyleIndex))
 	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
 	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
@@ -150,9 +150,9 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 		//default font
 		{
 			Name:   "Calibri",
-			Family: format.FontFamilySwiss,
+			Family: styles.FontFamilySwiss,
 			Size:   11,
-			Scheme: format.FontSchemeMinor,
+			Scheme: styles.FontSchemeMinor,
 		},
 		//new font
 		{
@@ -166,18 +166,18 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 		//default fill
 		{
 			Pattern: &ml.PatternFill{
-				Type: format.PatternTypeNone,
+				Type: styles.PatternTypeNone,
 			},
 		},
 		{
 			Pattern: &ml.PatternFill{
-				Type: format.PatternTypeGray125,
+				Type: styles.PatternTypeGray125,
 			},
 		},
 		//new fill
 		{
 			Pattern: &ml.PatternFill{
-				Type:       format.PatternTypeLightGrid,
+				Type:       styles.PatternTypeLightGrid,
 				Background: &ml.Color{RGB: "FFEFF142"},
 			},
 		},
@@ -202,10 +202,10 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 		},
 		//new border
 		{
-			Left:   &ml.BorderSegment{Type: format.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
-			Right:  &ml.BorderSegment{Type: format.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
-			Top:    &ml.BorderSegment{Type: format.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
-			Bottom: &ml.BorderSegment{Type: format.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
+			Left:   &ml.BorderSegment{Type: styles.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
+			Right:  &ml.BorderSegment{Type: styles.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
+			Top:    &ml.BorderSegment{Type: styles.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
+			Bottom: &ml.BorderSegment{Type: styles.BorderStyleDashDot, Color: &ml.Color{RGB: "FF1122FF"}},
 		},
 	}, xl.styleSheet.ml.Borders.Items)
 
@@ -293,8 +293,8 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 				ApplyBorder:       true,
 				ApplyAlignment:    true,
 				Alignment: &ml.CellAlignment{
-					Vertical:   format.VAlignBottom,
-					Horizontal: format.HAlignFill,
+					Vertical:   styles.VAlignBottom,
+					Horizontal: styles.HAlignFill,
 				},
 			},
 		},
@@ -312,8 +312,8 @@ func checkStyles(xl *Spreadsheet, t *testing.T) {
 				ApplyAlignment:    true,
 				ApplyProtection:   true,
 				Alignment: &ml.CellAlignment{
-					Vertical:   format.VAlignBottom,
-					Horizontal: format.HAlignFill,
+					Vertical:   styles.VAlignBottom,
+					Horizontal: styles.HAlignFill,
 				},
 				Protection: &ml.CellProtection{
 					Hidden: true,

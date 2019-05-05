@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -15,9 +15,9 @@ func TestFontScheme(t *testing.T) {
 	}
 
 	list := map[string]primitives.FontSchemeType{
-		"none":     format.FontSchemeNone,
-		"major":    format.FontSchemeMajor,
-		"minor":    format.FontSchemeMinor,
+		"none":     styles.FontSchemeNone,
+		"major":    styles.FontSchemeMajor,
+		"minor":    styles.FontSchemeMinor,
 		"schema-a": primitives.FontSchemeType("schema-a"),
 	}
 

@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,25 +16,25 @@ func TestFillPattern(t *testing.T) {
 
 	list := map[string]primitives.PatternType{
 		"":                primitives.PatternType(0),
-		"none":            format.PatternTypeNone,
-		"solid":           format.PatternTypeSolid,
-		"mediumGray":      format.PatternTypeMediumGray,
-		"darkGray":        format.PatternTypeDarkGray,
-		"lightGray":       format.PatternTypeLightGray,
-		"darkHorizontal":  format.PatternTypeDarkHorizontal,
-		"darkVertical":    format.PatternTypeDarkVertical,
-		"darkDown":        format.PatternTypeDarkDown,
-		"darkUp":          format.PatternTypeDarkUp,
-		"darkGrid":        format.PatternTypeDarkGrid,
-		"darkTrellis":     format.PatternTypeDarkTrellis,
-		"lightHorizontal": format.PatternTypeLightHorizontal,
-		"lightVertical":   format.PatternTypeLightVertical,
-		"lightDown":       format.PatternTypeLightDown,
-		"lightUp":         format.PatternTypeLightUp,
-		"lightGrid":       format.PatternTypeLightGrid,
-		"lightTrellis":    format.PatternTypeLightTrellis,
-		"gray125":         format.PatternTypeGray125,
-		"gray0625":        format.PatternTypeGray0625,
+		"none":            styles.PatternTypeNone,
+		"solid":           styles.PatternTypeSolid,
+		"mediumGray":      styles.PatternTypeMediumGray,
+		"darkGray":        styles.PatternTypeDarkGray,
+		"lightGray":       styles.PatternTypeLightGray,
+		"darkHorizontal":  styles.PatternTypeDarkHorizontal,
+		"darkVertical":    styles.PatternTypeDarkVertical,
+		"darkDown":        styles.PatternTypeDarkDown,
+		"darkUp":          styles.PatternTypeDarkUp,
+		"darkGrid":        styles.PatternTypeDarkGrid,
+		"darkTrellis":     styles.PatternTypeDarkTrellis,
+		"lightHorizontal": styles.PatternTypeLightHorizontal,
+		"lightVertical":   styles.PatternTypeLightVertical,
+		"lightDown":       styles.PatternTypeLightDown,
+		"lightUp":         styles.PatternTypeLightUp,
+		"lightGrid":       styles.PatternTypeLightGrid,
+		"lightTrellis":    styles.PatternTypeLightTrellis,
+		"gray125":         styles.PatternTypeGray125,
+		"gray0625":        styles.PatternTypeGray0625,
 	}
 
 	for s, v := range list {

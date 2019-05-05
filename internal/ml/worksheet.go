@@ -5,6 +5,9 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
+//Formula is a direct mapping of XSD ST_Formula
+type Formula string
+
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
 	XMLName               ml.Name                   `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
@@ -166,7 +169,7 @@ type ConditionalFormatting struct {
 
 //ConditionalRule is a direct mapping of XSD CT_CfRule
 type ConditionalRule struct {
-	Formula      primitives.Formula               `xml:"formula,omitempty"`
+	Formula      Formula                          `xml:"formula,omitempty"`
 	ColorScale   *ColorScale                      `xml:"colorScale,omitempty"`
 	DataBar      *DataBar                         `xml:"dataBar,omitempty"`
 	IconSet      *IconSet                         `xml:"iconSet,omitempty"`

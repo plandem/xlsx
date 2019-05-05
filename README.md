@@ -13,8 +13,10 @@ package main
 import (
 	"fmt"
 	"github.com/plandem/xlsx"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/hyperlink"
 )
 
 func main() {
@@ -27,12 +29,12 @@ func main() {
 		_ = xl.Close()
 	}()
 
-	redBoldYellow := xl.AddFormatting(
-		format.NewStyles(
-			format.Font.Bold,
-			format.Font.Color("#ff0000"),
-			format.Fill.Type(format.PatternTypeSolid),
-			format.Fill.Color("#FFFF00"),
+	redBoldYellow := xl.AddStyles(
+		styles.New(
+			styles.Font.Bold,
+			styles.Font.Color("#ff0000"),
+			styles.Fill.Type(styles.PatternTypeSolid),
+			styles.Fill.Color("#FFFF00"),
 		),
 	)
 
@@ -77,12 +79,12 @@ func main() {
 	_ = sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
 
 	//Add hyperlink via helper type for advanced settings
-	_ = sheet.CellByRef("A7").SetHyperlink(types.NewHyperlink(
-		types.Hyperlink.ToFile("./example_simple.xlsx"),
-		types.Hyperlink.ToRef("C3", "Sheet1"),
-		types.Hyperlink.Tooltip("That's a tooltip"),
-		types.Hyperlink.Display("Something to display"), //Cell still holds own value
-		types.Hyperlink.Formatting(redBoldYellow),
+	_ = sheet.CellByRef("A7").SetHyperlink(hyperlink.New(
+		hyperlink.ToFile("./example_simple.xlsx"),
+		hyperlink.ToRef("C3", "Sheet1"),
+		hyperlink.Tooltip("That's a tooltip"),
+		hyperlink.Display("Something to display"), //Cell still holds own value
+		hyperlink.Formatting(redBoldYellow),
 	))
 
 	sheet.CellByRef("A1").RemoveHyperlink()
@@ -94,24 +96,24 @@ func main() {
 	//Rich Text
 	_= sheet.CellByRef("F10").SetText(
 		"plain text", 
-		format.NewStyles(
-			format.Font.Bold,
-			format.Font.Color("#ff0000"),
+		styles.New(
+			styles.Font.Bold,
+			styles.Font.Color("#ff0000"),
 		),
 		"red bold text",
 		"another plain text",
 	)
 	
 	//Conditional formatting
-	_= sheet.AddConditional(format.NewConditions(
-		format.Conditions.Rule(
-			format.Condition.Type(format.ConditionTypeCellIs),
-			format.Condition.Operator(format.ConditionOperatorLessThanOrEqual),
-			format.Condition.Priority(2),
-			format.Condition.Formula("500"),
-			format.Condition.Style(format.NewStyles(
-				format.Font.Bold,
-				format.Font.Color("#FF0000"),
+	_= sheet.AddConditional(conditional.New(
+		conditional.AddRule(
+			conditional.Rule.Type(conditional.TypeCellIs),
+			conditional.Rule.Operator(conditional.OperatorLessThanOrEqual),
+			conditional.Rule.Priority(2),
+			conditional.Rule.Formula("500"),
+			conditional.Rule.Style(styles.New(
+				styles.Font.Bold,
+				styles.Font.Color("#FF0000"),
 			)),
 		),
 	), "A1:A10", "B2", "C1:C10")

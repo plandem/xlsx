@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/plandem/ooxml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"regexp"
 )
 
@@ -133,13 +133,13 @@ func (xl *Spreadsheet) DeleteSheet(i int) {
 	}
 }
 
-//AddFormatting adds a new style formatting to document and return related ID that can be used lately
-func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.DirectStyleID {
+//AddStyles adds a new style formatting to document and return related ID that can be used lately
+func (xl *Spreadsheet) AddStyles(style *styles.Info) styles.DirectStyleID {
 	return xl.styleSheet.addStyle(style)
 }
 
-//ResolveFormatting returns style formatting for styleID or nil if there is no any styles with such styleID
-func (xl *Spreadsheet) ResolveFormatting(styleID format.DirectStyleID) *format.StyleFormat {
+//ResolveStyles returns style formatting for styleID or nil if there is no any styles with such styleID
+func (xl *Spreadsheet) ResolveStyles(styleID styles.DirectStyleID) *styles.Info {
 	return xl.workbook.doc.styleSheet.resolveDirectStyle(styleID)
 }
 

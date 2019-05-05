@@ -1,7 +1,7 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
 )
@@ -31,12 +31,12 @@ func (c *Col) Set(o *options.ColumnOptions) {
 }
 
 //Formatting returns DirectStyleID of default format for column
-func (c *Col) Formatting() format.DirectStyleID {
+func (c *Col) Formatting() styles.DirectStyleID {
 	return c.ml.Style
 }
 
 //SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
-func (c *Col) SetFormatting(styleID format.DirectStyleID) {
+func (c *Col) SetFormatting(styleID styles.DirectStyleID) {
 	c.ml.Style = styleID
 }
 

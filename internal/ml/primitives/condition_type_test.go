@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,24 +16,24 @@ func TestConditionType(t *testing.T) {
 
 	list := map[string]primitives.ConditionType{
 		"":                  primitives.ConditionType(0),
-		"expression":        format.ConditionTypeExpression,
-		"cellIs":            format.ConditionTypeCellIs,
-		"colorScale":        format.ConditionTypeColorScale,
-		"dataBar":           format.ConditionTypeDataBar,
-		"iconSet":           format.ConditionTypeIconSet,
-		"top10":             format.ConditionTypeTop10,
-		"uniqueValues":      format.ConditionTypeUniqueValues,
-		"duplicateValues":   format.ConditionTypeDuplicateValues,
-		"containsText":      format.ConditionTypeContainsText,
-		"notContainsText":   format.ConditionTypeNotContainsText,
-		"beginsWith":        format.ConditionTypeBeginsWith,
-		"endsWith":          format.ConditionTypeEndsWith,
-		"containsBlanks":    format.ConditionTypeContainsBlanks,
-		"notContainsBlanks": format.ConditionTypeNotContainsBlanks,
-		"containsErrors":    format.ConditionTypeContainsErrors,
-		"notContainsErrors": format.ConditionTypeNotContainsErrors,
-		"timePeriod":        format.ConditionTypeTimePeriod,
-		"aboveAverage":      format.ConditionTypeAboveAverage,
+		"expression":        conditional.TypeExpression,
+		"cellIs":            conditional.TypeCellIs,
+		"colorScale":        conditional.TypeColorScale,
+		"dataBar":           conditional.TypeDataBar,
+		"iconSet":           conditional.TypeIconSet,
+		"top10":             conditional.TypeTop10,
+		"uniqueValues":      conditional.TypeUniqueValues,
+		"duplicateValues":   conditional.TypeDuplicateValues,
+		"containsText":      conditional.TypeContainsText,
+		"notContainsText":   conditional.TypeNotContainsText,
+		"beginsWith":        conditional.TypeBeginsWith,
+		"endsWith":          conditional.TypeEndsWith,
+		"containsBlanks":    conditional.TypeContainsBlanks,
+		"notContainsBlanks": conditional.TypeNotContainsBlanks,
+		"containsErrors":    conditional.TypeContainsErrors,
+		"notContainsErrors": conditional.TypeNotContainsErrors,
+		"timePeriod":        conditional.TypeTimePeriod,
+		"aboveAverage":      conditional.TypeAboveAverage,
 	}
 
 	for s, v := range list {

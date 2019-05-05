@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	sharedML "github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
@@ -209,7 +209,7 @@ func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
 }
 
 //AddConditional adds a new conditional formatting with additional refs if required
-func (s *sheetInfo) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+func (s *sheetInfo) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
 	return s.conditionals.Add(conditional, refs)
 }
 

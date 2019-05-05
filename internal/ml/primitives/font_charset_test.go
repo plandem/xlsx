@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -14,27 +14,27 @@ func TestFontCharset(t *testing.T) {
 		Property primitives.FontCharsetType `xml:"property,omitempty"`
 	}
 
-	list := map[string]format.FontCharsetType{
+	list := map[string]styles.FontCharsetType{
 		//"0":   format.FontCharsetANSI,
-		"1":   format.FontCharsetDEFAULT,
-		"2":   format.FontCharsetSYMBOL,
-		"77":  format.FontCharsetMAC,
-		"128": format.FontCharsetSHIFTJIS,
-		"129": format.FontCharsetHANGUL,
-		"130": format.FontCharsetJOHAB,
-		"134": format.FontCharsetGB2312,
-		"136": format.FontCharsetCHINESEBIG5,
-		"161": format.FontCharsetGREEK,
-		"162": format.FontCharsetTURKISH,
-		"163": format.FontCharsetVIETNAMESE,
-		"177": format.FontCharsetHEBREW,
-		"178": format.FontCharsetARABIC,
-		"186": format.FontCharsetBALTIC,
-		"204": format.FontCharsetRUSSIAN,
-		"222": format.FontCharsetTHAI,
-		"238": format.FontCharsetEASTEUROPE,
-		"255": format.FontCharsetOEM,
-		"25":  format.FontCharsetType(25),
+		"1":   styles.FontCharsetDEFAULT,
+		"2":   styles.FontCharsetSYMBOL,
+		"77":  styles.FontCharsetMAC,
+		"128": styles.FontCharsetSHIFTJIS,
+		"129": styles.FontCharsetHANGUL,
+		"130": styles.FontCharsetJOHAB,
+		"134": styles.FontCharsetGB2312,
+		"136": styles.FontCharsetCHINESEBIG5,
+		"161": styles.FontCharsetGREEK,
+		"162": styles.FontCharsetTURKISH,
+		"163": styles.FontCharsetVIETNAMESE,
+		"177": styles.FontCharsetHEBREW,
+		"178": styles.FontCharsetARABIC,
+		"186": styles.FontCharsetBALTIC,
+		"204": styles.FontCharsetRUSSIAN,
+		"222": styles.FontCharsetTHAI,
+		"238": styles.FontCharsetEASTEUROPE,
+		"255": styles.FontCharsetOEM,
+		"25":  styles.FontCharsetType(25),
 	}
 
 	for s, v := range list {

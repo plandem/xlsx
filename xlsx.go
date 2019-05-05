@@ -4,9 +4,11 @@ import (
 	"github.com/plandem/ooxml"
 
 	//init enums for marshal/unmarshal
-	_ "github.com/plandem/xlsx/format"
+	_ "github.com/plandem/xlsx/format/conditional"
+	_ "github.com/plandem/xlsx/format/styles"
 	_ "github.com/plandem/xlsx/options"
 	_ "github.com/plandem/xlsx/types"
+	_ "github.com/plandem/xlsx/types/hyperlink"
 )
 
 //Open opens a XLSX file with name or io.Reader

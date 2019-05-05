@@ -1,7 +1,7 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/options"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -33,7 +33,7 @@ func TestCol(t *testing.T) {
 	require.Equal(t, c.ml.Collapsed, o.Collapsed)
 	require.Equal(t, c.ml.Width, float32(0.0))
 	require.Equal(t, c.ml.CustomWidth, false)
-	require.Equal(t, c.ml.Style, format.DirectStyleID(0))
+	require.Equal(t, c.ml.Style, styles.DirectStyleID(0))
 
 	o = options.NewColumnOptions(
 		options.Column.Width(100.0),
@@ -46,15 +46,15 @@ func TestCol(t *testing.T) {
 	require.Equal(t, c.ml.Collapsed, o.Collapsed)
 	require.Equal(t, c.ml.Width, float32(100.0))
 	require.Equal(t, c.ml.CustomWidth, true)
-	require.Equal(t, c.ml.Style, format.DirectStyleID(0))
+	require.Equal(t, c.ml.Style, styles.DirectStyleID(0))
 
-	style := format.NewStyles(
-		format.Font.Name("Calibri"),
-		format.Font.Size(12),
+	style := styles.New(
+		styles.Font.Name("Calibri"),
+		styles.Font.Size(12),
 	)
 
-	styleRef := xl.AddFormatting(style)
+	styleRef := xl.AddStyles(style)
 	c.SetFormatting(styleRef)
 
-	require.Equal(t, c.ml.Style, format.DirectStyleID(styleRef))
+	require.Equal(t, c.ml.Style, styles.DirectStyleID(styleRef))
 }

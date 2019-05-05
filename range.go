@@ -1,7 +1,7 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/types"
 )
 
@@ -69,7 +69,7 @@ func (r *Range) Walk(cb func(idx, cIdx, rIdx int, c *Cell)) {
 }
 
 //SetFormatting sets style format to all cells in range
-func (r *Range) SetFormatting(styleID format.DirectStyleID) {
+func (r *Range) SetFormatting(styleID styles.DirectStyleID) {
 	r.Walk(func(idx, cIdx, rIdx int, c *Cell) {
 		c.SetFormatting(styleID)
 	})

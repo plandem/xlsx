@@ -3,7 +3,7 @@ package xlsx_test
 import (
 	"fmt"
 	"github.com/plandem/xlsx"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/options"
 	"log"
 	"os"
@@ -285,15 +285,15 @@ func Example_formatting() {
 	defer xl.Close()
 
 	// Create a new format for a bold font with red color and yellow solid background
-	redBold := format.NewStyles(
-		format.Font.Bold,
-		format.Font.Color("#ff0000"),
-		format.Fill.Background("#ffff00"),
-		format.Fill.Type(format.PatternTypeSolid),
+	redBold := styles.New(
+		styles.Font.Bold,
+		styles.Font.Color("#ff0000"),
+		styles.Fill.Background("#ffff00"),
+		styles.Fill.Type(styles.PatternTypeSolid),
 	)
 
 	// Add formatting to xlsx
-	styleId := xl.AddFormatting(redBold)
+	styleId := xl.AddStyles(redBold)
 
 	sheet := xl.Sheet(0)
 

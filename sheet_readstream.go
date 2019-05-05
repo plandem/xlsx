@@ -3,7 +3,7 @@ package xlsx
 import (
 	"encoding/xml"
 	"github.com/plandem/ooxml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
@@ -272,7 +272,7 @@ func (s *sheetReadStream) SplitCols(fromIndex, toIndex int) {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+func (s *sheetReadStream) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
 	panic(errorNotSupported)
 }
 

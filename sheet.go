@@ -1,7 +1,7 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
 )
@@ -59,7 +59,7 @@ type Sheet interface {
 	//SplitCols splits cols between fromIndex and toIndex
 	SplitCols(fromIndex, toIndex int)
 	//AddConditional adds conditional formatting to sheet
-	AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error
+	AddConditional(conditional *conditional.Info, refs ...types.Ref) error
 	//DeleteConditional deletes conditional formatting for refs
 	DeleteConditional(refs ...types.Ref)
 	//Name returns name of sheet

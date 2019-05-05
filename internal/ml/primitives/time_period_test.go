@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,16 +16,16 @@ func TestTimePeriod(t *testing.T) {
 
 	list := map[string]primitives.TimePeriodType{
 		"":          primitives.TimePeriodType(0),
-		"today":     format.TimePeriodToday,
-		"yesterday": format.TimePeriodYesterday,
-		"tomorrow":  format.TimePeriodTomorrow,
-		"last7Days": format.TimePeriodLast7Days,
-		"thisMonth": format.TimePeriodThisMonth,
-		"lastMonth": format.TimePeriodLastMonth,
-		"nextMonth": format.TimePeriodNextMonth,
-		"thisWeek":  format.TimePeriodThisWeek,
-		"lastWeek":  format.TimePeriodLastWeek,
-		"nextWeek":  format.TimePeriodNextWeek,
+		"today":     conditional.TimePeriodToday,
+		"yesterday": conditional.TimePeriodYesterday,
+		"tomorrow":  conditional.TimePeriodTomorrow,
+		"last7Days": conditional.TimePeriodLast7Days,
+		"thisMonth": conditional.TimePeriodThisMonth,
+		"lastMonth": conditional.TimePeriodLastMonth,
+		"nextMonth": conditional.TimePeriodNextMonth,
+		"thisWeek":  conditional.TimePeriodThisWeek,
+		"lastWeek":  conditional.TimePeriodLastWeek,
+		"nextWeek":  conditional.TimePeriodNextWeek,
 	}
 
 	for s, v := range list {

@@ -1,14 +1,15 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	_ "unsafe"
 )
 
-//go:linkname fromConditionalFormat github.com/plandem/xlsx/format.fromConditionalFormat
-func fromConditionalFormat(f *format.ConditionalFormat) (*ml.ConditionalFormatting, []*format.StyleFormat)
+//go:linkname fromConditionalFormat github.com/plandem/xlsx/format/conditional.from
+func fromConditionalFormat(f *conditional.Info) (*ml.ConditionalFormatting, []*styles.Info)
 
 type conditionals struct {
 	sheet *sheetInfo
@@ -28,19 +29,19 @@ func (c *conditionals) initIfRequired() {
 }
 
 //Add adds a conditional formatting with attaching additional refs if required
-func (c *conditionals) Add(conditional *format.ConditionalFormat, refs []types.Ref) error {
+func (c *conditionals) Add(ci *conditional.Info, refs []types.Ref) error {
 	c.initIfRequired()
 
 	//attach additional refs, if required
 	if len(refs) > 0 {
-		conditional.Set(format.Conditions.Refs(refs...))
+		ci.Set(conditional.Refs(refs...))
 	}
 
-	if err := conditional.Validate(); err != nil {
+	if err := ci.Validate(); err != nil {
 		return err
 	}
 
-	info, styles := fromConditionalFormat(conditional)
+	info, styles := fromConditionalFormat(ci)
 	if info != nil && len(styles) > 0 && len(info.Bounds) > 0 {
 		for i, styleInfo := range styles {
 			if styleInfo != nil {
@@ -63,8 +64,8 @@ func (c *conditionals) Remove(refs []types.Ref) {
 }
 
 //Resolve checks if requested cIdx and rIdx related to any conditionals formatting and returns it
-func (c *conditionals) Resolve(cIdx, rIdx int) *format.ConditionalFormat {
-	//TODO: Populate format.ConditionalFormat with required information
+func (c *conditionals) Resolve(cIdx, rIdx int) *conditional.Info {
+	//TODO: Populate format.Info with required information
 	panic(errorNotSupported)
 }
 
