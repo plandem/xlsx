@@ -8,8 +8,8 @@ import (
 	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 	"math"
 	"path/filepath"
 	"reflect"
@@ -135,7 +135,7 @@ func (s *sheetInfo) SetName(name string) {
 
 //Set sets options for sheet
 func (s *sheetInfo) Set(o *options.SheetOptions) {
-	if o.Visibility >= options.VisibilityTypeVisible && o.Visibility <= options.VisibilityTypeVeryHidden {
+	if o.Visibility >= options.Visible && o.Visibility <= options.VeryHidden {
 		s.workbook.ml.Sheets[s.index].State = o.Visibility
 		s.workbook.file.MarkAsUpdated()
 	}

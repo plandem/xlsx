@@ -79,7 +79,7 @@ func main() {
 	_ = sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
 
 	//Add hyperlink via helper type for advanced settings
-	_ = sheet.CellByRef("A7").SetHyperlink(hyperlink.New(
+	sheet.CellByRef("A7").SetHyperlink(hyperlink.New(
 		hyperlink.ToFile("./example_simple.xlsx"),
 		hyperlink.ToRef("C3", "Sheet1"),
 		hyperlink.Tooltip("That's a tooltip"),
@@ -90,11 +90,11 @@ func main() {
 	sheet.CellByRef("A1").RemoveHyperlink()
 	
 	//Merged Cells
-	_= sheet.Range("A1:C3").Merge()
+	sheet.Range("A1:C3").Merge()
 	sheet.Range("A1:C3").Split()
 	
 	//Rich Text
-	_= sheet.CellByRef("F10").SetText(
+	sheet.CellByRef("F10").SetText(
 		"plain text", 
 		styles.New(
 			styles.Font.Bold,
@@ -105,7 +105,7 @@ func main() {
 	)
 	
 	//Conditional formatting
-	_= sheet.AddConditional(conditional.New(
+	sheet.AddConditional(conditional.New(
 		conditional.AddRule(
 			conditional.Rule.Type(conditional.TypeCellIs),
 			conditional.Rule.Operator(conditional.OperatorLessThanOrEqual),
@@ -118,7 +118,7 @@ func main() {
 		),
 	), "A1:A10", "B2", "C1:C10")
     	
-	_= xl.SaveAs("test1.xlsx")
+	xl.SaveAs("test1.xlsx")
 }
 ```
 

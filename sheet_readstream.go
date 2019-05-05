@@ -5,8 +5,8 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 )
 
 type sheetReadStream struct {

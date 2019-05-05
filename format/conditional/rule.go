@@ -4,7 +4,6 @@ import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
-
 )
 
 //ruleInfo is objects that holds combined information about conditional rule

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types/options"
 	"log"
 	"os"
 	"strings"
@@ -341,7 +341,7 @@ func Example_options() {
 
 	// set options for sheet
 	sheetOptions := options.NewSheetOptions(
-		options.Sheet.Visibility(options.VisibilityTypeVeryHidden),
+		options.Sheet.Visibility(options.VeryHidden),
 	)
 	sheet.Set(sheetOptions)
 }

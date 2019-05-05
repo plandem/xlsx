@@ -3,7 +3,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types/options"
 )
 
 //Row is a higher level object that wraps ml.Row with functionality. Inherits functionality of Range

@@ -7,11 +7,11 @@ import (
 
 func TestSheetOptions(t *testing.T) {
 	o := NewSheetOptions(
-		Sheet.Visibility(VisibilityTypeVeryHidden),
+		Sheet.Visibility(VeryHidden),
 	)
 
 	require.IsType(t, &SheetOptions{}, o)
 	require.Equal(t, &SheetOptions{
-		Visibility: VisibilityTypeVeryHidden,
+		Visibility: VeryHidden,
 	}, o)
 }
