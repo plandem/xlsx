@@ -248,7 +248,7 @@ func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) Set(o *options.SheetOptions) {
+func (s *sheetReadStream) SetOptions(o *options.SheetOptions) {
 	panic(errorNotSupported)
 }
 

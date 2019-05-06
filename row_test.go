@@ -25,7 +25,7 @@ func TestRow(t *testing.T) {
 		options.Row.Collapsed(true),
 	)
 
-	r.Set(o)
+	r.SetOptions(o)
 
 	require.Equal(t, r.ml.OutlineLevel, o.OutlineLevel)
 	require.Equal(t, r.ml.Hidden, o.Hidden)
@@ -40,7 +40,7 @@ func TestRow(t *testing.T) {
 		options.Row.Height(100.0),
 	)
 
-	r.Set(o)
+	r.SetOptions(o)
 	require.Equal(t, r.ml.OutlineLevel, o.OutlineLevel)
 	require.Equal(t, r.ml.Hidden, o.Hidden)
 	require.Equal(t, r.ml.Phonetic, o.Phonetic)

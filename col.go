@@ -17,8 +17,8 @@ func (c *Col) Cell(rowIndex int) *Cell {
 	return c.sheet.Cell(c.bounds.FromCol, rowIndex)
 }
 
-//Set sets options for column
-func (c *Col) Set(o *options.ColumnOptions) {
+//SetOptions sets options for column
+func (c *Col) SetOptions(o *options.ColumnOptions) {
 	if o.Width > 0 {
 		c.ml.Width = o.Width
 		c.ml.CustomWidth = true

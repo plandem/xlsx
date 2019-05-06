@@ -35,7 +35,7 @@ func TestSheetInfo(t *testing.T) {
 	)
 
 	require.Equal(t, primitives.VisibilityType(0), xl.workbook.ml.Sheets[0].State)
-	sheet.Set(o)
+	sheet.SetOptions(o)
 	require.Equal(t, options.VeryHidden, xl.workbook.ml.Sheets[0].State)
 
 	//test set active

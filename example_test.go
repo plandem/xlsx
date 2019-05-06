@@ -329,7 +329,7 @@ func Example_options() {
 		options.Row.Height(10.0),
 		options.Row.Collapsed(true),
 	)
-	sheet.Row(9).Set(rowOptions)
+	sheet.Row(9).SetOptions(rowOptions)
 
 	// set options for col
 	colOptions := options.NewColumnOptions(
@@ -337,13 +337,13 @@ func Example_options() {
 		options.Column.Width(10.0),
 		options.Column.Collapsed(true),
 	)
-	sheet.Col(3).Set(colOptions)
+	sheet.Col(3).SetOptions(colOptions)
 
 	// set options for sheet
 	sheetOptions := options.NewSheetOptions(
 		options.Sheet.Visibility(options.VeryHidden),
 	)
-	sheet.Set(sheetOptions)
+	sheet.SetOptions(sheetOptions)
 }
 
 // Demonstrates how to append cols/rows/sheets.
@@ -370,11 +370,11 @@ func Example_append() {
 	fmt.Println(sheet.Dimension())
 
 	// Append 3 sheet
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 	xl.AddSheet("new sheet")
 	xl.AddSheet("new sheet")
 	xl.AddSheet("new sheet")
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 
 	//Output:
 	// 14 28
@@ -449,9 +449,9 @@ func Example_delete() {
 	fmt.Println(strings.Join(sheet.Row(3).Values(), ","))
 
 	// Delete sheet
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 	xl.DeleteSheet(0)
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 
 	//Output:
 	// 14 28

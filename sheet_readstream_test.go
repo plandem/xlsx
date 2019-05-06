@@ -148,7 +148,7 @@ func TestSheetReadStream_notImplemented(t *testing.T) {
 	require.Panics(t, func() { sheet.DeleteCol(0) })
 	require.Panics(t, func() { sheet.SetDimension(100, 100) })
 	require.Panics(t, func() { sheet.SetActive() })
-	require.Panics(t, func() { sheet.Set(options.NewSheetOptions(options.Sheet.Visibility(options.Visible))) })
+	require.Panics(t, func() { sheet.SetOptions(options.NewSheetOptions(options.Sheet.Visibility(options.Visible))) })
 	require.Panics(t, func() { sheet.SetName("aaa") })
 }
 

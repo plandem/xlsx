@@ -25,7 +25,7 @@ func TestCol(t *testing.T) {
 		options.Column.Collapsed(true),
 	)
 
-	c.Set(o)
+	c.SetOptions(o)
 
 	require.Equal(t, c.ml.OutlineLevel, o.OutlineLevel)
 	require.Equal(t, c.ml.Hidden, o.Hidden)
@@ -39,7 +39,7 @@ func TestCol(t *testing.T) {
 		options.Column.Width(100.0),
 	)
 
-	c.Set(o)
+	c.SetOptions(o)
 	require.Equal(t, c.ml.OutlineLevel, o.OutlineLevel)
 	require.Equal(t, c.ml.Hidden, o.Hidden)
 	require.Equal(t, c.ml.Phonetic, o.Phonetic)

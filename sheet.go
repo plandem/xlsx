@@ -67,7 +67,7 @@ type Sheet interface {
 	//SetName sets a name for sheet
 	SetName(name string)
 	//Set sets options for sheet
-	Set(o *options.SheetOptions)
+	SetOptions(o *options.SheetOptions)
 	//SetActive sets the sheet as active
 	SetActive()
 	//Close frees allocated by sheet resources

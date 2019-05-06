@@ -38,8 +38,8 @@ func newSpreadsheet(pkg *ooxml.PackageInfo) (interface{}, error) {
 	return xlDoc, nil
 }
 
-//GetSheetNames returns a names of all sheets
-func (xl *Spreadsheet) GetSheetNames() []string {
+//SheetNames returns a names of all sheets
+func (xl *Spreadsheet) SheetNames() []string {
 	sheetNames := make([]string, len(xl.sheets))
 
 	for id := range xl.sheets {
@@ -47,6 +47,17 @@ func (xl *Spreadsheet) GetSheetNames() []string {
 	}
 
 	return sheetNames
+}
+
+//SheetByName returns a sheet by name with required open mode options
+func (xl *Spreadsheet) SheetByName(name string, options ...sheetMode) Sheet {
+	for id := range xl.sheets {
+		if name == xl.workbook.ml.Sheets[id].Name {
+			return xl.Sheet(id, options...)
+		}
+	}
+
+	return nil
 }
 
 //Sheet returns a sheet by 0-based index with required open mode options

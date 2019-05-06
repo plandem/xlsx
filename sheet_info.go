@@ -129,12 +129,12 @@ func (s *sheetInfo) Name() string {
 
 //SetName sets a name for sheet
 func (s *sheetInfo) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), internal.ExcelSheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.SheetNames(), internal.ExcelSheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
-//Set sets options for sheet
-func (s *sheetInfo) Set(o *options.SheetOptions) {
+//SetOptions sets options for sheet
+func (s *sheetInfo) SetOptions(o *options.SheetOptions) {
 	if o.Visibility >= options.Visible && o.Visibility <= options.VeryHidden {
 		s.workbook.ml.Sheets[s.index].State = o.Visibility
 		s.workbook.file.MarkAsUpdated()

@@ -17,8 +17,8 @@ func (r *Row) Cell(colIndex int) *Cell {
 	return r.sheet.Cell(colIndex, r.bounds.FromRow)
 }
 
-//Set sets options for row
-func (r *Row) Set(o *options.RowOptions) {
+//SetOptions sets options for row
+func (r *Row) SetOptions(o *options.RowOptions) {
 	if o.Height > 0 {
 		r.ml.Height = o.Height
 		r.ml.CustomHeight = true
