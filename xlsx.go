@@ -6,6 +6,7 @@ import (
 	//init enums for marshal/unmarshal
 	_ "github.com/plandem/xlsx/format/conditional"
 	_ "github.com/plandem/xlsx/format/styles"
+	_ "github.com/plandem/xlsx/internal/ml/primitives"
 	_ "github.com/plandem/xlsx/types"
 	_ "github.com/plandem/xlsx/types/hyperlink"
 	_ "github.com/plandem/xlsx/types/options"
