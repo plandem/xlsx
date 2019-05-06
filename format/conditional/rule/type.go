@@ -1,4 +1,4 @@
-package conditional
+package rule
 
 import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
@@ -6,7 +6,7 @@ import (
 
 //List of all possible values for Type
 const (
-	_ Type = iota
+	_ ConditionType = iota
 	TypeExpression
 	TypeCellIs
 	TypeColorScale
@@ -28,7 +28,7 @@ const (
 )
 
 func init() {
-	primitives.FromConditionType = map[Type]string{
+	primitives.FromConditionType = map[ConditionType]string{
 		TypeExpression:        "expression",
 		TypeCellIs:            "cellIs",
 		TypeColorScale:        "colorScale",
@@ -49,7 +49,7 @@ func init() {
 		TypeAboveAverage:      "aboveAverage",
 	}
 
-	primitives.ToConditionType = make(map[string]Type, len(primitives.FromConditionType))
+	primitives.ToConditionType = make(map[string]ConditionType, len(primitives.FromConditionType))
 	for k, v := range primitives.FromConditionType {
 		primitives.ToConditionType[v] = k
 	}

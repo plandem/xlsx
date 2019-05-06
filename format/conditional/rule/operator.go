@@ -1,4 +1,4 @@
-package conditional
+package rule
 
 import (
 	"github.com/plandem/xlsx/internal/ml/primitives"

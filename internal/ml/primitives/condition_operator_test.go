@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,18 +16,18 @@ func TestConditionOperator(t *testing.T) {
 
 	list := map[string]primitives.ConditionOperatorType{
 		"":                   primitives.ConditionOperatorType(0),
-		"lessThan":           conditional.OperatorLessThan,
-		"lessThanOrEqual":    conditional.OperatorLessThanOrEqual,
-		"equal":              conditional.OperatorEqual,
-		"notEqual":           conditional.OperatorNotEqual,
-		"greaterThanOrEqual": conditional.OperatorGreaterThanOrEqual,
-		"greaterThan":        conditional.OperatorGreaterThan,
-		"between":            conditional.OperatorBetween,
-		"notBetween":         conditional.OperatorNotBetween,
-		"containsText":       conditional.OperatorContainsText,
-		"notContains":        conditional.OperatorNotContains,
-		"beginsWith":         conditional.OperatorBeginsWith,
-		"endsWith":           conditional.OperatorEndsWith,
+		"lessThan":           rule.OperatorLessThan,
+		"lessThanOrEqual":    rule.OperatorLessThanOrEqual,
+		"equal":              rule.OperatorEqual,
+		"notEqual":           rule.OperatorNotEqual,
+		"greaterThanOrEqual": rule.OperatorGreaterThanOrEqual,
+		"greaterThan":        rule.OperatorGreaterThan,
+		"between":            rule.OperatorBetween,
+		"notBetween":         rule.OperatorNotBetween,
+		"containsText":       rule.OperatorContainsText,
+		"notContains":        rule.OperatorNotContains,
+		"beginsWith":         rule.OperatorBeginsWith,
+		"endsWith":           rule.OperatorEndsWith,
 	}
 
 	for s, v := range list {

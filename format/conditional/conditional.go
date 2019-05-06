@@ -3,15 +3,20 @@ package conditional
 import (
 	"errors"
 	"fmt"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+	_ "unsafe"
 )
+
+//go:linkname fromRuleInfo github.com/plandem/xlsx/format/conditional/rule.from
+func fromRuleInfo(r *rule.Info) (*ml.ConditionalRule, *styles.Info)
 
 //Info is objects that holds combined information about cell conditional format
 type Info struct {
 	info  *ml.ConditionalFormatting
-	rules []*ruleInfo
+	rules []*rule.Info
 }
 
 type Option func(o *Info)
@@ -20,7 +25,7 @@ type Option func(o *Info)
 func New(options ...Option) *Info {
 	f := &Info{
 		info:  &ml.ConditionalFormatting{},
-		rules: []*ruleInfo{},
+		rules: []*rule.Info{},
 	}
 
 	f.Set(options...)
@@ -44,41 +49,43 @@ func (f *Info) Validate() error {
 	}
 
 	for i, r := range f.rules {
-		if r.rule.Type == 0 {
+		ri, _ := fromRuleInfo(r)
+
+		if ri.Type == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: no type", i))
 		}
 
-		if r.rule.Priority < 1 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: priority(%d) can't be higher thatn 1", i, r.rule.Priority))
+		if ri.Priority < 1 {
+			return errors.New(fmt.Sprintf("conditional rule#%d: priority(%d) can't be higher thatn 1", i, ri.Priority))
 		}
 
-		if r.rule.Type == TypeCellIs && r.rule.Operator == 0 {
+		if ri.Type == rule.TypeCellIs && ri.Operator == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: no operator", i))
 		}
 
-		if r.rule.Type == TypeTop10 && r.rule.Rank == 0 {
+		if ri.Type == rule.TypeTop10 && ri.Rank == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: wrong rank", i))
 		}
 
-		if r.rule.Type == TypeContainsText && len(r.rule.Text) == 0 {
+		if ri.Type == rule.TypeContainsText && len(ri.Text) == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: no text", i))
 		}
 
-		if r.rule.Type == TypeTimePeriod && r.rule.TimePeriod == 0 {
+		if ri.Type == rule.TypeTimePeriod && ri.TimePeriod == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: no time period", i))
 		}
 
-		if r.rule.ColorScale != nil {
-			if len(r.rule.ColorScale.Values) != len(r.rule.ColorScale.Colors) {
+		if ri.ColorScale != nil {
+			if len(ri.ColorScale.Values) != len(ri.ColorScale.Colors) {
 				return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have equal numbers of colors and values", i))
 			}
 
-			if len(r.rule.ColorScale.Values) < 2 {
+			if len(ri.ColorScale.Values) < 2 {
 				return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have at least 2 values", i))
 			}
 		}
 
-		if r.rule.IconSet != nil && (len(r.rule.IconSet.Values) < 2) {
+		if ri.IconSet != nil && (len(ri.IconSet.Values) < 2) {
 			return errors.New(fmt.Sprintf("conditional rule#%d: icon set should have at least 2 values", i))
 		}
 	}
@@ -98,9 +105,9 @@ func Refs(refs ...primitives.Ref) Option {
 	}
 }
 
-func AddRule(options ...ruleOption) Option {
+func AddRule(options ...rule.Option) Option {
 	return func(cf *Info) {
-		cf.rules = append(cf.rules, newRule(options...))
+		cf.rules = append(cf.rules, rule.New(options...))
 	}
 }
 
@@ -110,14 +117,16 @@ func from(f *Info) (*ml.ConditionalFormatting, []*styles.Info) {
 		return nil, nil
 	}
 
-	rules := make([]*ml.ConditionalRule, len(f.rules))
-	si := make([]*styles.Info, len(f.rules))
+	allRules := make([]*ml.ConditionalRule, len(f.rules))
+	allStyles := make([]*styles.Info, len(f.rules))
 
 	for i, r := range f.rules {
-		rules[i] = r.rule
-		si[i] = r.style
+		ri, si := fromRuleInfo(r)
+
+		allRules[i] = ri
+		allStyles[i] = si
 	}
 
-	f.info.Rules = rules
-	return f.info, si
+	f.info.Rules = allRules
+	return f.info, allStyles
 }

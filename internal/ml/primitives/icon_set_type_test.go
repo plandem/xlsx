@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,23 +16,23 @@ func TestIconSetType(t *testing.T) {
 
 	list := map[string]primitives.IconSetType{
 		"":                primitives.IconSetType(0),
-		"3Arrows":         conditional.IconSetType3Arrows,
-		"3ArrowsGray":     conditional.IconSetType3ArrowsGray,
-		"3Flags":          conditional.IconSetType3Flags,
-		"3TrafficLights1": conditional.IconSetType3TrafficLights1,
-		"3TrafficLights2": conditional.IconSetType3TrafficLights2,
-		"3Signs":          conditional.IconSetType3Signs,
-		"3Symbols":        conditional.IconSetType3Symbols,
-		"3Symbols2":       conditional.IconSetType3Symbols2,
-		"4Arrows":         conditional.IconSetType4Arrows,
-		"4ArrowsGray":     conditional.IconSetType4ArrowsGray,
-		"4RedToBlack":     conditional.IconSetType4RedToBlack,
-		"4Rating":         conditional.IconSetType4Rating,
-		"4TrafficLights":  conditional.IconSetType4TrafficLights,
-		"5Arrows":         conditional.IconSetType5Arrows,
-		"5ArrowsGray":     conditional.IconSetType5ArrowsGray,
-		"5Rating":         conditional.IconSetType5Rating,
-		"5Quarters":       conditional.IconSetType5Quarters,
+		"3Arrows":         rule.IconSetType3Arrows,
+		"3ArrowsGray":     rule.IconSetType3ArrowsGray,
+		"3Flags":          rule.IconSetType3Flags,
+		"3TrafficLights1": rule.IconSetType3TrafficLights1,
+		"3TrafficLights2": rule.IconSetType3TrafficLights2,
+		"3Signs":          rule.IconSetType3Signs,
+		"3Symbols":        rule.IconSetType3Symbols,
+		"3Symbols2":       rule.IconSetType3Symbols2,
+		"4Arrows":         rule.IconSetType4Arrows,
+		"4ArrowsGray":     rule.IconSetType4ArrowsGray,
+		"4RedToBlack":     rule.IconSetType4RedToBlack,
+		"4Rating":         rule.IconSetType4Rating,
+		"4TrafficLights":  rule.IconSetType4TrafficLights,
+		"5Arrows":         rule.IconSetType5Arrows,
+		"5ArrowsGray":     rule.IconSetType5ArrowsGray,
+		"5Rating":         rule.IconSetType5Rating,
+		"5Quarters":       rule.IconSetType5Quarters,
 	}
 
 	for s, v := range list {

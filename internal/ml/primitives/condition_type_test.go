@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,24 +16,24 @@ func TestConditionType(t *testing.T) {
 
 	list := map[string]primitives.ConditionType{
 		"":                  primitives.ConditionType(0),
-		"expression":        conditional.TypeExpression,
-		"cellIs":            conditional.TypeCellIs,
-		"colorScale":        conditional.TypeColorScale,
-		"dataBar":           conditional.TypeDataBar,
-		"iconSet":           conditional.TypeIconSet,
-		"top10":             conditional.TypeTop10,
-		"uniqueValues":      conditional.TypeUniqueValues,
-		"duplicateValues":   conditional.TypeDuplicateValues,
-		"containsText":      conditional.TypeContainsText,
-		"notContainsText":   conditional.TypeNotContainsText,
-		"beginsWith":        conditional.TypeBeginsWith,
-		"endsWith":          conditional.TypeEndsWith,
-		"containsBlanks":    conditional.TypeContainsBlanks,
-		"notContainsBlanks": conditional.TypeNotContainsBlanks,
-		"containsErrors":    conditional.TypeContainsErrors,
-		"notContainsErrors": conditional.TypeNotContainsErrors,
-		"timePeriod":        conditional.TypeTimePeriod,
-		"aboveAverage":      conditional.TypeAboveAverage,
+		"expression":        rule.TypeExpression,
+		"cellIs":            rule.TypeCellIs,
+		"colorScale":        rule.TypeColorScale,
+		"dataBar":           rule.TypeDataBar,
+		"iconSet":           rule.TypeIconSet,
+		"top10":             rule.TypeTop10,
+		"uniqueValues":      rule.TypeUniqueValues,
+		"duplicateValues":   rule.TypeDuplicateValues,
+		"containsText":      rule.TypeContainsText,
+		"notContainsText":   rule.TypeNotContainsText,
+		"beginsWith":        rule.TypeBeginsWith,
+		"endsWith":          rule.TypeEndsWith,
+		"containsBlanks":    rule.TypeContainsBlanks,
+		"notContainsBlanks": rule.TypeNotContainsBlanks,
+		"containsErrors":    rule.TypeContainsErrors,
+		"notContainsErrors": rule.TypeNotContainsErrors,
+		"timePeriod":        rule.TypeTimePeriod,
+		"aboveAverage":      rule.TypeAboveAverage,
 	}
 
 	for s, v := range list {
