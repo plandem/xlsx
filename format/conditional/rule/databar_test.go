@@ -14,17 +14,17 @@ func TestDataBar(t *testing.T) {
 
 	require.Equal(t, &Info{
 		initialized: true,
-		validator: DataBar,
+		validator:   DataBar,
 		rule: &ml.ConditionalRule{
 			Type: primitives.ConditionTypeDataBar,
 			DataBar: &ml.DataBar{
 				Values: []*ml.ConditionValue{
 					{
-						Type:  ValueTypeLowest,
+						Type: ValueTypeLowest,
 						//Value: "1",
 					},
 					{
-						Type:  ValueTypeHighest,
+						Type: ValueTypeHighest,
 						//Value: "50",
 					},
 				},
@@ -33,7 +33,6 @@ func TestDataBar(t *testing.T) {
 				Color: &ml.Color{
 					RGB: "FF638EC6",
 				},
-				ShowValue: true,
 			},
 		},
 	}, r)
@@ -47,7 +46,7 @@ func TestDataBar(t *testing.T) {
 
 	require.Equal(t, &Info{
 		initialized: true,
-		validator: DataBar,
+		validator:   DataBar,
 		rule: &ml.ConditionalRule{
 			Type: primitives.ConditionTypeDataBar,
 			DataBar: &ml.DataBar{
@@ -61,7 +60,7 @@ func TestDataBar(t *testing.T) {
 						Value: "50",
 					},
 				},
-				ShowValue: false,
+				ShowValue: ml.OptionalBool(false),
 				MinLength: 10,
 				MaxLength: 90,
 				Color: &ml.Color{

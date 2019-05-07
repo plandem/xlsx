@@ -181,7 +181,7 @@ func NamedStyle(name interface{}) func(*Info) {
 			}
 
 			builtInID := int(t)
-			s.namedInfo.BuiltinId = ml.OptionalIndex(&builtInID)
+			s.namedInfo.BuiltinId = ml.OptionalIndex(builtInID)
 			s.namedInfo.Name = defaultName
 		} else {
 			panic("unsupported format of NamedStyle (can'be name for custom style or built-in type only)")

@@ -56,11 +56,11 @@ type Font struct {
 
 //Color is a direct mapping of XSD CT_Color
 type Color struct {
-	Auto    bool             `xml:"auto,attr,omitempty"`
-	RGB     string           `xml:"rgb,attr,omitempty"`
-	Tint    float64          `xml:"tint,attr,omitempty"` //default 0.0
-	Indexed ml.OptionalIndex `xml:"indexed,attr,omitempty"`
-	Theme   ml.OptionalIndex `xml:"theme,attr,omitempty"`
+	Auto    bool    `xml:"auto,attr,omitempty"`
+	RGB     string  `xml:"rgb,attr,omitempty"`
+	Tint    float64 `xml:"tint,attr,omitempty"` //default 0.0
+	Indexed *int    `xml:"indexed,attr,omitempty"`
+	Theme   *int    `xml:"theme,attr,omitempty"`
 }
 
 //Fill is a direct mapping of XSD CT_Fill
@@ -115,13 +115,13 @@ type BorderSegment struct {
 
 //NamedStyleInfo is a direct mapping of XSD CT_CellStyle
 type NamedStyleInfo struct {
-	Name          string           `xml:"name,attr,omitempty"`
-	XfId          NamedStyleID     `xml:"xfId,attr"`
-	BuiltinId     ml.OptionalIndex `xml:"builtinId,attr,omitempty"`
-	ILevel        uint             `xml:"iLevel,attr,omitempty"`
-	Hidden        bool             `xml:"hidden,attr,omitempty"`
-	CustomBuiltin bool             `xml:"customBuiltin,attr,omitempty"`
-	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
+	Name          string       `xml:"name,attr,omitempty"`
+	XfId          NamedStyleID `xml:"xfId,attr"`
+	BuiltinId     *int         `xml:"builtinId,attr,omitempty"`
+	ILevel        uint         `xml:"iLevel,attr,omitempty"`
+	Hidden        bool         `xml:"hidden,attr,omitempty"`
+	CustomBuiltin bool         `xml:"customBuiltin,attr,omitempty"`
+	ExtLst        *ml.Reserved `xml:"extLst,omitempty"`
 }
 
 //Style is just underlayed struct to hold Xf master records and is a direct mapping of XSD CT_Xf

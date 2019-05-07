@@ -7,6 +7,7 @@ import (
 //List of all possible values for IconSetType
 const (
 	_ primitives.IconSetType = iota
+	__iconSetType3Icons
 	IconSetType3Arrows
 	IconSetType3ArrowsGray
 	IconSetType3Flags
@@ -15,11 +16,13 @@ const (
 	IconSetType3Signs
 	IconSetType3Symbols
 	IconSetType3Symbols2
+	__iconSetType4Icons
 	IconSetType4Arrows
 	IconSetType4ArrowsGray
 	IconSetType4RedToBlack
 	IconSetType4Rating
 	IconSetType4TrafficLights
+	__iconSetType5Icons
 	IconSetType5Arrows
 	IconSetType5ArrowsGray
 	IconSetType5Rating
@@ -52,4 +55,3 @@ func init() {
 		primitives.ToIconSetType[v] = k
 	}
 }
-

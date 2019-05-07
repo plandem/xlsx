@@ -15,7 +15,7 @@ func TestColorScale2(t *testing.T) {
 
 	require.Equal(t, &Info{
 		initialized: true,
-		validator: ColorScale2,
+		validator:   ColorScale2,
 		rule: &ml.ConditionalRule{
 			Type: primitives.ConditionTypeColorScale,
 			ColorScale: &ml.ColorScale{
