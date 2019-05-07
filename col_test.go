@@ -48,7 +48,7 @@ func TestCol(t *testing.T) {
 	require.Equal(t, c.ml.CustomWidth, true)
 	require.Equal(t, c.ml.Style, format.DirectStyleID(0))
 
-	style := format.New(
+	style := format.NewStyles(
 		format.Font.Name("Calibri"),
 		format.Font.Size(12),
 	)

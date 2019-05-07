@@ -11,7 +11,7 @@ type fontOption byte
 //Font is a 'namespace' for all possible settings for font
 var Font fontOption
 
-func (f *fontOption) Name(name string) option {
+func (f *fontOption) Name(name string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.Name = ml.Property(name)
 	}
@@ -49,43 +49,43 @@ func (f *fontOption) Extend(s *StyleFormat) {
 	s.styleInfo.Font.Extend = true
 }
 
-func (f *fontOption) Family(family primitives.FontFamilyType) option {
+func (f *fontOption) Family(family primitives.FontFamilyType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.Family = family
 	}
 }
 
-func (f *fontOption) Color(rgb string) option {
+func (f *fontOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.Color = color.New(rgb)
 	}
 }
 
-func (f *fontOption) Size(size float64) option {
+func (f *fontOption) Size(size float64) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.Size = ml.PropertyDouble(size)
 	}
 }
 
-func (f *fontOption) Underline(ut primitives.UnderlineType) option {
+func (f *fontOption) Underline(ut primitives.UnderlineType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.Underline = ut
 	}
 }
 
-func (f *fontOption) VAlign(va primitives.FontVAlignType) option {
+func (f *fontOption) VAlign(va primitives.FontVAlignType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.VAlign = va
 	}
 }
 
-func (f *fontOption) Scheme(sn primitives.FontSchemeType) option {
+func (f *fontOption) Scheme(sn primitives.FontSchemeType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Font.Scheme = sn
 	}
 }
 
-func (f *fontOption) Charset(charset FontCharsetType) option {
+func (f *fontOption) Charset(charset FontCharsetType) styleOption {
 	return func(s *StyleFormat) {
 		if charset >= FontCharsetANSI && charset <= FontCharsetOEM {
 			//FIXME: right now it's not possible to encode 'Ansi' charset with 'omitempty'

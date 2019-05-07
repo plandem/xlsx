@@ -39,8 +39,8 @@ func TestSheetInfo(t *testing.T) {
 	require.Equal(t, options.VisibilityTypeVeryHidden, xl.workbook.ml.Sheets[0].State)
 
 	//test set active
-	require.Equal(t, 0, (*xl.workbook.ml.BookViews)[0].ActiveTab)
+	require.Equal(t, 0, xl.workbook.ml.BookViews.Items[0].ActiveTab)
 	sheet = xl.AddSheet("test")
 	sheet.SetActive()
-	require.Equal(t, 1, (*xl.workbook.ml.BookViews)[0].ActiveTab)
+	require.Equal(t, 1, xl.workbook.ml.BookViews.Items[0].ActiveTab)
 }

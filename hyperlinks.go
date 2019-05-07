@@ -26,22 +26,12 @@ func newHyperlinks(sheet *sheetInfo) *hyperlinks {
 	return &hyperlinks{sheet: sheet, defaultStyleID: -1}
 }
 
-func (h *hyperlinks) initIfRequired() {
-	//attach hyperlinks object if required
-	if h.sheet.ml.Hyperlinks == nil {
-		var links []*ml.Hyperlink
-		h.sheet.ml.Hyperlinks = &links
-	}
-}
-
 //Add adds a new hyperlink info for provided bounds, where link can be string or HyperlinkInfo
 func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectStyleID, error) {
-	h.initIfRequired()
-
 	//check if hyperlink has style and if not, then add default
 	if h.defaultStyleID == -1 {
 		//we need to add default named style for hyperlink
-		defaultStyleID := h.sheet.workbook.doc.AddFormatting(format.New(
+		defaultStyleID := h.sheet.workbook.doc.AddFormatting(format.NewStyles(
 			format.NamedStyle(format.NamedStyleHyperlink),
 			format.Font.Default,
 			format.Font.Underline(format.UnderlineTypeSingle),
@@ -65,7 +55,7 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 
 	//let's check existing hyperlinks for overlapping bounds
 	hyperlinkIndex := -1
-	for linkIndex, link := range *h.sheet.ml.Hyperlinks {
+	for linkIndex, link := range h.sheet.ml.Hyperlinks.Items {
 		if link.Bounds.Equals(bounds) {
 			hyperlinkIndex = linkIndex
 		} else if link.Bounds.Overlaps(bounds) {
@@ -80,7 +70,7 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 	}
 
 	//exceeded Excel limit for total hyperlinks
-	if len(*h.sheet.ml.Hyperlinks) >= internal.ExcelHyperlinkLimit {
+	if len(h.sheet.ml.Hyperlinks.Items) >= internal.ExcelHyperlinkLimit {
 		return format.DefaultDirectStyle, errors.New(fmt.Sprintf("exceeds Excel limit (%d) for total number of hyperlinks per worksheet", internal.ExcelHyperlinkLimit))
 	}
 
@@ -103,10 +93,10 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 	hyperlink.Bounds = bounds
 	if hyperlinkIndex == -1 {
 		//add a new hyperlink
-		*h.sheet.ml.Hyperlinks = append(*h.sheet.ml.Hyperlinks, hyperlink)
+		h.sheet.ml.Hyperlinks.Items = append(h.sheet.ml.Hyperlinks.Items, hyperlink)
 	} else {
 		//update existing hyperlink
-		(*h.sheet.ml.Hyperlinks)[hyperlinkIndex] = hyperlink
+		h.sheet.ml.Hyperlinks.Items[hyperlinkIndex] = hyperlink
 	}
 
 	//if there are custom styles, then use it otherwise use default hyperlink styles
@@ -119,9 +109,7 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (format.DirectSt
 
 //Get returns a resolved hyperlink info for provided ref or nil if there is no any hyperlink
 func (h *hyperlinks) Get(ref types.CellRef) *types.HyperlinkInfo {
-	h.initIfRequired()
-
-	links := *h.sheet.ml.Hyperlinks
+	links := h.sheet.ml.Hyperlinks.Items
 	if len(links) > 0 {
 		cIdx, rIdx := ref.ToIndexes()
 		for _, link := range links {
@@ -138,27 +126,16 @@ func (h *hyperlinks) Get(ref types.CellRef) *types.HyperlinkInfo {
 
 //Remove removes hyperlink info for bounds
 func (h *hyperlinks) Remove(bounds types.Bounds) {
-	h.initIfRequired()
+	if len(h.sheet.ml.Hyperlinks.Items) > 0 {
+		newLinks := make([]*ml.Hyperlink, 0, len(h.sheet.ml.Hyperlinks.Items))
 
-	links := *h.sheet.ml.Hyperlinks
-	if len(links) > 0 {
-		newLinks := make([]*ml.Hyperlink, 0, len(links))
-		for _, link := range links {
+		for _, link := range h.sheet.ml.Hyperlinks.Items {
 			if !link.Bounds.Overlaps(bounds) {
 				//copy only non overlapping bounds
 				newLinks = append(newLinks, link)
 			}
 		}
 
-		h.sheet.ml.Hyperlinks = &newLinks
+		h.sheet.ml.Hyperlinks.Items = newLinks
 	}
-}
-
-func (h *hyperlinks) pack() *[]*ml.Hyperlink {
-	//hyperlinks must have at least one object
-	if h.sheet.ml.Hyperlinks != nil && len(*h.sheet.ml.Hyperlinks) == 0 {
-		h.sheet.ml.Hyperlinks = nil
-	}
-
-	return h.sheet.ml.Hyperlinks
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func TestAlignment(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		Alignment.VAlign(VAlignBottom),
 		Alignment.HAlign(HAlignFill),
 		Alignment.TextRotation(90),
@@ -21,7 +21,7 @@ func TestAlignment(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Alignment = &ml.CellAlignment{
 			Vertical:        VAlignBottom,
 			Horizontal:      HAlignFill,
@@ -38,7 +38,7 @@ func TestAlignment(t *testing.T) {
 
 func TestAlignmentMarshal(t *testing.T) {
 	//0 must be omitted
-	style := New(
+	style := NewStyles(
 		Alignment.TextRotation(0),
 		Alignment.Indent(0),
 		Alignment.RelativeIndent(0),
@@ -49,14 +49,14 @@ func TestAlignmentMarshal(t *testing.T) {
 	require.Equal(t, `<CellAlignment></CellAlignment>`, string(encoded))
 
 	//simple version
-	style = New(
+	style = NewStyles(
 		Alignment.WrapText,
 	)
 	encoded, _ = xml.Marshal(&style.styleInfo.Alignment)
 	require.Equal(t, `<CellAlignment wrapText="true"></CellAlignment>`, string(encoded))
 
 	//full version
-	style = New(
+	style = NewStyles(
 		Alignment.VAlign(VAlignBottom),
 		Alignment.HAlign(HAlignFill),
 		Alignment.TextRotation(90),
