@@ -6,6 +6,9 @@ install:
 go:
   - 1.12.x
 
+env:
+  - GO111MODULE=on
+
 before_install:
   - go get -t -v ./...
   - go get github.com/go-playground/overalls
