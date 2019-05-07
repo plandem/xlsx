@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,12 +16,12 @@ func TestConditionValueType(t *testing.T) {
 
 	list := map[string]primitives.ConditionValueType{
 		"":           primitives.ConditionValueType(0),
-		"num":        format.ConditionValueTypeNum,
-		"percent":    format.ConditionValueTypePercent,
-		"max":        format.ConditionValueTypeMax,
-		"min":        format.ConditionValueTypeMin,
-		"formula":    format.ConditionValueTypeFormula,
-		"percentile": format.ConditionValueTypePercentile,
+		"num":        rule.ValueTypeNumber,
+		"percent":    rule.ValueTypePercent,
+		"max":        rule.ValueTypeHighest,
+		"min":        rule.ValueTypeLowest,
+		"formula":    rule.ValueTypeFormula,
+		"percentile": rule.ValueTypePercentile,
 	}
 
 	for s, v := range list {

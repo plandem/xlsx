@@ -2,7 +2,7 @@ package xlsx_test
 
 import (
 	"github.com/plandem/xlsx"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types/options"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -148,7 +148,7 @@ func TestSheetReadStream_notImplemented(t *testing.T) {
 	require.Panics(t, func() { sheet.DeleteCol(0) })
 	require.Panics(t, func() { sheet.SetDimension(100, 100) })
 	require.Panics(t, func() { sheet.SetActive() })
-	require.Panics(t, func() { sheet.Set(options.NewSheetOptions(options.Sheet.Visibility(options.VisibilityTypeVisible))) })
+	require.Panics(t, func() { sheet.SetOptions(options.NewSheetOptions(options.Sheet.Visibility(options.Visible))) })
 	require.Panics(t, func() { sheet.SetName("aaa") })
 }
 
@@ -182,8 +182,8 @@ func TestSheetReadStream_unsupported(t *testing.T) {
 	//SetString must not work in read-only mode
 	require.Panics(t, func() { sheet.CellByRef("A1").SetString("a") })
 
-	//SetValueWithFormat must not work in read-only mode
-	require.Panics(t, func() { sheet.CellByRef("A1").SetValueWithFormat("a", "@") })
+	//SetValueWithStyles must not work in read-only mode
+	require.Panics(t, func() { sheet.CellByRef("A1").SetValueWithStyles("a", "@") })
 
 	//CopyTo/CopyToRef must not work in read-only mode
 	require.Panics(t, func() { sheet.Range("A1:B1").CopyToRef("C2") })

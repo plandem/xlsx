@@ -3,15 +3,15 @@ package xlsx
 import (
 	"errors"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	_ "unsafe"
 )
 
-//go:linkname toRichFont github.com/plandem/xlsx/format.toRichFont
-func toRichFont(f *format.StyleFormat) *ml.RichFont
+//go:linkname toRichFont github.com/plandem/xlsx/format/styles.toRichFont
+func toRichFont(f *styles.Info) *ml.RichFont
 
 func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 	si := &ml.StringItem{}
@@ -19,7 +19,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 
 	if len(parts) > 0 {
 		//if last part is format, then remove it
-		if _, lastIsFormat := parts[len(parts)-1].(*format.StyleFormat); lastIsFormat {
+		if _, lastIsFormat := parts[len(parts)-1].(*styles.Info); lastIsFormat {
 			parts = parts[:len(parts)-1]
 		}
 
@@ -43,7 +43,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 
 				fontPart = false
 
-			case *format.StyleFormat:
+			case *styles.Info:
 				if fontPart && i > 0 {
 					return nil, errors.New("two styles in row is not allowed")
 				}

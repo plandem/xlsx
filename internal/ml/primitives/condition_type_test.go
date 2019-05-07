@@ -3,7 +3,6 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,24 +15,24 @@ func TestConditionType(t *testing.T) {
 
 	list := map[string]primitives.ConditionType{
 		"":                  primitives.ConditionType(0),
-		"expression":        format.ConditionTypeExpression,
-		"cellIs":            format.ConditionTypeCellIs,
-		"colorScale":        format.ConditionTypeColorScale,
-		"dataBar":           format.ConditionTypeDataBar,
-		"iconSet":           format.ConditionTypeIconSet,
-		"top10":             format.ConditionTypeTop10,
-		"uniqueValues":      format.ConditionTypeUniqueValues,
-		"duplicateValues":   format.ConditionTypeDuplicateValues,
-		"containsText":      format.ConditionTypeContainsText,
-		"notContainsText":   format.ConditionTypeNotContainsText,
-		"beginsWith":        format.ConditionTypeBeginsWith,
-		"endsWith":          format.ConditionTypeEndsWith,
-		"containsBlanks":    format.ConditionTypeContainsBlanks,
-		"notContainsBlanks": format.ConditionTypeNotContainsBlanks,
-		"containsErrors":    format.ConditionTypeContainsErrors,
-		"notContainsErrors": format.ConditionTypeNotContainsErrors,
-		"timePeriod":        format.ConditionTypeTimePeriod,
-		"aboveAverage":      format.ConditionTypeAboveAverage,
+		"expression":        primitives.ConditionTypeExpression,
+		"cellIs":            primitives.ConditionTypeCellIs,
+		"colorScale":        primitives.ConditionTypeColorScale,
+		"dataBar":           primitives.ConditionTypeDataBar,
+		"iconSet":           primitives.ConditionTypeIconSet,
+		"top10":             primitives.ConditionTypeTop10,
+		"uniqueValues":      primitives.ConditionTypeUniqueValues,
+		"duplicateValues":   primitives.ConditionTypeDuplicateValues,
+		"containsText":      primitives.ConditionTypeContainsText,
+		"notContainsText":   primitives.ConditionTypeNotContainsText,
+		"beginsWith":        primitives.ConditionTypeBeginsWith,
+		"endsWith":          primitives.ConditionTypeEndsWith,
+		"containsBlanks":    primitives.ConditionTypeContainsBlanks,
+		"notContainsBlanks": primitives.ConditionTypeNotContainsBlanks,
+		"containsErrors":    primitives.ConditionTypeContainsErrors,
+		"notContainsErrors": primitives.ConditionTypeNotContainsErrors,
+		"timePeriod":        primitives.ConditionTypeTimePeriod,
+		"aboveAverage":      primitives.ConditionTypeAboveAverage,
 	}
 
 	for s, v := range list {

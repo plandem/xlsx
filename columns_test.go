@@ -214,7 +214,6 @@ func TestColumns_pack(t *testing.T) {
 		c.Width = 100
 	}
 
-
 	_, _ = xml.Marshal(&cols.sheet.ml.Cols)
 	require.EqualValues(t, []*ml.Col{
 		{

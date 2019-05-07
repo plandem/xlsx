@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/plandem/ooxml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"regexp"
 )
 
@@ -38,8 +38,8 @@ func newSpreadsheet(pkg *ooxml.PackageInfo) (interface{}, error) {
 	return xlDoc, nil
 }
 
-//GetSheetNames returns a names of all sheets
-func (xl *Spreadsheet) GetSheetNames() []string {
+//SheetNames returns a names of all sheets
+func (xl *Spreadsheet) SheetNames() []string {
 	sheetNames := make([]string, len(xl.sheets))
 
 	for id := range xl.sheets {
@@ -47,6 +47,17 @@ func (xl *Spreadsheet) GetSheetNames() []string {
 	}
 
 	return sheetNames
+}
+
+//SheetByName returns a sheet by name with required open mode options
+func (xl *Spreadsheet) SheetByName(name string, options ...sheetMode) Sheet {
+	for id := range xl.sheets {
+		if name == xl.workbook.ml.Sheets[id].Name {
+			return xl.Sheet(id, options...)
+		}
+	}
+
+	return nil
 }
 
 //Sheet returns a sheet by 0-based index with required open mode options
@@ -133,13 +144,13 @@ func (xl *Spreadsheet) DeleteSheet(i int) {
 	}
 }
 
-//AddFormatting adds a new style formatting to document and return related ID that can be used lately
-func (xl *Spreadsheet) AddFormatting(style *format.StyleFormat) format.DirectStyleID {
+//AddStyles adds a new style formatting to document and return related ID that can be used lately
+func (xl *Spreadsheet) AddStyles(style *styles.Info) styles.DirectStyleID {
 	return xl.styleSheet.addStyle(style)
 }
 
-//ResolveFormatting returns style formatting for styleID or nil if there is no any styles with such styleID
-func (xl *Spreadsheet) ResolveFormatting(styleID format.DirectStyleID) *format.StyleFormat {
+//ResolveStyles returns style formatting for styleID or nil if there is no any styles with such styleID
+func (xl *Spreadsheet) ResolveStyles(styleID styles.DirectStyleID) *styles.Info {
 	return xl.workbook.doc.styleSheet.resolveDirectStyle(styleID)
 }
 

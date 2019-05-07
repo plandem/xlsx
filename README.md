@@ -13,8 +13,10 @@ package main
 import (
 	"fmt"
 	"github.com/plandem/xlsx"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/hyperlink"
 )
 
 func main() {
@@ -23,16 +25,14 @@ func main() {
 		panic(err)
 	}
 
-	defer func() {
-		_ = xl.Close()
-	}()
+	defer xl.Close()
 
-	redBoldYellow := xl.AddFormatting(
-		format.NewStyles(
-			format.Font.Bold,
-			format.Font.Color("#ff0000"),
-			format.Fill.Type(format.PatternTypeSolid),
-			format.Fill.Color("#FFFF00"),
+	redBoldYellow := xl.AddStyles(
+		styles.New(
+			styles.Font.Bold,
+			styles.Font.Color("#ff0000"),
+			styles.Fill.Type(styles.PatternTypeSolid),
+			styles.Fill.Color("#FFFF00"),
 		),
 	)
 
@@ -43,7 +43,7 @@ func main() {
 		for iCol := 0; iCol < iMaxCol; iCol++ {
 			if iRow % 2 == 0 && iCol % 2 == 0 {
 				cell := sheet.Cell(iCol, iRow)
-				cell.SetFormatting(redBoldYellow)
+				cell.SetStyles(redBoldYellow)
 			}
 		}
 	}
@@ -55,7 +55,7 @@ func main() {
 		for cells := row.Cells(); cells.HasNext(); {
 			iCol, iRow, cell := cells.Next()
 			if iRow % 2 == 0 && iCol % 2 == 0 {
-				cell.SetFormatting(redBoldYellow)
+				cell.SetStyles(redBoldYellow)
 			}
 		}
 	}
@@ -65,58 +65,58 @@ func main() {
 		_, row := rows.Next()
 		row.Walk(func(idx, iCol, iRow int, cell *xlsx.Cell) {
 			if iRow % 2 == 0 && iCol % 2 == 0 {
-				cell.SetFormatting(redBoldYellow)
+				cell.SetStyles(redBoldYellow)
 			}
 		})
  	}
 
 	//Add hyperlink and set value same time
-	_ = sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
+	sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
 	
 	//Add hyperlink as string
-	_ = sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
+	sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
 
 	//Add hyperlink via helper type for advanced settings
-	_ = sheet.CellByRef("A7").SetHyperlink(types.NewHyperlink(
-		types.Hyperlink.ToFile("./example_simple.xlsx"),
-		types.Hyperlink.ToRef("C3", "Sheet1"),
-		types.Hyperlink.Tooltip("That's a tooltip"),
-		types.Hyperlink.Display("Something to display"), //Cell still holds own value
-		types.Hyperlink.Formatting(redBoldYellow),
+	sheet.CellByRef("A7").SetHyperlink(hyperlink.New(
+		hyperlink.ToFile("./example_simple.xlsx"),
+		hyperlink.ToRef("C3", "Sheet1"),
+		hyperlink.Tooltip("That's a tooltip"),
+		hyperlink.Display("Something to display"), //Cell still holds own value
+		hyperlink.Styles(redBoldYellow),
 	))
 
 	sheet.CellByRef("A1").RemoveHyperlink()
 	
 	//Merged Cells
-	_= sheet.Range("A1:C3").Merge()
+	sheet.Range("A1:C3").Merge()
 	sheet.Range("A1:C3").Split()
 	
 	//Rich Text
-	_= sheet.CellByRef("F10").SetText(
+	sheet.CellByRef("F10").SetText(
 		"plain text", 
-		format.NewStyles(
-			format.Font.Bold,
-			format.Font.Color("#ff0000"),
+		styles.New(
+			styles.Font.Bold,
+			styles.Font.Color("#ff0000"),
 		),
 		"red bold text",
 		"another plain text",
 	)
 	
 	//Conditional formatting
-	_= sheet.AddConditional(format.NewConditions(
-		format.Conditions.Rule(
-			format.Condition.Type(format.ConditionTypeCellIs),
-			format.Condition.Operator(format.ConditionOperatorLessThanOrEqual),
-			format.Condition.Priority(2),
-			format.Condition.Formula("500"),
-			format.Condition.Style(format.NewStyles(
-				format.Font.Bold,
-				format.Font.Color("#FF0000"),
+	sheet.AddConditional(conditional.New(
+		conditional.AddRule(
+			conditional.Rule.Type(conditional.TypeCellIs),
+			conditional.Rule.Operator(conditional.OperatorLessThanOrEqual),
+			conditional.Rule.Priority(2),
+			conditional.Rule.Formula("500"),
+			conditional.Rule.Style(styles.New(
+				styles.Font.Bold,
+				styles.Font.Color("#FF0000"),
 			)),
 		),
 	), "A1:A10", "B2", "C1:C10")
     	
-	_= xl.SaveAs("test1.xlsx")
+	xl.SaveAs("test1.xlsx")
 }
 ```
 

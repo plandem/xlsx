@@ -5,6 +5,15 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
+//Formula is a direct mapping of XSD ST_Formula
+type Formula string
+
+//OptionalBool is alias for OptionalBool from core package
+var OptionalBool = ml.OptionalBool
+
+//OptionalIndex is alias for OptionalIndex from core package
+var OptionalIndex = ml.OptionalIndex
+
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
 	XMLName               ml.Name                   `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
@@ -94,8 +103,8 @@ type Cell struct {
 	Ref       primitives.CellRef  `xml:"r,attr"`
 	Style     DirectStyleID       `xml:"s,attr,omitempty"`
 	Type      primitives.CellType `xml:"t,attr,omitempty"`
-	Cm        ml.OptionalIndex    `xml:"cm,attr,omitempty"`
-	Vm        ml.OptionalIndex    `xml:"vm,attr,omitempty"`
+	Cm        *int                `xml:"cm,attr,omitempty"`
+	Vm        *int                `xml:"vm,attr,omitempty"`
 	Ph        bool                `xml:"ph,attr,omitempty"`
 }
 
@@ -112,7 +121,7 @@ type CellFormula struct {
 	R1      primitives.CellRef         `xml:"r1,attr,omitempty"`
 	R2      primitives.CellRef         `xml:"r2,attr,omitempty"`
 	Ca      bool                       `xml:"ca,attr,omitempty"`
-	Si      ml.OptionalIndex           `xml:"si,attr,omitempty"`
+	Si      *int                       `xml:"si,attr,omitempty"`
 	Bx      bool                       `xml:"bx,attr,omitempty"`
 }
 
@@ -166,7 +175,7 @@ type ConditionalFormatting struct {
 
 //ConditionalRule is a direct mapping of XSD CT_CfRule
 type ConditionalRule struct {
-	Formula      primitives.Formula               `xml:"formula,omitempty"`
+	Formula      Formula                          `xml:"formula,omitempty"`
 	ColorScale   *ColorScale                      `xml:"colorScale,omitempty"`
 	DataBar      *DataBar                         `xml:"dataBar,omitempty"`
 	IconSet      *IconSet                         `xml:"iconSet,omitempty"`
@@ -188,10 +197,10 @@ type ConditionalRule struct {
 
 //ConditionValue is a direct mapping of XSD CT_Cfvo
 type ConditionValue struct {
-	ExtLst         *ml.Reserved                  `xml:"extLst,omitempty"`
-	Type           primitives.ConditionValueType `xml:"ST_CfvoType,attr"`
-	Value          string                        `xml:"val,attr,omitempty"`
-	GreaterOrEqual bool                          `xml:"gte,attr,omitempty"`
+	ExtLst           *ml.Reserved                  `xml:"extLst,omitempty"`
+	Type             primitives.ConditionValueType `xml:"type,attr"`
+	Value            string                        `xml:"val,attr,omitempty"`
+	GreaterThanEqual *bool                         `xml:"gte,attr,omitempty"`
 }
 
 //ColorScale is a direct mapping of XSD CT_ColorScale
@@ -206,14 +215,14 @@ type DataBar struct {
 	Color     *Color            `xml:"color"`
 	MinLength uint              `xml:"minLength,attr,omitempty"`
 	MaxLength uint              `xml:"maxLength,attr,omitempty"`
-	ShowValue bool              `xml:"showValue,attr,omitempty"`
+	ShowValue *bool             `xml:"showValue,attr,omitempty"`
 }
 
 //IconSet is a direct mapping of XSD ST_IconSetType
 type IconSet struct {
 	Values    []*ConditionValue      `xml:"cfvo"` //minimum 2 values
 	Type      primitives.IconSetType `xml:"iconSet,attr,omitempty"`
-	ShowValue bool                   `xml:"showValue,attr,omitempty"`
-	Percent   bool                   `xml:"percent,attr,omitempty"`
+	ShowValue *bool                  `xml:"showValue,attr,omitempty"`
+	Percent   *bool                  `xml:"percent,attr,omitempty"`
 	Reverse   bool                   `xml:"reverse,attr,omitempty"`
 }

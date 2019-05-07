@@ -36,3 +36,14 @@ func (t *ConditionValueType) UnmarshalXMLAttr(attr xml.Attr) error {
 
 	return nil
 }
+
+//IsAllowed check if type is in list of allowed types
+func (t *ConditionValueType) IsAllowed(allowed ...ConditionValueType) bool {
+	for _, a := range allowed {
+		if *t == a {
+			return true
+		}
+	}
+
+	return false
+}

@@ -3,12 +3,13 @@ package xlsx
 import (
 	"errors"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/hyperlink"
 	"math"
 	"strconv"
 	"time"
@@ -189,7 +190,7 @@ func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.Itoa(value)
 
-	if c.ml.Style == format.DirectStyleID(0) {
+	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
 	}
 
@@ -202,7 +203,7 @@ func (c *Cell) SetFloat(value float64) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
 
-	if c.ml.Style == format.DirectStyleID(0) {
+	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float]
 	}
 
@@ -228,7 +229,7 @@ func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
 
-	if c.ml.Style == format.DirectStyleID(0) {
+	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[t]
 	}
 
@@ -305,40 +306,40 @@ func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
 }
 
-//Formatting returns DirectStyleID of active format for cell
-func (c *Cell) Formatting() format.DirectStyleID {
+//Styles returns DirectStyleID of active format for cell
+func (c *Cell) Styles() styles.DirectStyleID {
 	return c.ml.Style
 }
 
-//SetFormatting sets style format to requested DirectStyleID
-func (c *Cell) SetFormatting(styleID format.DirectStyleID) {
+//SetStyles sets style format to requested DirectStyleID
+func (c *Cell) SetStyles(styleID styles.DirectStyleID) {
 	c.ml.Style = styleID
 }
 
-//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting with NumberFormat
-func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+//SetValueWithStyles is helper function that internally works as SetValue and SetStyles with NumberFormat
+func (c *Cell) SetValueWithStyles(value interface{}, formatCode string) {
 	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
 		panic(errorNotSupportedWrite)
 	}
 
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.NewStyles(format.NumberFormat(formatCode)))
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(styles.New(styles.NumberFormat(formatCode)))
 
 	c.SetValue(value)
 	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
-//Hyperlink returns resolved HyperlinkInfo if there is any hyperlink or nil otherwise
-func (c *Cell) Hyperlink() *types.HyperlinkInfo {
+//Hyperlink returns resolved Info if there is any hyperlink or nil otherwise
+func (c *Cell) Hyperlink() *hyperlink.Info {
 	return c.sheet.hyperlinks.Get(c.ml.Ref)
 }
 
-//SetHyperlink sets hyperlink for cell, where link can be string or HyperlinkInfo
+//SetHyperlink sets hyperlink for cell, where link can be string or Info
 func (c *Cell) SetHyperlink(link interface{}) error {
 	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link); err != nil {
 		return err
 	} else {
-		c.SetFormatting(styleID)
+		c.SetStyles(styleID)
 	}
 
 	return nil

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	sharedML "github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 	"math"
 	"path/filepath"
 	"reflect"
@@ -129,13 +129,13 @@ func (s *sheetInfo) Name() string {
 
 //SetName sets a name for sheet
 func (s *sheetInfo) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), internal.ExcelSheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.SheetNames(), internal.ExcelSheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
-//Set sets options for sheet
-func (s *sheetInfo) Set(o *options.SheetOptions) {
-	if o.Visibility >= options.VisibilityTypeVisible && o.Visibility <= options.VisibilityTypeVeryHidden {
+//SetOptions sets options for sheet
+func (s *sheetInfo) SetOptions(o *options.SheetOptions) {
+	if o.Visibility >= options.Visible && o.Visibility <= options.VeryHidden {
 		s.workbook.ml.Sheets[s.index].State = o.Visibility
 		s.workbook.file.MarkAsUpdated()
 	}
@@ -209,7 +209,7 @@ func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
 }
 
 //AddConditional adds a new conditional formatting with additional refs if required
-func (s *sheetInfo) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+func (s *sheetInfo) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
 	return s.conditionals.Add(conditional, refs)
 }
 
