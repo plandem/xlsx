@@ -10,8 +10,8 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname fromRuleInfo github.com/plandem/xlsx/format/conditional/rule.from
-func fromRuleInfo(r *rule.Info) (*ml.ConditionalRule, *styles.Info)
+//go:linkname fromRule github.com/plandem/xlsx/format/conditional/rule.fromRule
+func fromRule(info *rule.Info) (*ml.ConditionalRule, *styles.Info)
 
 //Info is objects that holds combined information about cell conditional format
 type Info struct {
@@ -49,45 +49,48 @@ func (f *Info) Validate() error {
 	}
 
 	for i, r := range f.rules {
-		ri, _ := fromRuleInfo(r)
-
-		if ri.Type == 0 {
+		rInfo, _ := fromRule(r)
+		if rInfo.Type == 0 {
 			return errors.New(fmt.Sprintf("conditional rule#%d: no type", i))
 		}
 
-		if ri.Priority < 1 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: priority(%d) can't be higher thatn 1", i, ri.Priority))
+		if rInfo.Priority < 1 {
+			return errors.New(fmt.Sprintf("conditional rule#%d: priority(%d) can't be higher thatn 1", i, rInfo.Priority))
 		}
 
-		if ri.Type == rule.TypeCellIs && ri.Operator == 0 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: no operator", i))
+		if err := r.Validate(); err != nil {
+			return err
 		}
 
-		if ri.Type == rule.TypeTop10 && ri.Rank == 0 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: wrong rank", i))
-		}
-
-		if ri.Type == rule.TypeContainsText && len(ri.Text) == 0 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: no text", i))
-		}
-
-		if ri.Type == rule.TypeTimePeriod && ri.TimePeriod == 0 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: no time period", i))
-		}
-
-		if ri.ColorScale != nil {
-			if len(ri.ColorScale.Values) != len(ri.ColorScale.Colors) {
-				return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have equal numbers of colors and values", i))
-			}
-
-			if len(ri.ColorScale.Values) < 2 {
-				return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have at least 2 values", i))
-			}
-		}
-
-		if ri.IconSet != nil && (len(ri.IconSet.Values) < 2) {
-			return errors.New(fmt.Sprintf("conditional rule#%d: icon set should have at least 2 values", i))
-		}
+		//if r.rule.Type == primitives.ConditionTypeCellIs && r.rule.Operator == 0 {
+		//	return errors.New(fmt.Sprintf("conditional rule#%d: no operator", i))
+		//}
+		//
+		//if r.rule.Type == primitives.ConditionTypeTop10 && r.rule.Rank == 0 {
+		//	return errors.New(fmt.Sprintf("conditional rule#%d: wrong rank", i))
+		//}
+		//
+		//if r.rule.Type == primitives.ConditionTypeContainsText && len(r.rule.Text) == 0 {
+		//	return errors.New(fmt.Sprintf("conditional rule#%d: no text", i))
+		//}
+		//
+		//if r.rule.Type == primitives.ConditionTypeTimePeriod && r.rule.TimePeriod == 0 {
+		//	return errors.New(fmt.Sprintf("conditional rule#%d: no time period", i))
+		//}
+		//
+		//if r.rule.ColorScale != nil {
+		//	if len(r.rule.ColorScale.Values) != len(r.rule.ColorScale.Colors) {
+		//		return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have equal numbers of colors and values", i))
+		//	}
+		//
+		//	if len(r.rule.ColorScale.Values) < 2 {
+		//		return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have at least 2 values", i))
+		//	}
+		//}
+		//
+		//if r.rule.IconSet != nil && (len(r.rule.IconSet.Values) < 2) {
+		//	return errors.New(fmt.Sprintf("conditional rule#%d: icon set should have at least 2 values", i))
+		//}
 	}
 
 	return nil
@@ -107,7 +110,11 @@ func Refs(refs ...primitives.Ref) Option {
 
 func AddRule(options ...rule.Option) Option {
 	return func(cf *Info) {
-		cf.rules = append(cf.rules, rule.New(options...))
+		r := rule.New(options...)
+
+		rInfo, _ := fromRule(r)
+		rInfo.Priority = len(cf.rules) + 1
+		cf.rules = append(cf.rules, r)
 	}
 }
 
@@ -121,10 +128,10 @@ func from(f *Info) (*ml.ConditionalFormatting, []*styles.Info) {
 	allStyles := make([]*styles.Info, len(f.rules))
 
 	for i, r := range f.rules {
-		ri, si := fromRuleInfo(r)
+		rInfo, sInfo := fromRule(r)
 
-		allRules[i] = ri
-		allStyles[i] = si
+		allRules[i] = rInfo
+		allStyles[i] = sInfo
 	}
 
 	f.info.Rules = allRules

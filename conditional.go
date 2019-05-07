@@ -41,9 +41,9 @@ func (c *conditionals) Add(ci *conditional.Info, refs []types.Ref) error {
 		return err
 	}
 
-	info, styles := fromConditionalFormat(ci)
-	if info != nil && len(styles) > 0 && len(info.Bounds) > 0 {
-		for i, styleInfo := range styles {
+	info, formats := fromConditionalFormat(ci)
+	if info != nil && len(formats) > 0 && len(info.Bounds) > 0 {
+		for i, styleInfo := range formats {
 			if styleInfo != nil {
 				//add a new diff styles
 				styleID := c.sheet.workbook.doc.styleSheet.addDiffStyle(styleInfo)

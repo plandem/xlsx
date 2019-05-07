@@ -7,20 +7,20 @@ import (
 //List of all possible values for ConditionValueType
 const (
 	_ primitives.ConditionValueType = iota
-	ValueTypeNum
+	ValueTypeNumber
 	ValueTypePercent
-	ValueTypeMax
-	ValueTypeMin
+	ValueTypeHighest
+	ValueTypeLowest
 	ValueTypeFormula
 	ValueTypePercentile
 )
 
 func init() {
 	primitives.FromConditionValueType = map[primitives.ConditionValueType]string{
-		ValueTypeNum:        "num",
+		ValueTypeNumber:     "num",
 		ValueTypePercent:    "percent",
-		ValueTypeMax:        "max",
-		ValueTypeMin:        "min",
+		ValueTypeHighest:    "max",
+		ValueTypeLowest:     "min",
 		ValueTypeFormula:    "formula",
 		ValueTypePercentile: "percentile",
 	}

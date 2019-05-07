@@ -192,7 +192,7 @@ type ConditionalRule struct {
 //ConditionValue is a direct mapping of XSD CT_Cfvo
 type ConditionValue struct {
 	ExtLst         *ml.Reserved                  `xml:"extLst,omitempty"`
-	Type           primitives.ConditionValueType `xml:"ST_CfvoType,attr"`
+	Type           primitives.ConditionValueType `xml:"type,attr"`
 	Value          string                        `xml:"val,attr,omitempty"`
 	GreaterOrEqual bool                          `xml:"gte,attr,omitempty"`
 }

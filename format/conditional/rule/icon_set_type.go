@@ -52,3 +52,4 @@ func init() {
 		primitives.ToIconSetType[v] = k
 	}
 }
+

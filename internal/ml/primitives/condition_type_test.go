@@ -3,7 +3,6 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,24 +15,24 @@ func TestConditionType(t *testing.T) {
 
 	list := map[string]primitives.ConditionType{
 		"":                  primitives.ConditionType(0),
-		"expression":        rule.TypeExpression,
-		"cellIs":            rule.TypeCellIs,
-		"colorScale":        rule.TypeColorScale,
-		"dataBar":           rule.TypeDataBar,
-		"iconSet":           rule.TypeIconSet,
-		"top10":             rule.TypeTop10,
-		"uniqueValues":      rule.TypeUniqueValues,
-		"duplicateValues":   rule.TypeDuplicateValues,
-		"containsText":      rule.TypeContainsText,
-		"notContainsText":   rule.TypeNotContainsText,
-		"beginsWith":        rule.TypeBeginsWith,
-		"endsWith":          rule.TypeEndsWith,
-		"containsBlanks":    rule.TypeContainsBlanks,
-		"notContainsBlanks": rule.TypeNotContainsBlanks,
-		"containsErrors":    rule.TypeContainsErrors,
-		"notContainsErrors": rule.TypeNotContainsErrors,
-		"timePeriod":        rule.TypeTimePeriod,
-		"aboveAverage":      rule.TypeAboveAverage,
+		"expression":        primitives.ConditionTypeExpression,
+		"cellIs":            primitives.ConditionTypeCellIs,
+		"colorScale":        primitives.ConditionTypeColorScale,
+		"dataBar":           primitives.ConditionTypeDataBar,
+		"iconSet":           primitives.ConditionTypeIconSet,
+		"top10":             primitives.ConditionTypeTop10,
+		"uniqueValues":      primitives.ConditionTypeUniqueValues,
+		"duplicateValues":   primitives.ConditionTypeDuplicateValues,
+		"containsText":      primitives.ConditionTypeContainsText,
+		"notContainsText":   primitives.ConditionTypeNotContainsText,
+		"beginsWith":        primitives.ConditionTypeBeginsWith,
+		"endsWith":          primitives.ConditionTypeEndsWith,
+		"containsBlanks":    primitives.ConditionTypeContainsBlanks,
+		"notContainsBlanks": primitives.ConditionTypeNotContainsBlanks,
+		"containsErrors":    primitives.ConditionTypeContainsErrors,
+		"notContainsErrors": primitives.ConditionTypeNotContainsErrors,
+		"timePeriod":        primitives.ConditionTypeTimePeriod,
+		"aboveAverage":      primitives.ConditionTypeAboveAverage,
 	}
 
 	for s, v := range list {

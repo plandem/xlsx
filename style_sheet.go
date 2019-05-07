@@ -217,14 +217,14 @@ func (ss *StyleSheet) resolveDirectStyle(id ml.DirectStyleID) *styles.Info {
 		return nil
 	}
 
-	cellStyle := ss.ml.CellXfs.Items[id]
-	style := &styles.Info{}
-	_ = cellStyle
-
-	//TODO: Populate format.Info with required information
 	panic(errorNotSupported)
 
-	return style
+	//cellStyle := ss.ml.CellXfs.Items[id]
+	//style := &styles.Info{}
+	//_ = cellStyle
+
+	//TODO: Populate format.Info with required information
+	//return style
 }
 
 //adds a differential style

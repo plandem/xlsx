@@ -6,7 +6,7 @@ import (
 
 //List of all possible values for OperatorType
 const (
-	_ OperatorType = iota
+	_ primitives.ConditionOperatorType = iota
 	OperatorLessThan
 	OperatorLessThanOrEqual
 	OperatorEqual

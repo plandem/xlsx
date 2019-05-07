@@ -16,10 +16,10 @@ func TestConditionValueType(t *testing.T) {
 
 	list := map[string]primitives.ConditionValueType{
 		"":           primitives.ConditionValueType(0),
-		"num":        rule.ValueTypeNum,
+		"num":        rule.ValueTypeNumber,
 		"percent":    rule.ValueTypePercent,
-		"max":        rule.ValueTypeMax,
-		"min":        rule.ValueTypeMin,
+		"max":        rule.ValueTypeHighest,
+		"min":        rule.ValueTypeLowest,
 		"formula":    rule.ValueTypeFormula,
 		"percentile": rule.ValueTypePercentile,
 	}
