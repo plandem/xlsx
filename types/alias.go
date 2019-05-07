@@ -7,8 +7,14 @@ import (
 //Bounds is alias of original primitives.Bounds type make it public.
 type Bounds = primitives.Bounds
 
+//BoundsList is alias of original primitives.BoundsList type make it public.
+type BoundsList = primitives.BoundsList
+
 //Ref is alias of original primitives.Ref type make it public.
 type Ref = primitives.Ref
+
+//RefList is alias of original primitives.RefList type make it public.
+type RefList = primitives.RefList
 
 //CellRef is alias of original primitives.CellRef type make it public.
 type CellRef = primitives.CellRef

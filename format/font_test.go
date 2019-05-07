@@ -8,7 +8,7 @@ import (
 )
 
 func TestFont(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		Font.Name("Calibri"),
 		Font.Size(10),
 		Font.Bold,
@@ -25,7 +25,7 @@ func TestFont(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Font = &ml.Font{
 			Name:      "Calibri",
 			Bold:      true,

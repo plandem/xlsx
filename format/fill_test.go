@@ -9,14 +9,14 @@ import (
 
 func TestFill(t *testing.T) {
 	//pattern only
-	style := New(
+	style := NewStyles(
 		Fill.Pattern.Type(PatternTypeDarkDown),
 		Fill.Pattern.Color("#FFFFFF"),
 		Fill.Pattern.Background("#FF0000"),
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Pattern = &ml.PatternFill{
 			Color:      color.New("FFFFFFFF"),
 			Background: color.New("FFFF0000"),
@@ -26,7 +26,7 @@ func TestFill(t *testing.T) {
 	}), style)
 
 	//gradient only
-	style = New(
+	style = NewStyles(
 		Fill.Gradient.Degree(90),
 		Fill.Gradient.Type(GradientTypePath),
 		Fill.Gradient.Left(1),
@@ -38,7 +38,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Gradient = &ml.GradientFill{
 			Degree: 90,
 			Type:   GradientTypePath,
@@ -54,7 +54,7 @@ func TestFill(t *testing.T) {
 	}), style)
 
 	//pattern override by gradient
-	style = New(
+	style = NewStyles(
 		Fill.Pattern.Type(PatternTypeDarkDown),
 		Fill.Pattern.Color("#FFFFFF"),
 		Fill.Pattern.Background("#FF0000"),
@@ -69,7 +69,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Gradient = &ml.GradientFill{
 			Degree: 90,
 			Type:   GradientTypePath,
@@ -85,7 +85,7 @@ func TestFill(t *testing.T) {
 	}), style)
 
 	//gradient override by pattern
-	style = New(
+	style = NewStyles(
 		Fill.Gradient.Degree(90),
 		Fill.Gradient.Type(GradientTypePath),
 		Fill.Gradient.Left(1),
@@ -100,7 +100,7 @@ func TestFill(t *testing.T) {
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Fill.Pattern = &ml.PatternFill{
 			Color:      color.New("FFFFFFFF"),
 			Background: color.New("FFFF0000"),

@@ -50,7 +50,7 @@ func TestRow(t *testing.T) {
 	require.Equal(t, r.ml.CustomFormat, false)
 	require.Equal(t, r.ml.Style, format.DirectStyleID(0))
 
-	style := format.New(
+	style := format.NewStyles(
 		format.Font.Name("Calibri"),
 		format.Font.Size(12),
 	)

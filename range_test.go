@@ -20,7 +20,7 @@ func TestRange(t *testing.T) {
 	require.Equal(t, format.DirectStyleID(0), sheet.CellByRef("E10").ml.Style)
 
 	//test styles
-	style := format.New(
+	style := format.NewStyles(
 		format.Font.Name("Calibri"),
 		format.Font.Size(12),
 	)

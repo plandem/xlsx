@@ -8,13 +8,13 @@ import (
 )
 
 func TestBorder(t *testing.T) {
-	style := New(
+	style := NewStyles(
 		Border.Type(BorderStyleDashDot),
 		Border.Color("#FF00FF"),
 	)
 
 	require.IsType(t, &StyleFormat{}, style)
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Border = &ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,
@@ -38,7 +38,7 @@ func TestBorder(t *testing.T) {
 		}
 	}), style)
 
-	style = New(
+	style = NewStyles(
 		Border.Left.Type(BorderStyleDashDot),
 		Border.Left.Color("#FF00FF"),
 		Border.Right.Type(BorderStyleDashDot),
@@ -55,7 +55,7 @@ func TestBorder(t *testing.T) {
 		Border.Horizontal.Color("#FF00FF"),
 	)
 
-	require.Equal(t, createAndFill(func(f *StyleFormat) {
+	require.Equal(t, createStylesAndFill(func(f *StyleFormat) {
 		f.styleInfo.Border = &ml.Border{
 			Left: &ml.BorderSegment{
 				Type:  BorderStyleDashDot,

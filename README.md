@@ -28,7 +28,7 @@ func main() {
 	}()
 
 	redBoldYellow := xl.AddFormatting(
-		format.New(
+		format.NewStyles(
 			format.Font.Bold,
 			format.Font.Color("#ff0000"),
 			format.Fill.Type(format.PatternTypeSolid),
@@ -94,7 +94,7 @@ func main() {
 	//Rich Text
 	_= sheet.CellByRef("F10").SetText(
 		"plain text", 
-		format.New(
+		format.NewStyles(
 			format.Font.Bold,
 			format.Font.Color("#ff0000"),
 		),
@@ -102,6 +102,20 @@ func main() {
 		"another plain text",
 	)
 	
+	//Conditional formatting
+	_= sheet.AddConditional(format.NewConditions(
+		format.Conditions.Rule(
+			format.Condition.Type(format.ConditionTypeCellIs),
+			format.Condition.Operator(format.ConditionOperatorLessThanOrEqual),
+			format.Condition.Priority(2),
+			format.Condition.Formula("500"),
+			format.Condition.Style(format.NewStyles(
+				format.Font.Bold,
+				format.Font.Color("#FF0000"),
+			)),
+		),
+	), "A1:A10", "B2", "C1:C10")
+    	
 	_= xl.SaveAs("test1.xlsx")
 }
 ```
@@ -163,7 +177,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [ ] cell: comments
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
-- [ ] other: conditional formatting
+- [x] other: conditional formatting
 - [x] other: rich texts
 - [ ] other: drawing
 - [ ] other: unpack package to temp folder to reduce memory usage

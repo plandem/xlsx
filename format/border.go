@@ -38,7 +38,7 @@ func (b *borderOption) Outline(s *StyleFormat) {
 	s.styleInfo.Border.Outline = true
 }
 
-func (b *borderOption) Type(t primitives.BorderStyleType) option {
+func (b *borderOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Top.Type = t
 		s.styleInfo.Border.Bottom.Type = t
@@ -47,7 +47,7 @@ func (b *borderOption) Type(t primitives.BorderStyleType) option {
 	}
 }
 
-func (b *borderOption) Color(rgb string) option {
+func (b *borderOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		rgb := color.New(rgb)
 		s.styleInfo.Border.Top.Color = rgb
@@ -57,85 +57,85 @@ func (b *borderOption) Color(rgb string) option {
 	}
 }
 
-func (b *borderTopSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderTopSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Top.Type = t
 	}
 }
 
-func (b *borderTopSegmentOption) Color(rgb string) option {
+func (b *borderTopSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Top.Color = color.New(rgb)
 	}
 }
 
-func (b *borderBottomSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderBottomSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Bottom.Type = t
 	}
 }
 
-func (b *borderBottomSegmentOption) Color(rgb string) option {
+func (b *borderBottomSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Bottom.Color = color.New(rgb)
 	}
 }
 
-func (b *borderLeftSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderLeftSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Left.Type = t
 	}
 }
 
-func (b *borderLeftSegmentOption) Color(rgb string) option {
+func (b *borderLeftSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Left.Color = color.New(rgb)
 	}
 }
 
-func (b *borderRightSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderRightSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Right.Type = t
 	}
 }
 
-func (b *borderRightSegmentOption) Color(rgb string) option {
+func (b *borderRightSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Right.Color = color.New(rgb)
 	}
 }
 
-func (b *borderDiagonalSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderDiagonalSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Diagonal.Type = t
 	}
 }
 
-func (b *borderDiagonalSegmentOption) Color(rgb string) option {
+func (b *borderDiagonalSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Diagonal.Color = color.New(rgb)
 	}
 }
 
-func (b *borderVerticalSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderVerticalSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Vertical.Type = t
 	}
 }
 
-func (b *borderVerticalSegmentOption) Color(rgb string) option {
+func (b *borderVerticalSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Vertical.Color = color.New(rgb)
 	}
 }
 
-func (b *borderHorizontalSegmentOption) Type(t primitives.BorderStyleType) option {
+func (b *borderHorizontalSegmentOption) Type(t primitives.BorderStyleType) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Horizontal.Type = t
 	}
 }
 
-func (b *borderHorizontalSegmentOption) Color(rgb string) option {
+func (b *borderHorizontalSegmentOption) Color(rgb string) styleOption {
 	return func(s *StyleFormat) {
 		s.styleInfo.Border.Horizontal.Color = color.New(rgb)
 	}

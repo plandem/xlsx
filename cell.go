@@ -322,7 +322,7 @@ func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 		panic(errorNotSupportedWrite)
 	}
 
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.New(format.NumberFormat(formatCode)))
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.NewStyles(format.NumberFormat(formatCode)))
 
 	c.SetValue(value)
 	c.ml.Style = ml.DirectStyleID(styleID)
