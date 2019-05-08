@@ -184,7 +184,7 @@ type ConditionalRule struct {
 	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
 	Priority     int                              `xml:"priority,attr"`
 	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
-	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"`
+	AboveAverage *bool                            `xml:"aboveAverage,attr,omitempty"`
 	Percent      bool                             `xml:"percent,attr,omitempty"`
 	Bottom       bool                             `xml:"bottom,attr,omitempty"`
 	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`

@@ -8,7 +8,9 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
-type dataBarRule byte
+type dataBarRule struct {
+	baseRule
+}
 
 var DataBar dataBarRule
 

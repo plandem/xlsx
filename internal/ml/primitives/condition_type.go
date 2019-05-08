@@ -18,12 +18,14 @@ const (
 	_ ConditionType = iota
 	ConditionTypeExpression
 	ConditionTypeCellIs
-	ConditionTypeColorScale
-	ConditionTypeDataBar
-	ConditionTypeIconSet
-	ConditionTypeTop10
-	ConditionTypeUniqueValues
-	ConditionTypeDuplicateValues
+
+	ConditionTypeColorScale//
+	ConditionTypeDataBar//
+	ConditionTypeIconSet//
+	ConditionTypeTop10//
+	ConditionTypeUniqueValues//
+	ConditionTypeDuplicateValues//
+
 	ConditionTypeContainsText
 	ConditionTypeNotContainsText
 	ConditionTypeBeginsWith
@@ -32,6 +34,7 @@ const (
 	ConditionTypeNotContainsBlanks
 	ConditionTypeContainsErrors
 	ConditionTypeNotContainsErrors
+
 	ConditionTypeTimePeriod
 	ConditionTypeAboveAverage
 )

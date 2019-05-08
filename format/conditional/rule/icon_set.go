@@ -7,7 +7,10 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
-type iconSetRule byte
+type iconSetRule struct {
+	baseRule
+}
+
 var IconSet iconSetRule
 
 func (x iconSetRule) initIfRequired(r *Info) {
