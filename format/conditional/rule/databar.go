@@ -74,7 +74,7 @@ func (x dataBarRule) Color(rgb string) Option {
 
 func (x dataBarRule) BarOnly(r *Info) {
 	x.initIfRequired(r)
-	r.rule.DataBar.ShowValue = ml.OptionalBool(false)
+	r.rule.DataBar.ShowValue = primitives.OptionalBool(false)
 }
 
 func (x dataBarRule) Validate(r *Info) error {

@@ -19,8 +19,8 @@ func (x bottomRule) initIfRequired(r *Info) {
 		r.initialized = true
 		r.validator = Bottom
 		r.rule = &ml.ConditionalRule{
-			Type: primitives.ConditionTypeTop10,
-			Rank: 10,
+			Type:   primitives.ConditionTypeTop10,
+			Rank:   10,
 			Bottom: true,
 		}
 	}

@@ -9,4 +9,3 @@ func (x baseRule) StopIfTrue(r *Info) {
 func (x baseRule) Validate(r *Info) error {
 	return nil
 }
-

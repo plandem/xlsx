@@ -8,12 +8,6 @@ import (
 //Formula is a direct mapping of XSD ST_Formula
 type Formula string
 
-//OptionalBool is alias for OptionalBool from core package
-func OptionalBool(v bool) ml.OptionalBool { return ml.OptionalBool(&v) }
-
-//OptionalIndex is alias for OptionalIndex from core package
-func OptionalIndex(v int) ml.OptionalIndex { return ml.OptionalIndex(&v) }
-
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
 	XMLName               ml.Name                   `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
@@ -184,7 +178,7 @@ type ConditionalRule struct {
 	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
 	Priority     int                              `xml:"priority,attr"`
 	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
-	AboveAverage ml.OptionalBool                  `xml:"aboveAverage,attr,omitempty"`
+	AboveAverage *bool                            `xml:"aboveAverage,attr,omitempty"`
 	Percent      bool                             `xml:"percent,attr,omitempty"`
 	Bottom       bool                             `xml:"bottom,attr,omitempty"`
 	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`
@@ -200,7 +194,7 @@ type ConditionValue struct {
 	ExtLst           *ml.Reserved                  `xml:"extLst,omitempty"`
 	Type             primitives.ConditionValueType `xml:"type,attr"`
 	Value            string                        `xml:"val,attr,omitempty"`
-	GreaterThanEqual ml.OptionalBool               `xml:"gte,attr,omitempty"`
+	GreaterThanEqual *bool                         `xml:"gte,attr,omitempty"`
 }
 
 //ColorScale is a direct mapping of XSD CT_ColorScale
@@ -215,14 +209,14 @@ type DataBar struct {
 	Color     *Color            `xml:"color"`
 	MinLength uint              `xml:"minLength,attr,omitempty"`
 	MaxLength uint              `xml:"maxLength,attr,omitempty"`
-	ShowValue ml.OptionalBool   `xml:"showValue,attr,omitempty"`
+	ShowValue *bool             `xml:"showValue,attr,omitempty"`
 }
 
 //IconSet is a direct mapping of XSD ST_IconSetType
 type IconSet struct {
 	Values    []*ConditionValue      `xml:"cfvo"` //minimum 2 values
 	Type      primitives.IconSetType `xml:"iconSet,attr,omitempty"`
-	ShowValue ml.OptionalBool        `xml:"showValue,attr,omitempty"`
-	Percent   ml.OptionalBool        `xml:"percent,attr,omitempty"`
+	ShowValue *bool                  `xml:"showValue,attr,omitempty"`
+	Percent   *bool                  `xml:"percent,attr,omitempty"`
 	Reverse   bool                   `xml:"reverse,attr,omitempty"`
 }

@@ -19,12 +19,12 @@ const (
 	ConditionTypeExpression
 	ConditionTypeCellIs
 
-	ConditionTypeColorScale//
-	ConditionTypeDataBar//
-	ConditionTypeIconSet//
-	ConditionTypeTop10//
-	ConditionTypeUniqueValues//
-	ConditionTypeDuplicateValues//
+	ConditionTypeColorScale      //
+	ConditionTypeDataBar         //
+	ConditionTypeIconSet         //
+	ConditionTypeTop10           //
+	ConditionTypeUniqueValues    //
+	ConditionTypeDuplicateValues //
 
 	ConditionTypeContainsText
 	ConditionTypeNotContainsText

@@ -16,7 +16,7 @@ func (x containsTextRule) initIfRequired(r *Info) {
 		r.initialized = true
 		r.validator = ContainsText
 		r.rule = &ml.ConditionalRule{
-			Type: primitives.ConditionTypeContainsText,
+			Type:    primitives.ConditionTypeContainsText,
 			Formula: `NOT(ISERROR(SEARCH("%s",%s)))`,
 		}
 	}
