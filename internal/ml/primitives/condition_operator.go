@@ -13,6 +13,45 @@ var (
 	FromConditionOperatorType map[ConditionOperatorType]string
 )
 
+//List of all possible values for OperatorType
+const (
+	_ ConditionOperatorType = iota
+	ConditionOperatorLessThan
+	ConditionOperatorLessThanOrEqual
+	ConditionOperatorEqual
+	ConditionOperatorNotEqual
+	ConditionOperatorGreaterThanOrEqual
+	ConditionOperatorGreaterThan
+	ConditionOperatorBetween
+	ConditionOperatorNotBetween
+	ConditionOperatorContainsText
+	ConditionOperatorNotContains
+	ConditionOperatorBeginsWith
+	ConditionOperatorEndsWith
+)
+
+func init() {
+	FromConditionOperatorType = map[ConditionOperatorType]string{
+		ConditionOperatorLessThan:           "lessThan",
+		ConditionOperatorLessThanOrEqual:    "lessThanOrEqual",
+		ConditionOperatorEqual:              "equal",
+		ConditionOperatorNotEqual:           "notEqual",
+		ConditionOperatorGreaterThanOrEqual: "greaterThanOrEqual",
+		ConditionOperatorGreaterThan:        "greaterThan",
+		ConditionOperatorBetween:            "between",
+		ConditionOperatorNotBetween:         "notBetween",
+		ConditionOperatorContainsText:       "containsText",
+		ConditionOperatorNotContains:        "notContains",
+		ConditionOperatorBeginsWith:         "beginsWith",
+		ConditionOperatorEndsWith:           "endsWith",
+	}
+
+	ToConditionOperatorType = make(map[string]ConditionOperatorType, len(FromConditionOperatorType))
+	for k, v := range FromConditionOperatorType {
+		ToConditionOperatorType[v] = k
+	}
+}
+
 func (t ConditionOperatorType) String() string {
 	return FromConditionOperatorType[t]
 }

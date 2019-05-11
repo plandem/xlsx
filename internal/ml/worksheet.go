@@ -169,7 +169,7 @@ type ConditionalFormatting struct {
 
 //ConditionalRule is a direct mapping of XSD CT_CfRule
 type ConditionalRule struct {
-	Formula      Formula                          `xml:"formula,omitempty"`
+	Formula      []Formula                        `xml:"formula,omitempty"`
 	ColorScale   *ColorScale                      `xml:"colorScale,omitempty"`
 	DataBar      *DataBar                         `xml:"dataBar,omitempty"`
 	IconSet      *IconSet                         `xml:"iconSet,omitempty"`

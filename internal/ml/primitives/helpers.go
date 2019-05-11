@@ -4,7 +4,7 @@ import (
 	"github.com/plandem/ooxml/ml"
 )
 
-//OptionalBool is helper alias for ml.OptionalBool from core package
+//OptionalBool is helper function that allow encode/decode optional boolean, where false should not be omitted - mostly for booleans with default true value
 func OptionalBool(v bool) *bool {
 	return &v
 }

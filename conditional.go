@@ -5,6 +5,7 @@ import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
+	"strings"
 	_ "unsafe"
 )
 
@@ -42,12 +43,34 @@ func (c *conditionals) Add(ci *conditional.Info, refs []types.Ref) error {
 	}
 
 	info, formats := fromConditionalFormat(ci)
-	if info != nil && len(formats) > 0 && len(info.Bounds) > 0 {
+	if info != nil {
+		var startCol, startRow int
+
+		//some rules require starting CellRef in formula
+		for i, b := range info.Bounds {
+			if i == 0 {
+				startCol, startRow = b.FromCol, b.FromRow
+			} else if b.FromCol < startCol {
+				startCol = b.FromCol
+			} else if b.FromRow < startRow {
+				startRow = b.FromRow
+			}
+		}
+
+		startCellRef := types.CellRefFromIndexes(startCol, startRow)
+
 		for i, styleInfo := range formats {
 			if styleInfo != nil {
 				//add a new diff styles
 				styleID := c.sheet.workbook.doc.styleSheet.addDiffStyle(styleInfo)
 				info.Rules[i].Style = &styleID
+			}
+
+			//finalize rules
+			for _, ruleInfo := range info.Rules {
+				for i, formula := range ruleInfo.Formula {
+					ruleInfo.Formula[i] = ml.Formula(strings.ReplaceAll(string(formula), ":cell:", string(startCellRef)))
+				}
 			}
 
 			//add a new conditional

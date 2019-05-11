@@ -188,7 +188,20 @@ func (c *Cell) SetInlineText(parts ...interface{}) error {
 //SetInt sets an integer value
 func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
-	c.ml.Value = strconv.Itoa(value)
+	c.ml.Value = strconv.FormatInt(int64(value), 10)
+
+	if c.ml.Style == styles.DirectStyleID(0) {
+		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
+	}
+
+	c.ml.Formula = nil
+	c.ml.InlineStr = nil
+}
+
+//SetUInt sets an unsigned integer value
+func (c *Cell) SetUInt(value uint) {
+	c.ml.Type = types.CellTypeNumber
+	c.ml.Value = strconv.FormatUint(uint64(value), 10)
 
 	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
@@ -270,6 +283,16 @@ func (c *Cell) SetValue(value interface{}) {
 		c.SetInt(int(v))
 	case int64:
 		c.SetInt(int(v))
+	case uint:
+		c.SetUInt(v)
+	case uint8:
+		c.SetUInt(uint(v))
+	case uint16:
+		c.SetUInt(uint(v))
+	case uint32:
+		c.SetUInt(uint(v))
+	case uint64:
+		c.SetUInt(uint(v))
 	case float32:
 		c.SetFloat(float64(v))
 	case float64:
