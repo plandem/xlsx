@@ -7,6 +7,8 @@ import (
 	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
+
+	// to link unexported
 	_ "unsafe"
 )
 
@@ -306,7 +308,6 @@ func (ss *StyleSheet) addStyle(f *styles.Info) styles.DirectStyleID {
 		cellStyle.xfId = cellStyleXf.index => NamedStyleID
 	*/
 
-	XfId := ml.NamedStyleID(0)
 	style := ml.Style{
 		FontId:            fontID,
 		FillId:            fillID,
@@ -322,11 +323,11 @@ func (ss *StyleSheet) addStyle(f *styles.Info) styles.DirectStyleID {
 		ApplyProtection:   protection != nil,
 	}
 
-	//add named style if required and get related XfId
-	XfId = ss.addNamedStyleIfRequired(namedInfo, style)
+	//add named style if required and get related xfid
+	xfid := ss.addNamedStyleIfRequired(namedInfo, style)
 
 	cellXf := &ml.DirectStyle{
-		XfId:  XfId,
+		XfId:  xfid,
 		Style: style,
 	}
 

@@ -7,6 +7,8 @@ import (
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+
+	// to link unexported
 	_ "unsafe"
 )
 
@@ -60,7 +62,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 	}
 
 	if length > internal.ExcelCellLimit {
-		return nil, errors.New(fmt.Sprintf("text exceeds allowed length for cell value = %d", internal.ExcelCellLimit))
+		return nil, fmt.Errorf("text exceeds allowed length for cell value = %d", internal.ExcelCellLimit)
 	}
 
 	return si, nil

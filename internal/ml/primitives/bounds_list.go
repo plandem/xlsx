@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//Bounds is implementation of RefList
+//BoundsList is implementation of RefList
 type BoundsList []Bounds
 
 func BoundsListFromRefs(refs ...Ref) BoundsList {

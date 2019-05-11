@@ -3,11 +3,14 @@ package xlsx
 import (
 	"errors"
 	"fmt"
+	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/hyperlink"
+
+	// to link unexported
 	_ "unsafe"
 )
 
@@ -60,44 +63,44 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (styles.DirectSt
 		if link.Bounds.Equals(bounds) {
 			hyperlinkIndex = linkIndex
 		} else if link.Bounds.Overlaps(bounds) {
-			return styles.DefaultDirectStyle, errors.New(fmt.Sprintf("intersection of different hyperlinks is not allowed, %s intersects with %s", link.Bounds, bounds))
+			return styles.DefaultDirectStyle, fmt.Errorf("intersection of different hyperlinks is not allowed, %s intersects with %s", link.Bounds, bounds)
 		}
 	}
 
 	//prepare hyperlink info
-	hyperlink, styleID, err := fromHyperlinkInfo(object)
+	hLink, styleID, err := fromHyperlinkInfo(object)
 	if err != nil {
 		return styles.DefaultDirectStyle, err
 	}
 
 	//exceeded Excel limit for total hyperlinks
 	if len(h.sheet.ml.Hyperlinks.Items) >= internal.ExcelHyperlinkLimit {
-		return styles.DefaultDirectStyle, errors.New(fmt.Sprintf("exceeds Excel limit (%d) for total number of hyperlinks per worksheet", internal.ExcelHyperlinkLimit))
+		return styles.DefaultDirectStyle, fmt.Errorf("exceeds Excel limit (%d) for total number of hyperlinks per worksheet", internal.ExcelHyperlinkLimit)
 	}
 
 	//if link has external target, then add relation for it
-	if len(hyperlink.RID) > 0 {
+	if len(hLink.RID) > 0 {
 		h.sheet.attachRelationshipsIfRequired()
 
-		//lookup for already existing targets to get RID
-		rid := h.sheet.relationships.GetIdByTarget(string(hyperlink.RID))
+		var rid sharedML.RID
 
-		//looks like target is new, let's create it and use
-		if rid = h.sheet.relationships.GetIdByTarget(string(hyperlink.RID)); len(rid) == 0 {
-			_, rid = h.sheet.relationships.AddLink(internal.RelationTypeHyperlink, string(hyperlink.RID))
+		//lookup for already existing targets to get RID
+		if rid = h.sheet.relationships.GetIdByTarget(string(hLink.RID)); len(rid) == 0 {
+			//looks like target is new, let's create it and use
+			_, rid = h.sheet.relationships.AddLink(internal.RelationTypeHyperlink, string(hLink.RID))
 		}
 
-		hyperlink.RID = rid
+		hLink.RID = rid
 	}
 
 	//add source Ref info
-	hyperlink.Bounds = bounds
+	hLink.Bounds = bounds
 	if hyperlinkIndex == -1 {
 		//add a new hyperlink
-		h.sheet.ml.Hyperlinks.Items = append(h.sheet.ml.Hyperlinks.Items, hyperlink)
+		h.sheet.ml.Hyperlinks.Items = append(h.sheet.ml.Hyperlinks.Items, hLink)
 	} else {
 		//update existing hyperlink
-		h.sheet.ml.Hyperlinks.Items[hyperlinkIndex] = hyperlink
+		h.sheet.ml.Hyperlinks.Items[hyperlinkIndex] = hLink
 	}
 
 	//if there are custom styles, then use it otherwise use default hyperlink styles

@@ -80,6 +80,7 @@ type ExternalReferenceList struct {
 	Items []*ExternalReference `xml:"workbookView,omitempty"`
 }
 
+//MarshalXML marshal DiffStyleList
 func (r *DiffStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -88,6 +89,7 @@ func (r *DiffStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) error
 	return nil
 }
 
+//MarshalXML marshal NamedStyleInfoList
 func (r *NamedStyleInfoList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -96,6 +98,7 @@ func (r *NamedStyleInfoList) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 	return nil
 }
 
+//MarshalXML marshal DirectStyleList
 func (r *DirectStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -104,6 +107,7 @@ func (r *DirectStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) err
 	return nil
 }
 
+//MarshalXML marshal NamedStyleList
 func (r *NamedStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -112,6 +116,7 @@ func (r *NamedStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 	return nil
 }
 
+//MarshalXML marshal BorderList
 func (r *BorderList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -120,6 +125,7 @@ func (r *BorderList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return nil
 }
 
+//MarshalXML marshal FontList
 func (r *FontList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -128,6 +134,7 @@ func (r *FontList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return nil
 }
 
+//MarshalXML marshal FillList
 func (r *FillList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -136,6 +143,7 @@ func (r *FillList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return nil
 }
 
+//MarshalXML marshal NumberFormatList
 func (r *NumberFormatList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -144,6 +152,7 @@ func (r *NumberFormatList) MarshalXML(e *xml.Encoder, start xml.StartElement) er
 	return nil
 }
 
+//MarshalXML marshal HyperlinkList
 func (r *HyperlinkList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if len(r.Items) > 0 {
 		return e.EncodeElement(*r, start)
@@ -152,6 +161,7 @@ func (r *HyperlinkList) MarshalXML(e *xml.Encoder, start xml.StartElement) error
 	return nil
 }
 
+//MarshalXML marshal MergedCellList
 func (r *MergedCellList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
 		return e.EncodeElement(*r, start)
@@ -160,6 +170,7 @@ func (r *MergedCellList) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 	return nil
 }
 
+//MarshalXML marshal SheetViewList
 func (r *SheetViewList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if len(r.Items) > 0 {
 		return e.EncodeElement(*r, start)
@@ -168,6 +179,7 @@ func (r *SheetViewList) MarshalXML(e *xml.Encoder, start xml.StartElement) error
 	return nil
 }
 
+//MarshalXML marshal BookViewList
 func (r *BookViewList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if len(r.Items) > 0 {
 		return e.EncodeElement(*r, start)
@@ -176,6 +188,7 @@ func (r *BookViewList) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	return nil
 }
 
+//MarshalXML marshal ExternalReferenceList
 func (r *ExternalReferenceList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if len(r.Items) > 0 {
 		return e.EncodeElement(*r, start)

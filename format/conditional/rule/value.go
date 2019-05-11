@@ -21,7 +21,7 @@ func (x valueRule) initIfRequired(r *Info) {
 	if !r.initialized {
 		r.initialized = true
 		r.validator = Value
-		r.rule = &ml.ConditionalRule {
+		r.rule = &ml.ConditionalRule{
 			Type: primitives.ConditionTypeCellIs,
 		}
 	}
@@ -46,7 +46,6 @@ func (x valueRule) fromBool(value bool) string {
 
 	return "0"
 }
-
 
 func (x valueRule) setValue(r *Info, values []interface{}, operator primitives.ConditionOperatorType, s *styles.Info) {
 	x.initIfRequired(r)

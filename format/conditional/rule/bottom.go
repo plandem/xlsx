@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
@@ -50,11 +49,11 @@ func (x bottomRule) Value(rank uint, settings ...interface{}) Option {
 func (x bottomRule) Validate(r *Info) error {
 	if r.rule.Percent {
 		if r.rule.Rank < 1 || r.rule.Rank > 100 {
-			return errors.New(fmt.Sprintf("bottom: value(%d) should be between (1 - 100)", r.rule.Rank))
+			return fmt.Errorf("bottom: value(%d) should be between (1 - 100)", r.rule.Rank)
 		}
 	} else {
 		if r.rule.Rank < 1 || r.rule.Rank > 1000 {
-			return errors.New(fmt.Sprintf("bottom: value(%d) should be between 1 and 1000", r.rule.Rank))
+			return fmt.Errorf("bottom: value(%d) should be between 1 and 1000", r.rule.Rank)
 		}
 	}
 

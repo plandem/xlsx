@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
@@ -87,7 +86,7 @@ func (x colorScale3Rule) Validate(r *Info) error {
 		ValueTypeFormula,
 		ValueTypePercentile,
 	) {
-		return errors.New(fmt.Sprintf("colorScale3: Not allowed type '%s' for min value", r.rule.ColorScale.Values[0].Type))
+		return fmt.Errorf("colorScale3: Not allowed type '%s' for min value", r.rule.ColorScale.Values[0].Type)
 	}
 
 	if !r.rule.ColorScale.Values[2].Type.IsAllowed(
@@ -97,7 +96,7 @@ func (x colorScale3Rule) Validate(r *Info) error {
 		ValueTypePercentile,
 		ValueTypeHighest,
 	) {
-		return errors.New(fmt.Sprintf("colorScale3: Not allowed type '%s' for max value", r.rule.ColorScale.Values[2].Type))
+		return fmt.Errorf("colorScale3: Not allowed type '%s' for max value", r.rule.ColorScale.Values[2].Type)
 	}
 	return nil
 }

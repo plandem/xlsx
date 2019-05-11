@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
@@ -85,7 +84,7 @@ func (x dataBarRule) Validate(r *Info) error {
 		ValueTypeFormula,
 		ValueTypePercentile,
 	) {
-		return errors.New(fmt.Sprintf("dataBar: Not allowed type '%s' for min value", r.rule.DataBar.Values[0].Type))
+		return fmt.Errorf("dataBar: Not allowed type '%s' for min value", r.rule.DataBar.Values[0].Type)
 	}
 
 	if !r.rule.DataBar.Values[1].Type.IsAllowed(
@@ -95,7 +94,7 @@ func (x dataBarRule) Validate(r *Info) error {
 		ValueTypePercentile,
 		ValueTypeHighest,
 	) {
-		return errors.New(fmt.Sprintf("dataBar: Not allowed type '%s' for max value", r.rule.DataBar.Values[1].Type))
+		return fmt.Errorf("dataBar: Not allowed type '%s' for max value", r.rule.DataBar.Values[1].Type)
 	}
 
 	return nil

@@ -17,7 +17,7 @@ func (x blanksRule) initIfRequired(r *Info) {
 		r.initialized = true
 		r.validator = Blanks
 		r.rule = &ml.ConditionalRule{
-			Type: primitives.ConditionTypeContainsBlanks,
+			Type:    primitives.ConditionTypeContainsBlanks,
 			Formula: []ml.Formula{`LEN(TRIM(:cell:))=0`},
 		}
 	}

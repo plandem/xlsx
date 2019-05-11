@@ -17,7 +17,7 @@ func (x noErrorsRule) initIfRequired(r *Info) {
 		r.initialized = true
 		r.validator = NoErrors
 		r.rule = &ml.ConditionalRule{
-			Type: primitives.ConditionTypeNotContainsErrors,
+			Type:    primitives.ConditionTypeNotContainsErrors,
 			Formula: []ml.Formula{`NOT(ISERROR(:cell:))`},
 		}
 	}

@@ -20,8 +20,7 @@ func (x textRule) initIfRequired(r *Info) {
 	if !r.initialized {
 		r.initialized = true
 		r.validator = Text
-		r.rule = &ml.ConditionalRule{
-		}
+		r.rule = &ml.ConditionalRule{}
 	}
 }
 
@@ -45,13 +44,13 @@ func (x textRule) setValue(r *Info, value string, formula string, t primitives.C
 
 func (x textRule) Contains(s string, settings ...interface{}) Option {
 	return func(r *Info) {
-		x.setValue(r, s, `NOT(ISERROR(SEARCH("%s",:cell:)))`, primitives.ConditionTypeContainsText, primitives.ConditionOperatorContainsText,  settings)
+		x.setValue(r, s, `NOT(ISERROR(SEARCH("%s",:cell:)))`, primitives.ConditionTypeContainsText, primitives.ConditionOperatorContainsText, settings)
 	}
 }
 
 func (x textRule) NotContains(s string, settings ...interface{}) Option {
 	return func(r *Info) {
-		x.setValue(r, s,  `ISERROR(SEARCH("%s",:cell:))`, primitives.ConditionTypeNotContainsText, primitives.ConditionOperatorNotContains, settings)
+		x.setValue(r, s, `ISERROR(SEARCH("%s",:cell:))`, primitives.ConditionTypeNotContainsText, primitives.ConditionOperatorNotContains, settings)
 	}
 }
 

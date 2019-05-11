@@ -152,7 +152,7 @@ func (c *Cell) SetString(value string) {
 	c.ml.Value = strconv.Itoa(sid)
 }
 
-//SetString sets shared rich text
+//SetText sets shared rich text
 func (c *Cell) SetText(parts ...interface{}) error {
 	//we can update sharedStrings only when sheet is in write mode, to prevent pollution of sharedStrings with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
@@ -359,12 +359,12 @@ func (c *Cell) Hyperlink() *hyperlink.Info {
 
 //SetHyperlink sets hyperlink for cell, where link can be string or Info
 func (c *Cell) SetHyperlink(link interface{}) error {
-	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link); err != nil {
+	styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link)
+	if err != nil {
 		return err
-	} else {
-		c.SetStyles(styleID)
 	}
 
+	c.SetStyles(styleID)
 	return nil
 }
 

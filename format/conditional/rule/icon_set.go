@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
@@ -114,7 +113,7 @@ func (x iconSetRule) Validate(r *Info) error {
 			ValueTypeFormula,
 			ValueTypePercentile,
 		) {
-			return errors.New(fmt.Sprintf("iconSet: Not allowed type '%s' for value at index %d", v.Type, i))
+			return fmt.Errorf("iconSet: Not allowed type '%s' for value at index %d", v.Type, i)
 		}
 	}
 
