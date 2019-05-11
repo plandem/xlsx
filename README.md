@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/hyperlink"
@@ -105,14 +106,21 @@ func main() {
 	//Conditional formatting
 	sheet.AddConditional(conditional.New(
 		conditional.AddRule(
-			conditional.Rule.Type(conditional.TypeCellIs),
-			conditional.Rule.Operator(conditional.OperatorLessThanOrEqual),
-			conditional.Rule.Priority(2),
-			conditional.Rule.Formula("500"),
-			conditional.Rule.Style(styles.New(
+			rule.Value.Between(35.5, 78, styles.New(
 				styles.Font.Bold,
-				styles.Font.Color("#FF0000"),
+				styles.Font.Color("#ff0000"),
 			)),
+		),
+		conditional.AddRule(
+			rule.TimePeriod.Last7Days(styles.New(
+        		styles.Font.Bold,
+        		styles.Font.Color("#ff0000"),
+        	)),
+        ),
+		conditional.AddRule(
+			rule.IconSet.Type(rule.IconSetType3Arrows),
+			rule.IconSet.Value(0, "90", ">="),
+			rule.IconSet.Value(1, "50", ">"),
 		),
 	), "A1:A10", "B2", "C1:C10")
     	

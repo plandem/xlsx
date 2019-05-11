@@ -11,35 +11,35 @@ import (
 	"time"
 )
 
-type cellRule struct {
+type valueRule struct {
 	baseRule
 }
 
-var Cell cellRule
+var Value valueRule
 
-func (x cellRule) initIfRequired(r *Info) {
+func (x valueRule) initIfRequired(r *Info) {
 	if !r.initialized {
 		r.initialized = true
-		r.validator = Cell
+		r.validator = Value
 		r.rule = &ml.ConditionalRule {
 			Type: primitives.ConditionTypeCellIs,
 		}
 	}
 }
 
-func (x cellRule) fromInt(value int) string {
+func (x valueRule) fromInt(value int) string {
 	return strconv.FormatInt(int64(value), 10)
 }
 
-func (x cellRule) fromUInt(value uint) string {
+func (x valueRule) fromUInt(value uint) string {
 	return strconv.FormatUint(uint64(value), 10)
 }
 
-func (x cellRule) fromFloat(value float64) string {
+func (x valueRule) fromFloat(value float64) string {
 	return strconv.FormatFloat(value, 'f', -1, 64)
 }
 
-func (x cellRule) fromBool(value bool) string {
+func (x valueRule) fromBool(value bool) string {
 	if value {
 		return "1"
 	}
@@ -48,7 +48,7 @@ func (x cellRule) fromBool(value bool) string {
 }
 
 
-func (x cellRule) setValue(r *Info, values []interface{}, operator primitives.ConditionOperatorType, s *styles.Info) {
+func (x valueRule) setValue(r *Info, values []interface{}, operator primitives.ConditionOperatorType, s *styles.Info) {
 	x.initIfRequired(r)
 	r.rule.Operator = operator
 
@@ -106,58 +106,58 @@ func (x cellRule) setValue(r *Info, values []interface{}, operator primitives.Co
 
 }
 
-func (x cellRule) Between(from, to interface{}, s *styles.Info) Option {
+func (x valueRule) Between(from, to interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.initIfRequired(r)
 		x.setValue(r, []interface{}{from, to}, primitives.ConditionOperatorBetween, s)
 	}
 }
 
-func (x cellRule) NotBetween(from, to interface{}, s *styles.Info) Option {
+func (x valueRule) NotBetween(from, to interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{from, to}, primitives.ConditionOperatorNotBetween, s)
 	}
 }
 
-func (x cellRule) Equal(value interface{}, s *styles.Info) Option {
+func (x valueRule) Equal(value interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{value}, primitives.ConditionOperatorEqual, s)
 	}
 }
 
-func (x cellRule) NotEqual(value interface{}, s *styles.Info) Option {
+func (x valueRule) NotEqual(value interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{value}, primitives.ConditionOperatorNotEqual, s)
 	}
 }
 
-func (x cellRule) Greater(value interface{}, s *styles.Info) Option {
+func (x valueRule) Greater(value interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{value}, primitives.ConditionOperatorGreaterThan, s)
 	}
 }
 
-func (x cellRule) Less(value interface{}, s *styles.Info) Option {
+func (x valueRule) Less(value interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{value}, primitives.ConditionOperatorLessThan, s)
 	}
 }
 
-func (x cellRule) GreaterOrEqual(value interface{}, s *styles.Info) Option {
+func (x valueRule) GreaterOrEqual(value interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{value}, primitives.ConditionOperatorGreaterThanOrEqual, s)
 	}
 }
 
-func (x cellRule) LessOrEqual(value interface{}, s *styles.Info) Option {
+func (x valueRule) LessOrEqual(value interface{}, s *styles.Info) Option {
 	return func(r *Info) {
 		x.setValue(r, []interface{}{value}, primitives.ConditionOperatorLessThanOrEqual, s)
 	}
 }
 
-func (x cellRule) Validate(r *Info) error {
+func (x valueRule) Validate(r *Info) error {
 	if len(r.rule.Formula) == 0 || len(r.rule.Formula[0]) == 0 {
-		return errors.New("cell: no criteria or value for rule")
+		return errors.New("value: no criteria or value for rule")
 	}
 
 	return nil
