@@ -126,6 +126,8 @@ func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 
 //afterOpen loads worksheet data and initializes it if required
 func (s *sheetReadStream) afterOpen() {
+	//adds a styles for types
+	s.workbook.doc.styleSheet.addTypedStylesIfRequired()
 
 	multiPhase := (s.sheetMode & SheetModeMultiPhase) != 0
 	conditionalsInited := false
