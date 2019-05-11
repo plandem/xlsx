@@ -113,10 +113,10 @@ func main() {
 		),
 		conditional.AddRule(
 			rule.TimePeriod.Last7Days(styles.New(
-        		styles.Font.Bold,
-        		styles.Font.Color("#ff0000"),
-        	)),
-        ),
+				styles.Font.Bold,
+				styles.Font.Color("#ff0000"),
+			)),
+		),
 		conditional.AddRule(
 			rule.IconSet.Type(rule.IconSetType3Arrows),
 			rule.IconSet.Value(0, "90", ">="),
