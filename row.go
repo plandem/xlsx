@@ -1,9 +1,9 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types/options"
 )
 
 //Row is a higher level object that wraps ml.Row with functionality. Inherits functionality of Range
@@ -17,8 +17,8 @@ func (r *Row) Cell(colIndex int) *Cell {
 	return r.sheet.Cell(colIndex, r.bounds.FromRow)
 }
 
-//Set sets options for row
-func (r *Row) Set(o *options.RowOptions) {
+//SetOptions sets options for row
+func (r *Row) SetOptions(o *options.RowOptions) {
 	if o.Height > 0 {
 		r.ml.Height = o.Height
 		r.ml.CustomHeight = true
@@ -30,13 +30,13 @@ func (r *Row) Set(o *options.RowOptions) {
 	r.ml.Phonetic = o.Phonetic
 }
 
-//Formatting returns DirectStyleID of default format for row
-func (r *Row) Formatting() format.DirectStyleID {
+//Styles returns DirectStyleID of default format for row
+func (r *Row) Styles() styles.DirectStyleID {
 	return r.ml.Style
 }
 
-//SetFormatting sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.
-func (r *Row) SetFormatting(styleID format.DirectStyleID) {
+//SetStyles sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.
+func (r *Row) SetStyles(styleID styles.DirectStyleID) {
 	r.ml.CustomFormat = true
 	r.ml.Style = styleID
 }

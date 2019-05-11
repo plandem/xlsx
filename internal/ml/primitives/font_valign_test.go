@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -15,9 +15,9 @@ func TestFontVAlign(t *testing.T) {
 	}
 
 	list := map[string]primitives.FontVAlignType{
-		"baseline":    format.FontVAlignBaseline,
-		"superscript": format.FontVAlignSuperscript,
-		"subscript":   format.FontVAlignSubscript,
+		"baseline":    styles.FontVAlignBaseline,
+		"superscript": styles.FontVAlignSuperscript,
+		"subscript":   styles.FontVAlignSubscript,
 		"align-a":     primitives.FontVAlignType("align-a"),
 	}
 

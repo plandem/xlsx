@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,8 +16,8 @@ func TestFillGradient(t *testing.T) {
 
 	list := map[string]primitives.GradientType{
 		"":       primitives.GradientType(0),
-		"linear": format.GradientTypeLinear,
-		"path":   format.GradientTypePath,
+		"linear": styles.GradientTypeLinear,
+		"path":   styles.GradientTypePath,
 	}
 
 	for s, v := range list {

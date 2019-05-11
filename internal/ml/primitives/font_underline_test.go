@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -15,11 +15,11 @@ func TestFontUnderline(t *testing.T) {
 	}
 
 	list := map[string]primitives.UnderlineType{
-		"single":           format.UnderlineTypeSingle,
-		"double":           format.UnderlineTypeDouble,
-		"singleAccounting": format.UnderlineTypeSingleAccounting,
-		"doubleAccounting": format.UnderlineTypeDoubleAccounting,
-		"none":             format.UnderlineTypeNone,
+		"single":           styles.UnderlineTypeSingle,
+		"double":           styles.UnderlineTypeDouble,
+		"singleAccounting": styles.UnderlineTypeSingleAccounting,
+		"doubleAccounting": styles.UnderlineTypeDoubleAccounting,
+		"none":             styles.UnderlineTypeNone,
 		"underline-a":      primitives.UnderlineType("underline-a"),
 	}
 

@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/plandem/xlsx/internal/ml/primitives"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types/options"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -16,9 +16,9 @@ func TestVisibility(t *testing.T) {
 
 	list := map[string]primitives.VisibilityType{
 		"":           primitives.VisibilityType(0),
-		"visible":    options.VisibilityTypeVisible,
-		"hidden":     options.VisibilityTypeHidden,
-		"veryHidden": options.VisibilityTypeVeryHidden,
+		"visible":    options.Visible,
+		"hidden":     options.Hidden,
+		"veryHidden": options.VeryHidden,
 	}
 
 	for s, v := range list {

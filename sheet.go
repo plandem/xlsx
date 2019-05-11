@@ -1,8 +1,9 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 )
 
 const errorNotSupported = "not supported"
@@ -57,12 +58,16 @@ type Sheet interface {
 	SplitRows(fromIndex, toIndex int)
 	//SplitCols splits cols between fromIndex and toIndex
 	SplitCols(fromIndex, toIndex int)
+	//AddConditional adds conditional formatting to sheet
+	AddConditional(conditional *conditional.Info, refs ...types.Ref) error
+	//DeleteConditional deletes conditional formatting for refs
+	DeleteConditional(refs ...types.Ref)
 	//Name returns name of sheet
 	Name() string
 	//SetName sets a name for sheet
 	SetName(name string)
 	//Set sets options for sheet
-	Set(o *options.SheetOptions)
+	SetOptions(o *options.SheetOptions)
 	//SetActive sets the sheet as active
 	SetActive()
 	//Close frees allocated by sheet resources

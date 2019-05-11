@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,11 +16,11 @@ func TestAlignV(t *testing.T) {
 
 	list := map[string]primitives.VAlignType{
 		"":            primitives.VAlignType(0),
-		"top":         format.VAlignTop,
-		"center":      format.VAlignCenter,
-		"bottom":      format.VAlignBottom,
-		"justify":     format.VAlignJustify,
-		"distributed": format.VAlignDistributed,
+		"top":         styles.VAlignTop,
+		"center":      styles.VAlignCenter,
+		"bottom":      styles.VAlignBottom,
+		"justify":     styles.VAlignJustify,
+		"distributed": styles.VAlignDistributed,
 	}
 
 	for s, v := range list {

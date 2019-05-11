@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,20 +16,20 @@ func TestBorderStyle(t *testing.T) {
 
 	list := map[string]primitives.BorderStyleType{
 		"":                 primitives.BorderStyleType(0),
-		"none":             format.BorderStyleNone,
-		"thin":             format.BorderStyleThin,
-		"medium":           format.BorderStyleMedium,
-		"dashed":           format.BorderStyleDashed,
-		"dotted":           format.BorderStyleDotted,
-		"thick":            format.BorderStyleThick,
-		"double":           format.BorderStyleDouble,
-		"hair":             format.BorderStyleHair,
-		"mediumDashed":     format.BorderStyleMediumDashed,
-		"dashDot":          format.BorderStyleDashDot,
-		"mediumDashDot":    format.BorderStyleMediumDashDot,
-		"dashDotDot":       format.BorderStyleDashDotDot,
-		"mediumDashDotDot": format.BorderStyleMediumDashDotDot,
-		"slantDashDot":     format.BorderStyleSlantDashDot,
+		"none":             styles.BorderStyleNone,
+		"thin":             styles.BorderStyleThin,
+		"medium":           styles.BorderStyleMedium,
+		"dashed":           styles.BorderStyleDashed,
+		"dotted":           styles.BorderStyleDotted,
+		"thick":            styles.BorderStyleThick,
+		"double":           styles.BorderStyleDouble,
+		"hair":             styles.BorderStyleHair,
+		"mediumDashed":     styles.BorderStyleMediumDashed,
+		"dashDot":          styles.BorderStyleDashDot,
+		"mediumDashDot":    styles.BorderStyleMediumDashDot,
+		"dashDotDot":       styles.BorderStyleDashDotDot,
+		"mediumDashDotDot": styles.BorderStyleMediumDashDotDot,
+		"slantDashDot":     styles.BorderStyleSlantDashDot,
 	}
 
 	for s, v := range list {

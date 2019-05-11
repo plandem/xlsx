@@ -81,7 +81,7 @@ func TestSaving(t *testing.T) {
 	require.NotNil(t, xl)
 	require.Nil(t, err)
 	require.IsType(t, &xlsx.Spreadsheet{}, xl)
-	assert.Equal(t, []string{"Sheet1"}, xl.GetSheetNames())
+	assert.Equal(t, []string{"Sheet1"}, xl.SheetNames())
 
 	//save with same name
 	xl.AddSheet("new sheet")
@@ -93,5 +93,5 @@ func TestSaving(t *testing.T) {
 	require.NotNil(t, xl)
 	require.Nil(t, err)
 	require.IsType(t, &xlsx.Spreadsheet{}, xl)
-	require.Equal(t, []string{"Sheet1", "new sheet"}, xl.GetSheetNames())
+	require.Equal(t, []string{"Sheet1", "new sheet"}, xl.SheetNames())
 }

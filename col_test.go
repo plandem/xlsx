@@ -1,8 +1,8 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/format/styles"
+	"github.com/plandem/xlsx/types/options"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -25,7 +25,7 @@ func TestCol(t *testing.T) {
 		options.Column.Collapsed(true),
 	)
 
-	c.Set(o)
+	c.SetOptions(o)
 
 	require.Equal(t, c.ml.OutlineLevel, o.OutlineLevel)
 	require.Equal(t, c.ml.Hidden, o.Hidden)
@@ -33,28 +33,28 @@ func TestCol(t *testing.T) {
 	require.Equal(t, c.ml.Collapsed, o.Collapsed)
 	require.Equal(t, c.ml.Width, float32(0.0))
 	require.Equal(t, c.ml.CustomWidth, false)
-	require.Equal(t, c.ml.Style, format.DirectStyleID(0))
+	require.Equal(t, c.ml.Style, styles.DirectStyleID(0))
 
 	o = options.NewColumnOptions(
 		options.Column.Width(100.0),
 	)
 
-	c.Set(o)
+	c.SetOptions(o)
 	require.Equal(t, c.ml.OutlineLevel, o.OutlineLevel)
 	require.Equal(t, c.ml.Hidden, o.Hidden)
 	require.Equal(t, c.ml.Phonetic, o.Phonetic)
 	require.Equal(t, c.ml.Collapsed, o.Collapsed)
 	require.Equal(t, c.ml.Width, float32(100.0))
 	require.Equal(t, c.ml.CustomWidth, true)
-	require.Equal(t, c.ml.Style, format.DirectStyleID(0))
+	require.Equal(t, c.ml.Style, styles.DirectStyleID(0))
 
-	style := format.New(
-		format.Font.Name("Calibri"),
-		format.Font.Size(12),
+	style := styles.New(
+		styles.Font.Name("Calibri"),
+		styles.Font.Size(12),
 	)
 
-	styleRef := xl.AddFormatting(style)
-	c.SetFormatting(styleRef)
+	styleRef := xl.AddStyles(style)
+	c.SetStyles(styleRef)
 
-	require.Equal(t, c.ml.Style, format.DirectStyleID(styleRef))
+	require.Equal(t, c.ml.Style, styles.DirectStyleID(styleRef))
 }

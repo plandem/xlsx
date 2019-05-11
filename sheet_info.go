@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	sharedML "github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 	"math"
+	"path/filepath"
 	"reflect"
 )
 
@@ -22,6 +24,7 @@ type sheetInfo struct {
 	columns       *columns
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
+	conditionals  *conditionals
 	comments      *comments
 	relationships *ooxml.Relationships
 	sheet         Sheet
@@ -105,6 +108,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.columns = newColumns(sheet)
 		sheet.mergedCells = newMergedCells(sheet)
 		sheet.hyperlinks = newHyperlinks(sheet)
+		sheet.conditionals = newConditionals(sheet)
 		sheet.comments = newComments(sheet)
 	}
 
@@ -127,13 +131,13 @@ func (s *sheetInfo) Name() string {
 
 //SetName sets a name for sheet
 func (s *sheetInfo) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), internal.ExcelSheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.SheetNames(), internal.ExcelSheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
-//Set sets options for sheet
-func (s *sheetInfo) Set(o *options.SheetOptions) {
-	if o.Visibility >= options.VisibilityTypeVisible && o.Visibility <= options.VisibilityTypeVeryHidden {
+//SetOptions sets options for sheet
+func (s *sheetInfo) SetOptions(o *options.SheetOptions) {
+	if o.Visibility >= options.Visible && o.Visibility <= options.VeryHidden {
 		s.workbook.ml.Sheets[s.index].State = o.Visibility
 		s.workbook.file.MarkAsUpdated()
 	}
@@ -142,17 +146,17 @@ func (s *sheetInfo) Set(o *options.SheetOptions) {
 //SetActive sets the sheet as active
 func (s *sheetInfo) SetActive() {
 	//set activate from workbook side
-	if s.workbook.ml.BookViews == nil || len(*s.workbook.ml.BookViews) == 0 {
-		s.workbook.ml.BookViews = &[]*ml.BookView{{
+	if len(s.workbook.ml.BookViews.Items) == 0 {
+		s.workbook.ml.BookViews.Items = append(s.workbook.ml.BookViews.Items, &ml.BookView{
 			ActiveTab: s.index,
-		}}
+		})
 	} else {
-		(*s.workbook.ml.BookViews)[0].ActiveTab = s.index
+		s.workbook.ml.BookViews.Items[0].ActiveTab = s.index
 	}
 
 	//set active from worksheet side
-	if s.ml.SheetViews != nil && len(s.ml.SheetViews.SheetView) > 0 {
-		s.ml.SheetViews.SheetView[0].TabSelected = true
+	if len(s.ml.SheetViews.Items) > 0 {
+		s.ml.SheetViews.Items[0].TabSelected = true
 	}
 
 	s.workbook.file.MarkAsUpdated()
@@ -206,6 +210,16 @@ func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
 	)).Split()
 }
 
+//AddConditional adds a new conditional formatting with additional refs if required
+func (s *sheetInfo) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
+	return s.conditionals.Add(conditional, refs)
+}
+
+//DeleteConditional deletes a conditional formatting from refs
+func (s *sheetInfo) DeleteConditional(refs ...types.Ref) {
+	s.conditionals.Remove(refs)
+}
+
 //Close frees allocated by sheet resources
 func (s *sheetInfo) Close() {
 
@@ -217,7 +231,8 @@ func (s *sheetInfo) afterOpen() {
 
 func (s *sheetInfo) attachRelationshipsIfRequired() {
 	if s.relationships == nil {
-		fileName := fmt.Sprintf("xl/worksheets/_rels/sheet%d.xml.rels", s.workbook.ml.Sheets[s.index].SheetID)
+		fileName := s.workbook.doc.relationships.GetTargetById(string(s.workbook.ml.Sheets[s.index].RID))
+		fileName = fmt.Sprintf("xl/worksheets/_rels/%s.rels", filepath.Base(fileName))
 
 		if file := s.workbook.doc.pkg.File(fileName); file != nil {
 			s.relationships = ooxml.NewRelationships(file, s.workbook.doc.pkg)

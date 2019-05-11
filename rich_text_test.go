@@ -1,16 +1,16 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestToRichFont(t *testing.T) {
-	style := format.New(
-		format.Font.Size(8),
-		format.Font.Color("#FF1122"),
+	style := styles.New(
+		styles.Font.Size(8),
+		styles.Font.Color("#FF1122"),
 	)
 
 	font := toRichFont(style)
@@ -23,8 +23,8 @@ func TestToRichFont(t *testing.T) {
 }
 
 func TestToRichText(t *testing.T) {
-	text, err := toRichText("1", "2", "3", format.New(
-		format.Font.Color("#FF3344"),
+	text, err := toRichText("1", "2", "3", styles.New(
+		styles.Font.Color("#FF3344"),
 	))
 	require.Nil(t, err)
 	require.Equal(t, &ml.StringItem{
@@ -41,11 +41,11 @@ func TestToRichText(t *testing.T) {
 		},
 	}, text)
 
-	text, err = toRichText(format.New(
-		format.Font.Color("#FF1122"),
-	), "1", format.New(
-		format.Font.Size(8),
-		format.Font.Color("#FF3344"),
+	text, err = toRichText(styles.New(
+		styles.Font.Color("#FF1122"),
+	), "1", styles.New(
+		styles.Font.Size(8),
+		styles.Font.Color("#FF3344"),
 	), "2")
 
 	require.Nil(t, err)
@@ -67,10 +67,10 @@ func TestToRichText(t *testing.T) {
 		},
 	}, text)
 
-	text, err = toRichText("1", "2", "3", format.New(
-		format.Font.Color("#FF3344"),
-	), format.New(
-		format.Font.Color("#FF3344"),
+	text, err = toRichText("1", "2", "3", styles.New(
+		styles.Font.Color("#FF3344"),
+	), styles.New(
+		styles.Font.Color("#FF3344"),
 	), "4")
 
 	require.NotNil(t, err)
@@ -78,17 +78,17 @@ func TestToRichText(t *testing.T) {
 }
 
 func TestFromRichText(t *testing.T) {
-	text, err := toRichText("1", "2", "3", format.New(
-		format.Font.Color("#FF3344"),
+	text, err := toRichText("1", "2", "3", styles.New(
+		styles.Font.Color("#FF3344"),
 	))
 	require.Nil(t, err)
 	require.Equal(t, "123", fromRichText(text))
 
-	text, err = toRichText(format.New(
-		format.Font.Color("#FF1122"),
-	), "1", format.New(
-		format.Font.Size(8),
-		format.Font.Color("#FF3344"),
+	text, err = toRichText(styles.New(
+		styles.Font.Color("#FF1122"),
+	), "1", styles.New(
+		styles.Font.Size(8),
+		styles.Font.Color("#FF3344"),
 	), "2")
 
 	require.Nil(t, err)

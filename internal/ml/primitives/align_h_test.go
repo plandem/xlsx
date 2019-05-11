@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -16,14 +16,14 @@ func TestAlignH(t *testing.T) {
 
 	list := map[string]primitives.HAlignType{
 		"":                 primitives.HAlignType(0),
-		"general":          format.HAlignGeneral,
-		"left":             format.HAlignLeft,
-		"center":           format.HAlignCenter,
-		"right":            format.HAlignRight,
-		"fill":             format.HAlignFill,
-		"justify":          format.HAlignJustify,
-		"centerContinuous": format.HAlignCenterContinuous,
-		"distributed":      format.HAlignDistributed,
+		"general":          styles.HAlignGeneral,
+		"left":             styles.HAlignLeft,
+		"center":           styles.HAlignCenter,
+		"right":            styles.HAlignRight,
+		"fill":             styles.HAlignFill,
+		"justify":          styles.HAlignJustify,
+		"centerContinuous": styles.HAlignCenterContinuous,
+		"distributed":      styles.HAlignDistributed,
 	}
 
 	for s, v := range list {

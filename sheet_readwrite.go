@@ -344,9 +344,7 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
 
-	s.hyperlinks.pack()
-	s.mergedCells.pack()
-	s.columns.pack()
+	s.conditionals.pack()
 
 	return &s.ml
 }

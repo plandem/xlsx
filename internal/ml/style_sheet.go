@@ -17,14 +17,14 @@ type NamedStyleID int
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
 	XMLName       ml.Name            `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
-	NumberFormats *[]*NumberFormat   `xml:"numFmts>numFmt,omitempty"`
-	Fonts         *[]*Font           `xml:"fonts>font,omitempty"`
-	Fills         *[]*Fill           `xml:"fills>fill,omitempty"`
-	Borders       *[]*Border         `xml:"borders>border,omitempty"`
-	CellStyleXfs  *[]*NamedStyle     `xml:"cellStyleXfs>xf,omitempty"`
-	CellXfs       *[]*DirectStyle    `xml:"cellXfs>xf,omitempty"`
-	CellStyles    *[]*NamedStyleInfo `xml:"cellStyles>cellStyle,omitempty"`
-	Dxfs          *[]*DiffStyle      `xml:"dxfs>dxf,omitempty"`
+	NumberFormats NumberFormatList   `xml:"numFmts"`
+	Fonts         FontList           `xml:"fonts"`
+	Fills         FillList           `xml:"fills"`
+	Borders       BorderList         `xml:"borders"`
+	CellStyleXfs  NamedStyleList     `xml:"cellStyleXfs"`
+	CellXfs       DirectStyleList    `xml:"cellXfs"`
+	CellStyles    NamedStyleInfoList `xml:"cellStyles"`
+	Dxfs          DiffStyleList      `xml:"dxfs"`
 	TableStyles   *ml.Reserved       `xml:"tableStyles,omitempty"`
 	Colors        *ml.Reserved       `xml:"colors,omitempty"`
 	ExtLst        *ml.Reserved       `xml:"extLst,omitempty"`
@@ -56,11 +56,11 @@ type Font struct {
 
 //Color is a direct mapping of XSD CT_Color
 type Color struct {
-	Auto    bool             `xml:"auto,attr,omitempty"`
-	RGB     string           `xml:"rgb,attr,omitempty"`
-	Tint    float64          `xml:"tint,attr,omitempty"` //default 0.0
-	Indexed ml.OptionalIndex `xml:"indexed,attr,omitempty"`
-	Theme   ml.OptionalIndex `xml:"theme,attr,omitempty"`
+	Auto    bool    `xml:"auto,attr,omitempty"`
+	RGB     string  `xml:"rgb,attr,omitempty"`
+	Tint    float64 `xml:"tint,attr,omitempty"` //default 0.0
+	Indexed *int    `xml:"indexed,attr,omitempty"`
+	Theme   *int    `xml:"theme,attr,omitempty"`
 }
 
 //Fill is a direct mapping of XSD CT_Fill
@@ -115,13 +115,13 @@ type BorderSegment struct {
 
 //NamedStyleInfo is a direct mapping of XSD CT_CellStyle
 type NamedStyleInfo struct {
-	Name          string           `xml:"name,attr,omitempty"`
-	XfId          NamedStyleID     `xml:"xfId,attr"`
-	BuiltinId     ml.OptionalIndex `xml:"builtinId,attr,omitempty"`
-	ILevel        uint             `xml:"iLevel,attr,omitempty"`
-	Hidden        bool             `xml:"hidden,attr,omitempty"`
-	CustomBuiltin bool             `xml:"customBuiltin,attr,omitempty"`
-	ExtLst        *ml.Reserved     `xml:"extLst,omitempty"`
+	Name          string       `xml:"name,attr,omitempty"`
+	XfId          NamedStyleID `xml:"xfId,attr"`
+	BuiltinId     *int         `xml:"builtinId,attr,omitempty"`
+	ILevel        uint         `xml:"iLevel,attr,omitempty"`
+	Hidden        bool         `xml:"hidden,attr,omitempty"`
+	CustomBuiltin bool         `xml:"customBuiltin,attr,omitempty"`
+	ExtLst        *ml.Reserved `xml:"extLst,omitempty"`
 }
 
 //Style is just underlayed struct to hold Xf master records and is a direct mapping of XSD CT_Xf
@@ -146,7 +146,7 @@ type Style struct {
 //NamedStyle is helper alias type for cellStyleXfs->xf of XSD CT_Xf to make it easier to read/understand markup files
 type NamedStyle Style
 
-//MasterStyle is helper alias type for cellXfs->xf of XSD CT_Xf to make it easier to read/understand markup files
+//DirectStyle is helper alias type for cellXfs->xf of XSD CT_Xf to make it easier to read/understand markup files
 type DirectStyle struct {
 	Style
 	XfId NamedStyleID `xml:"xfId,attr"`

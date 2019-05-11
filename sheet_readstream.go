@@ -3,9 +3,10 @@ package xlsx
 import (
 	"encoding/xml"
 	"github.com/plandem/ooxml"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 )
 
 type sheetReadStream struct {
@@ -125,8 +126,11 @@ func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 
 //afterOpen loads worksheet data and initializes it if required
 func (s *sheetReadStream) afterOpen() {
+	//adds a styles for types
+	s.workbook.doc.styleSheet.addTypedStylesIfRequired()
 
-	muliPhase := (s.sheetMode & SheetModeMultiPhase) != 0
+	multiPhase := (s.sheetMode & SheetModeMultiPhase) != 0
+	conditionalsInited := false
 
 	if s.currentRow == nil {
 		s.stream = s.file.ReadStream()
@@ -140,16 +144,21 @@ func (s *sheetReadStream) afterOpen() {
 					_ = decoder.DecodeElement(s.ml.Dimension, start)
 				case "hyperlinks":
 					s.hyperlinks = newHyperlinks(s.sheetInfo)
-					s.hyperlinks.initIfRequired()
+				case "conditionalFormatting":
+					if !conditionalsInited {
+						//N.B.: conditionalFormatting is not nested, so we have to use flag to init once only
+						s.conditionals = newConditionals(s.sheetInfo)
+						s.conditionals.initIfRequired()
+						conditionalsInited = true
+					}
 				case "mergeCells":
 					s.mergedCells = newMergedCells(s.sheetInfo)
-					s.mergedCells.initIfRequired()
 				case "mergeCell":
 					cell := &ml.MergeCell{}
 					_ = decoder.DecodeElement(cell, start)
-					*s.ml.MergeCells = append(*s.ml.MergeCells, cell)
+					s.ml.MergeCells.Items = append(s.ml.MergeCells.Items, cell)
 				case "row":
-					if muliPhase {
+					if multiPhase {
 						//skip row data, because 'mergeCell' is going after row data
 						return true
 					}
@@ -164,7 +173,7 @@ func (s *sheetReadStream) afterOpen() {
 		}
 
 		// multi phased?
-		if muliPhase {
+		if multiPhase {
 			//skip is func to skip any info till first row
 			skip := func() {
 				//close previous opened stream
@@ -193,7 +202,7 @@ func (s *sheetReadStream) afterOpen() {
 			for rows := s.Rows(); rows.HasNext(); {
 				rIdx, row := rows.Next()
 
-				for _, mc := range *s.ml.MergeCells {
+				for _, mc := range s.ml.MergeCells.Items {
 					if rIdx >= mc.Bounds.FromRow && rIdx <= mc.Bounds.ToRow {
 						s.mergedRows[rIdx] = row
 						break
@@ -241,10 +250,34 @@ func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) Set(o *options.SheetOptions) {
+func (s *sheetReadStream) SetOptions(o *options.SheetOptions) {
 	panic(errorNotSupported)
 }
 
 func (s *sheetReadStream) SetName(name string) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) MergeRows(fromIndex, toIndex int) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) MergeCols(fromIndex, toIndex int) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) SplitRows(fromIndex, toIndex int) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) SplitCols(fromIndex, toIndex int) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) DeleteConditional(refs ...types.Ref) {
 	panic(errorNotSupported)
 }
