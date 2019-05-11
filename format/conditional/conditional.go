@@ -61,36 +61,6 @@ func (f *Info) Validate() error {
 		if err := r.Validate(); err != nil {
 			return err
 		}
-
-		//if r.rule.Type == primitives.ConditionTypeCellIs && r.rule.Operator == 0 {
-		//	return errors.New(fmt.Sprintf("conditional rule#%d: no operator", i))
-		//}
-		//
-		//if r.rule.Type == primitives.ConditionTypeTop10 && r.rule.Rank == 0 {
-		//	return errors.New(fmt.Sprintf("conditional rule#%d: wrong rank", i))
-		//}
-		//
-		//if r.rule.Type == primitives.ConditionTypeContainsText && len(r.rule.Text) == 0 {
-		//	return errors.New(fmt.Sprintf("conditional rule#%d: no text", i))
-		//}
-		//
-		//if r.rule.Type == primitives.ConditionTypeTimePeriod && r.rule.TimePeriod == 0 {
-		//	return errors.New(fmt.Sprintf("conditional rule#%d: no time period", i))
-		//}
-		//
-		//if r.rule.ColorScale != nil {
-		//	if len(r.rule.ColorScale.Values) != len(r.rule.ColorScale.Colors) {
-		//		return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have equal numbers of colors and values", i))
-		//	}
-		//
-		//	if len(r.rule.ColorScale.Values) < 2 {
-		//		return errors.New(fmt.Sprintf("conditional rule#%d: color scale should have at least 2 values", i))
-		//	}
-		//}
-		//
-		//if r.rule.IconSet != nil && (len(r.rule.IconSet.Values) < 2) {
-		//	return errors.New(fmt.Sprintf("conditional rule#%d: icon set should have at least 2 values", i))
-		//}
 	}
 
 	return nil

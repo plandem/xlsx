@@ -7,7 +7,10 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
-type iconSetRule byte
+type iconSetRule struct {
+	baseRule
+}
+
 var IconSet iconSetRule
 
 func (x iconSetRule) initIfRequired(r *Info) {
@@ -70,7 +73,7 @@ func (x iconSetRule) ReverseIcons(r *Info) {
 
 func (x iconSetRule) IconsOnly(r *Info) {
 	x.initIfRequired(r)
-	r.rule.IconSet.ShowValue = ml.OptionalBool(false)
+	r.rule.IconSet.ShowValue = primitives.OptionalBool(false)
 }
 
 func (x iconSetRule) setValue(r *Info, idx int, value string, settings []interface{}) {
@@ -87,7 +90,7 @@ func (x iconSetRule) setValue(r *Info, idx int, value string, settings []interfa
 		switch pv := p.(type) {
 		case string:
 			if pv == ">" {
-				r.rule.IconSet.Values[idx].GreaterThanEqual = ml.OptionalBool(false)
+				r.rule.IconSet.Values[idx].GreaterThanEqual = primitives.OptionalBool(false)
 			}
 		case primitives.ConditionValueType:
 			r.rule.IconSet.Values[idx].Type = pv

@@ -8,12 +8,6 @@ import (
 //Formula is a direct mapping of XSD ST_Formula
 type Formula string
 
-//OptionalBool is alias for OptionalBool from core package
-var OptionalBool = ml.OptionalBool
-
-//OptionalIndex is alias for OptionalIndex from core package
-var OptionalIndex = ml.OptionalIndex
-
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
 	XMLName               ml.Name                   `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
@@ -103,8 +97,8 @@ type Cell struct {
 	Ref       primitives.CellRef  `xml:"r,attr"`
 	Style     DirectStyleID       `xml:"s,attr,omitempty"`
 	Type      primitives.CellType `xml:"t,attr,omitempty"`
-	Cm        *int                `xml:"cm,attr,omitempty"`
-	Vm        *int                `xml:"vm,attr,omitempty"`
+	Cm        ml.OptionalIndex    `xml:"cm,attr,omitempty"`
+	Vm        ml.OptionalIndex    `xml:"vm,attr,omitempty"`
 	Ph        bool                `xml:"ph,attr,omitempty"`
 }
 
@@ -121,7 +115,7 @@ type CellFormula struct {
 	R1      primitives.CellRef         `xml:"r1,attr,omitempty"`
 	R2      primitives.CellRef         `xml:"r2,attr,omitempty"`
 	Ca      bool                       `xml:"ca,attr,omitempty"`
-	Si      *int                       `xml:"si,attr,omitempty"`
+	Si      ml.OptionalIndex           `xml:"si,attr,omitempty"`
 	Bx      bool                       `xml:"bx,attr,omitempty"`
 }
 
@@ -175,7 +169,7 @@ type ConditionalFormatting struct {
 
 //ConditionalRule is a direct mapping of XSD CT_CfRule
 type ConditionalRule struct {
-	Formula      Formula                          `xml:"formula,omitempty"`
+	Formula      []Formula                        `xml:"formula,omitempty"`
 	ColorScale   *ColorScale                      `xml:"colorScale,omitempty"`
 	DataBar      *DataBar                         `xml:"dataBar,omitempty"`
 	IconSet      *IconSet                         `xml:"iconSet,omitempty"`
@@ -184,7 +178,7 @@ type ConditionalRule struct {
 	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
 	Priority     int                              `xml:"priority,attr"`
 	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
-	AboveAverage bool                             `xml:"aboveAverage,attr,omitempty"`
+	AboveAverage *bool                            `xml:"aboveAverage,attr,omitempty"`
 	Percent      bool                             `xml:"percent,attr,omitempty"`
 	Bottom       bool                             `xml:"bottom,attr,omitempty"`
 	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`

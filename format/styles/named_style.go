@@ -1,7 +1,7 @@
 package styles
 
 import (
-	"github.com/plandem/ooxml/ml"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 type namedStyleType int
@@ -180,8 +180,7 @@ func NamedStyle(name interface{}) func(*Info) {
 				t = _NamedStyleColLevel
 			}
 
-			builtInID := int(t)
-			s.namedInfo.BuiltinId = ml.OptionalIndex(builtInID)
+			s.namedInfo.BuiltinId = primitives.OptionalIndex(int(t))
 			s.namedInfo.Name = defaultName
 		} else {
 			panic("unsupported format of NamedStyle (can'be name for custom style or built-in type only)")

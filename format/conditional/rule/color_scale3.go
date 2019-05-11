@@ -8,7 +8,9 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
-type colorScale3Rule byte
+type colorScale3Rule struct {
+	baseRule
+}
 
 var ColorScale3 colorScale3Rule
 

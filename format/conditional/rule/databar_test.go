@@ -60,7 +60,7 @@ func TestDataBar(t *testing.T) {
 						Value: "50",
 					},
 				},
-				ShowValue: ml.OptionalBool(false),
+				ShowValue: primitives.OptionalBool(false),
 				MinLength: 10,
 				MaxLength: 90,
 				Color: &ml.Color{
