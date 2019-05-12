@@ -24,7 +24,7 @@ func (f *filters) initIfRequired() {
 }
 
 //AddAuto adds auto filter for range
-func (f *filters) AddAuto(ref types.Ref, settings ...interface{}) {
+func (f *filters) AddAuto(ref types.Ref, settings []interface{}) {
 	b := ref.ToBounds()
 
 	//adjust auto filter range to include custom filters if required
