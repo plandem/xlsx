@@ -22,7 +22,7 @@ type Worksheet struct {
 	SheetProtection       *ml.Reserved              `xml:"sheetProtection,omitempty"`
 	ProtectedRanges       *ml.Reserved              `xml:"protectedRanges,omitempty"`
 	Scenarios             *ml.Reserved              `xml:"scenarios,omitempty"`
-	AutoFilter            *ml.Reserved              `xml:"autoFilter,omitempty"`
+	AutoFilter            AutoFilter                `xml:"autoFilter"`
 	SortState             *ml.Reserved              `xml:"sortState,omitempty"`
 	DataConsolidate       *ml.Reserved              `xml:"dataConsolidate,omitempty"`
 	CustomSheetViews      *ml.Reserved              `xml:"customSheetViews,omitempty"`
@@ -219,4 +219,11 @@ type IconSet struct {
 	ShowValue *bool                  `xml:"showValue,attr,omitempty"`
 	Percent   *bool                  `xml:"percent,attr,omitempty"`
 	Reverse   bool                   `xml:"reverse,attr,omitempty"`
+}
+
+type AutoFilter struct {
+	FilterColumn *[]*ml.Reserved   `xml:"filterColumn,omitempty"`
+	SortState    *ml.Reserved      `xml:"sortState,omitempty"`
+	ExtLst       *ml.Reserved      `xml:"extLst,omitempty"`
+	Bounds       primitives.Bounds `xml:"ref,attr"`
 }

@@ -196,3 +196,12 @@ func (r *ExternalReferenceList) MarshalXML(e *xml.Encoder, start xml.StartElemen
 
 	return nil
 }
+
+//MarshalXML marshal AutoFilter
+func (r *AutoFilter) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if !r.Bounds.IsEmpty() {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}

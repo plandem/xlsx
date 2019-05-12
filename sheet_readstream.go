@@ -281,3 +281,11 @@ func (s *sheetReadStream) AddConditional(conditional *conditional.Info, refs ...
 func (s *sheetReadStream) DeleteConditional(refs ...types.Ref) {
 	panic(errorNotSupported)
 }
+
+func (s *sheetReadStream) AddFilter(colIndex int, settings ...interface{}) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) DeleteFilter(colIndex int) {
+	panic(errorNotSupported)
+}
