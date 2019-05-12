@@ -282,6 +282,10 @@ func (s *sheetReadStream) DeleteConditional(refs ...types.Ref) {
 	panic(errorNotSupported)
 }
 
+func (s *sheetReadStream) AutoFilter(ref types.Ref, settings ...interface{}) {
+	panic(errorNotSupported)
+}
+
 func (s *sheetReadStream) AddFilter(colIndex int, settings ...interface{}) error {
 	panic(errorNotSupported)
 }

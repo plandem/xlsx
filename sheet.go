@@ -62,7 +62,9 @@ type Sheet interface {
 	AddConditional(conditional *conditional.Info, refs ...types.Ref) error
 	//DeleteConditional deletes conditional formatting for refs
 	DeleteConditional(refs ...types.Ref)
-	//AddFilter adds a filter to column with 0-based colIndex
+	//AutoFilter adds auto filter in provided Ref range with additional settings if required
+	AutoFilter(ref types.Ref, settings ...interface{})
+	//AddFilter adds a custom filter to column with 0-based colIndex
 	AddFilter(colIndex int, settings ...interface{}) error
 	//DeleteFilter deletes a filter from column with 0-based colIndex
 	DeleteFilter(colIndex int)

@@ -94,11 +94,9 @@ func (c *conditionals) Resolve(cIdx, rIdx int) *conditional.Info {
 	panic(errorNotSupported)
 }
 
-func (c *conditionals) pack() *[]*ml.ConditionalFormatting {
+func (c *conditionals) pack() {
 	//conditionals must have at least one object
 	if c.sheet.ml.ConditionalFormatting != nil && len(*c.sheet.ml.ConditionalFormatting) == 0 {
 		c.sheet.ml.ConditionalFormatting = nil
 	}
-
-	return c.sheet.ml.ConditionalFormatting
 }

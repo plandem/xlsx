@@ -221,9 +221,24 @@ type IconSet struct {
 	Reverse   bool                   `xml:"reverse,attr,omitempty"`
 }
 
+//AutoFilter is direct mapping of XSD CT_AutoFilter
 type AutoFilter struct {
-	FilterColumn *[]*ml.Reserved   `xml:"filterColumn,omitempty"`
+	FilterColumn *[]*FilterColumn  `xml:"filterColumn,omitempty"`
 	SortState    *ml.Reserved      `xml:"sortState,omitempty"`
 	ExtLst       *ml.Reserved      `xml:"extLst,omitempty"`
 	Bounds       primitives.Bounds `xml:"ref,attr"`
+}
+
+//FilterColumn is direct mapping of XSD CT_FilterColumn
+type FilterColumn struct {
+	Filters       *ml.Reserved `xml:"filters,omitempty"`
+	Top10         *ml.Reserved `xml:"top10,omitempty"`
+	CustomFilters *ml.Reserved `xml:"customFilters,omitempty"`
+	DynamicFilter *ml.Reserved `xml:"dynamicFilter,omitempty"`
+	ColorFilter   *ml.Reserved `xml:"colorFilter,omitempty"`
+	IconFilter    *ml.Reserved `xml:"iconFilter,omitempty"`
+	ExtLst        *ml.Reserved `xml:"extLst,omitempty"`
+	ColId         int          `xml:"colId,attr"`
+	HiddenButton  bool         `xml:"hiddenButton,attr"`
+	ShowButton    *bool        `xml:"showButton,attr"`
 }

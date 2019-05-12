@@ -343,7 +343,10 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
+
+	//remove empty collections that don't have dedicated container
 	s.conditionals.pack()
+	s.filters.pack()
 	return &s.ml
 }
 
