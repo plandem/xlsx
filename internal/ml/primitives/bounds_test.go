@@ -9,7 +9,7 @@ import (
 
 func TestBounds(t *testing.T) {
 	type Entity struct {
-		Attribute primitives.Bounds `xml:"attribute,attr"`
+		Attribute  primitives.Bounds  `xml:"attribute,attr"`
 		PAttribute *primitives.Bounds `xml:"p_attribute,attr"`
 	}
 
@@ -18,7 +18,6 @@ func TestBounds(t *testing.T) {
 	encoded, err := xml.Marshal(&entity)
 	require.Empty(t, err)
 	require.Equal(t, `<Entity></Entity>`, string(encoded))
-
 
 	//encode
 	b := primitives.BoundsFromIndexes(0, 0, 10, 10)

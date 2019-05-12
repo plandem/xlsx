@@ -222,6 +222,11 @@ func (s *sheetInfo) DeleteConditional(refs ...types.Ref) {
 	s.conditionals.Remove(refs)
 }
 
+//AutoFilter adds auto filter in provided Ref range
+func (s *sheetInfo) AutoFilter(ref types.Ref, settings ...interface{}) {
+	s.filters.AddAuto(ref, settings)
+}
+
 //AddFilter adds a filter to column with index
 func (s *sheetInfo) AddFilter(colIndex int, settings ...interface{}) error {
 	return s.filters.Add(colIndex, settings)

@@ -101,4 +101,3 @@ func (b *Bounds) UnmarshalXMLAttr(attr xml.Attr) error {
 	*b = Ref(attr.Value).ToBounds()
 	return nil
 }
-
