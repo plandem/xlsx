@@ -343,9 +343,7 @@ func (s *sheetReadWrite) shrinkIfRequired() {
 func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	s.shrinkIfRequired()
 	s.isInitialized = false
-
 	s.conditionals.pack()
-
 	return &s.ml
 }
 

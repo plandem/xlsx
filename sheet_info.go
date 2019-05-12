@@ -25,6 +25,7 @@ type sheetInfo struct {
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
 	conditionals  *conditionals
+	filters       *filters
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
@@ -108,6 +109,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.mergedCells = newMergedCells(sheet)
 		sheet.hyperlinks = newHyperlinks(sheet)
 		sheet.conditionals = newConditionals(sheet)
+		sheet.filters = newFilters(sheet)
 	}
 
 	return sheet
@@ -216,6 +218,16 @@ func (s *sheetInfo) AddConditional(conditional *conditional.Info, refs ...types.
 //DeleteConditional deletes a conditional formatting from refs
 func (s *sheetInfo) DeleteConditional(refs ...types.Ref) {
 	s.conditionals.Remove(refs)
+}
+
+//AddFilter adds a filter to column with index
+func (s *sheetInfo) AddFilter(colIndex int, settings ...interface{}) error {
+	return s.filters.Add(colIndex, settings)
+}
+
+//DeleteFilter deletes a filter from column with index
+func (s *sheetInfo) DeleteFilter(colIndex int) {
+	s.filters.Remove(colIndex)
 }
 
 //Close frees allocated by sheet resources

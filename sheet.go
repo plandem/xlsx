@@ -50,18 +50,22 @@ type Sheet interface {
 	InsertCol(index int) *Col
 	//DeleteCol deletes a col at 0-based index
 	DeleteCol(index int)
-	//MergeRows merges rows between fromIndex and toIndex
+	//MergeRows merges rows between 0-based fromIndex and toIndex
 	MergeRows(fromIndex, toIndex int) error
-	//MergeCols merges cols between fromIndex and toIndex
+	//MergeCols merges cols between 0-based fromIndex and toIndex
 	MergeCols(fromIndex, toIndex int) error
-	//SplitRows splits rows between fromIndex and toIndex
+	//SplitRows splits rows between 0-based fromIndex and toIndex
 	SplitRows(fromIndex, toIndex int)
-	//SplitCols splits cols between fromIndex and toIndex
+	//SplitCols splits cols between 0-based fromIndex and toIndex
 	SplitCols(fromIndex, toIndex int)
-	//AddConditional adds conditional formatting to sheet
+	//AddConditional adds conditional formatting to sheet, with additional refs if required
 	AddConditional(conditional *conditional.Info, refs ...types.Ref) error
 	//DeleteConditional deletes conditional formatting for refs
 	DeleteConditional(refs ...types.Ref)
+	//AddFilter adds a filter to column with 0-based colIndex
+	AddFilter(colIndex int, settings ...interface{}) error
+	//DeleteFilter deletes a filter from column with 0-based colIndex
+	DeleteFilter(colIndex int)
 	//Name returns name of sheet
 	Name() string
 	//SetName sets a name for sheet
