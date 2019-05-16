@@ -352,12 +352,12 @@ func (c *Cell) SetValueWithStyles(value interface{}, formatCode string) {
 	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
-//Hyperlink returns resolved Info if there is any hyperlink or nil otherwise
+//Hyperlink returns resolved hyperlink.Info if there is any hyperlink or nil otherwise
 func (c *Cell) Hyperlink() *hyperlink.Info {
 	return c.sheet.hyperlinks.Get(c.ml.Ref)
 }
 
-//SetHyperlink sets hyperlink for cell, where link can be string or Info
+//SetHyperlink sets hyperlink for cell, where link can be string or hyperlink.Info
 func (c *Cell) SetHyperlink(link interface{}) error {
 	styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link)
 	if err != nil {
@@ -382,4 +382,14 @@ func (c *Cell) SetValueWithHyperlink(value interface{}, link interface{}) error 
 //RemoveHyperlink removes hyperlink from cell
 func (c *Cell) RemoveHyperlink() {
 	c.sheet.hyperlinks.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
+}
+
+//SetComment sets comment for cell, where comment can be string or comment.Info
+func (c *Cell) SetComment(comment interface{}) error {
+	return c.sheet.comments.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), comment)
+}
+
+//RemoveComment removes comment from cell
+func (c *Cell) RemoveComment() {
+	c.sheet.comments.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
 }

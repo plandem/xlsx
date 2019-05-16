@@ -42,6 +42,8 @@ type Worksheet struct {
 	IgnoredErrors         *ml.Reserved              `xml:"ignoredErrors,omitempty"`
 	SmartTags             *ml.Reserved              `xml:"smartTags,omitempty"`
 	Drawing               *ml.Reserved              `xml:"drawing,omitempty"`
+	LegacyDrawing         *LegacyDrawing            `xml:"legacyDrawing,omitempty"`
+	LegacyDrawingHF       *ml.Reserved            	`xml:"legacyDrawingHF,omitempty"`
 	DrawingHF             *ml.Reserved              `xml:"drawingHF,omitempty"`
 	Picture               *ml.Reserved              `xml:"picture,omitempty"`
 	OleObjects            *ml.Reserved              `xml:"oleObjects,omitempty"`
@@ -54,6 +56,11 @@ type Worksheet struct {
 //SheetDimension is a direct mapping of XSD CT_SheetDimension
 type SheetDimension struct {
 	Bounds primitives.Bounds `xml:"ref,attr"`
+}
+
+//LegacyDrawing is a direct mapping of XSD CT_LegacyDrawing
+type LegacyDrawing struct {
+	RID ml.RID `xml:"id,attr"`
 }
 
 //Col is a direct mapping of XSD CT_Col

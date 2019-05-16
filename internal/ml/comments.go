@@ -21,10 +21,27 @@ type Comments struct {
 
 //Comment is a direct mapping of XSD CT_Comment
 type Comment struct {
-	Text      *StringItem       `xml:"text"`
-	CommentPr *ml.Reserved      `xml:"commentPr,omitempty"`
-	Ref       primitives.Bounds `xml:"ref,attr"`
-	AuthorID  AuthorID          `xml:"authorId,attr"`
-	Guid      GUID              `xml:"guid,attr,omitempty"`
-	ShapeID   ml.OptionalIndex  `xml:"shapeId,attr,omitempty"`
+	Text     *StringItem       `xml:"text"`
+	Options  *CommentOptions   `xml:"commentPr,omitempty"`
+	Ref      primitives.Bounds `xml:"ref,attr"`
+	AuthorID AuthorID          `xml:"authorId,attr"`
+	Guid     GUID              `xml:"guid,attr,omitempty"`
+	ShapeID  ml.OptionalIndex  `xml:"shapeId,attr,omitempty"`
+}
+
+//CommentOptions is a direct mapping of CT_CommentPr
+type CommentOptions struct {
+	Anchor      *ml.Reserved `xml:"anchor"`
+	Locked      *bool        `xml:"locked,attr,omitempty"`
+	DefaultSize *bool        `xml:"defaultSize,attr,omitempty"`
+	Print       *bool        `xml:"print,attr,omitempty"`
+	Disabled    bool         `xml:"disabled,attr,omitempty"`
+	AutoFill    *bool        `xml:"autoFill,attr,omitempty"`
+	AutoLine    *bool        `xml:"autoLine,attr,omitempty"`
+	AltText     string       `xml:"altText,attr,omitempty"`
+	TextHAlign  *ml.Reserved `xml:"textHAlign,attr,omitempty"`
+	TextVAlign  *ml.Reserved `xml:"textVAlign,attr,omitempty"`
+	LockText    *bool        `xml:"lockText,attr,omitempty"`
+	JustLastX   bool         `xml:"justLastX,attr,omitempty"`
+	AutoScale   bool         `xml:"autoScale,attr,omitempty"`
 }
