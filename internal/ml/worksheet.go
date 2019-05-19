@@ -1,6 +1,7 @@
 package ml
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
@@ -10,7 +11,7 @@ type Formula string
 
 //Worksheet is a direct mapping of XSD CT_Worksheet
 type Worksheet struct {
-	XMLName               ml.Name                   `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
+	XMLName               xml.Name                  `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main worksheet"`
 	RIDName               ml.RIDName                `xml:",attr"`
 	SheetPr               *ml.Reserved              `xml:"sheetPr,omitempty"`
 	Dimension             *SheetDimension           `xml:"dimension,omitempty"`
@@ -43,7 +44,7 @@ type Worksheet struct {
 	SmartTags             *ml.Reserved              `xml:"smartTags,omitempty"`
 	Drawing               *ml.Reserved              `xml:"drawing,omitempty"`
 	LegacyDrawing         *LegacyDrawing            `xml:"legacyDrawing,omitempty"`
-	LegacyDrawingHF       *ml.Reserved            	`xml:"legacyDrawingHF,omitempty"`
+	LegacyDrawingHF       *ml.Reserved              `xml:"legacyDrawingHF,omitempty"`
 	DrawingHF             *ml.Reserved              `xml:"drawingHF,omitempty"`
 	Picture               *ml.Reserved              `xml:"picture,omitempty"`
 	OleObjects            *ml.Reserved              `xml:"oleObjects,omitempty"`

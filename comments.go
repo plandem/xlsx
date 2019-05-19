@@ -5,7 +5,7 @@ import (
 )
 
 type comments struct {
-	sheet          *sheetInfo
+	sheet *sheetInfo
 }
 
 //newComments creates an object that implements comments functionality
@@ -42,9 +42,6 @@ func (c *comments) initIfRequired() {
 func (c *comments) Add(bounds types.Bounds, comment interface{}) error {
 	c.initIfRequired()
 
-
-
-
 	return nil
 }
 
@@ -52,4 +49,3 @@ func (c *comments) Add(bounds types.Bounds, comment interface{}) error {
 func (c *comments) Remove(bounds types.Bounds) {
 	c.initIfRequired()
 }
-

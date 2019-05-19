@@ -3,7 +3,6 @@ package ml_test
 import (
 	"bytes"
 	"encoding/xml"
-	ooxml "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
@@ -42,27 +41,27 @@ func TestComments(t *testing.T) {
 	err := decoder.DecodeElement(comments, nil)
 	require.Nil(t, err)
 	require.Equal(t, &ml.Comments{
-		XMLName:ooxml.Name{
-			Space:"",
-			Local:"",
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+			Local: "comments",
 		},
-		Authors:[]primitives.Text{
+		Authors: []primitives.Text{
 			"Microsoft Office User",
 		},
-		CommentList:[]*ml.Comment{
+		CommentList: []*ml.Comment{
 			{
-				Ref: primitives.Ref("C6").ToBounds(),
+				Ref:      primitives.Ref("C6").ToBounds(),
 				AuthorID: 0,
-				ShapeID: &shapeID,
+				ShapeID:  &shapeID,
 				Text: &ml.StringItem{
 					Text: "",
 					RichText: &[]*ml.RichText{
 						{
 							Text: "My Comment",
 							Font: &ml.RichFont{
-								Size: 10,
-								Color: &ml.Color{RGB:"FF000000"},
-								Name: "Tahoma",
+								Size:   10,
+								Color:  &ml.Color{RGB: "FF000000"},
+								Name:   "Tahoma",
 								Family: 2,
 							},
 						},

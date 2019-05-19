@@ -1,12 +1,11 @@
 package types
 
 import (
-	//"github.com/plandem/xlsx/format"
-	//"github.com/plandem/xlsx/internal/ml"
+//"github.com/plandem/xlsx/format"
+//"github.com/plandem/xlsx/internal/ml"
 )
 
 type Comment struct {
-
 }
 
 type commentOption func(co *Comment)
@@ -91,20 +90,20 @@ func (o *commentOption) StartCol(start int) commentOption {
 	}
 }
 
-func (o *commentOption) Font(font interface {}) commentOption {
+func (o *commentOption) Font(font interface{}) commentOption {
 	return func(co *Comment) {
 
 	}
 }
 
-func (o *commentOption) FontSize(size interface {}) commentOption {
-	return func (co *Comment) {
+func (o *commentOption) FontSize(size interface{}) commentOption {
+	return func(co *Comment) {
 
 	}
 }
 
-func (o *commentOption) Color(color interface {}) commentOption {
-	return func (co *Comment) {
+func (o *commentOption) Color(color interface{}) commentOption {
+	return func(co *Comment) {
 
 	}
 }

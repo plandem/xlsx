@@ -1,6 +1,7 @@
 package ml
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
@@ -13,7 +14,7 @@ type GUID string
 
 //Comments is a direct mapping of XSD CT_Comments
 type Comments struct {
-	XMLName     ml.Name           `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main comments"`
+	XMLName     xml.Name          `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main comments"`
 	Authors     []primitives.Text `xml:"authors>author"`
 	CommentList []*Comment        `xml:"commentList>comment"`
 	ExtLst      *ml.Reserved      `xml:"extLst,omitempty"`
@@ -44,4 +45,16 @@ type CommentOptions struct {
 	LockText    *bool        `xml:"lockText,attr,omitempty"`
 	JustLastX   bool         `xml:"justLastX,attr,omitempty"`
 	AutoScale   bool         `xml:"autoScale,attr,omitempty"`
+}
+
+//ClientData is direct mapping for CT_ClientData, that used for Excel specific settings of Shape
+type ClientData struct {
+	XMLName       xml.Name `xml:"x:ClientData"`
+	Type          string   `xml:"ObjectType,attr"`
+	MoveWithCells bool     `xml:"x:MoveWithCells,omitempty"`
+	SizeWithCells bool     `xml:"x:SizeWithCells,omitempty"`
+	Anchor        string   `xml:"x:Anchor,omitempty"`
+	AutoFill      bool     `xml:"x:AutoFill,omitempty"`
+	Row           int      `xml:"x:Row"`
+	Column        int      `xml:"x:Column"`
 }

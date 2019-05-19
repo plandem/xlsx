@@ -227,7 +227,7 @@ func (s *sheetReadWrite) resolveDimension(force bool) {
 
 //expandOnInit expands grid to required dimension and copy existing data
 func (s *sheetReadWrite) expandOnInit() {
-	force := (s.sheetMode&SheetModeIgnoreDimension) != 0
+	force := (s.sheetMode & SheetModeIgnoreDimension) != 0
 	s.resolveDimension(force)
 
 	//during initialize phase we need to do hard work first time - expand grid to required size and copy it with existing data

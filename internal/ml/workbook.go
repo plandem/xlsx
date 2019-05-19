@@ -1,13 +1,14 @@
 package ml
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //Workbook is a direct mapping of XSD CT_Workbook
 type Workbook struct {
-	XMLName             ml.Name               `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main workbook"`
+	XMLName             xml.Name              `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main workbook"`
 	RIDName             ml.RIDName            `xml:",attr"`
 	FileVersion         *FileVersion          `xml:"fileVersion,omitempty"`
 	FileSharing         *ml.Reserved          `xml:"fileSharing,omitempty"`

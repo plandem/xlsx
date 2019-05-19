@@ -1,6 +1,7 @@
 package ml
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
@@ -16,7 +17,7 @@ type NamedStyleID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
-	XMLName       ml.Name            `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
+	XMLName       xml.Name           `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
 	NumberFormats NumberFormatList   `xml:"numFmts"`
 	Fonts         FontList           `xml:"fonts"`
 	Fills         FillList           `xml:"fills"`
