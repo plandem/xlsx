@@ -37,24 +37,24 @@ type CommentOptions struct {
 	DefaultSize *bool        `xml:"defaultSize,attr,omitempty"`
 	Print       *bool        `xml:"print,attr,omitempty"`
 	Disabled    bool         `xml:"disabled,attr,omitempty"`
+	JustLastX   bool         `xml:"justLastX,attr,omitempty"`
+	AutoScale   bool         `xml:"autoScale,attr,omitempty"`
 	AutoFill    *bool        `xml:"autoFill,attr,omitempty"`
 	AutoLine    *bool        `xml:"autoLine,attr,omitempty"`
 	AltText     string       `xml:"altText,attr,omitempty"`
 	TextHAlign  *ml.Reserved `xml:"textHAlign,attr,omitempty"`
 	TextVAlign  *ml.Reserved `xml:"textVAlign,attr,omitempty"`
 	LockText    *bool        `xml:"lockText,attr,omitempty"`
-	JustLastX   bool         `xml:"justLastX,attr,omitempty"`
-	AutoScale   bool         `xml:"autoScale,attr,omitempty"`
 }
 
 //ClientData is direct mapping for CT_ClientData, that used for Excel specific settings of Shape
 type ClientData struct {
 	XMLName       xml.Name `xml:"x:ClientData"`
-	Type          string   `xml:"ObjectType,attr"`
 	MoveWithCells bool     `xml:"x:MoveWithCells,omitempty"`
 	SizeWithCells bool     `xml:"x:SizeWithCells,omitempty"`
-	Anchor        string   `xml:"x:Anchor,omitempty"`
 	AutoFill      bool     `xml:"x:AutoFill,omitempty"`
+	Type          string   `xml:"ObjectType,attr"`
+	Anchor        string   `xml:"x:Anchor,omitempty"`
 	Row           int      `xml:"x:Row"`
 	Column        int      `xml:"x:Column"`
 }

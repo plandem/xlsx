@@ -11,7 +11,7 @@ func Reserved(reserved *ml.Reserved) Key {
 		reserved = &ml.Reserved{}
 	}
 
-	var result []string
+	result := make([]string, 0, len(reserved.Attrs))
 
 	if reserved.InnerXML != nil {
 		result = append(result, reserved.InnerXML.XML)

@@ -174,11 +174,11 @@ type CellProtection struct {
 type CellAlignment struct {
 	Horizontal      primitives.HAlignType `xml:"horizontal,attr,omitempty"`
 	Vertical        primitives.VAlignType `xml:"vertical,attr,omitempty"`
-	TextRotation    int                   `xml:"textRotation,attr,omitempty"`
 	WrapText        bool                  `xml:"wrapText,attr,omitempty"`
-	Indent          int                   `xml:"indent,attr,omitempty"`
-	RelativeIndent  int                   `xml:"relativeIndent,attr,omitempty"`
 	JustifyLastLine bool                  `xml:"justifyLastLine,attr,omitempty"`
 	ShrinkToFit     bool                  `xml:"shrinkToFit,attr,omitempty"`
+	TextRotation    int                   `xml:"textRotation,attr,omitempty"`
+	Indent          int                   `xml:"indent,attr,omitempty"`
+	RelativeIndent  int                   `xml:"relativeIndent,attr,omitempty"`
 	ReadingOrder    int                   `xml:"readingOrder,attr,omitempty"`
 }

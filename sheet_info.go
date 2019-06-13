@@ -18,8 +18,6 @@ import (
 type sheetInfo struct {
 	ml            ml.Worksheet
 	workbook      *Workbook
-	isInitialized bool
-	index         int
 	file          *ooxml.PackageFile
 	columns       *columns
 	mergedCells   *mergedCells
@@ -30,6 +28,8 @@ type sheetInfo struct {
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
+	isInitialized bool
+	index         int
 }
 
 //isCellEmpty checks if cell is empty - has no value and any formatting

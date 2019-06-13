@@ -104,27 +104,27 @@ type Cell struct {
 	ExtLst    *ml.Reserved        `xml:"extLst,omitempty"`
 	Ref       primitives.CellRef  `xml:"r,attr"`
 	Style     DirectStyleID       `xml:"s,attr,omitempty"`
+	Ph        bool                `xml:"ph,attr,omitempty"`
 	Type      primitives.CellType `xml:"t,attr,omitempty"`
 	Cm        ml.OptionalIndex    `xml:"cm,attr,omitempty"`
 	Vm        ml.OptionalIndex    `xml:"vm,attr,omitempty"`
-	Ph        bool                `xml:"ph,attr,omitempty"`
 }
 
 //CellFormula is a direct mapping of XSD CT_CellFormula
 type CellFormula struct {
-	Content string                     `xml:",chardata"`
-	T       primitives.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
 	Aca     bool                       `xml:"aca,attr,omitempty"`
-	Bounds  primitives.Bounds          `xml:"ref,attr,omitempty"`
 	Dt2D    bool                       `xml:"dt2D,attr,omitempty"`
 	Dtr     bool                       `xml:"dtr,attr,omitempty"`
 	Del1    bool                       `xml:"del1,attr,omitempty"`
 	Del2    bool                       `xml:"del2,attr,omitempty"`
+	Ca      bool                       `xml:"ca,attr,omitempty"`
+	Bx      bool                       `xml:"bx,attr,omitempty"`
+	T       primitives.CellFormulaType `xml:"t,attr,omitempty"` //default 'normal'
+	Bounds  primitives.Bounds          `xml:"ref,attr,omitempty"`
+	Content string                     `xml:",chardata"`
 	R1      primitives.CellRef         `xml:"r1,attr,omitempty"`
 	R2      primitives.CellRef         `xml:"r2,attr,omitempty"`
-	Ca      bool                       `xml:"ca,attr,omitempty"`
 	Si      ml.OptionalIndex           `xml:"si,attr,omitempty"`
-	Bx      bool                       `xml:"bx,attr,omitempty"`
 }
 
 //MergeCell is a direct mapping of XSD CT_MergeCell
@@ -183,18 +183,18 @@ type ConditionalRule struct {
 	IconSet      *IconSet                         `xml:"iconSet,omitempty"`
 	ExtLst       *ml.Reserved                     `xml:"extLst,omitempty"`
 	Type         primitives.ConditionType         `xml:"type,attr"`
-	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
-	Priority     int                              `xml:"priority,attr"`
+	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`
+	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`
 	StopIfTrue   bool                             `xml:"stopIfTrue,attr,omitempty"`
-	AboveAverage *bool                            `xml:"aboveAverage,attr,omitempty"`
 	Percent      bool                             `xml:"percent,attr,omitempty"`
 	Bottom       bool                             `xml:"bottom,attr,omitempty"`
-	Operator     primitives.ConditionOperatorType `xml:"operator,attr,omitempty"`
+	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"`
+	Priority     int                              `xml:"priority,attr"`
+	Style        *DiffStyleID                     `xml:"dxfId,attr,omitempty"`
+	AboveAverage *bool                            `xml:"aboveAverage,attr,omitempty"`
 	Text         string                           `xml:"text,attr,omitempty"`
-	TimePeriod   primitives.TimePeriodType        `xml:"timePeriod,attr,omitempty"`
 	Rank         uint                             `xml:"rank,attr,omitempty"`
 	StdDev       int                              `xml:"stdDev,attr,omitempty"`
-	EqualAverage bool                             `xml:"equalAverage,attr,omitempty"`
 }
 
 //ConditionValue is a direct mapping of XSD CT_Cfvo
@@ -224,9 +224,9 @@ type DataBar struct {
 type IconSet struct {
 	Values    []*ConditionValue      `xml:"cfvo"` //minimum 2 values
 	Type      primitives.IconSetType `xml:"iconSet,attr,omitempty"`
+	Reverse   bool                   `xml:"reverse,attr,omitempty"`
 	ShowValue *bool                  `xml:"showValue,attr,omitempty"`
 	Percent   *bool                  `xml:"percent,attr,omitempty"`
-	Reverse   bool                   `xml:"reverse,attr,omitempty"`
 }
 
 //AutoFilter is direct mapping of XSD CT_AutoFilter
