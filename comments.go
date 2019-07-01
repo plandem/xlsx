@@ -39,7 +39,7 @@ func (c *comments) initIfRequired() {
 	//c.sheet.relationships.GetIdByTarget()
 }
 
-func (c *comments) Add(bounds types.Bounds, comment interface{}) error {
+func (c *comments)  Add(bounds types.Bounds, comment interface{}) error {
 	c.initIfRequired()
 
 	return nil

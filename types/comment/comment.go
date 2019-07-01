@@ -1,9 +1,4 @@
-package types
-
-import (
-//"github.com/plandem/xlsx/format"
-//"github.com/plandem/xlsx/internal/ml"
-)
+package comment
 
 type Comment struct {
 }
@@ -11,7 +6,7 @@ type Comment struct {
 type commentOption func(co *Comment)
 
 //NewComment create and returns option set for comment
-func NewComment(options ...commentOption) *Comment {
+func New(options ...commentOption) *Comment {
 	s := &Comment{}
 	s.Set(options...)
 	return s
