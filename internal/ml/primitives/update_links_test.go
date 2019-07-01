@@ -13,20 +13,20 @@ func TestUpdateLinks(t *testing.T) {
 		Attribute primitives.UpdateLinksType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.UpdateLinksType{
-		"":        primitives.UpdateLinksType(0),
-		"userSet": primitives.UpdateLinksTypeUserSet,
-		"never":   primitives.UpdateLinksTypeNever,
-		"always":  primitives.UpdateLinksTypeAlways,
+	list := map[primitives.UpdateLinksType]string{
+		primitives.UpdateLinksType(0):     "",
+		primitives.UpdateLinksTypeUserSet: primitives.UpdateLinksTypeUserSet.String(),
+		primitives.UpdateLinksTypeNever:   primitives.UpdateLinksTypeNever.String(),
+		primitives.UpdateLinksTypeAlways:  primitives.UpdateLinksTypeAlways.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

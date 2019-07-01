@@ -14,36 +14,36 @@ func TestFillPattern(t *testing.T) {
 		Attribute primitives.PatternType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.PatternType{
-		"":                primitives.PatternType(0),
-		"none":            styles.PatternTypeNone,
-		"solid":           styles.PatternTypeSolid,
-		"mediumGray":      styles.PatternTypeMediumGray,
-		"darkGray":        styles.PatternTypeDarkGray,
-		"lightGray":       styles.PatternTypeLightGray,
-		"darkHorizontal":  styles.PatternTypeDarkHorizontal,
-		"darkVertical":    styles.PatternTypeDarkVertical,
-		"darkDown":        styles.PatternTypeDarkDown,
-		"darkUp":          styles.PatternTypeDarkUp,
-		"darkGrid":        styles.PatternTypeDarkGrid,
-		"darkTrellis":     styles.PatternTypeDarkTrellis,
-		"lightHorizontal": styles.PatternTypeLightHorizontal,
-		"lightVertical":   styles.PatternTypeLightVertical,
-		"lightDown":       styles.PatternTypeLightDown,
-		"lightUp":         styles.PatternTypeLightUp,
-		"lightGrid":       styles.PatternTypeLightGrid,
-		"lightTrellis":    styles.PatternTypeLightTrellis,
-		"gray125":         styles.PatternTypeGray125,
-		"gray0625":        styles.PatternTypeGray0625,
+	list := map[primitives.PatternType]string{
+		primitives.PatternType(0):         "",
+		styles.PatternTypeNone:            styles.PatternTypeNone.String(),
+		styles.PatternTypeSolid:           styles.PatternTypeSolid.String(),
+		styles.PatternTypeMediumGray:      styles.PatternTypeMediumGray.String(),
+		styles.PatternTypeDarkGray:        styles.PatternTypeDarkGray.String(),
+		styles.PatternTypeLightGray:       styles.PatternTypeLightGray.String(),
+		styles.PatternTypeDarkHorizontal:  styles.PatternTypeDarkHorizontal.String(),
+		styles.PatternTypeDarkVertical:    styles.PatternTypeDarkVertical.String(),
+		styles.PatternTypeDarkDown:        styles.PatternTypeDarkDown.String(),
+		styles.PatternTypeDarkUp:          styles.PatternTypeDarkUp.String(),
+		styles.PatternTypeDarkGrid:        styles.PatternTypeDarkGrid.String(),
+		styles.PatternTypeDarkTrellis:     styles.PatternTypeDarkTrellis.String(),
+		styles.PatternTypeLightHorizontal: styles.PatternTypeLightHorizontal.String(),
+		styles.PatternTypeLightVertical:   styles.PatternTypeLightVertical.String(),
+		styles.PatternTypeLightDown:       styles.PatternTypeLightDown.String(),
+		styles.PatternTypeLightUp:         styles.PatternTypeLightUp.String(),
+		styles.PatternTypeLightGrid:       styles.PatternTypeLightGrid.String(),
+		styles.PatternTypeLightTrellis:    styles.PatternTypeLightTrellis.String(),
+		styles.PatternTypeGray125:         styles.PatternTypeGray125.String(),
+		styles.PatternTypeGray0625:        styles.PatternTypeGray0625.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

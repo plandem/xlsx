@@ -14,20 +14,20 @@ func TestVisibility(t *testing.T) {
 		Attribute primitives.VisibilityType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.VisibilityType{
-		"":           primitives.VisibilityType(0),
-		"visible":    options.Visible,
-		"hidden":     options.Hidden,
-		"veryHidden": options.VeryHidden,
+	list := map[primitives.VisibilityType]string{
+		primitives.VisibilityType(0): "",
+		options.Visible:              options.Visible.String(),
+		options.Hidden:               options.Hidden.String(),
+		options.VeryHidden:           options.VeryHidden.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

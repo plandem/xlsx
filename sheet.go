@@ -36,8 +36,10 @@ type Sheet interface {
 	Cols() ColIterator
 	//Col returns a col for 0-based index
 	Col(index int) *Col
-	//Range returns a range for ref
-	Range(ref types.Ref) *Range
+	//Range returns a range for indexes
+	Range(fromCol, fromRow, toCol, toRow int) *Range
+	//RangeByRef returns a range for ref
+	RangeByRef(ref types.Ref) *Range
 	//Dimension returns total number of cols and rows in sheet
 	Dimension() (cols int, rows int)
 	//SetDimension sets total number of cols and rows in sheet

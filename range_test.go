@@ -14,7 +14,12 @@ func TestRange(t *testing.T) {
 
 	defer xl.Close()
 	sheet := xl.Sheet(0)
-	r := sheet.Range("D10:E10")
+	r := sheet.RangeByRef("D10:E10")
+	require.Equal(t, []string{"1", "2"}, r.Values())
+	require.Equal(t, styles.DirectStyleID(0), sheet.CellByRef("D10").ml.Style)
+	require.Equal(t, styles.DirectStyleID(0), sheet.CellByRef("E10").ml.Style)
+
+	r = sheet.Range(3, 9, 4, 9)
 	require.Equal(t, []string{"1", "2"}, r.Values())
 	require.Equal(t, styles.DirectStyleID(0), sheet.CellByRef("D10").ml.Style)
 	require.Equal(t, styles.DirectStyleID(0), sheet.CellByRef("E10").ml.Style)
