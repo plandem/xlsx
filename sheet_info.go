@@ -17,7 +17,7 @@ import (
 
 type sheetInfo struct {
 	ml            ml.Worksheet
-	workbook      *Workbook
+	workbook      *workbook
 	file          *ooxml.PackageFile
 	columns       *columns
 	mergedCells   *mergedCells

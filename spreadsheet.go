@@ -13,11 +13,11 @@ import (
 type Spreadsheet struct {
 	ooxml.Package
 	pkg           *ooxml.PackageInfo
-	workbook      *Workbook
+	workbook      *workbook
 	sheets        []*sheetInfo
 	relationships *ooxml.Relationships
-	sharedStrings *SharedStrings
-	styleSheet    *StyleSheet
+	sharedStrings *sharedStrings
+	styleSheet    *styleSheet
 }
 
 //newSpreadsheet creates an object that implements XLSX functionality

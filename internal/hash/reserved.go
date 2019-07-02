@@ -12,12 +12,7 @@ func Reserved(reserved *ml.Reserved) Key {
 	}
 
 	result := make([]string, 0, len(reserved.Attrs))
-
-	if reserved.InnerXML != nil {
-		result = append(result, reserved.InnerXML.XML)
-	} else {
-		result = append(result, "")
-	}
+	result = append(result, reserved.InnerXML)
 
 	for _, attr := range reserved.Attrs {
 		result = append(result,

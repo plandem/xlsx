@@ -8,16 +8,16 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
-//SharedStrings is a higher level object that wraps ml.SharedStrings with functionality
-type SharedStrings struct {
+//sharedStrings is a higher level object that wraps ml.SharedStrings with functionality
+type sharedStrings struct {
 	ml    ml.SharedStrings
 	index map[hash.Code]int
 	doc   *Spreadsheet
 	file  *ooxml.PackageFile
 }
 
-func newSharedStrings(f interface{}, doc *Spreadsheet) *SharedStrings {
-	ss := &SharedStrings{
+func newSharedStrings(f interface{}, doc *Spreadsheet) *sharedStrings {
+	ss := &sharedStrings{
 		doc:   doc,
 		index: make(map[hash.Code]int),
 	}
@@ -33,14 +33,14 @@ func newSharedStrings(f interface{}, doc *Spreadsheet) *SharedStrings {
 	return ss
 }
 
-func (ss *SharedStrings) afterLoad() {
+func (ss *sharedStrings) afterLoad() {
 	for i, s := range ss.ml.StringItem {
 		ss.index[hash.StringItem(s).Hash()] = i
 	}
 }
 
 //get returns string item stored at index
-func (ss *SharedStrings) get(index int) *ml.StringItem {
+func (ss *sharedStrings) get(index int) *ml.StringItem {
 	ss.file.LoadIfRequired(ss.afterLoad)
 
 	if index < len(ss.ml.StringItem) {
@@ -51,12 +51,12 @@ func (ss *SharedStrings) get(index int) *ml.StringItem {
 }
 
 //addString adds a new string and return index for it
-func (ss *SharedStrings) addString(value string) int {
+func (ss *sharedStrings) addString(value string) int {
 	return ss.addText(&ml.StringItem{Text: primitives.Text(value)})
 }
 
 //addText adds a new StringItem and return index for it
-func (ss *SharedStrings) addText(si *ml.StringItem) int {
+func (ss *sharedStrings) addText(si *ml.StringItem) int {
 	ss.file.LoadIfRequired(ss.afterLoad)
 
 	key := hash.StringItem(si).Hash()
