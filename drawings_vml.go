@@ -105,6 +105,8 @@ func (d *drawingsVML) nextChunkID() int {
 	d.nextShapeId = nextChunk * vmlChunkSize
 	d.nextShapeIdMax = d.nextShapeId + vmlChunkSize
 
+	d.ml.ShapeLayout.IdMap.Data = strings.Trim(strings.Replace(fmt.Sprint(d.chunks), " ", ",", -1), "[]")
+
 	return nextChunk
 }
 
@@ -184,8 +186,8 @@ func (d *drawingsVML) initIfRequired() {
 				if id, err := strconv.Atoi(string(matched[1])); err != nil {
 					panic(fmt.Errorf("can't get ID of shape: %s", matched))
 				} else {
-					//TODO: theoretically we should take maximum shape_id of the lowest chunk from file as possible.
-					// But it's premature optimization, so right now we just take maximum ID of shape, even "lower" chunks still can have more shapes.
+					//TODO: theoretically we should take maximum shape_id of the lowest chunk from file if possible.
+					// But it's premature optimization, so right now we just take maximum ID of shape, even if "lower" chunks can have more shapes.
 					// E.g.: file had few chunks, but later few shapes were deleted from chunk1, so theoretically we could add next shapes to chunk1 again
 					nextShapeID = int(math.Max(float64(nextShapeID), float64(id)))
 				}
