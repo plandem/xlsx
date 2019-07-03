@@ -3,21 +3,16 @@ package xlsx
 import (
 	"fmt"
 	"github.com/plandem/ooxml"
-	"github.com/plandem/ooxml/drawing/vml"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
-	"path"
-	"path/filepath"
 	"strings"
 )
 
 type comments struct {
-	sheet        *sheetInfo
-	ml           ml.Comments
-	vml          vml.Excel
-	fileComments *ooxml.PackageFile
-	fileDrawings *ooxml.PackageFile
+	sheet *sheetInfo
+	ml    ml.Comments
+	file  *ooxml.PackageFile
 }
 
 //newComments creates an object that implements comments functionality
@@ -26,80 +21,73 @@ func newComments(sheet *sheetInfo) *comments {
 }
 
 func (c *comments) initIfRequired() {
+	//attach comments file
+	c.attachFileIfRequired()
+
+	//attach default author if required
+	if len(c.ml.Authors) == 0 {
+		c.ml.Authors = append(c.ml.Authors, "")
+	}
+}
+
+//only attach files, no content is loading
+func (c *comments) attachFileIfRequired() {
 	//attach sheet relations file
 	c.sheet.attachRelationshipsIfRequired()
-	//attach comments file
-	c.attachCommentsIfRequired()
-	//attach VML file
-	c.attachDrawingsIfRequired()
-}
 
-func (c *comments) attachCommentsIfRequired() {
-	if c.fileComments == nil {
+	if c.file == nil {
 		fileName := c.sheet.relationships.GetTargetByType(internal.RelationTypeComments)
 		if fileName != "" {
+			//transform relative path to absolute
 			fileName = strings.Replace(fileName, "../", "xl/", 1)
-		} else {
-			fileName = c.sheet.workbook.doc.relationships.GetTargetById(string(c.sheet.workbook.ml.Sheets[c.sheet.index].RID))
-			fileName = fmt.Sprintf("xl/comments.%s.xml", strings.TrimSuffix(filepath.Base(fileName), path.Ext(fileName)))
+
+			if file := c.sheet.workbook.doc.pkg.File(fileName); file != nil {
+				c.file = ooxml.NewPackageFile(c.sheet.workbook.doc.pkg, file, &c.ml, nil)
+				return
+			}
+
+			panic(fmt.Sprintf("can't load comments file: %s", fileName))
 		}
 
-		if file := c.sheet.workbook.doc.pkg.File(fileName); file != nil {
-			c.fileComments = ooxml.NewPackageFile(c.sheet.workbook.doc.pkg, file, &c.ml, nil)
-			c.fileComments.LoadIfRequired(nil)
-		} else {
-			//register a new comments content
-			c.sheet.workbook.doc.pkg.ContentTypes().RegisterContent(fileName, internal.ContentTypeComments)
+		totalFiles := c.sheet.workbook.doc.pkg.ContentTypes().CountTypes(internal.ContentTypeComments)
+		fileName = fmt.Sprintf("xl/comments%d.xml", totalFiles+1)
 
-			//attach file to package
-			c.fileComments = ooxml.NewPackageFile(c.sheet.workbook.doc.pkg, fileName, &c.ml, nil)
+		//register a new comments content
+		c.sheet.workbook.doc.pkg.ContentTypes().RegisterContent(fileName, internal.ContentTypeComments)
 
-			//add file to sheet relations
-			c.sheet.relationships.AddFile(internal.RelationTypeComments, fileName)
-			c.fileComments.MarkAsUpdated()
-		}
+		//attach file to package
+		c.file = ooxml.NewPackageFile(c.sheet.workbook.doc.pkg, fileName, &c.ml, nil)
+
+		//add file to sheet relations
+		c.sheet.relationships.AddFile(internal.RelationTypeComments, fileName)
+		c.file.MarkAsUpdated()
 	}
 }
 
-func (c *comments) attachDrawingsIfRequired() {
-	if c.fileDrawings == nil {
-		fileName := c.sheet.relationships.GetTargetByType(internal.RelationTypeVmlDrawing)
-		if fileName != "" {
-			fileName = strings.Replace(fileName, "../", "xl/", 1)
-		} else {
-			fileName = c.sheet.workbook.doc.relationships.GetTargetById(string(c.sheet.workbook.ml.Sheets[c.sheet.index].RID))
-			fileName = fmt.Sprintf("xl/drawings/vmlDrawings.%s.vml", strings.TrimSuffix(filepath.Base(fileName), path.Ext(fileName)))
-		}
-
-		if file := c.sheet.workbook.doc.pkg.File(fileName); file != nil {
-			c.fileDrawings = ooxml.NewPackageFile(c.sheet.workbook.doc.pkg, file, &c.vml, nil)
-			c.fileDrawings.LoadIfRequired(nil)
-		} else {
-			//register a VML content type, if required
-			c.sheet.workbook.doc.pkg.ContentTypes().RegisterType("vml", ooxml.ContentTypeVmlDrawing)
-
-			//attach file to package
-			c.fileDrawings = ooxml.NewPackageFile(c.sheet.workbook.doc.pkg, fileName, &c.vml, nil)
-
-			//add file to sheet relations
-			_, rid := c.sheet.relationships.AddFile(internal.RelationTypeVmlDrawing, fileName)
-
-			//add legacy drawing
-			c.sheet.ml.LegacyDrawing = &ml.LegacyDrawing{RID: rid}
-		}
-	}
-}
-
+//Add adds a new comment info for bounds
 func (c *comments) Add(bounds types.Bounds, comment interface{}) error {
 	c.initIfRequired()
-	c.fileComments.MarkAsUpdated()
-	c.fileDrawings.MarkAsUpdated()
-	return nil
+
+	//TODO: replace mock data
+	cml := &ml.Comment{}
+	cml.Ref = bounds
+	cml.AuthorID = 0
+	cml.Text = &ml.StringItem{
+		Text: "My Comment",
+	}
+
+	c.ml.CommentList = append(c.ml.CommentList, cml)
+	c.file.MarkAsUpdated()
+
+	return c.sheet.drawingsVML.addComment(bounds, comment)
 }
 
 //Remove removes comment info for bounds
 func (c *comments) Remove(bounds types.Bounds) {
 	c.initIfRequired()
-	c.fileComments.MarkAsUpdated()
-	c.fileDrawings.MarkAsUpdated()
+	c.file.MarkAsUpdated()
+	//remove comment
+
+	//remove VML drawings
+	c.sheet.drawingsVML.removeComment(bounds)
 }

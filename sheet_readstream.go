@@ -133,7 +133,11 @@ func (s *sheetReadStream) afterOpen() {
 	conditionalsInited := false
 
 	if s.currentRow == nil {
-		s.stream = s.file.ReadStream()
+		if stream, err := s.file.ReadStream(); err != nil {
+			panic(err)
+		} else {
+			s.stream = stream
+		}
 
 		//phase1
 		for next, hasNext := s.stream.StartIterator(nil); hasNext; {
@@ -180,7 +184,12 @@ func (s *sheetReadStream) afterOpen() {
 				_ = s.stream.Close()
 
 				//re-open stream again and cache skip any info till first row
-				s.stream = s.file.ReadStream()
+				if stream, err := s.file.ReadStream(); err != nil {
+					panic(err)
+				} else {
+					s.stream = stream
+				}
+
 				for next, hasNext := s.stream.StartIterator(nil); hasNext; {
 					hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
 						if start.Name.Local == "row" {

@@ -24,6 +24,7 @@ type sheetInfo struct {
 	hyperlinks    *hyperlinks
 	conditionals  *conditionals
 	comments      *comments
+	drawingsVML   *drawingsVML
 	filters       *filters
 	relationships *ooxml.Relationships
 	sheet         Sheet
@@ -112,6 +113,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.conditionals = newConditionals(sheet)
 		sheet.filters = newFilters(sheet)
 		sheet.comments = newComments(sheet)
+		sheet.drawingsVML = newDrawingsVML(sheet)
 	}
 
 	return sheet
