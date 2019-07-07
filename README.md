@@ -17,6 +17,7 @@ import (
 	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/comment"
 	"github.com/plandem/xlsx/types/hyperlink"
 )
 
@@ -75,7 +76,7 @@ func main() {
 	sheet.CellByRef("A1").SetValueWithHyperlink("Link To Google", "http://google.com")
 	
 	//Add hyperlink as string
-	sheet.Range("B1:C3").SetHyperlink("spam@spam.it")	
+	sheet.RangeByRef("B1:C3").SetHyperlink("spam@spam.it")	
 
 	//Add hyperlink via helper type for advanced settings
 	sheet.CellByRef("A7").SetHyperlink(hyperlink.New(
@@ -89,8 +90,8 @@ func main() {
 	sheet.CellByRef("A1").RemoveHyperlink()
 	
 	//Merged Cells
-	sheet.Range("A1:C3").Merge()
-	sheet.Range("A1:C3").Split()
+	sheet.RangeByRef("A1:C3").Merge()
+	sheet.RangeByRef("A1:C3").Split()
 	
 	//Rich Text
 	sheet.CellByRef("F10").SetText(
@@ -102,6 +103,25 @@ func main() {
 		"red bold text",
 		"another plain text",
 	)
+	
+	//Add comment as string
+	sheet.CellByRef("F11").SetComment("A cell's comment")
+
+	//Add comment via helper type for advanced settings
+	sheet.CellByRef("F12").SetComment(comment.New(
+		comment.Author("John Doe"),
+		comment.Text(
+			"plain text", 
+			styles.New(
+				styles.Font.Bold,
+				styles.Font.Color("#ff0000"),
+			),
+			"red bold text",
+			"another plain text",
+        ),
+	))
+	
+	sheet.CellByRef("F11").RemoveComment()
 	
 	//Conditional formatting
 	sheet.AddConditional(conditional.New(

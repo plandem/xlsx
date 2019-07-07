@@ -6,15 +6,15 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 )
 
-//Workbook is a higher level object that wraps ml.Workbook with functionality
-type Workbook struct {
+//workbook is a higher level object that wraps ml.Workbook with functionality
+type workbook struct {
 	ml   ml.Workbook
 	doc  *Spreadsheet
 	file *ooxml.PackageFile
 }
 
-func newWorkbook(f interface{}, doc *Spreadsheet) *Workbook {
-	wb := &Workbook{
+func newWorkbook(f interface{}, doc *Spreadsheet) *workbook {
+	wb := &workbook{
 		doc: doc,
 	}
 

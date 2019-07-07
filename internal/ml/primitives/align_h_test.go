@@ -14,25 +14,25 @@ func TestAlignH(t *testing.T) {
 		Attribute primitives.HAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.HAlignType{
-		"":                 primitives.HAlignType(0),
-		"general":          styles.HAlignGeneral,
-		"left":             styles.HAlignLeft,
-		"center":           styles.HAlignCenter,
-		"right":            styles.HAlignRight,
-		"fill":             styles.HAlignFill,
-		"justify":          styles.HAlignJustify,
-		"centerContinuous": styles.HAlignCenterContinuous,
-		"distributed":      styles.HAlignDistributed,
+	list := map[primitives.HAlignType]string{
+		primitives.HAlignType(0):      "",
+		styles.HAlignGeneral:          styles.HAlignGeneral.String(),
+		styles.HAlignLeft:             styles.HAlignLeft.String(),
+		styles.HAlignCenter:           styles.HAlignCenter.String(),
+		styles.HAlignRight:            styles.HAlignRight.String(),
+		styles.HAlignFill:             styles.HAlignFill.String(),
+		styles.HAlignJustify:          styles.HAlignJustify.String(),
+		styles.HAlignCenterContinuous: styles.HAlignCenterContinuous.String(),
+		styles.HAlignDistributed:      styles.HAlignDistributed.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

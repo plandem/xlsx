@@ -25,7 +25,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 			parts = parts[:len(parts)-1]
 		}
 
-		richText := make([]*ml.RichText, 0)
+		richText := make([]*ml.RichText, 0, len(parts))
 		fontPart := true
 
 		for i, p := range parts {
@@ -58,7 +58,11 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 			}
 		}
 
-		si.RichText = &richText
+		if len(richText) == 1 && richText[0].Font == nil {
+			si.Text = richText[0].Text
+		} else {
+			si.RichText = &richText
+		}
 	}
 
 	if length > internal.ExcelCellLimit {

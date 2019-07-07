@@ -14,27 +14,27 @@ func TestTimePeriod(t *testing.T) {
 		Attribute primitives.TimePeriodType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.TimePeriodType{
-		"":          primitives.TimePeriodType(0),
-		"today":     primitives.TimePeriodToday,
-		"yesterday": primitives.TimePeriodYesterday,
-		"tomorrow":  primitives.TimePeriodTomorrow,
-		"last7Days": primitives.TimePeriodLast7Days,
-		"thisMonth": primitives.TimePeriodThisMonth,
-		"lastMonth": primitives.TimePeriodLastMonth,
-		"nextMonth": primitives.TimePeriodNextMonth,
-		"thisWeek":  primitives.TimePeriodThisWeek,
-		"lastWeek":  primitives.TimePeriodLastWeek,
-		"nextWeek":  primitives.TimePeriodNextWeek,
+	list := map[primitives.TimePeriodType]string{
+		primitives.TimePeriodType(0):   "",
+		primitives.TimePeriodToday:     primitives.TimePeriodToday.String(),
+		primitives.TimePeriodYesterday: primitives.TimePeriodYesterday.String(),
+		primitives.TimePeriodTomorrow:  primitives.TimePeriodTomorrow.String(),
+		primitives.TimePeriodLast7Days: primitives.TimePeriodLast7Days.String(),
+		primitives.TimePeriodThisMonth: primitives.TimePeriodThisMonth.String(),
+		primitives.TimePeriodLastMonth: primitives.TimePeriodLastMonth.String(),
+		primitives.TimePeriodNextMonth: primitives.TimePeriodNextMonth.String(),
+		primitives.TimePeriodThisWeek:  primitives.TimePeriodThisWeek.String(),
+		primitives.TimePeriodLastWeek:  primitives.TimePeriodLastWeek.String(),
+		primitives.TimePeriodNextWeek:  primitives.TimePeriodNextWeek.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

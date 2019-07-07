@@ -13,29 +13,29 @@ func TestConditionOperator(t *testing.T) {
 		Attribute primitives.ConditionOperatorType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.ConditionOperatorType{
-		"":                   primitives.ConditionOperatorType(0),
-		"lessThan":           primitives.ConditionOperatorLessThan,
-		"lessThanOrEqual":    primitives.ConditionOperatorLessThanOrEqual,
-		"equal":              primitives.ConditionOperatorEqual,
-		"notEqual":           primitives.ConditionOperatorNotEqual,
-		"greaterThanOrEqual": primitives.ConditionOperatorGreaterThanOrEqual,
-		"greaterThan":        primitives.ConditionOperatorGreaterThan,
-		"between":            primitives.ConditionOperatorBetween,
-		"notBetween":         primitives.ConditionOperatorNotBetween,
-		"containsText":       primitives.ConditionOperatorContainsText,
-		"notContains":        primitives.ConditionOperatorNotContains,
-		"beginsWith":         primitives.ConditionOperatorBeginsWith,
-		"endsWith":           primitives.ConditionOperatorEndsWith,
+	list := map[primitives.ConditionOperatorType]string{
+		primitives.ConditionOperatorType(0):            "",
+		primitives.ConditionOperatorLessThan:           primitives.ConditionOperatorLessThan.String(),
+		primitives.ConditionOperatorLessThanOrEqual:    primitives.ConditionOperatorLessThanOrEqual.String(),
+		primitives.ConditionOperatorEqual:              primitives.ConditionOperatorEqual.String(),
+		primitives.ConditionOperatorNotEqual:           primitives.ConditionOperatorNotEqual.String(),
+		primitives.ConditionOperatorGreaterThanOrEqual: primitives.ConditionOperatorGreaterThanOrEqual.String(),
+		primitives.ConditionOperatorGreaterThan:        primitives.ConditionOperatorGreaterThan.String(),
+		primitives.ConditionOperatorBetween:            primitives.ConditionOperatorBetween.String(),
+		primitives.ConditionOperatorNotBetween:         primitives.ConditionOperatorNotBetween.String(),
+		primitives.ConditionOperatorContainsText:       primitives.ConditionOperatorContainsText.String(),
+		primitives.ConditionOperatorNotContains:        primitives.ConditionOperatorNotContains.String(),
+		primitives.ConditionOperatorBeginsWith:         primitives.ConditionOperatorBeginsWith.String(),
+		primitives.ConditionOperatorEndsWith:           primitives.ConditionOperatorEndsWith.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

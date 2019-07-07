@@ -14,22 +14,22 @@ func TestAlignV(t *testing.T) {
 		Attribute primitives.VAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.VAlignType{
-		"":            primitives.VAlignType(0),
-		"top":         styles.VAlignTop,
-		"center":      styles.VAlignCenter,
-		"bottom":      styles.VAlignBottom,
-		"justify":     styles.VAlignJustify,
-		"distributed": styles.VAlignDistributed,
+	list := map[primitives.VAlignType]string{
+		primitives.VAlignType(0): "",
+		styles.VAlignTop:         styles.VAlignTop.String(),
+		styles.VAlignCenter:      styles.VAlignCenter.String(),
+		styles.VAlignBottom:      styles.VAlignBottom.String(),
+		styles.VAlignJustify:     styles.VAlignJustify.String(),
+		styles.VAlignDistributed: styles.VAlignDistributed.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

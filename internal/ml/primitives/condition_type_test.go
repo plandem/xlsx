@@ -13,35 +13,35 @@ func TestConditionType(t *testing.T) {
 		Attribute primitives.ConditionType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.ConditionType{
-		"":                  primitives.ConditionType(0),
-		"expression":        primitives.ConditionTypeExpression,
-		"cellIs":            primitives.ConditionTypeCellIs,
-		"colorScale":        primitives.ConditionTypeColorScale,
-		"dataBar":           primitives.ConditionTypeDataBar,
-		"iconSet":           primitives.ConditionTypeIconSet,
-		"top10":             primitives.ConditionTypeTop10,
-		"uniqueValues":      primitives.ConditionTypeUniqueValues,
-		"duplicateValues":   primitives.ConditionTypeDuplicateValues,
-		"containsText":      primitives.ConditionTypeContainsText,
-		"notContainsText":   primitives.ConditionTypeNotContainsText,
-		"beginsWith":        primitives.ConditionTypeBeginsWith,
-		"endsWith":          primitives.ConditionTypeEndsWith,
-		"containsBlanks":    primitives.ConditionTypeContainsBlanks,
-		"notContainsBlanks": primitives.ConditionTypeNotContainsBlanks,
-		"containsErrors":    primitives.ConditionTypeContainsErrors,
-		"notContainsErrors": primitives.ConditionTypeNotContainsErrors,
-		"timePeriod":        primitives.ConditionTypeTimePeriod,
-		"aboveAverage":      primitives.ConditionTypeAboveAverage,
+	list := map[primitives.ConditionType]string{
+		primitives.ConditionType(0):               "",
+		primitives.ConditionTypeExpression:        primitives.ConditionTypeExpression.String(),
+		primitives.ConditionTypeCellIs:            primitives.ConditionTypeCellIs.String(),
+		primitives.ConditionTypeColorScale:        primitives.ConditionTypeColorScale.String(),
+		primitives.ConditionTypeDataBar:           primitives.ConditionTypeDataBar.String(),
+		primitives.ConditionTypeIconSet:           primitives.ConditionTypeIconSet.String(),
+		primitives.ConditionTypeTop10:             primitives.ConditionTypeTop10.String(),
+		primitives.ConditionTypeUniqueValues:      primitives.ConditionTypeUniqueValues.String(),
+		primitives.ConditionTypeDuplicateValues:   primitives.ConditionTypeDuplicateValues.String(),
+		primitives.ConditionTypeContainsText:      primitives.ConditionTypeContainsText.String(),
+		primitives.ConditionTypeNotContainsText:   primitives.ConditionTypeNotContainsText.String(),
+		primitives.ConditionTypeBeginsWith:        primitives.ConditionTypeBeginsWith.String(),
+		primitives.ConditionTypeEndsWith:          primitives.ConditionTypeEndsWith.String(),
+		primitives.ConditionTypeContainsBlanks:    primitives.ConditionTypeContainsBlanks.String(),
+		primitives.ConditionTypeNotContainsBlanks: primitives.ConditionTypeNotContainsBlanks.String(),
+		primitives.ConditionTypeContainsErrors:    primitives.ConditionTypeContainsErrors.String(),
+		primitives.ConditionTypeNotContainsErrors: primitives.ConditionTypeNotContainsErrors.String(),
+		primitives.ConditionTypeTimePeriod:        primitives.ConditionTypeTimePeriod.String(),
+		primitives.ConditionTypeAboveAverage:      primitives.ConditionTypeAboveAverage.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

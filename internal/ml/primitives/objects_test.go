@@ -13,20 +13,20 @@ func TestObjects(t *testing.T) {
 		Attribute primitives.ObjectsType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.ObjectsType{
-		"":             primitives.ObjectsType(0),
-		"all":          primitives.ObjectsTypeAll,
-		"placeholders": primitives.ObjectsTypePlaceholders,
-		"none":         primitives.ObjectsTypeNone,
+	list := map[primitives.ObjectsType]string{
+		primitives.ObjectsType(0):          "",
+		primitives.ObjectsTypeAll:          primitives.ObjectsTypeAll.String(),
+		primitives.ObjectsTypePlaceholders: primitives.ObjectsTypePlaceholders.String(),
+		primitives.ObjectsTypeNone:         primitives.ObjectsTypeNone.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

@@ -13,11 +13,11 @@ import (
 type Spreadsheet struct {
 	ooxml.Package
 	pkg           *ooxml.PackageInfo
-	workbook      *Workbook
+	workbook      *workbook
 	sheets        []*sheetInfo
 	relationships *ooxml.Relationships
-	sharedStrings *SharedStrings
-	styleSheet    *StyleSheet
+	sharedStrings *sharedStrings
+	styleSheet    *styleSheet
 }
 
 //newSpreadsheet creates an object that implements XLSX functionality
@@ -165,7 +165,7 @@ func (xl *Spreadsheet) IsValid() error {
 
 //readSpreadsheet reads required information from XLSX
 func (xl *Spreadsheet) readSpreadsheet() {
-	files := xl.pkg.Files()
+	files := xl.pkg.Files(nil)
 	for _, file := range files {
 		if f, ok := file.(*zip.File); ok {
 			switch {

@@ -17,18 +17,20 @@ import (
 
 type sheetInfo struct {
 	ml            ml.Worksheet
-	workbook      *Workbook
-	isInitialized bool
-	index         int
+	workbook      *workbook
 	file          *ooxml.PackageFile
 	columns       *columns
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
 	conditionals  *conditionals
+	comments      *comments
+	drawingsVML   *drawingsVML
 	filters       *filters
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
+	isInitialized bool
+	index         int
 }
 
 //isCellEmpty checks if cell is empty - has no value and any formatting
@@ -110,6 +112,8 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.hyperlinks = newHyperlinks(sheet)
 		sheet.conditionals = newConditionals(sheet)
 		sheet.filters = newFilters(sheet)
+		sheet.comments = newComments(sheet)
+		sheet.drawingsVML = newDrawingsVML(sheet)
 	}
 
 	return sheet
@@ -173,41 +177,34 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	return
 }
 
-//Range returns a range for ref
-func (s *sheetInfo) Range(ref types.Ref) *Range {
+//Range returns a range for indexes
+func (s *sheetInfo) Range(fromCol, fromRow, toCol, toRow int) *Range {
+	return newRange(s.sheet, fromCol, toCol, fromRow, toRow)
+}
+
+//RangeByRef returns a range for ref
+func (s *sheetInfo) RangeByRef(ref types.Ref) *Range {
 	return newRangeFromRef(s.sheet, ref)
 }
 
 //MergeRows merges rows between fromIndex and toIndex
 func (s *sheetInfo) MergeRows(fromIndex, toIndex int) error {
-	return s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(0, fromIndex),
-		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
-	)).Merge()
+	return s.Range(0, fromIndex, internal.ExcelColumnLimit, toIndex).Merge()
 }
 
 //MergeCols merges cols between fromIndex and toIndex
 func (s *sheetInfo) MergeCols(fromIndex, toIndex int) error {
-	return s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(fromIndex, 0),
-		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
-	)).Merge()
+	return s.Range(fromIndex, 0, toIndex, internal.ExcelRowLimit).Merge()
 }
 
 //SplitRows splits rows between fromIndex and toIndex
 func (s *sheetInfo) SplitRows(fromIndex, toIndex int) {
-	s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(0, fromIndex),
-		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
-	)).Split()
+	s.Range(0, fromIndex, internal.ExcelColumnLimit, toIndex).Split()
 }
 
 //SplitCols splits cols between fromIndex and toIndex
 func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
-	s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(fromIndex, 0),
-		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
-	)).Split()
+	s.Range(fromIndex, 0, toIndex, internal.ExcelRowLimit).Split()
 }
 
 //AddConditional adds a new conditional formatting with additional refs if required

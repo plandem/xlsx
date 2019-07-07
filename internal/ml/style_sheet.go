@@ -1,6 +1,7 @@
 package ml
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
@@ -16,7 +17,7 @@ type NamedStyleID int
 
 //StyleSheet is a direct mapping of XSD CT_Stylesheet
 type StyleSheet struct {
-	XMLName       ml.Name            `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
+	XMLName       xml.Name           `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main styleSheet"`
 	NumberFormats NumberFormatList   `xml:"numFmts"`
 	Fonts         FontList           `xml:"fonts"`
 	Fills         FillList           `xml:"fills"`
@@ -173,11 +174,11 @@ type CellProtection struct {
 type CellAlignment struct {
 	Horizontal      primitives.HAlignType `xml:"horizontal,attr,omitempty"`
 	Vertical        primitives.VAlignType `xml:"vertical,attr,omitempty"`
-	TextRotation    int                   `xml:"textRotation,attr,omitempty"`
 	WrapText        bool                  `xml:"wrapText,attr,omitempty"`
-	Indent          int                   `xml:"indent,attr,omitempty"`
-	RelativeIndent  int                   `xml:"relativeIndent,attr,omitempty"`
 	JustifyLastLine bool                  `xml:"justifyLastLine,attr,omitempty"`
 	ShrinkToFit     bool                  `xml:"shrinkToFit,attr,omitempty"`
+	TextRotation    int                   `xml:"textRotation,attr,omitempty"`
+	Indent          int                   `xml:"indent,attr,omitempty"`
+	RelativeIndent  int                   `xml:"relativeIndent,attr,omitempty"`
 	ReadingOrder    int                   `xml:"readingOrder,attr,omitempty"`
 }

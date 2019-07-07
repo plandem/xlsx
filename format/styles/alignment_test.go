@@ -68,5 +68,5 @@ func TestAlignmentMarshal(t *testing.T) {
 		Alignment.ReadingOrder(4),
 	)
 	encoded, _ = xml.Marshal(&style.styleInfo.Alignment)
-	require.Equal(t, `<CellAlignment horizontal="fill" vertical="bottom" textRotation="90" wrapText="true" indent="10" relativeIndent="5" justifyLastLine="true" shrinkToFit="true" readingOrder="4"></CellAlignment>`, string(encoded))
+	require.Equal(t, `<CellAlignment horizontal="fill" vertical="bottom" wrapText="true" justifyLastLine="true" shrinkToFit="true" textRotation="90" indent="10" relativeIndent="5" readingOrder="4"></CellAlignment>`, string(encoded))
 }

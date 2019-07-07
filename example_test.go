@@ -85,7 +85,7 @@ func Example_access() {
 	fmt.Println(cell.Value())
 
 	// Get range by references
-	area := sheet.Range("D10:H13")
+	area := sheet.RangeByRef("D10:H13")
 	fmt.Println(strings.Join(area.Values(), ","))
 
 	//Output:
@@ -137,7 +137,7 @@ func Example_iterate() {
 	}
 
 	// Iterate range's cells via iterator
-	r := sheet.Range("A1:B3")
+	r := sheet.RangeByRef("A1:B3")
 	for cells := r.Cells(); cells.HasNext(); {
 		_, _, cell := cells.Next()
 		fmt.Println(cell.Value())
@@ -204,7 +204,7 @@ func Example_walk() {
 	})
 
 	// Walk through the cells of range
-	area := sheet.Range("A1:B3")
+	area := sheet.RangeByRef("A1:B3")
 	area.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
 		fmt.Println(c.Value())
 	})
@@ -257,7 +257,7 @@ func Example_update() {
 	fmt.Println(strings.Join(col.Values(), ","))
 
 	// Update value of cells in range
-	area := sheet.Range("D10:H13")
+	area := sheet.RangeByRef("D10:H13")
 	fmt.Println(strings.Join(area.Values(), ","))
 	area.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
 		c.SetValue(idx)
@@ -309,7 +309,7 @@ func Example_formatting() {
 	sheet.Col(3).SetStyles(styleId)
 
 	//set formatting for all cells in range
-	sheet.Range("D10:H13").SetStyles(styleId)
+	sheet.RangeByRef("D10:H13").SetStyles(styleId)
 }
 
 // Demonstrates how to set options of rows/cols/sheets
@@ -525,7 +525,7 @@ func Example_copy() {
 	}
 
 	// Copy range to another range that started at indexes
-	r := sheet.Range("A1:B3")
+	r := sheet.RangeByRef("A1:B3")
 	r.CopyTo(3, 0)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()

@@ -54,7 +54,7 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (styles.DirectSt
 	} else if value, ok := link.(hyperlink.Info); ok {
 		object = &value
 	} else {
-		return styles.DefaultDirectStyle, errors.New("unsupported type of hyperlink, only string or types.Info is allowed")
+		return styles.DefaultDirectStyle, errors.New("unsupported type of hyperlink, only string or hyperlink.Info is allowed")
 	}
 
 	//let's check existing hyperlinks for overlapping bounds

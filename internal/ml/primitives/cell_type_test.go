@@ -14,24 +14,24 @@ func TestCellType(t *testing.T) {
 		Attribute primitives.CellType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.CellType{
-		"":          types.CellTypeGeneral,
-		"b":         types.CellTypeBool,
-		"d":         types.CellTypeDate,
-		"n":         types.CellTypeNumber,
-		"e":         types.CellTypeError,
-		"s":         types.CellTypeSharedString,
-		"str":       types.CellTypeFormula,
-		"inlineStr": types.CellTypeInlineString,
+	list := map[primitives.CellType]string{
+		types.CellTypeGeneral:      types.CellTypeGeneral.String(),
+		types.CellTypeBool:         types.CellTypeBool.String(),
+		types.CellTypeDate:         types.CellTypeDate.String(),
+		types.CellTypeNumber:       types.CellTypeNumber.String(),
+		types.CellTypeError:        types.CellTypeError.String(),
+		types.CellTypeSharedString: types.CellTypeSharedString.String(),
+		types.CellTypeFormula:      types.CellTypeFormula.String(),
+		types.CellTypeInlineString: types.CellTypeInlineString.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

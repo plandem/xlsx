@@ -14,31 +14,31 @@ func TestBorderStyle(t *testing.T) {
 		Attribute primitives.BorderStyleType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.BorderStyleType{
-		"":                 primitives.BorderStyleType(0),
-		"none":             styles.BorderStyleNone,
-		"thin":             styles.BorderStyleThin,
-		"medium":           styles.BorderStyleMedium,
-		"dashed":           styles.BorderStyleDashed,
-		"dotted":           styles.BorderStyleDotted,
-		"thick":            styles.BorderStyleThick,
-		"double":           styles.BorderStyleDouble,
-		"hair":             styles.BorderStyleHair,
-		"mediumDashed":     styles.BorderStyleMediumDashed,
-		"dashDot":          styles.BorderStyleDashDot,
-		"mediumDashDot":    styles.BorderStyleMediumDashDot,
-		"dashDotDot":       styles.BorderStyleDashDotDot,
-		"mediumDashDotDot": styles.BorderStyleMediumDashDotDot,
-		"slantDashDot":     styles.BorderStyleSlantDashDot,
+	list := map[primitives.BorderStyleType]string{
+		primitives.BorderStyleType(0):      "",
+		styles.BorderStyleNone:             styles.BorderStyleNone.String(),
+		styles.BorderStyleThin:             styles.BorderStyleThin.String(),
+		styles.BorderStyleMedium:           styles.BorderStyleMedium.String(),
+		styles.BorderStyleDashed:           styles.BorderStyleDashed.String(),
+		styles.BorderStyleDotted:           styles.BorderStyleDotted.String(),
+		styles.BorderStyleThick:            styles.BorderStyleThick.String(),
+		styles.BorderStyleDouble:           styles.BorderStyleDouble.String(),
+		styles.BorderStyleHair:             styles.BorderStyleHair.String(),
+		styles.BorderStyleMediumDashed:     styles.BorderStyleMediumDashed.String(),
+		styles.BorderStyleDashDot:          styles.BorderStyleDashDot.String(),
+		styles.BorderStyleMediumDashDot:    styles.BorderStyleMediumDashDot.String(),
+		styles.BorderStyleDashDotDot:       styles.BorderStyleDashDotDot.String(),
+		styles.BorderStyleMediumDashDotDot: styles.BorderStyleMediumDashDotDot.String(),
+		styles.BorderStyleSlantDashDot:     styles.BorderStyleSlantDashDot.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

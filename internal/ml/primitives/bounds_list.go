@@ -9,7 +9,7 @@ import (
 type BoundsList []Bounds
 
 func BoundsListFromRefs(refs ...Ref) BoundsList {
-	var list []Bounds
+	list := make([]Bounds, 0, len(refs))
 
 	for _, r := range refs {
 		list = append(list, r.ToBounds())
@@ -25,7 +25,7 @@ func (bl *BoundsList) ToRefList() RefList {
 
 //String return textual version of BoundsList
 func (bl BoundsList) String() string {
-	var refs []string
+	refs := make([]string, 0, len(bl))
 
 	for _, b := range bl {
 		refs = append(refs, b.String())

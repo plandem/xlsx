@@ -227,7 +227,7 @@ func (s *sheetReadWrite) resolveDimension(force bool) {
 
 //expandOnInit expands grid to required dimension and copy existing data
 func (s *sheetReadWrite) expandOnInit() {
-	force := (s.sheetMode&SheetModeIgnoreDimension) != 0
+	force := (s.sheetMode & SheetModeIgnoreDimension) != 0
 	s.resolveDimension(force)
 
 	//during initialize phase we need to do hard work first time - expand grid to required size and copy it with existing data
@@ -348,6 +348,11 @@ func (s *sheetReadWrite) BeforeMarshalXML() interface{} {
 	//remove empty collections that don't have dedicated container
 	s.conditionals.pack()
 	s.filters.pack()
+
+	//we should add LegacyDrawing if any VML drawing was added, but
+	//we can't be sure in order of files for marshaling, so should call manually
+	s.drawingsVML.attachDrawingsRID()
+
 	return &s.ml
 }
 
