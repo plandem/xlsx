@@ -1,13 +1,14 @@
 package ml
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
 //Workbook is a direct mapping of XSD CT_Workbook
 type Workbook struct {
-	XMLName             ml.Name               `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main workbook"`
+	XMLName             xml.Name              `xml:"http://schemas.openxmlformats.org/spreadsheetml/2006/main workbook"`
 	RIDName             ml.RIDName            `xml:",attr"`
 	FileVersion         *FileVersion          `xml:"fileVersion,omitempty"`
 	FileSharing         *ml.Reserved          `xml:"fileSharing,omitempty"`
@@ -43,15 +44,12 @@ type FileVersion struct {
 //WorkbookPr is a direct mapping of XSD CT_WorkbookPr
 type WorkbookPr struct {
 	Date1904                   bool                       `xml:"date1904,attr,omitempty"`
-	ShowObjects                primitives.ObjectsType     `xml:"showObjects,attr,omitempty"`
 	ShowBorderUnselectedTables bool                       `xml:"showBorderUnselectedTables,attr,omitempty"`
 	FilterPrivacy              bool                       `xml:"filterPrivacy,attr,omitempty"`
 	PromptedSolutions          bool                       `xml:"promptedSolutions,attr,omitempty"`
 	ShowInkAnnotation          bool                       `xml:"showInkAnnotation,attr,omitempty"`
 	BackupFile                 bool                       `xml:"backupFile,attr,omitempty"`
 	SaveExternalLinkValues     bool                       `xml:"saveExternalLinkValues,attr,omitempty"`
-	UpdateLinks                primitives.UpdateLinksType `xml:"updateLinks,attr,omitempty"`
-	CodeName                   string                     `xml:"codeName,attr,omitempty"`
 	HidePivotFieldList         bool                       `xml:"hidePivotFieldList,attr,omitempty"`
 	ShowPivotChartFilter       bool                       `xml:"showPivotChartFilter,attr,omitempty"`
 	AllowRefreshQuery          bool                       `xml:"allowRefreshQuery,attr,omitempty"`
@@ -59,7 +57,10 @@ type WorkbookPr struct {
 	CheckCompatibility         bool                       `xml:"checkCompatibility,attr,omitempty"`
 	AutoCompressPictures       bool                       `xml:"autoCompressPictures,attr,omitempty"`
 	RefreshAllConnections      bool                       `xml:"refreshAllConnections,attr,omitempty"`
+	ShowObjects                primitives.ObjectsType     `xml:"showObjects,attr,omitempty"`
+	UpdateLinks                primitives.UpdateLinksType `xml:"updateLinks,attr,omitempty"`
 	DefaultThemeVersion        uint                       `xml:"defaultThemeVersion,attr,omitempty"`
+	CodeName                   string                     `xml:"codeName,attr,omitempty"`
 }
 
 //BookView is a direct mapping of XSD CT_BookView
@@ -70,6 +71,7 @@ type BookView struct {
 	ShowHorizontalScroll   bool                      `xml:"showHorizontalScroll,attr,omitempty"`
 	ShowVerticalScroll     bool                      `xml:"showVerticalScroll,attr,omitempty"`
 	ShowSheetTabs          bool                      `xml:"showSheetTabs,attr,omitempty"`
+	AutoFilterDateGrouping bool                      `xml:"autoFilterDateGrouping,attr,omitempty"`
 	XWindow                int                       `xml:"xWindow,attr,omitempty"`
 	YWindow                int                       `xml:"yWindow,attr,omitempty"`
 	WindowHeight           uint                      `xml:"windowHeight,attr,omitempty"`
@@ -77,7 +79,6 @@ type BookView struct {
 	TabRatio               uint                      `xml:"tabRatio,attr,omitempty"`
 	FirstSheet             uint                      `xml:"firstSheet,attr,omitempty"`
 	ActiveTab              int                       `xml:"activeTab,attr,omitempty"`
-	AutoFilterDateGrouping bool                      `xml:"autoFilterDateGrouping,attr,omitempty"`
 }
 
 //Sheet is a direct mapping of XSD CT_Sheet

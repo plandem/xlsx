@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -14,34 +14,34 @@ func TestIconSetType(t *testing.T) {
 		Attribute primitives.IconSetType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.IconSetType{
-		"":                primitives.IconSetType(0),
-		"3Arrows":         format.IconSetType3Arrows,
-		"3ArrowsGray":     format.IconSetType3ArrowsGray,
-		"3Flags":          format.IconSetType3Flags,
-		"3TrafficLights1": format.IconSetType3TrafficLights1,
-		"3TrafficLights2": format.IconSetType3TrafficLights2,
-		"3Signs":          format.IconSetType3Signs,
-		"3Symbols":        format.IconSetType3Symbols,
-		"3Symbols2":       format.IconSetType3Symbols2,
-		"4Arrows":         format.IconSetType4Arrows,
-		"4ArrowsGray":     format.IconSetType4ArrowsGray,
-		"4RedToBlack":     format.IconSetType4RedToBlack,
-		"4Rating":         format.IconSetType4Rating,
-		"4TrafficLights":  format.IconSetType4TrafficLights,
-		"5Arrows":         format.IconSetType5Arrows,
-		"5ArrowsGray":     format.IconSetType5ArrowsGray,
-		"5Rating":         format.IconSetType5Rating,
-		"5Quarters":       format.IconSetType5Quarters,
+	list := map[primitives.IconSetType]string{
+		primitives.IconSetType(0):       "",
+		rule.IconSetType3Arrows:         rule.IconSetType3Arrows.String(),
+		rule.IconSetType3ArrowsGray:     rule.IconSetType3ArrowsGray.String(),
+		rule.IconSetType3Flags:          rule.IconSetType3Flags.String(),
+		rule.IconSetType3TrafficLights1: rule.IconSetType3TrafficLights1.String(),
+		rule.IconSetType3TrafficLights2: rule.IconSetType3TrafficLights2.String(),
+		rule.IconSetType3Signs:          rule.IconSetType3Signs.String(),
+		rule.IconSetType3Symbols:        rule.IconSetType3Symbols.String(),
+		rule.IconSetType3Symbols2:       rule.IconSetType3Symbols2.String(),
+		rule.IconSetType4Arrows:         rule.IconSetType4Arrows.String(),
+		rule.IconSetType4ArrowsGray:     rule.IconSetType4ArrowsGray.String(),
+		rule.IconSetType4RedToBlack:     rule.IconSetType4RedToBlack.String(),
+		rule.IconSetType4Rating:         rule.IconSetType4Rating.String(),
+		rule.IconSetType4TrafficLights:  rule.IconSetType4TrafficLights.String(),
+		rule.IconSetType5Arrows:         rule.IconSetType5Arrows.String(),
+		rule.IconSetType5ArrowsGray:     rule.IconSetType5ArrowsGray.String(),
+		rule.IconSetType5Rating:         rule.IconSetType5Rating.String(),
+		rule.IconSetType5Quarters:       rule.IconSetType5Quarters.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

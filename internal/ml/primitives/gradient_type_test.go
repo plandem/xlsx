@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -14,19 +14,18 @@ func TestFillGradient(t *testing.T) {
 		Attribute primitives.GradientType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.GradientType{
-		"":       primitives.GradientType(0),
-		"linear": format.GradientTypeLinear,
-		"path":   format.GradientTypePath,
+	list := map[primitives.GradientType]string{
+		styles.GradientTypeLinear: styles.GradientTypeLinear.String(),
+		styles.GradientTypePath:   styles.GradientTypePath.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity attribute="linear"></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

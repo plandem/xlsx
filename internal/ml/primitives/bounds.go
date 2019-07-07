@@ -84,7 +84,7 @@ func (b Bounds) IsEmpty() bool {
 }
 
 //MarshalXMLAttr marshal Bounds
-func (b *Bounds) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+func (b Bounds) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	attr := xml.Attr{Name: name}
 
 	if b.IsEmpty() {

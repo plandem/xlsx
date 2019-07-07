@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -14,36 +14,36 @@ func TestFillPattern(t *testing.T) {
 		Attribute primitives.PatternType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.PatternType{
-		"":                primitives.PatternType(0),
-		"none":            format.PatternTypeNone,
-		"solid":           format.PatternTypeSolid,
-		"mediumGray":      format.PatternTypeMediumGray,
-		"darkGray":        format.PatternTypeDarkGray,
-		"lightGray":       format.PatternTypeLightGray,
-		"darkHorizontal":  format.PatternTypeDarkHorizontal,
-		"darkVertical":    format.PatternTypeDarkVertical,
-		"darkDown":        format.PatternTypeDarkDown,
-		"darkUp":          format.PatternTypeDarkUp,
-		"darkGrid":        format.PatternTypeDarkGrid,
-		"darkTrellis":     format.PatternTypeDarkTrellis,
-		"lightHorizontal": format.PatternTypeLightHorizontal,
-		"lightVertical":   format.PatternTypeLightVertical,
-		"lightDown":       format.PatternTypeLightDown,
-		"lightUp":         format.PatternTypeLightUp,
-		"lightGrid":       format.PatternTypeLightGrid,
-		"lightTrellis":    format.PatternTypeLightTrellis,
-		"gray125":         format.PatternTypeGray125,
-		"gray0625":        format.PatternTypeGray0625,
+	list := map[primitives.PatternType]string{
+		primitives.PatternType(0):         "",
+		styles.PatternTypeNone:            styles.PatternTypeNone.String(),
+		styles.PatternTypeSolid:           styles.PatternTypeSolid.String(),
+		styles.PatternTypeMediumGray:      styles.PatternTypeMediumGray.String(),
+		styles.PatternTypeDarkGray:        styles.PatternTypeDarkGray.String(),
+		styles.PatternTypeLightGray:       styles.PatternTypeLightGray.String(),
+		styles.PatternTypeDarkHorizontal:  styles.PatternTypeDarkHorizontal.String(),
+		styles.PatternTypeDarkVertical:    styles.PatternTypeDarkVertical.String(),
+		styles.PatternTypeDarkDown:        styles.PatternTypeDarkDown.String(),
+		styles.PatternTypeDarkUp:          styles.PatternTypeDarkUp.String(),
+		styles.PatternTypeDarkGrid:        styles.PatternTypeDarkGrid.String(),
+		styles.PatternTypeDarkTrellis:     styles.PatternTypeDarkTrellis.String(),
+		styles.PatternTypeLightHorizontal: styles.PatternTypeLightHorizontal.String(),
+		styles.PatternTypeLightVertical:   styles.PatternTypeLightVertical.String(),
+		styles.PatternTypeLightDown:       styles.PatternTypeLightDown.String(),
+		styles.PatternTypeLightUp:         styles.PatternTypeLightUp.String(),
+		styles.PatternTypeLightGrid:       styles.PatternTypeLightGrid.String(),
+		styles.PatternTypeLightTrellis:    styles.PatternTypeLightTrellis.String(),
+		styles.PatternTypeGray125:         styles.PatternTypeGray125.String(),
+		styles.PatternTypeGray0625:        styles.PatternTypeGray0625.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

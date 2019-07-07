@@ -3,15 +3,17 @@ package xlsx
 import (
 	"errors"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+
+	// to link unexported
 	_ "unsafe"
 )
 
-//go:linkname toRichFont github.com/plandem/xlsx/format.toRichFont
-func toRichFont(f *format.StyleFormat) *ml.RichFont
+//go:linkname toRichFont github.com/plandem/xlsx/format/styles.toRichFont
+func toRichFont(f *styles.Info) *ml.RichFont
 
 func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 	si := &ml.StringItem{}
@@ -19,11 +21,11 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 
 	if len(parts) > 0 {
 		//if last part is format, then remove it
-		if _, lastIsFormat := parts[len(parts)-1].(*format.StyleFormat); lastIsFormat {
+		if _, lastIsFormat := parts[len(parts)-1].(*styles.Info); lastIsFormat {
 			parts = parts[:len(parts)-1]
 		}
 
-		richText := make([]*ml.RichText, 0)
+		richText := make([]*ml.RichText, 0, len(parts))
 		fontPart := true
 
 		for i, p := range parts {
@@ -43,7 +45,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 
 				fontPart = false
 
-			case *format.StyleFormat:
+			case *styles.Info:
 				if fontPart && i > 0 {
 					return nil, errors.New("two styles in row is not allowed")
 				}
@@ -56,11 +58,15 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 			}
 		}
 
-		si.RichText = &richText
+		if len(richText) == 1 && richText[0].Font == nil {
+			si.Text = richText[0].Text
+		} else {
+			si.RichText = &richText
+		}
 	}
 
 	if length > internal.ExcelCellLimit {
-		return nil, errors.New(fmt.Sprintf("text exceeds allowed length for cell value = %d", internal.ExcelCellLimit))
+		return nil, fmt.Errorf("text exceeds allowed length for cell value = %d", internal.ExcelCellLimit)
 	}
 
 	return si, nil

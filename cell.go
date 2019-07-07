@@ -3,12 +3,13 @@ package xlsx
 import (
 	"errors"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/hyperlink"
 	"math"
 	"strconv"
 	"time"
@@ -151,7 +152,7 @@ func (c *Cell) SetString(value string) {
 	c.ml.Value = strconv.Itoa(sid)
 }
 
-//SetString sets shared rich text
+//SetText sets shared rich text
 func (c *Cell) SetText(parts ...interface{}) error {
 	//we can update sharedStrings only when sheet is in write mode, to prevent pollution of sharedStrings with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
@@ -187,9 +188,22 @@ func (c *Cell) SetInlineText(parts ...interface{}) error {
 //SetInt sets an integer value
 func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
-	c.ml.Value = strconv.Itoa(value)
+	c.ml.Value = strconv.FormatInt(int64(value), 10)
 
-	if c.ml.Style == format.DirectStyleID(0) {
+	if c.ml.Style == styles.DirectStyleID(0) {
+		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
+	}
+
+	c.ml.Formula = nil
+	c.ml.InlineStr = nil
+}
+
+//SetUInt sets an unsigned integer value
+func (c *Cell) SetUInt(value uint) {
+	c.ml.Type = types.CellTypeNumber
+	c.ml.Value = strconv.FormatUint(uint64(value), 10)
+
+	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
 	}
 
@@ -202,7 +216,7 @@ func (c *Cell) SetFloat(value float64) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
 
-	if c.ml.Style == format.DirectStyleID(0) {
+	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float]
 	}
 
@@ -228,7 +242,7 @@ func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
 
-	if c.ml.Style == format.DirectStyleID(0) {
+	if c.ml.Style == styles.DirectStyleID(0) {
 		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[t]
 	}
 
@@ -269,6 +283,16 @@ func (c *Cell) SetValue(value interface{}) {
 		c.SetInt(int(v))
 	case int64:
 		c.SetInt(int(v))
+	case uint:
+		c.SetUInt(v)
+	case uint8:
+		c.SetUInt(uint(v))
+	case uint16:
+		c.SetUInt(uint(v))
+	case uint32:
+		c.SetUInt(uint(v))
+	case uint64:
+		c.SetUInt(uint(v))
 	case float32:
 		c.SetFloat(float64(v))
 	case float64:
@@ -305,42 +329,42 @@ func (c *Cell) HasFormula() bool {
 	return c.ml.Formula != nil && (*c.ml.Formula != ml.CellFormula{})
 }
 
-//Formatting returns DirectStyleID of active format for cell
-func (c *Cell) Formatting() format.DirectStyleID {
+//Styles returns DirectStyleID of active format for cell
+func (c *Cell) Styles() styles.DirectStyleID {
 	return c.ml.Style
 }
 
-//SetFormatting sets style format to requested DirectStyleID
-func (c *Cell) SetFormatting(styleID format.DirectStyleID) {
+//SetStyles sets style format to requested DirectStyleID
+func (c *Cell) SetStyles(styleID styles.DirectStyleID) {
 	c.ml.Style = styleID
 }
 
-//SetValueWithFormat is helper function that internally works as SetValue and SetFormatting with NumberFormat
-func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
+//SetValueWithStyles is helper function that internally works as SetValue and SetStyles with NumberFormat
+func (c *Cell) SetValueWithStyles(value interface{}, formatCode string) {
 	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
 		panic(errorNotSupportedWrite)
 	}
 
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format.NewStyles(format.NumberFormat(formatCode)))
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(styles.New(styles.NumberFormat(formatCode)))
 
 	c.SetValue(value)
 	c.ml.Style = ml.DirectStyleID(styleID)
 }
 
-//Hyperlink returns resolved HyperlinkInfo if there is any hyperlink or nil otherwise
-func (c *Cell) Hyperlink() *types.HyperlinkInfo {
+//Hyperlink returns resolved hyperlink.Info if there is any hyperlink or nil otherwise
+func (c *Cell) Hyperlink() *hyperlink.Info {
 	return c.sheet.hyperlinks.Get(c.ml.Ref)
 }
 
-//SetHyperlink sets hyperlink for cell, where link can be string or HyperlinkInfo
+//SetHyperlink sets hyperlink for cell, where link can be string or hyperlink.Info
 func (c *Cell) SetHyperlink(link interface{}) error {
-	if styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link); err != nil {
+	styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link)
+	if err != nil {
 		return err
-	} else {
-		c.SetFormatting(styleID)
 	}
 
+	c.SetStyles(styleID)
 	return nil
 }
 
@@ -358,4 +382,14 @@ func (c *Cell) SetValueWithHyperlink(value interface{}, link interface{}) error 
 //RemoveHyperlink removes hyperlink from cell
 func (c *Cell) RemoveHyperlink() {
 	c.sheet.hyperlinks.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
+}
+
+//SetComment sets comment for cell, where comment can be string or comment.Info
+func (c *Cell) SetComment(comment interface{}) error {
+	return c.sheet.comments.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), comment)
+}
+
+//RemoveComment removes comment from cell
+func (c *Cell) RemoveComment() {
+	c.sheet.comments.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
 }

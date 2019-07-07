@@ -1,9 +1,9 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/types/options"
 )
 
 //Col is a higher level object that wraps ml.Col with functionality. Inherits functionality of Range
@@ -17,8 +17,8 @@ func (c *Col) Cell(rowIndex int) *Cell {
 	return c.sheet.Cell(c.bounds.FromCol, rowIndex)
 }
 
-//Set sets options for column
-func (c *Col) Set(o *options.ColumnOptions) {
+//SetOptions sets options for column
+func (c *Col) SetOptions(o *options.ColumnOptions) {
 	if o.Width > 0 {
 		c.ml.Width = o.Width
 		c.ml.CustomWidth = true
@@ -30,13 +30,13 @@ func (c *Col) Set(o *options.ColumnOptions) {
 	c.ml.Phonetic = o.Phonetic
 }
 
-//Formatting returns DirectStyleID of default format for column
-func (c *Col) Formatting() format.DirectStyleID {
+//Styles returns DirectStyleID of default format for column
+func (c *Col) Styles() styles.DirectStyleID {
 	return c.ml.Style
 }
 
-//SetFormatting sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
-func (c *Col) SetFormatting(styleID format.DirectStyleID) {
+//SetStyles sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
+func (c *Col) SetStyles(styleID styles.DirectStyleID) {
 	c.ml.Style = styleID
 }
 

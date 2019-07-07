@@ -1,7 +1,6 @@
 package xlsx
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
@@ -35,7 +34,7 @@ func (m *mergedCells) Add(bounds types.Bounds) error {
 	//let's check existing merged cells for overlapping
 	for _, mc := range m.sheet.ml.MergeCells.Items {
 		if mc.Bounds.Overlaps(bounds) {
-			return errors.New(fmt.Sprintf("intersection of different merged ranges is not allowed, %s intersects with %s", mc.Bounds, bounds))
+			return fmt.Errorf("intersection of different merged ranges is not allowed, %s intersects with %s", mc.Bounds, bounds)
 		}
 	}
 

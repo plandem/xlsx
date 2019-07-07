@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -14,25 +14,25 @@ func TestAlignH(t *testing.T) {
 		Attribute primitives.HAlignType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.HAlignType{
-		"":                 primitives.HAlignType(0),
-		"general":          format.HAlignGeneral,
-		"left":             format.HAlignLeft,
-		"center":           format.HAlignCenter,
-		"right":            format.HAlignRight,
-		"fill":             format.HAlignFill,
-		"justify":          format.HAlignJustify,
-		"centerContinuous": format.HAlignCenterContinuous,
-		"distributed":      format.HAlignDistributed,
+	list := map[primitives.HAlignType]string{
+		primitives.HAlignType(0):      "",
+		styles.HAlignGeneral:          styles.HAlignGeneral.String(),
+		styles.HAlignLeft:             styles.HAlignLeft.String(),
+		styles.HAlignCenter:           styles.HAlignCenter.String(),
+		styles.HAlignRight:            styles.HAlignRight.String(),
+		styles.HAlignFill:             styles.HAlignFill.String(),
+		styles.HAlignJustify:          styles.HAlignJustify.String(),
+		styles.HAlignCenterContinuous: styles.HAlignCenterContinuous.String(),
+		styles.HAlignDistributed:      styles.HAlignDistributed.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

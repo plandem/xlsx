@@ -3,8 +3,8 @@ package xlsx_test
 import (
 	"fmt"
 	"github.com/plandem/xlsx"
-	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/format/styles"
+	"github.com/plandem/xlsx/types/options"
 	"log"
 	"os"
 	"strings"
@@ -85,7 +85,7 @@ func Example_access() {
 	fmt.Println(cell.Value())
 
 	// Get range by references
-	area := sheet.Range("D10:H13")
+	area := sheet.RangeByRef("D10:H13")
 	fmt.Println(strings.Join(area.Values(), ","))
 
 	//Output:
@@ -137,7 +137,7 @@ func Example_iterate() {
 	}
 
 	// Iterate range's cells via iterator
-	r := sheet.Range("A1:B3")
+	r := sheet.RangeByRef("A1:B3")
 	for cells := r.Cells(); cells.HasNext(); {
 		_, _, cell := cells.Next()
 		fmt.Println(cell.Value())
@@ -204,7 +204,7 @@ func Example_walk() {
 	})
 
 	// Walk through the cells of range
-	area := sheet.Range("A1:B3")
+	area := sheet.RangeByRef("A1:B3")
 	area.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
 		fmt.Println(c.Value())
 	})
@@ -257,7 +257,7 @@ func Example_update() {
 	fmt.Println(strings.Join(col.Values(), ","))
 
 	// Update value of cells in range
-	area := sheet.Range("D10:H13")
+	area := sheet.RangeByRef("D10:H13")
 	fmt.Println(strings.Join(area.Values(), ","))
 	area.Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {
 		c.SetValue(idx)
@@ -285,31 +285,31 @@ func Example_formatting() {
 	defer xl.Close()
 
 	// Create a new format for a bold font with red color and yellow solid background
-	redBold := format.NewStyles(
-		format.Font.Bold,
-		format.Font.Color("#ff0000"),
-		format.Fill.Background("#ffff00"),
-		format.Fill.Type(format.PatternTypeSolid),
+	redBold := styles.New(
+		styles.Font.Bold,
+		styles.Font.Color("#ff0000"),
+		styles.Fill.Background("#ffff00"),
+		styles.Fill.Type(styles.PatternTypeSolid),
 	)
 
 	// Add formatting to xlsx
-	styleId := xl.AddFormatting(redBold)
+	styleId := xl.AddStyles(redBold)
 
 	sheet := xl.Sheet(0)
 
 	// Set formatting for cell
-	sheet.CellByRef("N28").SetFormatting(styleId)
+	sheet.CellByRef("N28").SetStyles(styleId)
 
 	// Set DEFAULT formatting for row. Affects cells not yet allocated in the row.
 	// In other words, this style applies to new cells.
-	sheet.Row(9).SetFormatting(styleId)
+	sheet.Row(9).SetStyles(styleId)
 
 	// Set DEFAULT formatting for col. Affects cells not yet allocated in the col.
 	// In other words, this style applies to new cells.
-	sheet.Col(3).SetFormatting(styleId)
+	sheet.Col(3).SetStyles(styleId)
 
 	//set formatting for all cells in range
-	sheet.Range("D10:H13").SetFormatting(styleId)
+	sheet.RangeByRef("D10:H13").SetStyles(styleId)
 }
 
 // Demonstrates how to set options of rows/cols/sheets
@@ -329,7 +329,7 @@ func Example_options() {
 		options.Row.Height(10.0),
 		options.Row.Collapsed(true),
 	)
-	sheet.Row(9).Set(rowOptions)
+	sheet.Row(9).SetOptions(rowOptions)
 
 	// set options for col
 	colOptions := options.NewColumnOptions(
@@ -337,13 +337,13 @@ func Example_options() {
 		options.Column.Width(10.0),
 		options.Column.Collapsed(true),
 	)
-	sheet.Col(3).Set(colOptions)
+	sheet.Col(3).SetOptions(colOptions)
 
 	// set options for sheet
 	sheetOptions := options.NewSheetOptions(
-		options.Sheet.Visibility(options.VisibilityTypeVeryHidden),
+		options.Sheet.Visibility(options.VeryHidden),
 	)
-	sheet.Set(sheetOptions)
+	sheet.SetOptions(sheetOptions)
 }
 
 // Demonstrates how to append cols/rows/sheets.
@@ -370,11 +370,11 @@ func Example_append() {
 	fmt.Println(sheet.Dimension())
 
 	// Append 3 sheet
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 	xl.AddSheet("new sheet")
 	xl.AddSheet("new sheet")
 	xl.AddSheet("new sheet")
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 
 	//Output:
 	// 14 28
@@ -449,9 +449,9 @@ func Example_delete() {
 	fmt.Println(strings.Join(sheet.Row(3).Values(), ","))
 
 	// Delete sheet
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 	xl.DeleteSheet(0)
-	fmt.Println(strings.Join(xl.GetSheetNames(), ","))
+	fmt.Println(strings.Join(xl.SheetNames(), ","))
 
 	//Output:
 	// 14 28
@@ -525,7 +525,7 @@ func Example_copy() {
 	}
 
 	// Copy range to another range that started at indexes
-	r := sheet.Range("A1:B3")
+	r := sheet.RangeByRef("A1:B3")
 	r.CopyTo(3, 0)
 	for rows := sheet.Rows(); rows.HasNext(); {
 		_, row := rows.Next()

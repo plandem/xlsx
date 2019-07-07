@@ -3,10 +3,10 @@ package xlsx
 import (
 	"encoding/xml"
 	"github.com/plandem/ooxml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 )
 
 type sheetReadStream struct {
@@ -133,7 +133,11 @@ func (s *sheetReadStream) afterOpen() {
 	conditionalsInited := false
 
 	if s.currentRow == nil {
-		s.stream = s.file.ReadStream()
+		if stream, err := s.file.ReadStream(); err != nil {
+			panic(err)
+		} else {
+			s.stream = stream
+		}
 
 		//phase1
 		for next, hasNext := s.stream.StartIterator(nil); hasNext; {
@@ -180,7 +184,12 @@ func (s *sheetReadStream) afterOpen() {
 				_ = s.stream.Close()
 
 				//re-open stream again and cache skip any info till first row
-				s.stream = s.file.ReadStream()
+				if stream, err := s.file.ReadStream(); err != nil {
+					panic(err)
+				} else {
+					s.stream = stream
+				}
+
 				for next, hasNext := s.stream.StartIterator(nil); hasNext; {
 					hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
 						if start.Name.Local == "row" {
@@ -250,7 +259,7 @@ func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) Set(o *options.SheetOptions) {
+func (s *sheetReadStream) SetOptions(o *options.SheetOptions) {
 	panic(errorNotSupported)
 }
 
@@ -274,10 +283,22 @@ func (s *sheetReadStream) SplitCols(fromIndex, toIndex int) {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+func (s *sheetReadStream) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
 	panic(errorNotSupported)
 }
 
 func (s *sheetReadStream) DeleteConditional(refs ...types.Ref) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) AutoFilter(ref types.Ref, settings ...interface{}) {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) AddFilter(colIndex int, settings ...interface{}) error {
+	panic(errorNotSupported)
+}
+
+func (s *sheetReadStream) DeleteFilter(colIndex int) {
 	panic(errorNotSupported)
 }

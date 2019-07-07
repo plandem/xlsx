@@ -1,9 +1,9 @@
 package xlsx
 
 import (
-	"github.com/plandem/xlsx/format"
-	"github.com/plandem/xlsx/options"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 )
 
 const errorNotSupported = "not supported"
@@ -36,8 +36,10 @@ type Sheet interface {
 	Cols() ColIterator
 	//Col returns a col for 0-based index
 	Col(index int) *Col
-	//Range returns a range for ref
-	Range(ref types.Ref) *Range
+	//Range returns a range for indexes
+	Range(fromCol, fromRow, toCol, toRow int) *Range
+	//RangeByRef returns a range for ref
+	RangeByRef(ref types.Ref) *Range
 	//Dimension returns total number of cols and rows in sheet
 	Dimension() (cols int, rows int)
 	//SetDimension sets total number of cols and rows in sheet
@@ -50,24 +52,30 @@ type Sheet interface {
 	InsertCol(index int) *Col
 	//DeleteCol deletes a col at 0-based index
 	DeleteCol(index int)
-	//MergeRows merges rows between fromIndex and toIndex
+	//MergeRows merges rows between 0-based fromIndex and toIndex
 	MergeRows(fromIndex, toIndex int) error
-	//MergeCols merges cols between fromIndex and toIndex
+	//MergeCols merges cols between 0-based fromIndex and toIndex
 	MergeCols(fromIndex, toIndex int) error
-	//SplitRows splits rows between fromIndex and toIndex
+	//SplitRows splits rows between 0-based fromIndex and toIndex
 	SplitRows(fromIndex, toIndex int)
-	//SplitCols splits cols between fromIndex and toIndex
+	//SplitCols splits cols between 0-based fromIndex and toIndex
 	SplitCols(fromIndex, toIndex int)
-	//AddConditional adds conditional formatting to sheet
-	AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error
+	//AddConditional adds conditional formatting to sheet, with additional refs if required
+	AddConditional(conditional *conditional.Info, refs ...types.Ref) error
 	//DeleteConditional deletes conditional formatting for refs
 	DeleteConditional(refs ...types.Ref)
+	//AutoFilter adds auto filter in provided Ref range with additional settings if required
+	AutoFilter(ref types.Ref, settings ...interface{})
+	//AddFilter adds a custom filter to column with 0-based colIndex
+	AddFilter(colIndex int, settings ...interface{}) error
+	//DeleteFilter deletes a filter from column with 0-based colIndex
+	DeleteFilter(colIndex int)
 	//Name returns name of sheet
 	Name() string
 	//SetName sets a name for sheet
 	SetName(name string)
 	//Set sets options for sheet
-	Set(o *options.SheetOptions)
+	SetOptions(o *options.SheetOptions)
 	//SetActive sets the sheet as active
 	SetActive()
 	//Close frees allocated by sheet resources

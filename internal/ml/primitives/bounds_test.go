@@ -9,22 +9,23 @@ import (
 
 func TestBounds(t *testing.T) {
 	type Entity struct {
-		Attribute *primitives.Bounds `xml:"attribute,attr"`
+		Attribute  primitives.Bounds  `xml:"attribute,attr"`
+		PAttribute *primitives.Bounds `xml:"p_attribute,attr"`
 	}
 
 	//empty
-	entity := Entity{Attribute: &primitives.Bounds{}}
+	entity := Entity{Attribute: primitives.Bounds{}, PAttribute: &primitives.Bounds{}}
 	encoded, err := xml.Marshal(&entity)
 	require.Empty(t, err)
 	require.Equal(t, `<Entity></Entity>`, string(encoded))
 
 	//encode
 	b := primitives.BoundsFromIndexes(0, 0, 10, 10)
-	entity = Entity{Attribute: &b}
+	entity = Entity{Attribute: b, PAttribute: &b}
 	encoded, err = xml.Marshal(&entity)
 
 	require.Empty(t, err)
-	require.Equal(t, `<Entity attribute="A1:K11"></Entity>`, string(encoded))
+	require.Equal(t, `<Entity attribute="A1:K11" p_attribute="A1:K11"></Entity>`, string(encoded))
 
 	//decode
 	var decoded Entity
@@ -35,8 +36,13 @@ func TestBounds(t *testing.T) {
 
 	//methods
 	require.Equal(t, primitives.Ref("A1:K11"), decoded.Attribute.ToRef())
+	require.Equal(t, primitives.Ref("A1:K11"), decoded.PAttribute.ToRef())
 
 	w, h := decoded.Attribute.Dimension()
+	require.Equal(t, 11, w)
+	require.Equal(t, 11, h)
+
+	w, h = decoded.PAttribute.Dimension()
 	require.Equal(t, 11, w)
 	require.Equal(t, 11, h)
 
@@ -44,6 +50,11 @@ func TestBounds(t *testing.T) {
 	require.Equal(t, true, decoded.Attribute.ContainsRef("A1"))
 	require.Equal(t, false, decoded.Attribute.Contains(12, 12))
 	require.Equal(t, false, decoded.Attribute.ContainsRef("L12"))
+
+	require.Equal(t, true, decoded.PAttribute.Contains(0, 0))
+	require.Equal(t, true, decoded.PAttribute.ContainsRef("A1"))
+	require.Equal(t, false, decoded.PAttribute.Contains(12, 12))
+	require.Equal(t, false, decoded.PAttribute.ContainsRef("L12"))
 
 	b1 := primitives.BoundsFromIndexes(10, 10, 0, 0)
 	require.Equal(t, b, b1)

@@ -13,21 +13,21 @@ func TestCellFormulaType(t *testing.T) {
 		Attribute primitives.CellFormulaType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.CellFormulaType{
-		"":          primitives.CellFormulaType(0),
-		"normal":    primitives.CellFormulaTypeNormal,
-		"array":     primitives.CellFormulaTypeArray,
-		"dataTable": primitives.CellFormulaTypeDataTable,
-		"shared":    primitives.CellFormulaTypeShared,
+	list := map[primitives.CellFormulaType]string{
+		primitives.CellFormulaType(0):       "",
+		primitives.CellFormulaTypeNormal:    primitives.CellFormulaTypeNormal.String(),
+		primitives.CellFormulaTypeArray:     primitives.CellFormulaTypeArray.String(),
+		primitives.CellFormulaTypeDataTable: primitives.CellFormulaTypeDataTable.String(),
+		primitives.CellFormulaTypeShared:    primitives.CellFormulaTypeShared.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

@@ -3,7 +3,7 @@ package primitives_test
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -14,23 +14,23 @@ func TestConditionValueType(t *testing.T) {
 		Attribute primitives.ConditionValueType `xml:"attribute,attr"`
 	}
 
-	list := map[string]primitives.ConditionValueType{
-		"":           primitives.ConditionValueType(0),
-		"num":        format.ConditionValueTypeNum,
-		"percent":    format.ConditionValueTypePercent,
-		"max":        format.ConditionValueTypeMax,
-		"min":        format.ConditionValueTypeMin,
-		"formula":    format.ConditionValueTypeFormula,
-		"percentile": format.ConditionValueTypePercentile,
+	list := map[primitives.ConditionValueType]string{
+		primitives.ConditionValueType(0): "",
+		rule.ValueTypeNumber:             rule.ValueTypeNumber.String(),
+		rule.ValueTypePercent:            rule.ValueTypePercent.String(),
+		rule.ValueTypeHighest:            rule.ValueTypeHighest.String(),
+		rule.ValueTypeLowest:             rule.ValueTypeLowest.String(),
+		rule.ValueTypeFormula:            rule.ValueTypeFormula.String(),
+		rule.ValueTypePercentile:         rule.ValueTypePercentile.String(),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Entity{Attribute: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Entity></Entity>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Entity attribute="%s"></Entity>`, s), string(encoded))

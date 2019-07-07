@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	sharedML "github.com/plandem/ooxml/ml"
-	"github.com/plandem/xlsx/format"
+	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/options"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/options"
 	"math"
 	"path/filepath"
 	"reflect"
@@ -17,17 +17,20 @@ import (
 
 type sheetInfo struct {
 	ml            ml.Worksheet
-	workbook      *Workbook
-	isInitialized bool
-	index         int
+	workbook      *workbook
 	file          *ooxml.PackageFile
 	columns       *columns
 	mergedCells   *mergedCells
 	hyperlinks    *hyperlinks
 	conditionals  *conditionals
+	comments      *comments
+	drawingsVML   *drawingsVML
+	filters       *filters
 	relationships *ooxml.Relationships
 	sheet         Sheet
 	sheetMode     sheetMode
+	isInitialized bool
+	index         int
 }
 
 //isCellEmpty checks if cell is empty - has no value and any formatting
@@ -108,6 +111,9 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 		sheet.mergedCells = newMergedCells(sheet)
 		sheet.hyperlinks = newHyperlinks(sheet)
 		sheet.conditionals = newConditionals(sheet)
+		sheet.filters = newFilters(sheet)
+		sheet.comments = newComments(sheet)
+		sheet.drawingsVML = newDrawingsVML(sheet)
 	}
 
 	return sheet
@@ -129,13 +135,13 @@ func (s *sheetInfo) Name() string {
 
 //SetName sets a name for sheet
 func (s *sheetInfo) SetName(name string) {
-	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.GetSheetNames(), internal.ExcelSheetNameLimit)
+	s.workbook.ml.Sheets[s.index].Name = ooxml.UniqueName(name, s.workbook.doc.SheetNames(), internal.ExcelSheetNameLimit)
 	s.workbook.file.MarkAsUpdated()
 }
 
-//Set sets options for sheet
-func (s *sheetInfo) Set(o *options.SheetOptions) {
-	if o.Visibility >= options.VisibilityTypeVisible && o.Visibility <= options.VisibilityTypeVeryHidden {
+//SetOptions sets options for sheet
+func (s *sheetInfo) SetOptions(o *options.SheetOptions) {
+	if o.Visibility >= options.Visible && o.Visibility <= options.VeryHidden {
 		s.workbook.ml.Sheets[s.index].State = o.Visibility
 		s.workbook.file.MarkAsUpdated()
 	}
@@ -171,51 +177,59 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	return
 }
 
-//Range returns a range for ref
-func (s *sheetInfo) Range(ref types.Ref) *Range {
+//Range returns a range for indexes
+func (s *sheetInfo) Range(fromCol, fromRow, toCol, toRow int) *Range {
+	return newRange(s.sheet, fromCol, toCol, fromRow, toRow)
+}
+
+//RangeByRef returns a range for ref
+func (s *sheetInfo) RangeByRef(ref types.Ref) *Range {
 	return newRangeFromRef(s.sheet, ref)
 }
 
 //MergeRows merges rows between fromIndex and toIndex
 func (s *sheetInfo) MergeRows(fromIndex, toIndex int) error {
-	return s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(0, fromIndex),
-		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
-	)).Merge()
+	return s.Range(0, fromIndex, internal.ExcelColumnLimit, toIndex).Merge()
 }
 
 //MergeCols merges cols between fromIndex and toIndex
 func (s *sheetInfo) MergeCols(fromIndex, toIndex int) error {
-	return s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(fromIndex, 0),
-		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
-	)).Merge()
+	return s.Range(fromIndex, 0, toIndex, internal.ExcelRowLimit).Merge()
 }
 
 //SplitRows splits rows between fromIndex and toIndex
 func (s *sheetInfo) SplitRows(fromIndex, toIndex int) {
-	s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(0, fromIndex),
-		types.CellRefFromIndexes(internal.ExcelColumnLimit, toIndex),
-	)).Split()
+	s.Range(0, fromIndex, internal.ExcelColumnLimit, toIndex).Split()
 }
 
 //SplitCols splits cols between fromIndex and toIndex
 func (s *sheetInfo) SplitCols(fromIndex, toIndex int) {
-	s.Range(types.RefFromCellRefs(
-		types.CellRefFromIndexes(fromIndex, 0),
-		types.CellRefFromIndexes(toIndex, internal.ExcelRowLimit),
-	)).Split()
+	s.Range(fromIndex, 0, toIndex, internal.ExcelRowLimit).Split()
 }
 
 //AddConditional adds a new conditional formatting with additional refs if required
-func (s *sheetInfo) AddConditional(conditional *format.ConditionalFormat, refs ...types.Ref) error {
+func (s *sheetInfo) AddConditional(conditional *conditional.Info, refs ...types.Ref) error {
 	return s.conditionals.Add(conditional, refs)
 }
 
 //DeleteConditional deletes a conditional formatting from refs
 func (s *sheetInfo) DeleteConditional(refs ...types.Ref) {
 	s.conditionals.Remove(refs)
+}
+
+//AutoFilter adds auto filter in provided Ref range
+func (s *sheetInfo) AutoFilter(ref types.Ref, settings ...interface{}) {
+	s.filters.AddAuto(ref, settings)
+}
+
+//AddFilter adds a filter to column with index
+func (s *sheetInfo) AddFilter(colIndex int, settings ...interface{}) error {
+	return s.filters.Add(colIndex, settings)
+}
+
+//DeleteFilter deletes a filter from column with index
+func (s *sheetInfo) DeleteFilter(colIndex int) {
+	s.filters.Remove(colIndex)
 }
 
 //Close frees allocated by sheet resources
