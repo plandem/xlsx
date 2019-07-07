@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"github.com/plandem/ooxml"
 	"github.com/plandem/ooxml/drawing/vml"
+	"github.com/plandem/ooxml/drawing/vml/css"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal"
+	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/comment"
 	"math"
 	"regexp"
 	"strconv"
@@ -25,6 +28,7 @@ type drawingsVML struct {
 	updated             bool
 	nextShapeId         int
 	nextShapeIdMax      int
+	shapeIndex          map[hash.Code]int
 }
 
 //capacity of chunk. vml file store shapes in chunks
@@ -34,12 +38,16 @@ const vmlChunkSize = 1024
 const commentShapeTypeSpt = 202
 
 var (
-	regexpDrawings = regexp.MustCompile(`xl/drawings/[[:alpha:]]+[\d]+\.vml`)
-	regexpShapeID  = regexp.MustCompile(`_x0000_s([\d]+)`)
+	regexpDrawings   = regexp.MustCompile(`xl/drawings/[[:alpha:]]+[\d]+\.vml`)
+	regexpShapeID    = regexp.MustCompile(`_x0000_s([\d]+)`)
+	commentShapeType = fmt.Sprintf("#_x0000_t%d", commentShapeTypeSpt)
 )
 
 func newDrawingsVML(sheet *sheetInfo) *drawingsVML {
-	return &drawingsVML{sheet: sheet}
+	return &drawingsVML{
+		sheet:      sheet,
+		shapeIndex: make(map[hash.Code]int),
+	}
 }
 
 //resolve chunks info of this VML drawings file
@@ -119,39 +127,75 @@ func (d *drawingsVML) nextShapeID() int {
 	return d.nextShapeId
 }
 
-func (d *drawingsVML) addComment(bounds types.Bounds, comment interface{}) error {
+func (d *drawingsVML) addComment(bounds types.Bounds, info *comment.Info) error {
 	d.initCommentsIfRequired()
 
-	//TODO: replace mock data
 	shape := &vml.Shape{}
 	shape.ID = fmt.Sprintf("_x0000_s%d", d.nextShapeID())
-	shape.Type = fmt.Sprintf("#_x0000_t%d", commentShapeTypeSpt)
-	shape.FillColor = "#ffffe1"
+	shape.Type = commentShapeType
+	shape.FillColor = info.Background
 	shape.InsetMode = vml.InsetModeAuto
-	shape.Style = "position:absolute;margin-left:242.25pt;margin-top:22.5pt;width:96pt;height:55.5pt;z-index:1;visibility:hidden"
-	shape.Fill = &vml.Fill{Color2: "#ffffe1"}
-	shape.PathSettings = &vml.Path{ConnectType: vml.ConnectTypeNone}
-	shape.Shadow = &vml.Shadow{
-		Color:    "black",
-		On:       sharedML.TriStateTrue,
-		Obscured: sharedML.TriStateTrue,
+
+	//TODO: add support for margins - right now no idea how to calculate it
+	//"margin-left:242.25pt;margin-top:22.5pt"
+	style := css.Style{
+		ZIndex:   len(d.ml.Shape) + 1,
+		Position: css.PositionAbsolute,
+		Width:    css.NewNumber(info.Width),
+		Height:   css.NewNumber(info.Height),
 	}
+
+	if info.Visible {
+		style.Visible = css.VisibilityVisible
+	} else {
+		style.Visible = css.VisibilityHidden
+	}
+
+	shape.Style = style.String()
+	shape.Fill = &vml.Fill{Color2: info.Background}
+	shape.PathSettings = &vml.Path{ConnectType: vml.ConnectTypeNone}
+
+	if len(info.Shadow) != 0 {
+		shape.Shadow = &vml.Shadow{
+			Color:    info.Shadow,
+			On:       sharedML.TriStateTrue,
+			Obscured: sharedML.TriStateTrue,
+		}
+	}
+
+	//"1, 15, 0,  2, 3, 15, 3, 16"
+	//"3, 15, 1, 10, 5, 15, 2, 64",
+	//"1, 15, 0,  2, 2, 54, 5, 3"
+	//"2, 15, 2, 14, 4, 23, 6, 19"
+	//"1, 15, x, 5, 3, 15, x, 0"
+
+	//TODO: add support for anchors - right now no idea how to calculate it
+	//anchor := vml.ClientDataAnchor{
+	//	LeftColumn:   3,
+	//	LeftOffset:   15,
+	//	TopRow:       1,
+	//	TopOffset:    10,
+	//	RightColumn:  5,
+	//	RightOffset:  15,
+	//	BottomRow:    2,
+	//	BottomOffset: 16,
+	//}
+
 	shape.ClientData = &vml.ClientData{
-		Row:           bounds.FromRow,
-		Column:        bounds.FromCol,
-		Type:          vml.ObjectTypeNote,
-		Anchor:        "3, 15, 1, 10, 5, 15, 2, 64",
+		Row:    bounds.FromRow,
+		Column: bounds.FromCol,
+		Type:   vml.ObjectTypeNote,
+		//Anchor:        anchor.String(),
 		SizeWithCells: sharedML.TriStateBlankTrue(sharedML.TriStateTrue),
 		MoveWithCells: sharedML.TriStateBlankTrue(sharedML.TriStateTrue),
 		AutoFill:      sharedML.TriStateBlankTrue(sharedML.TriStateFalse),
 	}
 
-	//colCount = max(line length)
-	//lineCount = number of lines + 1
-	//Row:      xAxis,
-	//Column:   yAxis,
-	//Anchor: 1+yAxis, 1+xAxis, 2+yAxis+lineCount, colCount+yAxis, 2+xAxis+lineCount),
+	if info.Visible {
+		shape.ClientData.Visible = sharedML.TriStateBlankTrue(sharedML.TriStateTrue)
+	}
 
+	d.shapeIndex[hash.Vml(shape).Hash()] = len(d.ml.Shape)
 	d.ml.Shape = append(d.ml.Shape, shape)
 	d.file.MarkAsUpdated()
 	d.updated = true
@@ -162,7 +206,24 @@ func (d *drawingsVML) addComment(bounds types.Bounds, comment interface{}) error
 func (d *drawingsVML) removeComment(bounds types.Bounds) {
 	d.initCommentsIfRequired()
 
-	//TODO: remove comments
+	shape := &vml.Shape{}
+
+	//TODO: theoretically we can have few shape types for comments, but right now we use index as - shapeType+row+col
+	shape.Type = commentShapeType
+	shape.ClientData = &vml.ClientData{
+		Column: bounds.FromCol,
+		Row:    bounds.FromRow,
+	}
+
+	key := hash.Vml(shape).Hash()
+	if id, ok := d.shapeIndex[key]; ok {
+		d.ml.Shape[id] = d.ml.Shape[len(d.ml.Shape)-1]
+		d.ml.Shape[len(d.ml.Shape)-1] = nil //prevent memory leaks
+		d.ml.Shape = d.ml.Shape[:len(d.ml.Shape)-1]
+
+		//clean up indexes
+		delete(d.shapeIndex, key)
+	}
 }
 
 //load all content if required or add minimal required
@@ -211,6 +272,7 @@ func (d *drawingsVML) initIfRequired() {
 	d.file.MarkAsUpdated()
 	d.initializedFile = true
 	d.updated = true
+	d.buildIndexes()
 }
 
 //attach LegacyDrawing info into sheet
@@ -284,5 +346,12 @@ func (d *drawingsVML) attachFileIfRequired() {
 
 		//add file to sheet relations
 		d.sheet.relationships.AddFile(internal.RelationTypeVmlDrawing, fileName)
+	}
+}
+
+//build indexes for shapes
+func (d *drawingsVML) buildIndexes() {
+	for id, s := range d.ml.Shape {
+		d.shapeIndex[hash.Vml(s).Hash()] = id
 	}
 }

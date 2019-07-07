@@ -1,6 +1,8 @@
 package hash_test
 
 import (
+	"fmt"
+	"github.com/plandem/ooxml/drawing/vml"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
@@ -326,4 +328,20 @@ func TestDiffStyle(t *testing.T) {
 			Left:         &ml.BorderSegment{Color: &ml.Color{RGB: "777777"}, Type: styles.BorderStyleSlantDashDot},
 		}},
 	))
+}
+
+func TestVmlShape(t *testing.T) {
+
+	shape := &vml.Shape{}
+	shape.ID = fmt.Sprintf("_x0000_s%d", 1025)
+	shape.Type = "#_x0000_t202"
+	shape.FillColor = "#ffeeee"
+	shape.InsetMode = vml.InsetModeAuto
+
+	shape.ClientData = &vml.ClientData{
+		Column: 1,
+		Row:    2,
+	}
+
+	require.Equal(t, hash.Key("#_x0000_t202:1:2"), hash.Vml(shape))
 }

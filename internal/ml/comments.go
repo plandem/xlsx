@@ -6,9 +6,6 @@ import (
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
 
-//AuthorID is helper alias type for authorId
-type AuthorID uint
-
 //GUID is a direct mapping of XSD ST_Guid
 type GUID string
 
@@ -25,7 +22,7 @@ type Comment struct {
 	Text     *StringItem       `xml:"text"`
 	Options  *CommentOptions   `xml:"commentPr,omitempty"`
 	Ref      primitives.Bounds `xml:"ref,attr"`
-	AuthorID AuthorID          `xml:"authorId,attr"`
+	AuthorID int               `xml:"authorId,attr"`
 	Guid     GUID              `xml:"guid,attr,omitempty"`
 	ShapeID  ml.OptionalIndex  `xml:"shapeId,attr,omitempty"`
 }

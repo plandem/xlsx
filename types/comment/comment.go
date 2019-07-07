@@ -1,104 +1,103 @@
 package comment
 
-type Comment struct {
+type Info struct {
+	Width      float32
+	Height     float32
+	XScale     float32
+	YScale     float32
+	XOffset    float32
+	YOffset    float32
+	Author     string
+	Background string
+	Shadow     string
+	Visible    bool
+	Text       []interface{}
 }
 
-type commentOption func(co *Comment)
+type Option func(o *Info)
 
-//NewComment create and returns option set for comment
-func New(options ...commentOption) *Comment {
-	s := &Comment{}
+//New create and returns option set for comment
+func New(options ...Option) *Info {
+	s := &Info{
+		Background: "#ffffe1",
+		Width:      128,
+		Height:     74,
+		XScale:     1,
+		YScale:     1,
+	}
 	s.Set(options...)
 	return s
 }
 
 //Set sets new options for option set
-func (co *Comment) Set(options ...commentOption) {
+func (i *Info) Set(options ...Option) {
 	for _, o := range options {
-		o(co)
+		o(i)
 	}
 }
 
-func (o *commentOption) Author(author string) commentOption {
-	return func(co *Comment) {
-
+func Author(author string) Option {
+	return func(i *Info) {
+		i.Author = author
 	}
 }
 
-func (o *commentOption) Visible(visibility bool) commentOption {
-	return func(co *Comment) {
-
+func Visible(visible bool) Option {
+	return func(i *Info) {
+		i.Visible = visible
 	}
 }
 
-func (o *commentOption) XScale(scale float32) commentOption {
-	return func(co *Comment) {
-
+func XScale(scale float32) Option {
+	return func(co *Info) {
+		co.XScale = scale
 	}
 }
 
-func (o *commentOption) YScale(scale float32) commentOption {
-	return func(co *Comment) {
-
+func YScale(scale float32) Option {
+	return func(i *Info) {
+		i.YScale = scale
 	}
 }
 
-func (o *commentOption) XOffset(offset float32) commentOption {
-	return func(co *Comment) {
-
+func XOffset(offset float32) Option {
+	return func(i *Info) {
+		i.XOffset = offset
 	}
 }
 
-func (o *commentOption) YOffset(offset float32) commentOption {
-	return func(co *Comment) {
-
+func YOffset(offset float32) Option {
+	return func(i *Info) {
+		i.YOffset = offset
 	}
 }
 
-func (o *commentOption) Width(width float32) commentOption {
-	return func(co *Comment) {
-
+func Width(width float32) Option {
+	return func(i *Info) {
+		i.Width = width
 	}
 }
 
-func (o *commentOption) Height(height float32) commentOption {
-	return func(co *Comment) {
-
+func Height(height float32) Option {
+	return func(i *Info) {
+		i.Height = height
 	}
 }
 
-func (o *commentOption) StartCell(start int) commentOption {
-	return func(co *Comment) {
-
+func Background(rgb string) Option {
+	return func(i *Info) {
+		i.Background = rgb
 	}
 }
 
-func (o *commentOption) StartRow(start int) commentOption {
-	return func(co *Comment) {
-
+func Shadow(rgb string) Option {
+	return func(i *Info) {
+		i.Shadow = rgb
 	}
 }
 
-func (o *commentOption) StartCol(start int) commentOption {
-	return func(co *Comment) {
-
-	}
-}
-
-func (o *commentOption) Font(font interface{}) commentOption {
-	return func(co *Comment) {
-
-	}
-}
-
-func (o *commentOption) FontSize(size interface{}) commentOption {
-	return func(co *Comment) {
-
-	}
-}
-
-func (o *commentOption) Color(color interface{}) commentOption {
-	return func(co *Comment) {
-
+func Text(parts ...interface{}) Option {
+	return func(i *Info) {
+		i.Text = parts
 	}
 }

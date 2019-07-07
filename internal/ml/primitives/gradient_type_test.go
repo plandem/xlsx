@@ -15,8 +15,8 @@ func TestFillGradient(t *testing.T) {
 	}
 
 	list := map[primitives.GradientType]string{
-		styles.GradientTypeLinear:  styles.GradientTypeLinear.String(),
-		styles.GradientTypePath:    styles.GradientTypePath.String(),
+		styles.GradientTypeLinear: styles.GradientTypeLinear.String(),
+		styles.GradientTypePath:   styles.GradientTypePath.String(),
 	}
 
 	for v, s := range list {
