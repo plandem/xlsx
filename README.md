@@ -17,6 +17,7 @@ import (
 	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/types"
+	"github.com/plandem/xlsx/types/comment"
 	"github.com/plandem/xlsx/types/hyperlink"
 )
 
@@ -110,11 +111,13 @@ func main() {
 	sheet.CellByRef("F12").SetComment(comment.New(
 		comment.Author("John Doe"),
 		comment.Text(
-			"Red bold comment",
+			"plain text", 
 			styles.New(
 				styles.Font.Bold,
 				styles.Font.Color("#ff0000"),
-        	),
+			),
+			"red bold text",
+			"another plain text",
         ),
 	))
 	
