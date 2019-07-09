@@ -3,6 +3,8 @@ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/go-test/deep v1.0.1/go.mod h1:wGDj63lr65AM2AQyKZd/NYHGb0R+1RLqB8NKt3aSFNA=
 github.com/plandem/ooxml v0.0.0-20190707190948-c8a4fbdda617 h1:Te32w/enwEEVSG9jwYU9ER+ID8621U+MKLOoWpJkZBs=
 github.com/plandem/ooxml v0.0.0-20190707190948-c8a4fbdda617/go.mod h1:IPgZT3JusQax//tCModfRm0HVTJXMB04liCaOeaDf5o=
+github.com/plandem/ooxml v0.0.0-20190709153553-bb6edf43a4b2 h1:ZrFWOoS0PJGAbnCIlk3Of1HJk/WMqOUFXnRTsj9A/J4=
+github.com/plandem/ooxml v0.0.0-20190709153553-bb6edf43a4b2/go.mod h1:IPgZT3JusQax//tCModfRm0HVTJXMB04liCaOeaDf5o=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

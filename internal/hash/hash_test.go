@@ -331,7 +331,6 @@ func TestDiffStyle(t *testing.T) {
 }
 
 func TestVmlShape(t *testing.T) {
-
 	shape := &vml.Shape{}
 	shape.ID = fmt.Sprintf("_x0000_s%d", 1025)
 	shape.Type = "#_x0000_t202"
@@ -343,5 +342,18 @@ func TestVmlShape(t *testing.T) {
 		Row:    2,
 	}
 
-	require.Equal(t, hash.Key("#_x0000_t202:1:2"), hash.Vml(shape))
+	require.Equal(t, hash.Key("#_x0000_t202:0:1:2"), hash.Vml(shape))
+
+	shape = &vml.Shape{}
+	shape.ID = fmt.Sprintf("_x0000_s%d", 1025)
+	shape.FillColor = "#ffeeee"
+	shape.InsetMode = vml.InsetModeAuto
+	shape.Spt = 202
+
+	shape.ClientData = &vml.ClientData{
+		Column: 1,
+		Row:    2,
+	}
+
+	require.Equal(t, hash.Key(":202:1:2"), hash.Vml(shape))
 }

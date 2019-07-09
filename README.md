@@ -100,7 +100,7 @@ func main() {
 			styles.Font.Bold,
 			styles.Font.Color("#ff0000"),
 		),
-		"red bold text",
+		" red bold text ",
 		"another plain text",
 	)
 	
@@ -116,9 +116,9 @@ func main() {
 				styles.Font.Bold,
 				styles.Font.Color("#ff0000"),
 			),
-			"red bold text",
+			" red bold text ",
 			"another plain text",
-        ),
+		),
 	))
 	
 	sheet.CellByRef("F11").RemoveComment()
@@ -202,7 +202,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 - [x] range: copy
 - [x] row: copy
 - [x] col: copy
-- [ ] cell: comments
+- [x] cell: comments
 - [ ] cell: formulas
 - [x] cell: typed getter/setter for values
 - [x] other: conditional formatting
