@@ -14,6 +14,7 @@ func Vml(shape *vml.Shape) Key {
 
 	return Key(strings.Join([]string{
 		shape.Type,
+		strconv.FormatInt(int64(shape.Spt), 10),
 		strconv.FormatInt(int64(shape.ClientData.Column), 10),
 		strconv.FormatInt(int64(shape.ClientData.Row), 10),
 	}, ":"))

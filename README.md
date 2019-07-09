@@ -100,7 +100,7 @@ func main() {
 			styles.Font.Bold,
 			styles.Font.Color("#ff0000"),
 		),
-		"red bold text",
+		" red bold text ",
 		"another plain text",
 	)
 	
@@ -116,7 +116,7 @@ func main() {
 				styles.Font.Bold,
 				styles.Font.Color("#ff0000"),
 			),
-			"red bold text",
+			" red bold text ",
 			"another plain text",
 		),
 	))

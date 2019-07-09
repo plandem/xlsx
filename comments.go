@@ -114,6 +114,7 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 		cml.AuthorID = id
 	} else {
 		nextID := len(c.ml.Authors)
+		c.ml.Authors = append(c.ml.Authors, types.Text(object.Author))
 		c.authorIndex[authorKey] = nextID
 		cml.AuthorID = nextID
 	}
