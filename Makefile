@@ -17,3 +17,10 @@ bench-sheet:
 
 test:
 	go test -v ./... -cover
+
+docs-build:
+	vuepress build docs
+
+docs-dev:
+	vuepress dev docs
+
