@@ -10,9 +10,10 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/ooxml/drawing/vml"
 	"github.com/plandem/ooxml/drawing/vml/css"
+	"github.com/plandem/ooxml/index"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/hash"
+	//"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/comment"
@@ -32,7 +33,7 @@ type drawingsVML struct {
 	updated             bool
 	nextShapeId         int
 	nextShapeIdMax      int
-	shapeIndex          map[hash.Code]int
+	shapeIndex          index.Index
 }
 
 //capacity of chunk. vml file store shapes in chunks
@@ -49,8 +50,7 @@ var (
 
 func newDrawingsVML(sheet *sheetInfo) *drawingsVML {
 	return &drawingsVML{
-		sheet:      sheet,
-		shapeIndex: make(map[hash.Code]int),
+		sheet: sheet,
 	}
 }
 
@@ -199,7 +199,10 @@ func (d *drawingsVML) addComment(bounds types.Bounds, info *comment.Info) error 
 		shape.ClientData.Visible = sharedML.TriStateBlankTrue(sharedML.TriStateTrue)
 	}
 
-	d.shapeIndex[hash.Vml(shape).Hash()] = len(d.ml.Shape)
+	if err := d.shapeIndex.Add(shape, len(d.ml.Shape)); err != nil {
+		return err
+	}
+
 	d.ml.Shape = append(d.ml.Shape, shape)
 	d.file.MarkAsUpdated()
 	d.updated = true
@@ -219,14 +222,13 @@ func (d *drawingsVML) removeComment(bounds types.Bounds) {
 		Row:    bounds.FromRow,
 	}
 
-	key := hash.Vml(shape).Hash()
-	if id, ok := d.shapeIndex[key]; ok {
+	if id, ok := d.shapeIndex.Get(shape); ok {
 		d.ml.Shape[id] = d.ml.Shape[len(d.ml.Shape)-1]
 		d.ml.Shape[len(d.ml.Shape)-1] = nil //prevent memory leaks
 		d.ml.Shape = d.ml.Shape[:len(d.ml.Shape)-1]
 
 		//clean up indexes
-		delete(d.shapeIndex, key)
+		d.shapeIndex.Remove(shape)
 	}
 }
 
@@ -356,6 +358,6 @@ func (d *drawingsVML) attachFileIfRequired() {
 //build indexes for shapes
 func (d *drawingsVML) buildIndexes() {
 	for id, s := range d.ml.Shape {
-		d.shapeIndex[hash.Vml(s).Hash()] = id
+		_ = d.shapeIndex.Add(s, id)
 	}
 }

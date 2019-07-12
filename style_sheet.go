@@ -6,9 +6,9 @@ package xlsx
 
 import (
 	"github.com/plandem/ooxml"
+	"github.com/plandem/ooxml/index"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 
@@ -24,15 +24,15 @@ type styleSheet struct {
 	ml ml.StyleSheet
 
 	//hash -> index for styles
-	directStyleIndex map[hash.Code]styles.DirectStyleID
-	diffStyleIndex   map[hash.Code]styles.DiffStyleID
-	namedStyleIndex  map[hash.Code]styles.NamedStyleID
+	directStyleIndex index.Index
+	diffStyleIndex   index.Index
+	namedStyleIndex  index.Index
 
 	//hash -> index for types
-	borderIndex map[hash.Code]int
-	fillIndex   map[hash.Code]int
-	fontIndex   map[hash.Code]int
-	numberIndex map[hash.Code]int
+	borderIndex index.Index
+	fillIndex   index.Index
+	fontIndex   index.Index
+	numberIndex index.Index
 
 	//hash for typed number formats
 	typedStyles map[numberFormat.Type]styles.DirectStyleID
@@ -44,13 +44,6 @@ type styleSheet struct {
 func newStyleSheet(f interface{}, doc *Spreadsheet) *styleSheet {
 	ss := &styleSheet{
 		doc:              doc,
-		directStyleIndex: make(map[hash.Code]styles.DirectStyleID),
-		diffStyleIndex:   make(map[hash.Code]styles.DiffStyleID),
-		namedStyleIndex:  make(map[hash.Code]styles.NamedStyleID),
-		borderIndex:      make(map[hash.Code]int),
-		fillIndex:        make(map[hash.Code]int),
-		fontIndex:        make(map[hash.Code]int),
-		numberIndex:      make(map[hash.Code]int),
 		typedStyles:      make(map[numberFormat.Type]styles.DirectStyleID),
 	}
 
@@ -141,38 +134,38 @@ func (ss *styleSheet) addDefaults() {
 func (ss *styleSheet) buildIndexes() {
 	//build indexes for fonts
 	for id, f := range ss.ml.Fonts.Items {
-		ss.fontIndex[hash.Font(f).Hash()] = id
+		_= ss.fontIndex.Add(f, id)
 	}
 
 	//build indexes for fill
 	for id, f := range ss.ml.Fills.Items {
-		ss.fillIndex[hash.Fill(f).Hash()] = id
+		_= ss.fillIndex.Add(f, id)
 	}
 
 	//build indexes for border
 	for id, f := range ss.ml.Borders.Items {
-		ss.borderIndex[hash.Border(f).Hash()] = id
+		_= ss.borderIndex.Add(f, id)
 	}
 
 	//build indexes for number formats
 	for _, f := range ss.ml.NumberFormats.Items {
 		//N.B.: NumberFormat uses ID, not indexes
-		ss.numberIndex[hash.NumberFormat(f).Hash()] = f.ID
+		_= ss.numberIndex.Add(f, f.ID)
 	}
 
 	//build indexes for named styles
 	for id, xf := range ss.ml.CellStyleXfs.Items {
-		ss.namedStyleIndex[hash.NamedStyle(xf).Hash()] = styles.NamedStyleID(id)
+		_= ss.namedStyleIndex.Add(xf, id)
 	}
 
 	//build indexes for direct styles
 	for id, xf := range ss.ml.CellXfs.Items {
-		ss.directStyleIndex[hash.DirectStyle(xf).Hash()] = styles.DirectStyleID(id)
+		_= ss.directStyleIndex.Add(xf, id)
 	}
 
 	//build indexes for differential styles
 	for id, dxf := range ss.ml.Dxfs.Items {
-		ss.diffStyleIndex[hash.DiffStyle(dxf).Hash()] = styles.DiffStyleID(id)
+		_= ss.diffStyleIndex.Add(dxf, id)
 	}
 }
 
@@ -250,15 +243,14 @@ func (ss *styleSheet) addDiffStyle(f *styles.Info) styles.DiffStyleID {
 	}
 
 	//return id of already existing information
-	key := hash.DiffStyle(dXf).Hash()
-	if id, ok := ss.diffStyleIndex[key]; ok {
+	if id, ok := ss.diffStyleIndex.Get(dXf); ok {
 		return styles.DiffStyleID(id)
 	}
 
 	//add a new one and return related id
 	nextID := styles.DiffStyleID(len(ss.ml.Dxfs.Items))
 	ss.ml.Dxfs.Items = append(ss.ml.Dxfs.Items, dXf)
-	ss.diffStyleIndex[key] = nextID
+	_= ss.diffStyleIndex.Add(dXf, int(nextID))
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -270,18 +262,17 @@ func (ss *styleSheet) addNamedStyleIfRequired(namedInfo *ml.NamedStyleInfo, styl
 	}
 
 	namedStyle := ml.NamedStyle(style)
-	key := hash.NamedStyle(&namedStyle).Hash()
 
 	//TODO: check if it's possible to have 2 same built-styles
 
 	//if there is already same styles, then use it
-	if id, ok := ss.namedStyleIndex[key]; ok {
+	if id, ok := ss.namedStyleIndex.Get(&namedStyle); ok {
 		namedInfo.XfId = ml.NamedStyleID(id)
 	} else {
 		//add a new style
 		nextID := styles.NamedStyleID(len(ss.ml.CellStyleXfs.Items))
 		ss.ml.CellStyleXfs.Items = append(ss.ml.CellStyleXfs.Items, &namedStyle)
-		ss.namedStyleIndex[key] = nextID
+		_= ss.namedStyleIndex.Add(&namedStyle, int(nextID))
 
 		//add style info
 		namedInfo.XfId = ml.NamedStyleID(nextID)
@@ -336,15 +327,14 @@ func (ss *styleSheet) addStyle(f *styles.Info) styles.DirectStyleID {
 	}
 
 	//return id of already existing information
-	key := hash.DirectStyle(cellXf).Hash()
-	if id, ok := ss.directStyleIndex[key]; ok {
-		return id
+	if id, ok := ss.directStyleIndex.Get(cellXf); ok {
+		return styles.DirectStyleID(id)
 	}
 
 	//add a new one and return related id
 	nextID := styles.DirectStyleID(len(ss.ml.CellXfs.Items))
 	ss.ml.CellXfs.Items = append(ss.ml.CellXfs.Items, cellXf)
-	ss.directStyleIndex[key] = nextID
+	_= ss.directStyleIndex.Add(cellXf, int(nextID))
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -357,15 +347,14 @@ func (ss *styleSheet) addFontIfRequired(font *ml.Font) int {
 	}
 
 	//return id of already existing information
-	key := hash.Font(font).Hash()
-	if id, ok := ss.fontIndex[key]; ok {
+	if id, ok := ss.fontIndex.Get(font); ok {
 		return id
 	}
 
 	//add a new one and return related id
 	nextID := len(ss.ml.Fonts.Items)
 	ss.ml.Fonts.Items = append(ss.ml.Fonts.Items, font)
-	ss.fontIndex[key] = nextID
+	_= ss.fontIndex.Add(font, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -378,15 +367,14 @@ func (ss *styleSheet) addFillIfRequired(fill *ml.Fill) int {
 	}
 
 	//return id of already existing information
-	key := hash.Fill(fill).Hash()
-	if id, ok := ss.fillIndex[key]; ok {
+	if id, ok := ss.fillIndex.Get(fill); ok {
 		return id
 	}
 
 	//add a new one and return related id
 	nextID := len(ss.ml.Fills.Items)
 	ss.ml.Fills.Items = append(ss.ml.Fills.Items, fill)
-	ss.fillIndex[key] = nextID
+	_= ss.fillIndex.Add(fill, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -399,15 +387,14 @@ func (ss *styleSheet) addBorderIfRequired(border *ml.Border) int {
 	}
 
 	//return id of already existing information
-	key := hash.Border(border).Hash()
-	if id, ok := ss.borderIndex[key]; ok {
+	if id, ok := ss.borderIndex.Get(border); ok {
 		return id
 	}
 
 	//add a new one and return related id
 	nextID := len(ss.ml.Borders.Items)
 	ss.ml.Borders.Items = append(ss.ml.Borders.Items, border)
-	ss.borderIndex[key] = nextID
+	_= ss.borderIndex.Add(border, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -426,8 +413,7 @@ func (ss *styleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
 
 	//Return id of already existing information.
 	//N.B.: Supposed that for custom format we have -1 as code, so hash should be same for new/existing custom format
-	key := hash.NumberFormat(number).Hash()
-	if id, ok := ss.numberIndex[key]; ok {
+	if id, ok := ss.numberIndex.Get(number); ok {
 		return id
 	}
 
@@ -443,7 +429,7 @@ func (ss *styleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
 	number.ID = nextID
 
 	ss.ml.NumberFormats.Items = append(ss.ml.NumberFormats.Items, number)
-	ss.numberIndex[key] = nextID
+	_= ss.numberIndex.Add(number, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }

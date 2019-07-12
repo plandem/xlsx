@@ -40,23 +40,20 @@ You get more info about benchmarks at dedicated [Benchmarks Repository](https://
 :::
 
 ## Roadmap
-- [ ] sheet: copy
-- [x] sheet: read as stream
-- [ ] sheet: write as stream
+- [x] [copy cell, row, col](/guide/copy.md)
+- [x] [read as stream](/guide/stream-read.md)
 - [x] [merged cells](/guide/merged-cells.md)
 - [x] [hyperlinks](/guide/hyperlinks.md)
-- [x] range: copy
-- [x] row: copy
-- [x] col: copy
 - [x] [comments](/guide/comments.md)
-- [ ] cell: formulas
-- [x] cell: typed getter/setter for values
+- [x] [typed getter/setter for values](/guide/typed-values.md)
 - [x] [conditional formatting](/guide/conditional-formatting.md)
 - [x] [styles formatting](/guide/styles-formatting.md)
 - [x] [rich text](/guide/rich-text.md)
-- [ ] other: drawing
-- [ ] other: unpack package to temp folder to reduce memory usage
-- [x] other: more tests
+- [ ] copy sheet
+- [ ] write as stream
+- [ ] formulas
+- [ ] drawing
+- [ ] unpack package to temp folder to reduce memory usage
 
 ## API Documentation
 For detailed API documentation, you can check [godoc.org](https://godoc.org/github.com/plandem/xlsx)

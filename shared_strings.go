@@ -6,8 +6,8 @@ package xlsx
 
 import (
 	"github.com/plandem/ooxml"
+	"github.com/plandem/ooxml/index"
 	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 )
@@ -15,7 +15,7 @@ import (
 //sharedStrings is a higher level object that wraps ml.SharedStrings with functionality
 type sharedStrings struct {
 	ml    ml.SharedStrings
-	index map[hash.Code]int
+	index index.Index
 	doc   *Spreadsheet
 	file  *ooxml.PackageFile
 }
@@ -23,7 +23,6 @@ type sharedStrings struct {
 func newSharedStrings(f interface{}, doc *Spreadsheet) *sharedStrings {
 	ss := &sharedStrings{
 		doc:   doc,
-		index: make(map[hash.Code]int),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
@@ -39,7 +38,7 @@ func newSharedStrings(f interface{}, doc *Spreadsheet) *sharedStrings {
 
 func (ss *sharedStrings) afterLoad() {
 	for i, s := range ss.ml.StringItem {
-		ss.index[hash.StringItem(s).Hash()] = i
+		_= ss.index.Add(s, i)
 	}
 }
 
@@ -63,16 +62,14 @@ func (ss *sharedStrings) addString(value string) int {
 func (ss *sharedStrings) addText(si *ml.StringItem) int {
 	ss.file.LoadIfRequired(ss.afterLoad)
 
-	key := hash.StringItem(si).Hash()
-
 	//return sid if already exists
-	if sid, ok := ss.index[key]; ok {
+	if sid, ok := ss.index.Get(si); ok {
 		return sid
 	}
 
 	sid := len(ss.ml.StringItem)
 	ss.ml.StringItem = append(ss.ml.StringItem, si)
-	ss.index[key] = sid
+	_= ss.index.Add(si, sid)
 
 	ss.file.MarkAsUpdated()
 
