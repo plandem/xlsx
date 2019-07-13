@@ -28,12 +28,20 @@ module.exports = {
                     '/guide/getting-started.md',
                     '/guide/access.md',
                     '/guide/iterate.md',
+                    '/guide/typed-values',
                     '/guide/merged-cells.md',
+                    '/guide/rich-text.md',
                     '/guide/hyperlinks.md',
                     '/guide/comments.md',
                     '/guide/styles-formatting.md',
-                    '/guide/conditional-formatting'
+                    '/guide/conditional-formatting',
+                    ['/guide/filters', 'Filters'],
+                    '/guide/limits.md',
                 ]
+            },
+            {
+                title: 'F.A.Q.',
+                path: '/faq/',
             }
         ]
     }

@@ -1,5 +1,5 @@
 # Iterate
-Does not matter how will you access data inside of sheet(by indexes, reference or via iterators), in all cases library will auto expand sheet's dimension to required size.
+Does not matter how you will access data inside of sheet(by indexes, reference or via iterators), in all cases library will auto expand sheet's dimension to required size.
 ```go
 	xl := xlsx.New()
 	sheet := xl.AddSheet("sheet name")
@@ -22,12 +22,12 @@ Sheet is a grid, so if you request something outside of current dimension of gri
 	}
 ```
 
-## Iterators
+### Iterators
 Sometimes it's easier to iterate through the data using iterators
 
 N.B.: Internally, Row and Column are subtypes of Range, so they inherit Range's functionality. 
 
-### Sheet
+#### Sheet
 ```go
 	xl, err := xlsx.Open("./foo.xlsx")
 	if err != nil {
@@ -40,7 +40,7 @@ N.B.: Internally, Row and Column are subtypes of Range, so they inherit Range's 
 	}
 ```
 
-### Rows
+#### Rows
 ```go
 	// Iterate rows via iterator
 	for rows := sheet.Rows(); rows.HasNext(); {
@@ -53,7 +53,7 @@ N.B.: Internally, Row and Column are subtypes of Range, so they inherit Range's 
 	}
 ```
 
-### Columns
+#### Columns
 ```go
 	// Iterate cols via iterator
 	for cols := sheet.Cols(); cols.HasNext(); {
@@ -65,7 +65,7 @@ N.B.: Internally, Row and Column are subtypes of Range, so they inherit Range's 
 	}
 ```
 
-### Range
+#### Range
 ```go
 	// Iterate range's cells via iterator
 	for cells := sheet.RangeByRef("A1:B3").Cells(); cells.HasNext(); {
@@ -73,8 +73,8 @@ N.B.: Internally, Row and Column are subtypes of Range, so they inherit Range's 
 	}
 ```
 
-## Walk
-You can use `Walk` method if you need to process cells in range
+### Walk
+Or you can `Walk` method to process cells in range
 ```go
 	//Walk through the cells of row
 	sheet.Row(0).Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {

@@ -196,6 +196,7 @@ For more detailed documentation and examples you can check [godoc.org](https://g
 # Roadmap
 - [ ] sheet: copy
 - [x] sheet: read as stream
+- [ ] sheet: custom filters
 - [ ] sheet: write as stream
 - [x] merged cells: merge/split for ranges, cols, rows
 - [x] hyperlinks: for cells, ranges, cols, rows
