@@ -125,12 +125,12 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 	}
 
 	cml.Ref = bounds
-	if text, err := toRichText(object.Text...); err != nil {
+	text, err := toRichText(object.Text...)
+	if err != nil {
 		return err
-	} else {
-		cml.Text = text
 	}
 
+	cml.Text = text
 	_ = c.commentIndex.Add(bounds, len(c.ml.CommentList))
 	c.ml.CommentList = append(c.ml.CommentList, cml)
 	c.file.MarkAsUpdated()
