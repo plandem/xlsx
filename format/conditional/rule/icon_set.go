@@ -14,6 +14,7 @@ type iconSetRule struct {
 	baseRule
 }
 
+//IconSet is helper object to set specific options for rule
 var IconSet iconSetRule
 
 func (x iconSetRule) initIfRequired(r *Info) {

@@ -10,6 +10,7 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"strings"
+
 	// to link unexported
 	_ "unsafe"
 )

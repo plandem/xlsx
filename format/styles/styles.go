@@ -19,6 +19,7 @@ type Info struct {
 	namedInfo *ml.NamedStyleInfo
 }
 
+//Option is helper type to set options for styles formatting
 type Option func(o *Info)
 
 //New creates and returns Info object with requested options
@@ -56,6 +57,7 @@ func (s *Info) Set(options ...Option) {
 	}
 }
 
+//nolint
 //private method used by stylesheet manager to unpack Info
 func from(f *Info) (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border, namedInfo *ml.NamedStyleInfo) {
 	style := f.styleInfo

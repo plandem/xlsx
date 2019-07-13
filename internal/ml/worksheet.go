@@ -172,6 +172,7 @@ type Hyperlink struct {
 	RID      ml.RID            `xml:"id,attr,omitempty"`
 }
 
+//ConditionalFormatting is a direct mapping of XSD CT_ConditionalFormatting
 type ConditionalFormatting struct {
 	Pivot  bool                  `xml:"pivot,attr,omitempty"`
 	Bounds primitives.BoundsList `xml:"sqref,attr"`

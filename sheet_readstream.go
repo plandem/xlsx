@@ -128,6 +128,7 @@ func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 	}
 }
 
+//nolint
 //afterOpen loads worksheet data and initializes it if required
 func (s *sheetReadStream) afterOpen() {
 	//adds a styles for types

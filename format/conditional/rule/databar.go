@@ -15,6 +15,7 @@ type dataBarRule struct {
 	baseRule
 }
 
+//DataBar is helper object to set specific options for rule
 var DataBar dataBarRule
 
 func (x dataBarRule) initIfRequired(r *Info) {

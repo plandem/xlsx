@@ -15,6 +15,7 @@ type topRule struct {
 	baseRule
 }
 
+//Top is helper object to set specific options for rule
 var Top topRule
 
 func (x topRule) initIfRequired(r *Info) {

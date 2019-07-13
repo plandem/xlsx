@@ -11,6 +11,7 @@ import (
 //VisibilityType is a type to encode XSD ST_Visibility and ST_SheetState
 type VisibilityType byte
 
+//nolint
 var (
 	ToVisibilityType   map[string]VisibilityType
 	FromVisibilityType map[VisibilityType]string

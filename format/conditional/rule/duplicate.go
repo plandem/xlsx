@@ -14,6 +14,7 @@ type duplicateRule struct {
 	baseRule
 }
 
+//Duplicate is helper object to set specific options for rule
 var Duplicate duplicateRule
 
 func (x duplicateRule) initIfRequired(r *Info) {

@@ -7,7 +7,7 @@ vendor: init
 	dep ensure -update
 
 lint:
-	golint ./...
+	goreportcard-cli -v
 
 bench:
 	go test -run=^$$ -bench=Libs

@@ -14,6 +14,7 @@ type errorsRule struct {
 	baseRule
 }
 
+//Errors is helper object to set specific options for rule
 var Errors errorsRule
 
 func (x errorsRule) initIfRequired(r *Info) {

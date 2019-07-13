@@ -274,6 +274,7 @@ func (c *Cell) SetDeltaTime(value time.Time) {
 	c.setDate(value, number.DeltaTime)
 }
 
+//nolint
 //SetValue sets a value
 func (c *Cell) SetValue(value interface{}) {
 	switch v := value.(type) {

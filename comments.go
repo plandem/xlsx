@@ -144,14 +144,8 @@ func (c *comments) Remove(bounds types.Bounds) {
 	c.file.MarkAsUpdated()
 
 	if id, ok := c.commentIndex.Get(bounds); ok {
-		c.ml.CommentList[id] = c.ml.CommentList[len(c.ml.CommentList)-1]
-		c.ml.CommentList[len(c.ml.CommentList)-1] = nil //prevent memory leaks
-		c.ml.CommentList = c.ml.CommentList[:len(c.ml.CommentList)-1]
-
-		//remove VML drawings
+		c.ml.CommentList = append(c.ml.CommentList[:id], c.ml.CommentList[id+1:]...)
 		c.sheet.drawingsVML.removeComment(bounds)
-
-		//clean up indexes
 		c.commentIndex.Remove(bounds)
 	}
 }

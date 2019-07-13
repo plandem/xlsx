@@ -14,6 +14,7 @@ type blanksRule struct {
 	baseRule
 }
 
+//Blanks is helper object to set specific options for rule
 var Blanks blanksRule
 
 func (x blanksRule) initIfRequired(r *Info) {

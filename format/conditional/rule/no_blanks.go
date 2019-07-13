@@ -14,6 +14,7 @@ type noBlanksRule struct {
 	baseRule
 }
 
+//NoBlanks is helper object to set specific options for rule
 var NoBlanks noBlanksRule
 
 func (x noBlanksRule) initIfRequired(r *Info) {

@@ -18,6 +18,7 @@ type textRule struct {
 	baseRule
 }
 
+//Text is helper object to set specific options for rule
 var Text textRule
 
 func (x textRule) initIfRequired(r *Info) {

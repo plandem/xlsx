@@ -11,6 +11,7 @@ import (
 //CellType is a type to encode XSD ST_CellType
 type CellType byte
 
+//nolint
 var (
 	ToCellType   map[string]CellType
 	FromCellType map[CellType]string

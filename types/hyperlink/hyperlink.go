@@ -16,12 +16,14 @@ import (
 	"strings"
 )
 
+//Info hold advanced settings of hyperlink
 type Info struct {
 	hyperlink *ml.Hyperlink
 	styleID   styles.DirectStyleID
 	linkType  hyperlinkType
 }
 
+//Option is helper type to set options for hyperlink
 type Option func(o *Info)
 
 type hyperlinkType byte
@@ -49,6 +51,7 @@ func (i *Info) Set(options ...Option) {
 	}
 }
 
+//nolint
 //Validate validates hyperlink info and return error in case of invalid settings
 func (i *Info) Validate() error {
 	switch i.linkType {
@@ -118,18 +121,21 @@ func (i *Info) String() string {
 	return target
 }
 
+//Styles sets styles for hyperlink
 func Styles(styleID styles.DirectStyleID) Option {
 	return func(i *Info) {
 		i.styleID = styleID
 	}
 }
 
+//Tooltip adds a tooltip information for hyperlink
 func Tooltip(tip string) Option {
 	return func(i *Info) {
 		i.hyperlink.Tooltip = tip
 	}
 }
 
+//Display adds a display information for hyperlink
 func Display(display string) Option {
 	return func(i *Info) {
 		i.hyperlink.Display = display

@@ -15,6 +15,7 @@ type colorScale3Rule struct {
 	baseRule
 }
 
+//ColorScale3 is helper object to set specific options for rule
 var ColorScale3 colorScale3Rule
 
 func (x colorScale3Rule) initIfRequired(r *Info) {

@@ -223,11 +223,7 @@ func (d *drawingsVML) removeComment(bounds types.Bounds) {
 	}
 
 	if id, ok := d.shapeIndex.Get(shape); ok {
-		d.ml.Shape[id] = d.ml.Shape[len(d.ml.Shape)-1]
-		d.ml.Shape[len(d.ml.Shape)-1] = nil //prevent memory leaks
-		d.ml.Shape = d.ml.Shape[:len(d.ml.Shape)-1]
-
-		//clean up indexes
+		d.ml.Shape = append(d.ml.Shape[:id], d.ml.Shape[id+1:]...)
 		d.shapeIndex.Remove(shape)
 	}
 }

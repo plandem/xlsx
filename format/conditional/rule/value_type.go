@@ -11,11 +11,17 @@ import (
 //List of all possible values for ConditionValueType
 const (
 	_ primitives.ConditionValueType = iota
+	//ValueTypeNumber type indicate that it's number
 	ValueTypeNumber
+	//ValueTypeNumber type indicate that it's percent
 	ValueTypePercent
+	//ValueTypeNumber type indicate that it's maximum
 	ValueTypeHighest
+	//ValueTypeNumber type indicate that it's minimum
 	ValueTypeLowest
+	//ValueTypeFormula type indicate that it's formula
 	ValueTypeFormula
+	//ValueTypePercentile type indicate that it's percentile
 	ValueTypePercentile
 )
 

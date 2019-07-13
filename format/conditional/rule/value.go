@@ -11,6 +11,7 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/plandem/xlsx/internal/number_format/convert"
+	//"reflect"
 	"strconv"
 	"time"
 )
@@ -19,6 +20,7 @@ type valueRule struct {
 	baseRule
 }
 
+//Value is helper object to set specific options for rule
 var Value valueRule
 
 func (x valueRule) initIfRequired(r *Info) {
@@ -51,13 +53,13 @@ func (x valueRule) fromBool(value bool) string {
 	return "0"
 }
 
+//nolint
 func (x valueRule) setValue(r *Info, values []interface{}, operator primitives.ConditionOperatorType, s *styles.Info) {
 	x.initIfRequired(r)
 	r.rule.Operator = operator
 
 	for _, v := range values {
 		var s string
-
 		switch value := v.(type) {
 		case int:
 			s = x.fromInt(value)

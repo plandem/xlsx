@@ -21,6 +21,7 @@ type Info struct {
 	validator   validator
 }
 
+//Option is helper type to set options for rule
 type Option func(o *Info)
 
 //New creates and returns Info object with requested options
@@ -40,7 +41,7 @@ func (r *Info) Set(options ...Option) {
 	}
 }
 
-//Validates conditional if there is provided validator
+//Validate validate rule if required
 func (r *Info) Validate() error {
 	if r.validator != nil {
 		return r.validator.Validate(r)
