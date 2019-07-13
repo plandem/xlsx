@@ -68,7 +68,7 @@ func (c *Cell) String() string {
 	code := c.sheet.workbook.doc.styleSheet.resolveNumberFormat(c.ml.Style)
 
 	//N.B.: Maybe it's not a good idea to use resolved value (e.g. inline string) for conversion?!
-	return numberFormat.Format(c.Value(), code, c.ml.Type)
+	return number.Format(c.Value(), code, c.ml.Type)
 }
 
 //Date try to convert and return current raw value as time.Time
@@ -195,7 +195,7 @@ func (c *Cell) SetInt(value int) {
 	c.ml.Value = strconv.FormatInt(int64(value), 10)
 
 	if c.ml.Style == styles.DirectStyleID(0) {
-		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
+		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[number.Integer]
 	}
 
 	c.ml.Formula = nil
@@ -208,7 +208,7 @@ func (c *Cell) SetUInt(value uint) {
 	c.ml.Value = strconv.FormatUint(uint64(value), 10)
 
 	if c.ml.Style == styles.DirectStyleID(0) {
-		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Integer]
+		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[number.Integer]
 	}
 
 	c.ml.Formula = nil
@@ -221,7 +221,7 @@ func (c *Cell) SetFloat(value float64) {
 	c.ml.Value = strconv.FormatFloat(value, 'f', -1, 64)
 
 	if c.ml.Style == styles.DirectStyleID(0) {
-		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[numberFormat.Float]
+		c.ml.Style = c.sheet.workbook.doc.styleSheet.typedStyles[number.Float]
 	}
 
 	c.ml.Formula = nil
@@ -242,7 +242,7 @@ func (c *Cell) SetBool(value bool) {
 }
 
 //setDate is a general setter for date types
-func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
+func (c *Cell) setDate(value time.Time, t number.Type) {
 	c.ml.Type = types.CellTypeDate
 	c.ml.Value = value.Format(convert.ISO8601)
 
@@ -256,22 +256,22 @@ func (c *Cell) setDate(value time.Time, t numberFormat.Type) {
 
 //SetDateTime sets a time value with number format for datetime
 func (c *Cell) SetDateTime(value time.Time) {
-	c.setDate(value, numberFormat.DateTime)
+	c.setDate(value, number.DateTime)
 }
 
 //SetDate sets a time value with number format for date
 func (c *Cell) SetDate(value time.Time) {
-	c.setDate(value, numberFormat.Date)
+	c.setDate(value, number.Date)
 }
 
 //SetTime sets a time value with number format for time
 func (c *Cell) SetTime(value time.Time) {
-	c.setDate(value, numberFormat.Time)
+	c.setDate(value, number.Time)
 }
 
 //SetDeltaTime sets a time value with number format for delta time
 func (c *Cell) SetDeltaTime(value time.Time) {
-	c.setDate(value, numberFormat.DeltaTime)
+	c.setDate(value, number.DeltaTime)
 }
 
 //SetValue sets a value
@@ -308,7 +308,7 @@ func (c *Cell) SetValue(value interface{}) {
 	case bool:
 		c.SetBool(v)
 	case time.Time:
-		c.setDate(v, numberFormat.DateTime)
+		c.setDate(v, number.DateTime)
 	case []interface{}:
 		_ = c.SetText(v...)
 	case nil:

@@ -35,7 +35,7 @@ type styleSheet struct {
 	numberIndex index.Index
 
 	//hash for typed number formats
-	typedStyles map[numberFormat.Type]styles.DirectStyleID
+	typedStyles map[number.Type]styles.DirectStyleID
 
 	doc  *Spreadsheet
 	file *ooxml.PackageFile
@@ -44,7 +44,7 @@ type styleSheet struct {
 func newStyleSheet(f interface{}, doc *Spreadsheet) *styleSheet {
 	ss := &styleSheet{
 		doc:         doc,
-		typedStyles: make(map[numberFormat.Type]styles.DirectStyleID),
+		typedStyles: make(map[number.Type]styles.DirectStyleID),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
@@ -172,16 +172,16 @@ func (ss *styleSheet) buildIndexes() {
 //adds a number formats for each type of number format if required. These styles will be used by cell's typed SetXXX methods
 func (ss *styleSheet) addTypedStylesIfRequired() {
 	if len(ss.typedStyles) == 0 {
-		for _, t := range []numberFormat.Type{
-			numberFormat.General,
-			numberFormat.Integer,
-			numberFormat.Float,
-			numberFormat.Date,
-			numberFormat.Time,
-			numberFormat.DateTime,
-			numberFormat.DeltaTime,
+		for _, t := range []number.Type{
+			number.General,
+			number.Integer,
+			number.Float,
+			number.Date,
+			number.Time,
+			number.DateTime,
+			number.DeltaTime,
 		} {
-			id, _ := numberFormat.Default(t)
+			id, _ := number.Default(t)
 			ss.typedStyles[t] = ss.addStyle(styles.New(styles.NumberFormatID(id)))
 		}
 
@@ -194,8 +194,8 @@ func (ss *styleSheet) resolveNumberFormat(id ml.DirectStyleID) string {
 	style := ss.ml.CellXfs.Items[id]
 
 	//return code for built-in number format
-	if number := numberFormat.Normalize(ml.NumberFormat{ID: style.NumFmtId}); len(number.Code) > 0 {
-		return number.Code
+	if n := number.Normalize(ml.NumberFormat{ID: style.NumFmtId}); len(n.Code) > 0 {
+		return n.Code
 	}
 
 	//try to lookup through custom formats and find same ID
@@ -206,7 +206,7 @@ func (ss *styleSheet) resolveNumberFormat(id ml.DirectStyleID) string {
 	}
 
 	//N.B.: wtf is going on?! non built-in and not existing id?
-	_, code := numberFormat.Default(numberFormat.General)
+	_, code := number.Default(number.General)
 	return code
 }
 
@@ -400,36 +400,36 @@ func (ss *styleSheet) addBorderIfRequired(border *ml.Border) int {
 }
 
 //adds a new number format if required
-func (ss *styleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
+func (ss *styleSheet) addNumFormatIfRequired(n *ml.NumberFormat) int {
 	//if there is no information, then use default
-	if number == nil {
+	if n == nil {
 		return 0
 	}
 
 	//if is built-in format then return id
-	if numberFormat.IsBuiltIn(number.ID) {
-		return number.ID
+	if number.IsBuiltIn(n.ID) {
+		return n.ID
 	}
 
 	//Return id of already existing information.
 	//N.B.: Supposed that for custom format we have -1 as code, so hash should be same for new/existing custom format
-	if id, ok := ss.numberIndex.Get(number); ok {
+	if id, ok := ss.numberIndex.Get(n); ok {
 		return id
 	}
 
 	//try to lookup through custom formats and find same code
 	for _, f := range ss.ml.NumberFormats.Items {
-		if number.Code == f.Code {
+		if n.Code == f.Code {
 			return f.ID
 		}
 	}
 
 	//N.B.: NumberFormat uses ID, not indexes
-	nextID := numberFormat.LastReservedID + len(ss.ml.NumberFormats.Items) + 1
-	number.ID = nextID
+	nextID := number.LastReservedID + len(ss.ml.NumberFormats.Items) + 1
+	n.ID = nextID
 
-	ss.ml.NumberFormats.Items = append(ss.ml.NumberFormats.Items, number)
-	_ = ss.numberIndex.Add(number, nextID)
+	ss.ml.NumberFormats.Items = append(ss.ml.NumberFormats.Items, n)
+	_ = ss.numberIndex.Add(n, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
