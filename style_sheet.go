@@ -43,8 +43,8 @@ type styleSheet struct {
 
 func newStyleSheet(f interface{}, doc *Spreadsheet) *styleSheet {
 	ss := &styleSheet{
-		doc:              doc,
-		typedStyles:      make(map[numberFormat.Type]styles.DirectStyleID),
+		doc:         doc,
+		typedStyles: make(map[numberFormat.Type]styles.DirectStyleID),
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
@@ -134,38 +134,38 @@ func (ss *styleSheet) addDefaults() {
 func (ss *styleSheet) buildIndexes() {
 	//build indexes for fonts
 	for id, f := range ss.ml.Fonts.Items {
-		_= ss.fontIndex.Add(f, id)
+		_ = ss.fontIndex.Add(f, id)
 	}
 
 	//build indexes for fill
 	for id, f := range ss.ml.Fills.Items {
-		_= ss.fillIndex.Add(f, id)
+		_ = ss.fillIndex.Add(f, id)
 	}
 
 	//build indexes for border
 	for id, f := range ss.ml.Borders.Items {
-		_= ss.borderIndex.Add(f, id)
+		_ = ss.borderIndex.Add(f, id)
 	}
 
 	//build indexes for number formats
 	for _, f := range ss.ml.NumberFormats.Items {
 		//N.B.: NumberFormat uses ID, not indexes
-		_= ss.numberIndex.Add(f, f.ID)
+		_ = ss.numberIndex.Add(f, f.ID)
 	}
 
 	//build indexes for named styles
 	for id, xf := range ss.ml.CellStyleXfs.Items {
-		_= ss.namedStyleIndex.Add(xf, id)
+		_ = ss.namedStyleIndex.Add(xf, id)
 	}
 
 	//build indexes for direct styles
 	for id, xf := range ss.ml.CellXfs.Items {
-		_= ss.directStyleIndex.Add(xf, id)
+		_ = ss.directStyleIndex.Add(xf, id)
 	}
 
 	//build indexes for differential styles
 	for id, dxf := range ss.ml.Dxfs.Items {
-		_= ss.diffStyleIndex.Add(dxf, id)
+		_ = ss.diffStyleIndex.Add(dxf, id)
 	}
 }
 
@@ -250,7 +250,7 @@ func (ss *styleSheet) addDiffStyle(f *styles.Info) styles.DiffStyleID {
 	//add a new one and return related id
 	nextID := styles.DiffStyleID(len(ss.ml.Dxfs.Items))
 	ss.ml.Dxfs.Items = append(ss.ml.Dxfs.Items, dXf)
-	_= ss.diffStyleIndex.Add(dXf, int(nextID))
+	_ = ss.diffStyleIndex.Add(dXf, int(nextID))
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -272,7 +272,7 @@ func (ss *styleSheet) addNamedStyleIfRequired(namedInfo *ml.NamedStyleInfo, styl
 		//add a new style
 		nextID := styles.NamedStyleID(len(ss.ml.CellStyleXfs.Items))
 		ss.ml.CellStyleXfs.Items = append(ss.ml.CellStyleXfs.Items, &namedStyle)
-		_= ss.namedStyleIndex.Add(&namedStyle, int(nextID))
+		_ = ss.namedStyleIndex.Add(&namedStyle, int(nextID))
 
 		//add style info
 		namedInfo.XfId = ml.NamedStyleID(nextID)
@@ -334,7 +334,7 @@ func (ss *styleSheet) addStyle(f *styles.Info) styles.DirectStyleID {
 	//add a new one and return related id
 	nextID := styles.DirectStyleID(len(ss.ml.CellXfs.Items))
 	ss.ml.CellXfs.Items = append(ss.ml.CellXfs.Items, cellXf)
-	_= ss.directStyleIndex.Add(cellXf, int(nextID))
+	_ = ss.directStyleIndex.Add(cellXf, int(nextID))
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -354,7 +354,7 @@ func (ss *styleSheet) addFontIfRequired(font *ml.Font) int {
 	//add a new one and return related id
 	nextID := len(ss.ml.Fonts.Items)
 	ss.ml.Fonts.Items = append(ss.ml.Fonts.Items, font)
-	_= ss.fontIndex.Add(font, nextID)
+	_ = ss.fontIndex.Add(font, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -374,7 +374,7 @@ func (ss *styleSheet) addFillIfRequired(fill *ml.Fill) int {
 	//add a new one and return related id
 	nextID := len(ss.ml.Fills.Items)
 	ss.ml.Fills.Items = append(ss.ml.Fills.Items, fill)
-	_= ss.fillIndex.Add(fill, nextID)
+	_ = ss.fillIndex.Add(fill, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -394,7 +394,7 @@ func (ss *styleSheet) addBorderIfRequired(border *ml.Border) int {
 	//add a new one and return related id
 	nextID := len(ss.ml.Borders.Items)
 	ss.ml.Borders.Items = append(ss.ml.Borders.Items, border)
-	_= ss.borderIndex.Add(border, nextID)
+	_ = ss.borderIndex.Add(border, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }
@@ -429,7 +429,7 @@ func (ss *styleSheet) addNumFormatIfRequired(number *ml.NumberFormat) int {
 	number.ID = nextID
 
 	ss.ml.NumberFormats.Items = append(ss.ml.NumberFormats.Items, number)
-	_= ss.numberIndex.Add(number, nextID)
+	_ = ss.numberIndex.Add(number, nextID)
 	ss.file.MarkAsUpdated()
 	return nextID
 }

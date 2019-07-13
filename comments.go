@@ -26,7 +26,7 @@ type comments struct {
 //newComments creates an object that implements comments functionality
 func newComments(sheet *sheetInfo) *comments {
 	return &comments{
-		sheet:        sheet,
+		sheet: sheet,
 	}
 }
 
@@ -131,7 +131,7 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 		cml.Text = text
 	}
 
-	_= c.commentIndex.Add(bounds, len(c.ml.CommentList))
+	_ = c.commentIndex.Add(bounds, len(c.ml.CommentList))
 	c.ml.CommentList = append(c.ml.CommentList, cml)
 	c.file.MarkAsUpdated()
 

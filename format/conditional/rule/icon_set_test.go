@@ -25,7 +25,7 @@ func TestIconSet(t *testing.T) {
 			Type: primitives.ConditionTypeIconSet,
 			IconSet: &ml.IconSet{
 				Reverse: true,
-				Type: IconSetType4Arrows,
+				Type:    IconSetType4Arrows,
 				Values: []*ml.ConditionValue{
 					{
 						Type:  ValueTypePercent,

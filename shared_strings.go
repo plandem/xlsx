@@ -22,7 +22,7 @@ type sharedStrings struct {
 
 func newSharedStrings(f interface{}, doc *Spreadsheet) *sharedStrings {
 	ss := &sharedStrings{
-		doc:   doc,
+		doc: doc,
 	}
 
 	ss.file = ooxml.NewPackageFile(doc.pkg, f, &ss.ml, nil)
@@ -38,7 +38,7 @@ func newSharedStrings(f interface{}, doc *Spreadsheet) *sharedStrings {
 
 func (ss *sharedStrings) afterLoad() {
 	for i, s := range ss.ml.StringItem {
-		_= ss.index.Add(s, i)
+		_ = ss.index.Add(s, i)
 	}
 }
 
@@ -69,7 +69,7 @@ func (ss *sharedStrings) addText(si *ml.StringItem) int {
 
 	sid := len(ss.ml.StringItem)
 	ss.ml.StringItem = append(ss.ml.StringItem, si)
-	_= ss.index.Add(si, sid)
+	_ = ss.index.Add(si, sid)
 
 	ss.file.MarkAsUpdated()
 
