@@ -5,7 +5,6 @@
 package hyperlink
 
 import (
-	"errors"
 	"fmt"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/format/styles"
@@ -55,27 +54,27 @@ func (i *Info) Validate() error {
 	switch i.linkType {
 	case hyperlinkTypeUnknown:
 		if len(i.hyperlink.Location) == 0 {
-			return errors.New("unknown type of hyperlink")
+			return fmt.Errorf("unknown type of hyperlink")
 		}
 	case hyperlinkTypeWeb:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
-			return errors.New(fmt.Sprintf("url exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+			return fmt.Errorf("url exceeded maximum allowed length (%d chars)", internal.UrlLimit)
 		}
 
 		if len(i.hyperlink.RID) <= 3 {
-			return errors.New("url is too short")
+			return fmt.Errorf("url is too short")
 		}
 
 		if strings.Contains(string(i.hyperlink.RID), "#") {
-			return errors.New("url contains a pound sign (#)")
+			return fmt.Errorf("url contains a pound sign (#)")
 		}
 
 		if !validator.IsURL(string(i.hyperlink.RID)) {
-			return errors.New("url is not valid")
+			return fmt.Errorf("url is not valid")
 		}
 	case hyperlinkTypeEmail:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
-			return errors.New(fmt.Sprintf("email exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+			return fmt.Errorf("email exceeded maximum allowed length (%d chars)", internal.UrlLimit)
 		}
 
 		if !validator.IsEmail(string(i.hyperlink.RID)) {
@@ -83,19 +82,19 @@ func (i *Info) Validate() error {
 				break
 			}
 
-			return errors.New("email is not valid")
+			return fmt.Errorf("email is not valid")
 		}
 	case hyperlinkTypeFile:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
-			return errors.New(fmt.Sprintf("link to file exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+			return fmt.Errorf("link to file exceeded maximum allowed length (%d chars)", internal.UrlLimit)
 		}
 
 		if len(i.hyperlink.RID) <= 3 {
-			return errors.New("filename is too short")
+			return fmt.Errorf("filename is too short")
 		}
 
 		if strings.Contains(string(i.hyperlink.RID), "#") {
-			return errors.New("filename contains a pound sign (#)")
+			return fmt.Errorf("filename contains a pound sign (#)")
 		}
 	}
 
