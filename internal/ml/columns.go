@@ -82,6 +82,7 @@ func (cols *ColList) pack() {
 	cols.Items = packed
 }
 
+//MarshalXML marshal ColList
 func (cols *ColList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	//after using columns manager ColList can contain mix of grouped/non-grouped columns with intersection of indexes
 	cols.pack()

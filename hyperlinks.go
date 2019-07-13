@@ -13,7 +13,6 @@ import (
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/hyperlink"
-
 	// to link unexported
 	_ "unsafe"
 )
