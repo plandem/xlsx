@@ -78,6 +78,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 	require.NotNil(t, number)
 	require.NotNil(t, protection)
 	require.NotNil(t, border)
+	require.NotNil(t, namedInfo)
 
 	require.Equal(t, &ml.CellAlignment{
 		Vertical:        VAlignBottom,
