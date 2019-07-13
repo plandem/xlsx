@@ -5,7 +5,7 @@ import (
 	"github.com/plandem/xlsx/format/styles"
 )
 
-func main() {
+func Example_MergedCells() {
 	xl := xlsx.New()
 
 	sheet := xl.AddSheet("")

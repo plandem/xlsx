@@ -19,7 +19,7 @@ features:
 footer: MIT Licensed | Copyright © 2017-present Andrey Gayvoronsky
 ---
 
-<<< @/src/code/demo.go
+<<< @/src/code/demo_test.go
 
 ::: warning COMPATIBILITY NOTE
 Xlsx2Go requires GoLang >= 1.9

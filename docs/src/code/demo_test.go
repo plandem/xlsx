@@ -7,7 +7,7 @@ import (
 	"github.com/plandem/xlsx/format/styles"
 )
 
-func main() {
+func Example() {
 	xl := xlsx.New()
 
 	defer xl.Close()
