@@ -38,11 +38,11 @@ func (x iconSetRule) Default(r *Info) {
 
 func (x iconSetRule) initValues(r *Info) {
 	var total int
-	if r.rule.IconSet.Type > __iconSetType3Icons && r.rule.IconSet.Type < __iconSetType4Icons {
+	if r.rule.IconSet.Type > fromIconSetType3Icons && r.rule.IconSet.Type < fromIconSetType4Icons {
 		total = 3
-	} else if r.rule.IconSet.Type > __iconSetType4Icons && r.rule.IconSet.Type < __iconSetType5Icons {
+	} else if r.rule.IconSet.Type > fromIconSetType4Icons && r.rule.IconSet.Type < fromIconSetType5Icons {
 		total = 4
-	} else if r.rule.IconSet.Type > __iconSetType5Icons {
+	} else if r.rule.IconSet.Type > fromIconSetType5Icons {
 		total = 5
 	}
 
