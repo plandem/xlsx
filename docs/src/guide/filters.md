@@ -1,7 +1,7 @@
-# Auto Filters
-An AutoFilter is a way of filtering a range of data based on some criteria. 
+# Filters
+[[toc]]
 
-To creates drop-down selectors in the heading row
+To creates default dropdown selectors in the heading row
 ```go
 	sheet.AutoFilter("A1:A10")
 ```

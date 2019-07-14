@@ -1,15 +1,16 @@
 # Getting Started
+[[toc]]
 
 ::: warning COMPATIBILITY NOTE
 Xlsx2Go requires GoLang >= 1.9
 :::
 
-## Installation
+### Installation
 ```
 go get github.com/plandem/xlsx
 ```
 
-## Create a new file
+### Create a new file
 While creation of a new XLSX file is dead simple, valid XLSX file requires a bit more steps 
 ```go
 package main
@@ -34,7 +35,7 @@ func main() {
 }
 ```
 
-## Open the existing file
+### Open the existing file
 To open XLSX file using filename or file handler
 ```go
 	xl, err := xlsx.Open("./foo.xlsx")
@@ -45,7 +46,7 @@ To open XLSX file using filename or file handler
 	defer xl.Close()
 ````
 
-## Save file
+### Save file
 To update the existing XLSX file
 ```go
 	if err := xl.Save(); err != nil {

@@ -5,6 +5,9 @@
     "build": "vuepress build src"
   },
   "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.0.0-rc.1",
+    "@vuepress/plugin-google-analytics": "^1.0.0-rc.1",
+    "@vuepress/plugin-nprogress": "^1.0.2",
     "markdown-it-task-lists": "^2.1.1",
     "vuepress": "^1.0.2"
   }
