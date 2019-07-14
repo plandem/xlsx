@@ -125,7 +125,7 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 	}
 
 	cml.Ref = bounds
-	text, err := toRichText(object.Text...)
+	text, _, err := toRichText(object.Text...)
 	if err != nil {
 		return err
 	}

@@ -187,7 +187,7 @@ func TestSheetReadStream_unsupported(t *testing.T) {
 	require.Panics(t, func() { sheet.CellByRef("A1").SetText("a") })
 
 	//SetValueWithStyles must not work in read-only mode
-	require.Panics(t, func() { sheet.CellByRef("A1").SetValueWithStyles("a", "@") })
+	require.Panics(t, func() { sheet.CellByRef("A1").SetValueWithFormat("a", "@") })
 
 	//CopyTo/CopyToRef must not work in read-only mode
 	require.Panics(t, func() { sheet.RangeByRef("A1:B1").CopyToRef("C2") })

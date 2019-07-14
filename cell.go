@@ -132,12 +132,16 @@ func (c *Cell) SetText(parts ...interface{}) error {
 	}
 
 	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
-	text, err := toRichText(parts...)
+	text, cellStyles, err := toRichText(parts...)
 	if err == nil {
 		sid := c.sheet.workbook.doc.sharedStrings.addText(text)
 		c.ml.Formula = nil
 		c.ml.Type = types.CellTypeSharedString
 		c.ml.Value = strconv.Itoa(sid)
+
+		if cellStyles != nil {
+			c.SetStyles(cellStyles)
+		}
 	}
 
 	return err
@@ -145,13 +149,17 @@ func (c *Cell) SetText(parts ...interface{}) error {
 
 //SetInlineText sets inline rich text
 func (c *Cell) SetInlineText(parts ...interface{}) error {
-	text, err := toRichText(parts...)
+	text, cellStyles, err := toRichText(parts...)
 
 	if err == nil {
 		c.ml.Type = types.CellTypeInlineString
 		c.ml.Value = ""
 		c.ml.Formula = nil
 		c.ml.InlineStr = text
+
+		if cellStyles != nil {
+			c.SetStyles(cellStyles)
+		}
 	}
 
 	return err
@@ -307,13 +315,33 @@ func (c *Cell) Styles() styles.DirectStyleID {
 	return c.ml.Style
 }
 
-//SetStyles sets style format to requested DirectStyleID
-func (c *Cell) SetStyles(styleID styles.DirectStyleID) {
+//SetStyles sets style format to requested DirectStyleID or styles.Info
+func (c *Cell) SetStyles(s interface{}) {
+	if styleID, ok := s.(styles.DirectStyleID); ok {
+		c.ml.Style = styleID
+		return
+	}
+
+	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
+	if (c.sheet.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
+
+	var format *styles.Info
+	if f, ok := s.(styles.Info); ok {
+		format = &f
+	} else if f, ok := s.(*styles.Info); ok {
+		format = f
+	} else {
+		panic("only DirectStyleID or styles.Info supported as styles for cell")
+	}
+
+	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format)
 	c.ml.Style = styleID
 }
 
-//SetValueWithStyles is helper function that internally works as SetValue and SetStyles with NumberFormat
-func (c *Cell) SetValueWithStyles(value interface{}, formatCode string) {
+//SetValueWithFormat is helper function that internally works as SetValue and SetStyles with NumberFormat
+func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
 	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
 	if (c.sheet.mode() & sheetModeWrite) == 0 {
 		panic(errorNotSupportedWrite)
@@ -322,7 +350,7 @@ func (c *Cell) SetValueWithStyles(value interface{}, formatCode string) {
 	styleID := c.sheet.workbook.doc.styleSheet.addStyle(styles.New(styles.NumberFormat(formatCode)))
 
 	c.SetValue(value)
-	c.ml.Style = ml.DirectStyleID(styleID)
+	c.ml.Style = styleID
 }
 
 //Hyperlink returns resolved hyperlink.Info if there is any hyperlink or nil otherwise
@@ -332,12 +360,12 @@ func (c *Cell) Hyperlink() *hyperlink.Info {
 
 //SetHyperlink sets hyperlink for cell, where link can be string or hyperlink.Info
 func (c *Cell) SetHyperlink(link interface{}) error {
-	styleID, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link)
+	format, err := c.sheet.hyperlinks.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), link)
 	if err != nil {
 		return err
 	}
 
-	c.SetStyles(styleID)
+	c.SetStyles(format)
 	return nil
 }
 

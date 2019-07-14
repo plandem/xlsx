@@ -19,8 +19,9 @@ import (
 //Info hold advanced settings of hyperlink
 type Info struct {
 	hyperlink *ml.Hyperlink
-	styleID   styles.DirectStyleID
-	linkType  hyperlinkType
+	format    interface{}
+
+	linkType hyperlinkType
 }
 
 //Option is helper type to set options for hyperlink
@@ -104,11 +105,6 @@ func (i *Info) Validate() error {
 	return nil
 }
 
-//Styles returns style that will be used by hyperlink
-func (i *Info) Styles() styles.DirectStyleID {
-	return i.styleID
-}
-
 //String returns text version of hyperlink info
 func (i *Info) String() string {
 	target := string(i.hyperlink.RID)
@@ -121,10 +117,10 @@ func (i *Info) String() string {
 	return target
 }
 
-//Styles sets styles for hyperlink
-func Styles(styleID styles.DirectStyleID) Option {
+//Styles sets style format to requested DirectStyleID or styles.Info
+func Styles(s interface{}) Option {
 	return func(i *Info) {
-		i.styleID = styleID
+		i.format = s
 	}
 }
 
@@ -290,12 +286,12 @@ func ToTarget(target string) Option {
 }
 
 //private method used by hyperlinks manager to unpack Info
-func from(info *Info) (hyperlink *ml.Hyperlink, styleID styles.DirectStyleID, err error) {
+func from(info *Info) (hyperlink *ml.Hyperlink, format interface{}, err error) {
 	if err = info.Validate(); err != nil {
 		return
 	}
 
-	styleID = info.styleID
+	format = info.format
 	hyperlink = info.hyperlink
 	return
 }

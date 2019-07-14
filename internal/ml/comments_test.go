@@ -79,7 +79,7 @@ func TestComments(t *testing.T) {
 				},
 			},
 			{
-				Ref: primitives.Ref("C7").ToBounds(),
+				Ref:      primitives.Ref("C7").ToBounds(),
 				AuthorID: 0,
 				Text: &ml.StringItem{
 					Text: "My Comment2",

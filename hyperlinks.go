@@ -19,7 +19,7 @@ import (
 )
 
 //go:linkname fromHyperlinkInfo github.com/plandem/xlsx/types/hyperlink.from
-func fromHyperlinkInfo(info *hyperlink.Info) (hyperlink *ml.Hyperlink, styleID styles.DirectStyleID, err error)
+func fromHyperlinkInfo(info *hyperlink.Info) (hyperlink *ml.Hyperlink, format interface{}, err error)
 
 //go:linkname toHyperlinkInfo github.com/plandem/xlsx/types/hyperlink.to
 func toHyperlinkInfo(hyperlink *ml.Hyperlink, targetInfo string, styleID styles.DirectStyleID) *hyperlink.Info
@@ -35,7 +35,7 @@ func newHyperlinks(sheet *sheetInfo) *hyperlinks {
 }
 
 //Add adds a new hyperlink info for provided bounds, where link can be string or Info
-func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (styles.DirectStyleID, error) {
+func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (interface{}, error) {
 	//check if hyperlink has style and if not, then add default
 	if h.defaultStyleID == -1 {
 		//we need to add default named style for hyperlink
@@ -72,7 +72,7 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (styles.DirectSt
 	}
 
 	//prepare hyperlink info
-	hLink, styleID, err := fromHyperlinkInfo(object)
+	hLink, format, err := fromHyperlinkInfo(object)
 	if err != nil {
 		return styles.DefaultDirectStyle, err
 	}
@@ -108,11 +108,11 @@ func (h *hyperlinks) Add(bounds types.Bounds, link interface{}) (styles.DirectSt
 	}
 
 	//if there are custom styles, then use it otherwise use default hyperlink styles
-	if styleID == styles.DefaultDirectStyle {
-		styleID = h.defaultStyleID
+	if format == nil {
+		return h.defaultStyleID, nil
 	}
 
-	return styleID, nil
+	return format, nil
 }
 
 //Get returns a resolved hyperlink info for provided ref or nil if there is no any hyperlink
