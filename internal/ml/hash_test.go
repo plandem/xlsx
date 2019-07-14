@@ -183,11 +183,11 @@ func TestFont_Hash(t *testing.T) {
 	require.Nil(t, idx.Add(&ml.Font{Color: &ml.Color{RGB: "112233"}}, 1))
 	require.Nil(t, idx.Add(&ml.Font{Size: 2.2}, 1))
 	require.Nil(t, idx.Add(&ml.Font{Underline: styles.UnderlineTypeDoubleAccounting}, 1))
-	require.Nil(t, idx.Add(&ml.Font{VAlign: styles.FontVAlignSubscript}, 1))
+	require.Nil(t, idx.Add(&ml.Font{Effect: styles.FontEffectSubscript}, 1))
 	require.Nil(t, idx.Add(&ml.Font{Scheme: styles.FontSchemeMajor}, 1))
 	require.Nil(t, idx.Add(&ml.Font{
 		Scheme:    styles.FontSchemeMajor,
-		VAlign:    styles.FontVAlignSubscript,
+		Effect:    styles.FontEffectSubscript,
 		Underline: styles.UnderlineTypeDoubleAccounting,
 		Size:      2.2,
 		Color:     &ml.Color{RGB: "112233"},
@@ -298,7 +298,7 @@ func TestDiffStyle_Hash(t *testing.T) {
 	require.Nil(t, idx.Add(&ml.DiffStyle{
 		Font: &ml.Font{
 			Scheme:    styles.FontSchemeMajor,
-			VAlign:    styles.FontVAlignSubscript,
+			Effect:    styles.FontEffectSubscript,
 			Underline: styles.UnderlineTypeDoubleAccounting,
 			Size:      2.2,
 			Color:     &ml.Color{RGB: "112233"},

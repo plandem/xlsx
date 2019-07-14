@@ -55,7 +55,7 @@ type Font struct {
 	Color     *Color                     `xml:"color,omitempty"`
 	Size      ml.PropertyDouble          `xml:"sz,omitempty"`
 	Underline primitives.UnderlineType   `xml:"u,omitempty"`
-	VAlign    primitives.FontVAlignType  `xml:"vertAlign,omitempty"`
+	Effect    primitives.FontEffectType  `xml:"vertAlign,omitempty"`
 	Scheme    primitives.FontSchemeType  `xml:"scheme,omitempty"`
 }
 

@@ -18,14 +18,14 @@ func TestFontScheme(t *testing.T) {
 		Property primitives.FontSchemeType `xml:"property,omitempty"`
 	}
 
-	list := map[string]primitives.FontSchemeType{
-		"none":     styles.FontSchemeNone,
-		"major":    styles.FontSchemeMajor,
-		"minor":    styles.FontSchemeMinor,
-		"schema-a": primitives.FontSchemeType("schema-a"),
+	list := map[primitives.FontSchemeType]string{
+		styles.FontSchemeNone:                 string(styles.FontSchemeNone),
+		styles.FontSchemeMajor:                string(styles.FontSchemeMajor),
+		styles.FontSchemeMinor:                string(styles.FontSchemeMinor),
+		primitives.FontSchemeType("schema-a"): "schema-a",
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Element{Property: v}
 			encoded, err := xml.Marshal(&entity)

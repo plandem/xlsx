@@ -18,16 +18,16 @@ func TestFontUnderline(t *testing.T) {
 		Property primitives.UnderlineType `xml:"property,omitempty"`
 	}
 
-	list := map[string]primitives.UnderlineType{
-		"single":           styles.UnderlineTypeSingle,
-		"double":           styles.UnderlineTypeDouble,
-		"singleAccounting": styles.UnderlineTypeSingleAccounting,
-		"doubleAccounting": styles.UnderlineTypeDoubleAccounting,
-		"none":             styles.UnderlineTypeNone,
-		"underline-a":      primitives.UnderlineType("underline-a"),
+	list := map[primitives.UnderlineType]string{
+		styles.UnderlineTypeSingle:              string(styles.UnderlineTypeSingle),
+		styles.UnderlineTypeDouble:              string(styles.UnderlineTypeDouble),
+		styles.UnderlineTypeSingleAccounting:    string(styles.UnderlineTypeSingleAccounting),
+		styles.UnderlineTypeDoubleAccounting:    string(styles.UnderlineTypeDoubleAccounting),
+		styles.UnderlineTypeNone:                string(styles.UnderlineTypeNone),
+		primitives.UnderlineType("underline-a"): "underline-a",
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Element{Property: v}
 			encoded, err := xml.Marshal(&entity)

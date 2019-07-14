@@ -24,7 +24,7 @@ func TestFont(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.VAlign(FontVAlignBaseline),
+		Font.Effect(FontEffectBaseline),
 		Font.Scheme(FontSchemeMinor),
 	)
 
@@ -42,7 +42,7 @@ func TestFont(t *testing.T) {
 			Color:     color.New("FFFF00FF"),
 			Family:    FontFamilyDecorative,
 			Underline: UnderlineTypeSingle,
-			VAlign:    FontVAlignBaseline,
+			Effect:    FontEffectBaseline,
 			Scheme:    FontSchemeMinor,
 		}
 	}), style)

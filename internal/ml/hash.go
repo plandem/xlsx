@@ -186,7 +186,7 @@ func (f *Font) Hash() index.Code {
 		font.Color.Hash().String(),
 		strconv.FormatFloat(float64(font.Size), 'f', -1, 64),
 		string(font.Underline),
-		string(font.VAlign),
+		string(font.Effect),
 		string(font.Scheme),
 	}, ":"))
 }
