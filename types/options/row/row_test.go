@@ -10,16 +10,16 @@ import (
 )
 
 func TestRowOptions(t *testing.T) {
-	o := NewRowOptions(
-		Row.OutlineLevel(5),
-		Row.Hidden(true),
-		Row.Phonetic(true),
-		Row.Height(45.5),
-		Row.Collapsed(true),
+	o := New(
+		OutlineLevel(5),
+		Hidden(true),
+		Phonetic(true),
+		Height(45.5),
+		Collapsed(true),
 	)
 
-	require.IsType(t, &RowOptions{}, o)
-	require.Equal(t, &RowOptions{
+	require.IsType(t, &Info{}, o)
+	require.Equal(t, &Info{
 		OutlineLevel: 5,
 		Hidden:       true,
 		Phonetic:     true,
@@ -27,12 +27,12 @@ func TestRowOptions(t *testing.T) {
 		Collapsed:    true,
 	}, o)
 
-	o = NewRowOptions(
-		Row.OutlineLevel(10),
-		Row.Hidden(false),
-		Row.Phonetic(true),
+	o = New(
+		OutlineLevel(10),
+		Hidden(false),
+		Phonetic(true),
 	)
-	require.Equal(t, &RowOptions{
+	require.Equal(t, &Info{
 		Hidden:   false,
 		Phonetic: true,
 	}, o)

@@ -6,7 +6,7 @@ package xlsx_test
 
 import (
 	"github.com/plandem/xlsx"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/sheet"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -152,7 +152,7 @@ func TestSheetReadStream_notImplemented(t *testing.T) {
 	require.Panics(t, func() { sheet.DeleteCol(0) })
 	require.Panics(t, func() { sheet.SetDimension(100, 100) })
 	require.Panics(t, func() { sheet.SetActive() })
-	require.Panics(t, func() { sheet.SetOptions(options.NewSheetOptions(options.Sheet.Visibility(options.Visible))) })
+	require.Panics(t, func() { sheet.SetOptions(options.New(options.Visibility(options.VisibilityVisible))) })
 	require.Panics(t, func() { sheet.SetName("aaa") })
 }
 

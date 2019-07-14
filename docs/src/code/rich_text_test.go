@@ -3,7 +3,7 @@ package code
 import (
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/column"
 )
 
 func Example_richText() {
@@ -11,8 +11,8 @@ func Example_richText() {
 
 	sheet := xl.AddSheet("")
 	sheet.Col(1).SetOptions(
-		options.NewColumnOptions(
-			options.Column.Width(48),
+		options.New(
+			options.Width(48),
 		),
 	)
 

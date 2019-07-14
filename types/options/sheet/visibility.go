@@ -11,16 +11,16 @@ import (
 //List of all possible values for VisibilityType
 const (
 	_ primitives.VisibilityType = iota
-	Visible
-	Hidden
-	VeryHidden
+	VisibilityVisible
+	VisibilityHidden
+	VisibilityVeryHidden
 )
 
 func init() {
 	primitives.FromVisibilityType = map[primitives.VisibilityType]string{
-		Visible:    "visible",
-		Hidden:     "hidden",
-		VeryHidden: "veryHidden",
+		VisibilityVisible:    "visible",
+		VisibilityHidden:     "hidden",
+		VisibilityVeryHidden: "veryHidden",
 	}
 
 	primitives.ToVisibilityType = make(map[string]primitives.VisibilityType, len(primitives.FromVisibilityType))

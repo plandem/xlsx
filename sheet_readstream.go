@@ -10,7 +10,7 @@ import (
 	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/sheet"
 )
 
 type sheetReadStream struct {
@@ -264,7 +264,7 @@ func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) SetOptions(o *options.SheetOptions) {
+func (s *sheetReadStream) SetOptions(o *options.Info) {
 	panic(errorNotSupported)
 }
 

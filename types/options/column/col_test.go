@@ -10,16 +10,16 @@ import (
 )
 
 func TestColumnOptions(t *testing.T) {
-	o := NewColumnOptions(
-		Column.OutlineLevel(5),
-		Column.Hidden(true),
-		Column.Phonetic(true),
-		Column.Width(45.5),
-		Column.Collapsed(true),
+	o := New(
+		OutlineLevel(5),
+		Hidden(true),
+		Phonetic(true),
+		Width(45.5),
+		Collapsed(true),
 	)
 
-	require.IsType(t, &ColumnOptions{}, o)
-	require.Equal(t, &ColumnOptions{
+	require.IsType(t, &Info{}, o)
+	require.Equal(t, &Info{
 		OutlineLevel: 5,
 		Hidden:       true,
 		Phonetic:     true,
@@ -27,12 +27,12 @@ func TestColumnOptions(t *testing.T) {
 		Collapsed:    true,
 	}, o)
 
-	o = NewColumnOptions(
-		Column.OutlineLevel(10),
-		Column.Hidden(false),
-		Column.Phonetic(true),
+	o = New(
+		OutlineLevel(10),
+		Hidden(false),
+		Phonetic(true),
 	)
-	require.Equal(t, &ColumnOptions{
+	require.Equal(t, &Info{
 		Hidden:   false,
 		Phonetic: true,
 	}, o)

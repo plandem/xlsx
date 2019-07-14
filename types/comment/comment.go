@@ -5,6 +5,7 @@
 package comment
 
 //Info hold advanced settings of comment
+// N.B.: You should NOT mutate any value directly.
 type Info struct {
 	Width      float32
 	Height     float32

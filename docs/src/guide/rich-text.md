@@ -1,4 +1,6 @@
 # Rich Text
+[[toc]]
+
 Rich text is text with multiply style formatting. The rule oh thumb is to break the string into parts and put a style object before the part that you want to format. String parts that don’t have a style are given a default styles.  
 
 For example to get 'This is text with **bold** part':

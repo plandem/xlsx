@@ -100,6 +100,13 @@ While string hyperlink is quite powerful, sometimes we need additional settings 
 
 <<< @/src/code/hyperlinks_test.go
 
+::: tip
+As was shown in example, few relevant targets can be combined:
+* `ToFile` + `ToBookmark`, e.g. Word file with bookmark or Excel file with named region
+* `ToFile` + `ToRef`, e.g. reference at other Excel file
+* `ToUrl` + `ToBookmark`, e.g. bookmark at other site
+::: 
+
 #### Target examples
 ```go
 	//sets target to external file
@@ -123,10 +130,3 @@ While string hyperlink is quite powerful, sometimes we need additional settings 
 	//sets target in same format as string version of hyperlink
 	hyperlink.ToTarget(`D:\Folder\File.docx#Bookmark`)
 ```
-
-::: tip
-As was shown in example, few relevant targets can be combined:
-* `ToFile` + `ToBookmark`, e.g. Word file with bookmark or Excel file with named region
-* `ToFile` + `ToRef`, e.g. reference at other Excel file
-* `ToUrl` + `ToBookmark`, e.g. bookmark at other site
-::: 

@@ -6,7 +6,7 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/row"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -21,12 +21,12 @@ func TestRow(t *testing.T) {
 	sheet := xl.Sheet(0)
 	r := sheet.Row(5)
 
-	o := options.NewRowOptions(
-		options.Row.Height(0),
-		options.Row.OutlineLevel(10),
-		options.Row.Hidden(true),
-		options.Row.Phonetic(true),
-		options.Row.Collapsed(true),
+	o := options.New(
+		options.Height(0),
+		options.OutlineLevel(10),
+		options.Hidden(true),
+		options.Phonetic(true),
+		options.Collapsed(true),
 	)
 
 	r.SetOptions(o)
@@ -40,8 +40,8 @@ func TestRow(t *testing.T) {
 	require.Equal(t, r.ml.CustomFormat, false)
 	require.Equal(t, r.ml.Style, styles.DirectStyleID(0))
 
-	o = options.NewRowOptions(
-		options.Row.Height(100.0),
+	o = options.New(
+		options.Height(100.0),
 	)
 
 	r.SetOptions(o)

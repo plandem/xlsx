@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/types/options"
+	colOptions "github.com/plandem/xlsx/types/options/column"
+	rowOptions "github.com/plandem/xlsx/types/options/row"
+	sheetOptions "github.com/plandem/xlsx/types/options/sheet"
 	"log"
 	"os"
 	"strings"
@@ -328,26 +330,26 @@ func Example_options() {
 	sheet := xl.Sheet(0)
 
 	// set options for row
-	rowOptions := options.NewRowOptions(
-		options.Row.Hidden(true),
-		options.Row.Height(10.0),
-		options.Row.Collapsed(true),
+	ro := rowOptions.New(
+		rowOptions.Hidden(true),
+		rowOptions.Height(10.0),
+		rowOptions.Collapsed(true),
 	)
-	sheet.Row(9).SetOptions(rowOptions)
+	sheet.Row(9).SetOptions(ro)
 
 	// set options for col
-	colOptions := options.NewColumnOptions(
-		options.Column.Hidden(true),
-		options.Column.Width(10.0),
-		options.Column.Collapsed(true),
+	co := colOptions.New(
+		colOptions.Hidden(true),
+		colOptions.Width(10.0),
+		colOptions.Collapsed(true),
 	)
-	sheet.Col(3).SetOptions(colOptions)
+	sheet.Col(3).SetOptions(co)
 
 	// set options for sheet
-	sheetOptions := options.NewSheetOptions(
-		options.Sheet.Visibility(options.VeryHidden),
+	so := sheetOptions.New(
+		sheetOptions.Visibility(sheetOptions.VisibilityVeryHidden),
 	)
-	sheet.SetOptions(sheetOptions)
+	sheet.SetOptions(so)
 }
 
 // Demonstrates how to append cols/rows/sheets.

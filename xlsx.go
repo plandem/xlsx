@@ -13,8 +13,11 @@ import (
 	_ "github.com/plandem/xlsx/format/styles"
 	_ "github.com/plandem/xlsx/internal/ml/primitives"
 	_ "github.com/plandem/xlsx/types"
+	_ "github.com/plandem/xlsx/types/comment"
 	_ "github.com/plandem/xlsx/types/hyperlink"
-	_ "github.com/plandem/xlsx/types/options"
+	_ "github.com/plandem/xlsx/types/options/column"
+	_ "github.com/plandem/xlsx/types/options/row"
+	_ "github.com/plandem/xlsx/types/options/sheet"
 )
 
 //Open opens a XLSX file with name or io.Reader
