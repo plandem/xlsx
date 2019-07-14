@@ -65,7 +65,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, error) {
 		if len(richText) == 1 && richText[0].Font == nil {
 			si.Text = richText[0].Text
 		} else {
-			si.RichText = &richText
+			si.RichText = richText
 		}
 	}
 
@@ -84,7 +84,7 @@ func fromRichText(text *ml.StringItem) (s string) {
 	s += string(text.Text)
 
 	if text.RichText != nil {
-		for _, part := range *text.RichText {
+		for _, part := range text.RichText {
 			s += string(part.Text)
 		}
 	}

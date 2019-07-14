@@ -230,13 +230,13 @@ func (s *StringItem) Hash() index.Code {
 	}
 
 	if si.RPh != nil {
-		for _, r := range *si.RPh {
+		for _, r := range si.RPh {
 			result = append(result, r.Hash().String())
 		}
 	}
 
 	if si.RichText != nil {
-		for _, part := range *si.RichText {
+		for _, part := range si.RichText {
 			result = append(result, string(part.Text))
 
 			if part.Font != nil {

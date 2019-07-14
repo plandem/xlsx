@@ -35,7 +35,7 @@ func TestSharedStrings(t *testing.T) {
 	require.Equal(t, 2, ss.index.Count())
 
 	text := &ml.StringItem{
-		RichText: &[]*ml.RichText{
+		RichText: []*ml.RichText{
 			{
 				Text: "part1",
 				Font: &ml.RichFont{

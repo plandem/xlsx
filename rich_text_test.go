@@ -32,7 +32,7 @@ func TestToRichText(t *testing.T) {
 	))
 	require.Nil(t, err)
 	require.Equal(t, &ml.StringItem{
-		RichText: &[]*ml.RichText{
+		RichText: []*ml.RichText{
 			{
 				Text: "1",
 			},
@@ -54,7 +54,7 @@ func TestToRichText(t *testing.T) {
 
 	require.Nil(t, err)
 	require.Equal(t, &ml.StringItem{
-		RichText: &[]*ml.RichText{
+		RichText: []*ml.RichText{
 			{
 				Text: "1",
 				Font: &ml.RichFont{

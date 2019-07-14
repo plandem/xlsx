@@ -22,8 +22,8 @@ type SharedStrings struct {
 //StringItem is a direct mapping of XSD CT_Rst
 type StringItem struct {
 	Text       primitives.Text `xml:"t,omitempty"` //optional
-	RichText   *[]*RichText    `xml:"r,omitempty"` //optional
-	RPh        *[]*ml.Reserved `xml:"rPh,omitempty"`
+	RichText   []*RichText     `xml:"r,omitempty"` //optional
+	RPh        []*ml.Reserved  `xml:"rPh,omitempty"` //optional
 	PhoneticPr *ml.Reserved    `xml:"phoneticPr,omitempty"`
 }
 
