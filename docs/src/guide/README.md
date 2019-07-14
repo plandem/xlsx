@@ -1,4 +1,6 @@
 # Introduction
+[[toc]]
+
 Why another library to work with Excel XLSX in GO? 
 
 Truth be told, developing of any library starts with some personal goals of author. Someone wants simple library to read Excel files, someone wants to create a new file, other wants to add charts. 
@@ -17,29 +19,7 @@ So what were the goals that time? It's a great pity, but I could not get a libra
 4) easy to read/understand source code, easy to maintain, easy to contribute - no shadow places/hacks/magic, just read and understand
 > I was trying to contribute to existing libraries, but...actually it's much faster to create it from ground zero than to refactor existing and get satisfied results or fix some issues.
 
-## Benchmarks
-It was not a goal to make best of the best, but the same time it's interesting to know pros/cons. 
-For some cases this library is second, for other - best, but in case of reading huge files - **the only**. 
-
-|                | tealeg | excelize | xlsx |
-|----------------|:------:|:--------:|:----:|
-| RandomGet      |   1*   |     3    |   2  |
-| RandomSet      |   1*   |     3    |   2  |
-| RandomSetStyle |   1*   |     3    |   2  |
-| ReadBigFile    |   2    |     3    |   1  |
-| UpdateBigFile  |   2**  |     3    |   1  |
-| ReadHugeFile   |   -    |     -    |   1  |
-| UpdateHugeFile |   -    |     -    |   1  |
-
-\* does not mutate information directly, so faster get/set, but slower read/write files - sometimes it can take forever to open file.
-
-\** corrupted file after saving, lost styles/formatting
-
-::: tip
-You get more info about benchmarks at dedicated [Benchmarks Repository](https://github.com/plandem/xlsx-benchmarks)  
-:::
-
-## API Documentation
+### API Documentation
 For detailed API documentation, you can check [godoc.org](https://godoc.org/github.com/plandem/xlsx)
 
 ### OOXML edition

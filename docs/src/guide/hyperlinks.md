@@ -58,7 +58,7 @@ Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-func
 * `#A1` - Reference to same sheet  
 
 
-#### tip same file, other sheet
+#### same file, other sheet
 * `#SheetName!A1` - Reference to sheet without space in name  
 * `#'Sheet Name'!A1` - Reference to sheet with space in name  
 
@@ -94,7 +94,7 @@ Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-func
 
 
 ### Custom hyperlink
-While string hyperlink is quite powerful, sometimes we need additional settings like tooltips or styles. For these cases you can use special type and configure hyperlink as you wish.
+While with string hyperlink you can add any type of hyperlink, sometimes we need additional settings like tooltips or styles. For these cases you can use special type and configure hyperlink as you wish.
 
 #### Example
 
@@ -107,7 +107,7 @@ As was shown in example, few relevant targets can be combined:
 * `ToUrl` + `ToBookmark`, e.g. bookmark at other site
 ::: 
 
-#### Target examples
+#### Target types + examples
 ```go
 	//sets target to external file
 	// can be unix, windows or network format
