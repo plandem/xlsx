@@ -12,10 +12,10 @@ In some cases, adding same hyperlink to range (instead of cells directly) can he
 :::
 
 ::: tip filepath
-Library automatically detects windows, unix and network versions of filepath and validates it.
+Xlsx2Go automatically detects windows, unix and network versions of filepath and validates it.
 :::
 
-Library supports string version of hyperlinks, as well as custom version via special type. Read about types below.
+Xlsx2Go supports string version of hyperlinks, as well as custom version via special type. Read about types below.
 
 ### Hyperlinks with cells
 
@@ -49,7 +49,7 @@ Library supports string version of hyperlinks, as well as custom version via spe
 ### String hyperlink
 As was shown, the simplest way to add hyperlink is to use string version. At the same time, that version is quite limited - valid format should be used and you can't set tooltips, styles and etc. 
 :::tip 
-Library supports same format as Excel's `HYPERLINK` function and will try to autodetect type of hyperlink (email, file, website and etc) to validate it later. 
+Xlsx2Go supports same format as Excel's `HYPERLINK` function and will try to autodetect type of hyperlink (email, file, website and etc) to validate it later. 
 
 Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-function-333c7ce6-c5ae-4164-9c47-7de9b76f577f) for more information.
 :::

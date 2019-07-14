@@ -10,7 +10,7 @@ In general access is possible by indexes (0-based) or by references (alphanumeri
 N.B.: There is special case when **Ref** points to single cell, e.g. `A1:A1` is same as `A1`
 :::
 
-Library has few helper types, such as **Bounds** and **BoundsList** to simplify and unify access logic and few helper functions.
+Xlsx2Go has few helper types, such as **Bounds** and **BoundsList** to simplify and unify access logic and few helper functions.
 ```go
 package main
 

@@ -9,29 +9,27 @@ import (
 
 func Example() {
 	xl := xlsx.New()
-
 	defer xl.Close()
 
+	//create a new sheet
 	sheet := xl.AddSheet("The first sheet")
-
-	//Red, bold text with solid yellow background and green border
-	coolStyles := xl.AddStyles(
-		styles.New(
-			styles.Font.Bold,
-			styles.Font.Color("#ff0000"),
-			styles.Fill.Type(styles.PatternTypeSolid),
-			styles.Fill.Color("#ffff00"),
-			styles.Border.Color("#009000"),
-			styles.Border.Type(styles.BorderStyleMedium),
-		),
-	)
 
 	//access by ref
 	cell := sheet.CellByRef("A2")
+
 	//set value
-	cell.SetValue("best styles")
+	cell.SetValue("Easy Peasy")
+
 	//set cool styles
-	cell.SetStyles(coolStyles)
+	cell.SetStyles(styles.New(
+		styles.Font.Bold,
+		styles.Font.Color("#ff0000"),
+		styles.Fill.Type(styles.PatternTypeSolid),
+		styles.Fill.Color("#ffff00"),
+		styles.Border.Color("#009000"),
+		styles.Border.Type(styles.BorderStyleMedium),
+	))
+
 	//add comment
 	cell.SetComment("No Comment!")
 

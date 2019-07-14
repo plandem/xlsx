@@ -1,7 +1,7 @@
 # Iterate
 [[toc]]
 
-Does not matter how you will access data inside of sheet(by indexes, reference or via iterators), in all cases library will auto expand sheet's dimension to required size.
+Does not matter how you will access data inside of sheet(by indexes, reference or via iterators), in all cases Xlsx2Go will auto expand sheet's dimension to required size.
 ```go
 	xl := xlsx.New()
 	sheet := xl.AddSheet("sheet name")
@@ -12,7 +12,7 @@ Does not matter how you will access data inside of sheet(by indexes, reference o
 	// Append 49 cols, 50 in total
 	sheet.Col(49)
 ```
-Sheet is a grid, so if you request something outside of current dimension of grid, library will auto expand to required dimension (new sheets have 1x1 dimension by default).
+Sheet is a grid, so if you request something outside of current dimension of grid, Xlsx2Go will auto expand to required dimension (new sheets have 1x1 dimension by default).
 
 ::: warning Columns and Rows limits
 Excel has built-in limits for total number of rows and columns per sheet. Check [Excel Limits](/guide/limits.md) for more information about built-in limits

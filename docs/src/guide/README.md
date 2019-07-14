@@ -19,9 +19,6 @@ So what were the goals that time? It's a great pity, but I could not get a libra
 4) easy to read/understand source code, easy to maintain, easy to contribute - no shadow places/hacks/magic, just read and understand
 > I was trying to contribute to existing libraries, but...actually it's much faster to create it from ground zero than to refactor existing and get satisfied results or fix some issues.
 
-### API Documentation
-For detailed API documentation, you can check [godoc.org](https://godoc.org/github.com/plandem/xlsx)
-
 ### OOXML edition
 XML is compliant with part 1 of the [5th edition](http://www.ecma-international.org/publications/standards/Ecma-376.htm) of the ECMA-376 Standard for Office Open XML
 

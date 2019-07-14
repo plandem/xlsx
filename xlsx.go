@@ -11,6 +11,7 @@ import (
 	_ "github.com/plandem/xlsx/format/conditional"
 	_ "github.com/plandem/xlsx/format/conditional/rule"
 	_ "github.com/plandem/xlsx/format/styles"
+	_ "github.com/plandem/xlsx/internal/ml"
 	_ "github.com/plandem/xlsx/internal/ml/primitives"
 	_ "github.com/plandem/xlsx/types"
 	_ "github.com/plandem/xlsx/types/comment"
