@@ -10,5 +10,8 @@
     "@vuepress/plugin-nprogress": "^1.0.2",
     "markdown-it-task-lists": "^2.1.1",
     "vuepress": "^1.0.2"
+  },
+  "dependencies": {
+    "vuepress-plugin-container": "^2.0.2"
   }
 }

@@ -17,7 +17,7 @@ Xlsx2Go automatically detects windows, unix and network versions of filepath and
 
 Xlsx2Go supports string version of hyperlinks, as well as custom version via special type. Read about types below.
 
-### Hyperlinks with cells
+### Hyperlinks and cells
 
 ```go
 	//to add hyperlink to cell
@@ -33,7 +33,7 @@ Xlsx2Go supports string version of hyperlinks, as well as custom version via spe
 	link := sheet.CellByRef("N28").Hyperlink()
 ```
 
-### Hyperlinks with ranges
+### Hyperlinks and ranges
 ```go
 	//add hyperlink to range
 	sheet.RangeByRef("A1:A10").SetHyperlink("http://google.com")
@@ -46,6 +46,10 @@ Xlsx2Go supports string version of hyperlinks, as well as custom version via spe
 	sheet.Col(0).SetHyperlink("http://google.com")
 ```
 
+::: note N.B.:
+In case of ranges, only one hyperlink will be added to sheet, but for whole range!
+:::
+
 ### String hyperlink
 As was shown, the simplest way to add hyperlink is to use string version. At the same time, that version is quite limited - valid format should be used and you can't set tooltips, styles and etc. 
 :::tip 
@@ -54,44 +58,44 @@ Xlsx2Go supports same format as Excel's `HYPERLINK` function and will try to aut
 Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-function-333c7ce6-c5ae-4164-9c47-7de9b76f577f) for more information.
 :::
 
-#### same file, same sheet
-* `#A1` - Reference to same sheet  
+::: note Same file, same sheet
+* `#A1`  
+:::
 
+::: note Same file, other sheet
+* `#SheetName!A1`  
+* `#'Sheet Name'!A1`  
+:::
 
-#### same file, other sheet
-* `#SheetName!A1` - Reference to sheet without space in name  
-* `#'Sheet Name'!A1` - Reference to sheet with space in name  
+::: note External local file
+* `D:\Folder\File.docx`
+* `[D:\Folder\File.docx]`  
+* `D:\Folder\File.docx#Bookmark`  
+* `[D:\Folder\File.docx]Bookmark`  
+* `D:\Folder\File.xlsx#SheetName!A1`  
+* `[D:\Folder\File.xlsx]SheetName!A1`  
+* `D:\Folder\File.xlsx#'Sheet Name'!A1`  
+* `[D:\Folder\File.xlsx]'Sheet Name'!A1`  
+:::
 
+::: note External remote file
+* `\\SERVER\Folder\File.doc`  
+* `\\SERVER\Folder\File.xlsx#SheetName!A1`  
+* `[\\SERVER\Folder\File.xlsx]SheetName!A1`  
+* `\\SERVER\Folder\File.xlsx#'Sheet Name'!A1`  
+* `[\\SERVER\Folder\File.xlsx]'Sheet Name'!A1`  
+:::
 
-#### other local file
-`D:\Folder\File.docx` - Word file  
-`[D:\Folder\File.docx]` - Word file  
-`D:\Folder\File.docx#Bookmark` - Local Word file with bookmark  
-`[D:\Folder\File.docx]Bookmark` - Local Word file with bookmark  
-`D:\Folder\File.xlsx#SheetName!A1` - Local Excel file with reference  
-`[D:\Folder\File.xlsx]SheetName!A1` - Local Excel file with reference  
-`D:\Folder\File.xlsx#'Sheet Name'!A1` - Local Excel file with reference  
-`[D:\Folder\File.xlsx]'Sheet Name'!A1` - Local Excel file with reference  
+::: note Url
+* `https://www.spam.it`  
+* `https://www.spam.it/#bookmark`  
+* `[https://www.spam.it/]bookmark`  
+:::
 
-
-#### other remote file
-* `\\SERVER\Folder\File.doc` - Remote Word file  
-* `\\SERVER\Folder\File.xlsx#SheetName!A1` - Remote Excel file with reference  
-* `[\\SERVER\Folder\File.xlsx]SheetName!A1` - Remote Excel file with reference  
-* `\\SERVER\Folder\File.xlsx#'Sheet Name'!A1` - Remote Excel file with reference  
-* `[\\SERVER\Folder\File.xlsx]'Sheet Name'!A1` - Remote Excel file with reference  
-
-
-#### url
-* `https://www.spam.it` - Website without bookmark  
-* `https://www.spam.it/#bookmark` - Website with bookmark  
-* `[https://www.spam.it/]bookmark` - Website with bookmark  
-
-
-#### email
-* `mailto:spam@spam.it` - Email without subject  
-* `mailto:spam@spam.it?subject=topic` - Email with subject  
-
+::: note Email
+* `mailto:spam@spam.it`  
+* `mailto:spam@spam.it?subject=topic`  
+:::
 
 ### Custom hyperlink
 While with string hyperlink you can add any type of hyperlink, sometimes we need additional settings like tooltips or styles. For these cases you can use special type and configure hyperlink as you wish.

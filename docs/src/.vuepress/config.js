@@ -1,12 +1,6 @@
 const mdList = require('markdown-it-task-lists');
 
 module.exports = {
-    plugins: [
-        '@vuepress/back-to-top',
-        '@vuepress/last-updated',
-        '@vuepress/nprogress',
-        // ['@vuepress/google-analytics', {'ga': 'UA-00000000-0'}],
-    ],
     title: 'Xlsx2Go',
     description: 'Fast and Reliable way to work with xlsx in Golang',
     markdown: {
@@ -52,5 +46,13 @@ module.exports = {
                 path: '/faq/',
             }
         ]
-    }
+    },
+    plugins: [
+        '@vuepress/back-to-top',
+        '@vuepress/last-updated',
+        '@vuepress/nprogress',
+        ['container', {type: 'right', defaultTitle: ''}],
+        ['container', {type: 'note', defaultTitle: ''}],
+        // ['@vuepress/google-analytics', {'ga': 'UA-00000000-0'}],
+    ],
 };
