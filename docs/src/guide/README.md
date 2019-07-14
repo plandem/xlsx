@@ -39,22 +39,6 @@ For some cases this library is second, for other - best, but in case of reading 
 You get more info about benchmarks at dedicated [Benchmarks Repository](https://github.com/plandem/xlsx-benchmarks)  
 :::
 
-## Roadmap
-- [x] [copy cell, row, col](/guide/copy.md)
-- [x] [read as stream](/guide/stream-read.md)
-- [x] [merged cells](/guide/merged-cells.md)
-- [x] [hyperlinks](/guide/hyperlinks.md)
-- [x] [comments](/guide/comments.md)
-- [x] [typed getter/setter for values](/guide/typed-values.md)
-- [x] [conditional formatting](/guide/conditional-formatting.md)
-- [x] [styles formatting](/guide/styles-formatting.md)
-- [x] [rich text](/guide/rich-text.md)
-- [ ] copy sheet
-- [ ] write as stream
-- [ ] formulas
-- [ ] drawing
-- [ ] unpack package to temp folder to reduce memory usage
-
 ## API Documentation
 For detailed API documentation, you can check [godoc.org](https://godoc.org/github.com/plandem/xlsx)
 

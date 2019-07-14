@@ -28,7 +28,7 @@ module.exports = {
                     '/guide/getting-started.md',
                     '/guide/access.md',
                     '/guide/iterate.md',
-                    '/guide/typed-values',
+                    '/guide/values',
                     '/guide/merged-cells.md',
                     '/guide/rich-text.md',
                     '/guide/hyperlinks.md',

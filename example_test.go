@@ -580,8 +580,8 @@ func Example_gettersAndSetters() {
 	now, _ := time.Parse("02 Jan 06 15:04 MST", time.RFC822)
 
 	//set values by typed method
-	sheet.CellByRef("A1").SetString("string")
-	sheet.CellByRef("B1").SetInlineString("inline string")
+	sheet.CellByRef("A1").SetText("string")
+	sheet.CellByRef("B1").SetInlineText("inline string")
 	sheet.CellByRef("C1").SetBool(true)
 	sheet.CellByRef("D1").SetInt(12345)
 	sheet.CellByRef("E1").SetFloat(123.123)

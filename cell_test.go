@@ -112,8 +112,8 @@ func TestCell_write(t *testing.T) {
 	//set values by dedicated method
 	sheet.CellByRef("A2").SetValue("typed set:")
 	sheet.CellByRef("B2").SetValue("bla-bla")
-	sheet.CellByRef("C2").SetString("string")
-	sheet.CellByRef("D2").SetInlineString("inline string")
+	sheet.CellByRef("C2").SetText("string")
+	sheet.CellByRef("D2").SetInlineText("inline string")
 	sheet.CellByRef("E2").SetBool(true)
 	sheet.CellByRef("F2").SetInt(12345)
 	sheet.CellByRef("G2").SetFloat(123.123)

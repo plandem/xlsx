@@ -124,38 +124,6 @@ func (c *Cell) truncateIfRequired(value string) string {
 	return value
 }
 
-//SetInlineString sets value as inline string
-func (c *Cell) SetInlineString(value string) {
-	if len(value) == 0 {
-		c.setGeneral(value)
-		return
-	}
-
-	c.ml.Type = types.CellTypeInlineString
-	c.ml.Value = ""
-	c.ml.Formula = nil
-	c.ml.InlineStr = &ml.StringItem{Text: types.Text(c.truncateIfRequired(value))}
-}
-
-//SetString sets value as shared string
-func (c *Cell) SetString(value string) {
-	if len(value) == 0 {
-		c.setGeneral(value)
-		return
-	}
-
-	//we can update sharedStrings only when sheet is in write mode, to prevent pollution of sharedStrings with fake values
-	if (c.sheet.mode() & sheetModeWrite) == 0 {
-		panic(errorNotSupportedWrite)
-	}
-
-	//sharedStrings is the only place that can be mutated from the 'sheet' perspective
-	sid := c.sheet.workbook.doc.sharedStrings.addString(c.truncateIfRequired(value))
-	c.ml.Formula = nil
-	c.ml.Type = types.CellTypeSharedString
-	c.ml.Value = strconv.Itoa(sid)
-}
-
 //SetText sets shared rich text
 func (c *Cell) SetText(parts ...interface{}) error {
 	//we can update sharedStrings only when sheet is in write mode, to prevent pollution of sharedStrings with fake values
@@ -303,9 +271,9 @@ func (c *Cell) SetValue(value interface{}) {
 	case float64:
 		c.SetFloat(v)
 	case string:
-		c.SetString(v)
+		c.SetText(v)
 	case []byte:
-		c.SetString(string(v))
+		c.SetText(string(v))
 	case bool:
 		c.SetBool(v)
 	case time.Time:
@@ -315,7 +283,7 @@ func (c *Cell) SetValue(value interface{}) {
 	case nil:
 		c.Reset()
 	default:
-		c.SetString(fmt.Sprintf("%v", value))
+		c.SetText(fmt.Sprintf("%v", value))
 	}
 }
 

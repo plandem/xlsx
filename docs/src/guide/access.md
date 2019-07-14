@@ -1,10 +1,14 @@
 # Access
-In general access is possible by indexes (0-based) or by references (alphanumeric presentation, e.g. A1). Type of reference depends on situation, in terms of library it can be: 
-- **CellRef** - single cell. E.g. A1
-- **Ref** - range. E.g. A1:B2
-- **RefList** - few ranges same time, E.g. A1:B2 C3 D1:E4
+[[toc]]
 
-N.B.: There is special case when Ref points to single cell, e.g. A1:A1 is same as A1
+In general access is possible by indexes (0-based) or by references (alphanumeric presentation, e.g. `A1`). Type of reference depends on situation. 
+::: tip Type of reference
+- **CellRef** - single cell. E.g. `A1`
+- **Ref** - range. E.g. `A1:B2`
+- **RefList** - few ranges same time, E.g. `A1:B2 C3 D1:E4`
+
+N.B.: There is special case when **Ref** points to single cell, e.g. `A1:A1` is same as `A1`
+:::
 
 Library has few helper types, such as **Bounds** and **BoundsList** to simplify and unify access logic and few helper functions.
 ```go

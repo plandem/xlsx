@@ -184,7 +184,7 @@ func TestSheetReadStream_unsupported(t *testing.T) {
 	defer sheet.Close()
 
 	//SetString must not work in read-only mode
-	require.Panics(t, func() { sheet.CellByRef("A1").SetString("a") })
+	require.Panics(t, func() { sheet.CellByRef("A1").SetText("a") })
 
 	//SetValueWithStyles must not work in read-only mode
 	require.Panics(t, func() { sheet.CellByRef("A1").SetValueWithStyles("a", "@") })

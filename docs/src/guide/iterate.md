@@ -1,4 +1,6 @@
 # Iterate
+[[toc]]
+
 Does not matter how you will access data inside of sheet(by indexes, reference or via iterators), in all cases library will auto expand sheet's dimension to required size.
 ```go
 	xl := xlsx.New()
@@ -11,6 +13,10 @@ Does not matter how you will access data inside of sheet(by indexes, reference o
 	sheet.Col(49)
 ```
 Sheet is a grid, so if you request something outside of current dimension of grid, library will auto expand to required dimension (new sheets have 1x1 dimension by default).
+
+::: warning Columns and Rows limits
+Excel has built-in limits for total number of rows and columns per sheet. Check [Excel Limits](/guide/limits.md) for more information about built-in limits
+:::
 
 ### Iterate by indexes
 ```go
@@ -74,7 +80,7 @@ N.B.: Internally, Row and Column are subtypes of Range, so they inherit Range's 
 ```
 
 ### Walk
-Or you can `Walk` method to process cells in range
+Or you can use `Walk` method to process cells in range
 ```go
 	//Walk through the cells of row
 	sheet.Row(0).Walk(func(idx, cIdx, rIdx int, c *xlsx.Cell) {

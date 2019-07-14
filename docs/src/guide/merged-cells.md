@@ -1,4 +1,6 @@
 # Merged Cells
+[[toc]]
+
 Short example is better any words
 
 ![](/merged-cells.png)
@@ -31,4 +33,6 @@ In case if you need to merge few columns:
 	sheet.SplitCols(1, 9)
 ```
 
-Check [Excel Limits](/guide/limits.md) for more information about built-in limits
+::: warning Columns and Rows limits
+Excel has built-in limits for total number of rows and columns per sheet. Check [Excel Limits](/guide/limits.md) for more information about built-in limits
+:::

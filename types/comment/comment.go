@@ -25,11 +25,11 @@ type Option func(o *Info)
 //New create and returns option set for comment
 func New(options ...Option) *Info {
 	s := &Info{
-			Background: "#ffffe1",
-			Width:      128,
-			Height:     74,
-			XScale:     1,
-			YScale:     1,
+		Background: "#ffffe1",
+		Width:      128,
+		Height:     74,
+		XScale:     1,
+		YScale:     1,
 	}
 
 	s.Set(options...)
