@@ -16,6 +16,7 @@ type Info struct {
 	Author     string
 	Background string
 	Shadow     string
+	Stroke     string
 	Visible    bool
 	Text       []interface{}
 }
@@ -25,8 +26,10 @@ type Option func(o *Info)
 
 //New create and returns option set for comment
 func New(options ...Option) *Info {
+	//Excel uses default settings for comment shape, but different versions use different settings sometimes
 	s := &Info{
-		Background: "#ffffe1",
+		Background: "#FFFFE1",
+		Stroke:     "#000000",
 		Width:      128,
 		Height:     74,
 		XScale:     1,
@@ -111,6 +114,13 @@ func Background(rgb string) Option {
 func Shadow(rgb string) Option {
 	return func(i *Info) {
 		i.Shadow = rgb
+	}
+}
+
+//Stroke sets stroke color for comment
+func Stroke(rgb string) Option {
+	return func(i *Info) {
+		i.Stroke = rgb
 	}
 }
 

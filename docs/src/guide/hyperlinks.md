@@ -3,6 +3,8 @@
 
 You can add any type of hyperlink to cell or range (row and col are ranges too), such as: hyperlink to file, network, website, email, another sheet and etc. 
 
+Xlsx2Go supports string version of hyperlinks, as well as custom version via special type. Read about types below.
+
 ::: warning Hyperlinks limits
 Excel has built-in limit for total number of hyperlinks per sheet. Check [Excel Limits](/guide/limits.md)
 :::
@@ -11,11 +13,9 @@ Excel has built-in limit for total number of hyperlinks per sheet. Check [Excel 
 In some cases, adding same hyperlink to range (instead of cells directly) can help to exceed these limits.
 :::
 
-::: tip filepath
+::: note Filepath
 Xlsx2Go automatically detects windows, unix and network versions of filepath and validates it.
 :::
-
-Xlsx2Go supports string version of hyperlinks, as well as custom version via special type. Read about types below.
 
 ### Hyperlinks and cells
 
@@ -67,7 +67,7 @@ Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-func
 * `#'Sheet Name'!A1`  
 :::
 
-::: note External local file
+::: note External file
 * `D:\Folder\File.docx`
 * `[D:\Folder\File.docx]`  
 * `D:\Folder\File.docx#Bookmark`  
@@ -78,7 +78,7 @@ Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-func
 * `[D:\Folder\File.xlsx]'Sheet Name'!A1`  
 :::
 
-::: note External remote file
+::: note Network file
 * `\\SERVER\Folder\File.doc`  
 * `\\SERVER\Folder\File.xlsx#SheetName!A1`  
 * `[\\SERVER\Folder\File.xlsx]SheetName!A1`  
@@ -98,7 +98,7 @@ Check [Excel Hyperlink]( https://support.office.com/en-us/article/hyperlink-func
 :::
 
 ### Custom hyperlink
-While with string hyperlink you can add any type of hyperlink, sometimes we need additional settings like tooltips or styles. For these cases you can use special type and configure hyperlink as you wish.
+While with string version of hyperlink you can add any kind of hyperlink, sometimes we need additional settings like tooltips or styles. For these cases you can use special type and configure hyperlink as you wish.
 
 #### Example
 

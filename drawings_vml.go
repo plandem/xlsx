@@ -13,7 +13,6 @@ import (
 	"github.com/plandem/ooxml/index"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal"
-	//"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/comment"
@@ -158,6 +157,10 @@ func (d *drawingsVML) addComment(bounds types.Bounds, info *comment.Info) error 
 	shape.Style = style.String()
 	shape.Fill = &vml.Fill{Color2: info.Background}
 	shape.PathSettings = &vml.Path{ConnectType: vml.ConnectTypeNone}
+
+	if len(info.Stroke) != 0 {
+		shape.StrokeColor = info.Stroke
+	}
 
 	if len(info.Shadow) != 0 {
 		shape.Shadow = &vml.Shadow{
