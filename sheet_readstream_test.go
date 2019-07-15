@@ -200,7 +200,7 @@ func TestSheetReadStream_modes(t *testing.T) {
 	}
 
 	//open as read-write and after as read-stream
-	sheet := xl.Sheet(0)
+	_ = xl.Sheet(0)
 	require.Panics(t, func() { xl.Sheet(0, xlsx.SheetModeStream, xlsx.SheetModeMultiPhase) })
 	xl.Close()
 
@@ -211,6 +211,6 @@ func TestSheetReadStream_modes(t *testing.T) {
 	defer xl.Close()
 
 	//open as read-stream and after as read-write
-	sheet = xl.Sheet(0, xlsx.SheetModeStream, xlsx.SheetModeMultiPhase)
+	sheet := xl.Sheet(0, xlsx.SheetModeStream, xlsx.SheetModeMultiPhase)
 	defer sheet.Close()
 }

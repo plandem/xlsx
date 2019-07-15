@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/number_format"
 	"github.com/plandem/xlsx/internal/number_format/convert"
@@ -107,21 +106,12 @@ func (c *Cell) Bool() (bool, error) {
 	return false, errTypeMismatch
 }
 
-//setGeneral sets the value as general type
-func (c *Cell) setGeneral(value string) {
+//SetGeneral sets the value as general type
+func (c *Cell) SetGeneral(value string) {
 	c.ml.Type = types.CellTypeGeneral
 	c.ml.Value = value
 	c.ml.Formula = nil
 	c.ml.InlineStr = nil
-}
-
-//truncateIfRequired truncate string is exceeded allowed size
-func (c *Cell) truncateIfRequired(value string) string {
-	if len(value) > internal.ExcelCellLimit {
-		value = value[:internal.ExcelCellLimit]
-	}
-
-	return value
 }
 
 //SetText sets shared rich text
@@ -291,7 +281,7 @@ func (c *Cell) SetValue(value interface{}) {
 	case nil:
 		c.Reset()
 	default:
-		c.SetText(fmt.Sprintf("%v", value))
+		c.SetGeneral(fmt.Sprintf("%v", value))
 	}
 }
 
@@ -387,10 +377,16 @@ func (c *Cell) RemoveHyperlink() {
 
 //SetComment sets comment for cell, where comment can be string or comment.Info
 func (c *Cell) SetComment(comment interface{}) error {
-	return c.sheet.comments.Add(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds(), comment)
+	return c.sheet.comments.Add(c.ml.Ref, comment)
+}
+
+//Comment returns text of comment if there is any comment or empty string
+func (c *Cell) Comment() string {
+	comment := c.sheet.comments.Get(c.ml.Ref)
+	return fromRichText(comment)
 }
 
 //RemoveComment removes comment from cell
 func (c *Cell) RemoveComment() {
-	c.sheet.comments.Remove(types.RefFromIndexes(c.ml.Ref.ToIndexes()).ToBounds())
+	c.sheet.comments.Remove(c.ml.Ref)
 }

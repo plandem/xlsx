@@ -91,10 +91,11 @@ func (c *comments) addDefaults() {
 }
 
 //Add adds a new comment info for bounds
-func (c *comments) Add(bounds types.Bounds, info interface{}) error {
+func (c *comments) Add(ref types.CellRef, info interface{}) error {
 	c.initIfRequired()
 
 	//check if there is comment already for these bounds
+	bounds := types.RefFromIndexes(ref.ToIndexes()).ToBounds()
 	if c.commentIndex.Has(bounds) {
 		return fmt.Errorf("there is already comment for ref %s", bounds.String())
 	}
@@ -139,13 +140,26 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 }
 
 //Remove removes comment info for bounds
-func (c *comments) Remove(bounds types.Bounds) {
+func (c *comments) Remove(ref types.CellRef) {
 	c.initIfRequired()
 	c.file.MarkAsUpdated()
 
+	bounds := types.RefFromIndexes(ref.ToIndexes()).ToBounds()
 	if id, ok := c.commentIndex.Get(bounds); ok {
 		c.ml.CommentList = append(c.ml.CommentList[:id], c.ml.CommentList[id+1:]...)
 		c.sheet.drawingsVML.removeComment(bounds)
 		c.commentIndex.Remove(bounds)
 	}
+}
+
+//Get returns a resolved comment info for provided ref or nil if there is no any comment
+func (c *comments) Get(ref types.CellRef) *ml.StringItem {
+	c.initIfRequired()
+
+	bounds := types.RefFromIndexes(ref.ToIndexes()).ToBounds()
+	if idx, ok := c.commentIndex.Get(bounds); ok {
+		return c.ml.CommentList[idx].Text
+	}
+
+	return nil
 }
