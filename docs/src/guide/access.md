@@ -24,10 +24,10 @@ func main() {
 	var ref types.Ref = types.RefFromCellRefs("A1", "B2")
 	
 	//to create CellRef from indexes
-	var cRef = types.CellRefFromIndexes(0, 1)
+	var cRef types.CellRef = types.CellRefFromIndexes(0, 1)
 	
 	//to create Bounds from indexes
-	var bounds = types.BoundsFromIndexes(0, 1, 1, 2)
+	var bounds types.Bounds = types.BoundsFromIndexes(0, 1, 1, 2)
 }
 
 ```

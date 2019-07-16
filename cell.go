@@ -79,10 +79,19 @@ func (c *Cell) Date() (time.Time, error) {
 	return time.Now(), errTypeMismatch
 }
 
-//Int try to convert and return current raw value as int
+//Int try to convert and return current raw value as signed integer
 func (c *Cell) Int() (int, error) {
 	if c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
 		return convert.ToInt(c.ml.Value)
+	}
+
+	return 0, errTypeMismatch
+}
+
+//Uint try to convert and return current raw value as unsigned integer
+func (c *Cell) Uint() (uint, error) {
+	if c.ml.Type == types.CellTypeNumber || c.ml.Type == types.CellTypeGeneral {
+		return convert.ToUint(c.ml.Value)
 	}
 
 	return 0, errTypeMismatch
@@ -155,7 +164,7 @@ func (c *Cell) SetInlineText(parts ...interface{}) error {
 	return err
 }
 
-//SetInt sets an integer value
+//SetInt sets an signed integer value
 func (c *Cell) SetInt(value int) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatInt(int64(value), 10)
@@ -168,8 +177,8 @@ func (c *Cell) SetInt(value int) {
 	c.ml.InlineStr = nil
 }
 
-//SetUInt sets an unsigned integer value
-func (c *Cell) SetUInt(value uint) {
+//SetUint sets an unsigned integer value
+func (c *Cell) SetUint(value uint) {
 	c.ml.Type = types.CellTypeNumber
 	c.ml.Value = strconv.FormatUint(uint64(value), 10)
 
@@ -255,15 +264,15 @@ func (c *Cell) SetValue(value interface{}) {
 	case int64:
 		c.SetInt(int(v))
 	case uint:
-		c.SetUInt(v)
+		c.SetUint(v)
 	case uint8:
-		c.SetUInt(uint(v))
+		c.SetUint(uint(v))
 	case uint16:
-		c.SetUInt(uint(v))
+		c.SetUint(uint(v))
 	case uint32:
-		c.SetUInt(uint(v))
+		c.SetUint(uint(v))
 	case uint64:
-		c.SetUInt(uint(v))
+		c.SetUint(uint(v))
 	case float32:
 		c.SetFloat(float64(v))
 	case float64:

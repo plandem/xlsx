@@ -25,6 +25,12 @@ func ToInt(value string) (int, error) {
 	return int(i), err
 }
 
+//ToUint tries to convert string into int type
+func ToUint(value string) (uint, error) {
+	i, err := strconv.ParseUint(value, 10, 64)
+	return uint(i), err
+}
+
 //ToFloat tries to convert string into float64 type
 func ToFloat(value string) (float64, error) {
 	return strconv.ParseFloat(value, 64)

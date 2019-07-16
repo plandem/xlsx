@@ -583,6 +583,8 @@ func Example_gettersAndSetters() {
 
 	//set values by typed method
 	sheet.CellByRef("A1").SetText("string")
+	sheet.CellByRef("A1").SetValueWithFormat(-1234, "")
+
 	sheet.CellByRef("B1").SetInlineText("inline string")
 	sheet.CellByRef("C1").SetBool(true)
 	sheet.CellByRef("D1").SetInt(12345)

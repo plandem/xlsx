@@ -8,7 +8,7 @@ In some cases, when input file is really huge, more advanced techniques required
 Full stream support of xlsx files can be challenging task. More over, in real world only sheets holds huge data to process. Taking this into account, the real world task will be to stream sheets, but not xlsx file entirely.   
 
 ::: warning Limits
-Xlsx2Go supports only limited set of features during sheet streaming - access to cell's value.
+Xlsx2Go supports only limited set of features during sheet streaming.
 :::
 
 ### Reading sheet
@@ -29,7 +29,7 @@ If sheet previously was opened in normal mode, then you can't open it in stream 
 :::
 
 ::: tip Merged cells, Hyperlinks and etc
-By default, there is no access to merged cells, hyperlinks and conditional formatting information, to get access you should open sheet in `Multi Phase` mode. In that case sheet will be loaded few times - first one to load `later` information, such as merged cells, and last phase for actual streaming cells info.
+By default, there is no access to merged cells, hyperlinks and conditional formatting information, to get access you should open sheet in `Multi Phase` mode. In that case sheet will be processed few times - first one to load `later` information, such as merged cells, and last phase for actual streaming cells info.
 ::: 
 
 ```go
@@ -39,5 +39,3 @@ By default, there is no access to merged cells, hyperlinks and conditional forma
 
 #### Example 
 <<< @/src/code/stream_read_test.go
-
-### Writing sheet
