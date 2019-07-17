@@ -1,6 +1,7 @@
 const mdList = require('markdown-it-task-lists');
 
 module.exports = {
+    base: '/xlsx2go/',
     title: 'Xlsx2Go',
     description: 'Fast and Reliable way to work with xlsx in Golang',
     markdown: {
