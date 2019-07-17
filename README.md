@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/plandem/xlsx2go)](https://goreportcard.com/report/github.com/plandem/xlsx2go)
 [![GoDoc](https://godoc.org/github.com/plandem/xlsx2go?status.svg)](https://godoc.org/github.com/plandem/xlsx2go)
 [![License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/plandem/xlsx2go/master/LICENSE) 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fplandem%2Fxlsx2go.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fplandem%2Fxlsx2go?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fplandem%2Fxlsx.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fplandem%2Fxlsx?ref=badge_shield)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/gayvoronsky)
 
 **Note:** Github repository was renamed from `xlsx` to `xlsx2go` to make it more easier to distinct existing xlsx libraries. Previous address will be auto redirected, package will be named as before - xlsx.   
