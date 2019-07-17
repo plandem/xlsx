@@ -7,7 +7,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/row"
 )
 
 //Row is a higher level object that wraps ml.Row with functionality. Inherits functionality of Range
@@ -22,7 +22,7 @@ func (r *Row) Cell(colIndex int) *Cell {
 }
 
 //SetOptions sets options for row
-func (r *Row) SetOptions(o *options.RowOptions) {
+func (r *Row) SetOptions(o *options.Info) {
 	if o.Height > 0 {
 		r.ml.Height = o.Height
 		r.ml.CustomHeight = true

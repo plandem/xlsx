@@ -12,6 +12,7 @@ import (
 //BoundsList is implementation of RefList
 type BoundsList []Bounds
 
+//BoundsListFromRefs returns BoundsList for provided refs
 func BoundsListFromRefs(refs ...Ref) BoundsList {
 	list := make([]Bounds, 0, len(refs))
 

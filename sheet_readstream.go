@@ -6,17 +6,18 @@ package xlsx
 
 import (
 	"encoding/xml"
+	"fmt"
 	"github.com/plandem/ooxml"
 	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/sheet"
+	"math"
 )
 
 type sheetReadStream struct {
 	*sheetInfo
 	stream     *ooxml.StreamFileReader
-	rowReader  ooxml.StreamReaderIterator
 	mergedRows map[int]*Row
 	currentRow *ml.Row
 }
@@ -39,16 +40,7 @@ func (s *sheetReadStream) Cell(colIndex, rowIndex int) *Cell {
 	return &Cell{ml: data, sheet: s.sheetInfo}
 }
 
-func (s *sheetReadStream) CellByRef(cellRef types.CellRef) *Cell {
-	cid, rid := cellRef.ToIndexes()
-	return s.Cell(cid, rid)
-}
-
 func (s *sheetReadStream) Row(index int) *Row {
-	if s.rowReader == nil {
-		return nil
-	}
-
 	//if index from cached merged rows, then use it
 	if row, ok := s.mergedRows[index]; ok {
 		return row
@@ -70,7 +62,13 @@ func (s *sheetReadStream) Row(index int) *Row {
 			}
 		}
 
-		if !s.rowReader(s.nextRow) {
+		t, _ := s.stream.Token()
+		if t == nil {
+			break
+		}
+
+		//no more rows?
+		if start, ok := t.(xml.StartElement); !ok || !s.loadRow(&start) {
 			break
 		}
 	}
@@ -86,10 +84,10 @@ func (s *sheetReadStream) Row(index int) *Row {
 	}
 }
 
-func (s *sheetReadStream) nextRow(decoder *xml.Decoder, start *xml.StartElement) bool {
-	if start != nil && start.Name.Local == "row" {
+func (s *sheetReadStream) loadRow(start *xml.StartElement) bool {
+	if start.Name.Local == "row" {
 		row := &ml.Row{}
-		_ = decoder.DecodeElement(row, start)
+		_ = s.stream.DecodeElement(row, start)
 
 		//expand row dimension to required width
 		width, _ := s.Dimension()
@@ -128,105 +126,130 @@ func (s *sheetReadStream) emptyDataRow(indexRef int) *ml.Row {
 	}
 }
 
+//nolint
 //afterOpen loads worksheet data and initializes it if required
 func (s *sheetReadStream) afterOpen() {
 	//adds a styles for types
 	s.workbook.doc.styleSheet.addTypedStylesIfRequired()
 
+	s.currentRow = nil
+	ignoreDimension := (s.sheetMode & SheetModeIgnoreDimension) != 0
 	multiPhase := (s.sheetMode & SheetModeMultiPhase) != 0
 	conditionalsInited := false
 
-	if s.currentRow == nil {
-		if stream, err := s.file.ReadStream(); err != nil {
-			panic(err)
-		} else {
-			s.stream = stream
+	if !multiPhase && ignoreDimension {
+		panic(fmt.Errorf("to ignore dimension, streaming should be multiphased"))
+	}
+
+	if stream, err := s.file.ReadStream(); err != nil {
+		panic(err)
+	} else {
+		s.stream = stream
+	}
+
+	var maxCol, maxRow float64
+
+	stop := false
+
+	//first phase
+	for {
+		if stop {
+			break
 		}
 
-		//phase1
-		for next, hasNext := s.stream.StartIterator(nil); hasNext; {
-			hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
-				switch start.Name.Local {
-				case "dimension":
+		t, _ := s.stream.Token()
+		if t == nil {
+			break
+		}
+
+		if start, ok := t.(xml.StartElement); ok {
+			switch start.Name.Local {
+			case "dimension":
+				if !ignoreDimension {
 					s.ml.Dimension = &ml.SheetDimension{}
-					_ = decoder.DecodeElement(s.ml.Dimension, start)
-				case "hyperlinks":
-					s.hyperlinks = newHyperlinks(s.sheetInfo)
-				case "conditionalFormatting":
-					if !conditionalsInited {
-						//N.B.: conditionalFormatting is not nested, so we have to use flag to init once only
-						s.conditionals = newConditionals(s.sheetInfo)
-						s.conditionals.initIfRequired()
-						conditionalsInited = true
-					}
-				case "mergeCells":
-					s.mergedCells = newMergedCells(s.sheetInfo)
-				case "mergeCell":
-					cell := &ml.MergeCell{}
-					_ = decoder.DecodeElement(cell, start)
-					s.ml.MergeCells.Items = append(s.ml.MergeCells.Items, cell)
-				case "row":
-					if multiPhase {
-						//skip row data, because 'mergeCell' is going after row data
-						return true
-					}
-
-					//first row found, so stop pre-loading phase
-					s.rowReader, _ = s.stream.StartIterator(start)
-					return false
+					_ = s.stream.DecodeElement(s.ml.Dimension, &start)
+				}
+			case "hyperlinks":
+				s.hyperlinks = newHyperlinks(s.sheetInfo)
+			case "conditionalFormatting":
+				if !conditionalsInited {
+					//N.B.: conditionalFormatting is not nested, so we have to use flag to init once only
+					s.conditionals = newConditionals(s.sheetInfo)
+					s.conditionals.initIfRequired()
+					conditionalsInited = true
+				}
+			case "mergeCells":
+				s.mergedCells = newMergedCells(s.sheetInfo)
+			case "mergeCell":
+				cell := &ml.MergeCell{}
+				_ = s.stream.DecodeElement(cell, &start)
+				s.ml.MergeCells.Items = append(s.ml.MergeCells.Items, cell)
+			case "row":
+				if !multiPhase {
+					stop = true
+					s.loadRow(&start)
+					break
 				}
 
-				return true
-			})
-		}
-
-		// multi phased?
-		if multiPhase {
-			//skip is func to skip any info till first row
-			skip := func() {
-				//close previous opened stream
-				_ = s.stream.Close()
-
-				//re-open stream again and cache skip any info till first row
-				if stream, err := s.file.ReadStream(); err != nil {
-					panic(err)
-				} else {
-					s.stream = stream
-				}
-
-				for next, hasNext := s.stream.StartIterator(nil); hasNext; {
-					hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
-						if start.Name.Local == "row" {
-							//first row found, so stop pre-loading phase
-							s.rowReader, _ = s.stream.StartIterator(start)
-							return false
-						}
-
-						return true
-					})
+				row := &ml.Row{}
+				_ = s.stream.DecodeElement(row, &start)
+				for _, cell := range row.Cells {
+					colIndex, _ := types.CellRef(cell.Ref).ToIndexes()
+					maxCol = math.Max(maxCol, float64(colIndex))
 				}
 			}
+		}
+	}
 
-			//phase2 - reset pointer to rows
-			skip()
+	// multi phased?
+	if multiPhase {
+		if ignoreDimension {
+			s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, int(maxCol), int(maxRow))}
+		}
 
-			//cache merged rows
-			s.mergedRows = make(map[int]*Row)
-			for rows := s.Rows(); rows.HasNext(); {
-				rIdx, row := rows.Next()
+		//skipToFistRow is func to skip any info till first row
+		skipToFistRow := func() {
+			//close previous opened stream
+			_ = s.stream.Close()
 
-				for _, mc := range s.ml.MergeCells.Items {
-					if rIdx >= mc.Bounds.FromRow && rIdx <= mc.Bounds.ToRow {
-						s.mergedRows[rIdx] = row
-						break
-					}
-				}
+			//re-open stream again and cache skip any info till first row
+			if stream, err := s.file.ReadStream(); err != nil {
+				panic(err)
+			} else {
+				s.stream = stream
 			}
 
-			//phase3 - reset pointer to rows and clear current row info
-			skip()
-			s.currentRow = nil
+			for {
+				t, _ := s.stream.Token()
+				if t == nil {
+					break
+				}
+
+				if start, ok := t.(xml.StartElement); ok && start.Name.Local == "row" {
+					s.loadRow(&start)
+					break
+				}
+			}
 		}
+
+		//phase2 - reset pointer to rows
+		skipToFistRow()
+
+		//cache merged rows
+		s.mergedRows = make(map[int]*Row)
+		for rows := s.Rows(); rows.HasNext(); {
+			rIdx, row := rows.Next()
+
+			for _, mc := range s.ml.MergeCells.Items {
+				if rIdx >= mc.Bounds.FromRow && rIdx <= mc.Bounds.ToRow {
+					s.mergedRows[rIdx] = row
+					break
+				}
+			}
+		}
+
+		//phase3 - reset pointer to rows and clear current row info, because it was polluted while loaded merged cells
+		skipToFistRow()
 	}
 }
 
@@ -263,7 +286,7 @@ func (s *sheetReadStream) SetActive() {
 	panic(errorNotSupported)
 }
 
-func (s *sheetReadStream) SetOptions(o *options.SheetOptions) {
+func (s *sheetReadStream) SetOptions(o *options.Info) {
 	panic(errorNotSupported)
 }
 

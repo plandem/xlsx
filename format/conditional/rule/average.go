@@ -14,6 +14,7 @@ type averageRule struct {
 	baseRule
 }
 
+//Average is helper object to set specific options for rule
 var Average averageRule
 
 func (x averageRule) initIfRequired(r *Info) {

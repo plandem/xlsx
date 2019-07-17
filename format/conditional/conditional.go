@@ -5,12 +5,13 @@
 package conditional
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format/conditional/rule"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+
+	// to link unexported
 	_ "unsafe"
 )
 
@@ -23,6 +24,7 @@ type Info struct {
 	rules []*rule.Info
 }
 
+//Option is helper type to set options for conditional formatting
 type Option func(o *Info)
 
 //New creates and returns Info object with requested options
@@ -43,23 +45,24 @@ func (f *Info) Set(options ...Option) {
 	}
 }
 
+//Validate the conditional formatting information
 func (f *Info) Validate() error {
 	if len(f.info.Bounds) == 0 {
-		return errors.New("no any refs for conditional formatting")
+		return fmt.Errorf("no any refs for conditional formatting")
 	}
 
 	if len(f.rules) == 0 {
-		return errors.New("no any rules for conditional formatting")
+		return fmt.Errorf("no any rules for conditional formatting")
 	}
 
 	for i, r := range f.rules {
 		rInfo, _ := fromRule(r)
 		if rInfo.Type == 0 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: no type", i))
+			return fmt.Errorf("conditional rule#%d: no type", i)
 		}
 
 		if rInfo.Priority < 1 {
-			return errors.New(fmt.Sprintf("conditional rule#%d: priority(%d) can't be higher thatn 1", i, rInfo.Priority))
+			return fmt.Errorf("conditional rule#%d: priority(%d) can't be higher thatn 1", i, rInfo.Priority)
 		}
 
 		if err := r.Validate(); err != nil {
@@ -70,10 +73,12 @@ func (f *Info) Validate() error {
 	return nil
 }
 
+//Pivot sets pivot flag of conditional formatting
 func Pivot(cf *Info) {
 	cf.info.Pivot = true
 }
 
+//Refs sets references that will be used for this conditional formatting
 func Refs(refs ...primitives.Ref) Option {
 	return func(cf *Info) {
 		for _, ref := range refs {
@@ -82,6 +87,7 @@ func Refs(refs ...primitives.Ref) Option {
 	}
 }
 
+//AddRule adds another rule to conditional formatting
 func AddRule(options ...rule.Option) Option {
 	return func(cf *Info) {
 		r := rule.New(options...)

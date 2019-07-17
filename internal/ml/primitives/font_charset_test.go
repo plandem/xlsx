@@ -10,6 +10,7 @@ import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
+	"strconv"
 	"testing"
 )
 
@@ -18,36 +19,40 @@ func TestFontCharset(t *testing.T) {
 		Property primitives.FontCharsetType `xml:"property,omitempty"`
 	}
 
-	list := map[string]styles.FontCharsetType{
-		//"0":   format.FontCharsetANSI,
-		"1":   styles.FontCharsetDEFAULT,
-		"2":   styles.FontCharsetSYMBOL,
-		"77":  styles.FontCharsetMAC,
-		"128": styles.FontCharsetSHIFTJIS,
-		"129": styles.FontCharsetHANGUL,
-		"130": styles.FontCharsetJOHAB,
-		"134": styles.FontCharsetGB2312,
-		"136": styles.FontCharsetCHINESEBIG5,
-		"161": styles.FontCharsetGREEK,
-		"162": styles.FontCharsetTURKISH,
-		"163": styles.FontCharsetVIETNAMESE,
-		"177": styles.FontCharsetHEBREW,
-		"178": styles.FontCharsetARABIC,
-		"186": styles.FontCharsetBALTIC,
-		"204": styles.FontCharsetRUSSIAN,
-		"222": styles.FontCharsetTHAI,
-		"238": styles.FontCharsetEASTEUROPE,
-		"255": styles.FontCharsetOEM,
-		"25":  styles.FontCharsetType(25),
+	list := map[styles.FontCharsetType]string{
+		styles.FontCharsetANSI:        strconv.Itoa(int(styles.FontCharsetANSI)),
+		styles.FontCharsetDEFAULT:     strconv.Itoa(int(styles.FontCharsetDEFAULT)),
+		styles.FontCharsetSYMBOL:      strconv.Itoa(int(styles.FontCharsetSYMBOL)),
+		styles.FontCharsetMAC:         strconv.Itoa(int(styles.FontCharsetMAC)),
+		styles.FontCharsetSHIFTJIS:    strconv.Itoa(int(styles.FontCharsetSHIFTJIS)),
+		styles.FontCharsetHANGUL:      strconv.Itoa(int(styles.FontCharsetHANGUL)),
+		styles.FontCharsetJOHAB:       strconv.Itoa(int(styles.FontCharsetJOHAB)),
+		styles.FontCharsetGB2312:      strconv.Itoa(int(styles.FontCharsetGB2312)),
+		styles.FontCharsetCHINESEBIG5: strconv.Itoa(int(styles.FontCharsetCHINESEBIG5)),
+		styles.FontCharsetGREEK:       strconv.Itoa(int(styles.FontCharsetGREEK)),
+		styles.FontCharsetTURKISH:     strconv.Itoa(int(styles.FontCharsetTURKISH)),
+		styles.FontCharsetVIETNAMESE:  strconv.Itoa(int(styles.FontCharsetVIETNAMESE)),
+		styles.FontCharsetHEBREW:      strconv.Itoa(int(styles.FontCharsetHEBREW)),
+		styles.FontCharsetARABIC:      strconv.Itoa(int(styles.FontCharsetARABIC)),
+		styles.FontCharsetBALTIC:      strconv.Itoa(int(styles.FontCharsetBALTIC)),
+		styles.FontCharsetRUSSIAN:     strconv.Itoa(int(styles.FontCharsetRUSSIAN)),
+		styles.FontCharsetTHAI:        strconv.Itoa(int(styles.FontCharsetTHAI)),
+		styles.FontCharsetEASTEUROPE:  strconv.Itoa(int(styles.FontCharsetEASTEUROPE)),
+		styles.FontCharsetOEM:         strconv.Itoa(int(styles.FontCharsetOEM)),
+		styles.FontCharsetType(25):    strconv.Itoa(25),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Element{Property: primitives.FontCharsetType(v)}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			require.Equal(tt, fmt.Sprintf(`<Element><property val="%s"></property></Element>`, s), string(encoded))
+			if v == 0 {
+				require.Equal(tt, `<Element></Element>`, string(encoded))
+			} else {
+				require.Equal(tt, fmt.Sprintf(`<Element><property val="%s"></property></Element>`, s), string(encoded))
+			}
 
 			var decoded Element
 			err = xml.Unmarshal(encoded, &decoded)

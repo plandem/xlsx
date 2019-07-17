@@ -15,17 +15,17 @@ import (
 
 func TestFontVAlign(t *testing.T) {
 	type Element struct {
-		Property primitives.FontVAlignType `xml:"property,omitempty"`
+		Property primitives.FontEffectType `xml:"property,omitempty"`
 	}
 
-	list := map[string]primitives.FontVAlignType{
-		"baseline":    styles.FontVAlignBaseline,
-		"superscript": styles.FontVAlignSuperscript,
-		"subscript":   styles.FontVAlignSubscript,
-		"align-a":     primitives.FontVAlignType("align-a"),
+	list := map[primitives.FontEffectType]string{
+		styles.FontEffectBaseline:            string(styles.FontEffectBaseline),
+		styles.FontEffectSuperscript:         string(styles.FontEffectSuperscript),
+		styles.FontEffectSubscript:           string(styles.FontEffectSubscript),
+		primitives.FontEffectType("align-a"): "align-a",
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Element{Property: v}
 			encoded, err := xml.Marshal(&entity)

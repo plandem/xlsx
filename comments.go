@@ -7,8 +7,8 @@ package xlsx
 import (
 	"fmt"
 	"github.com/plandem/ooxml"
+	"github.com/plandem/ooxml/index"
 	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/comment"
@@ -19,16 +19,14 @@ type comments struct {
 	sheet        *sheetInfo
 	ml           ml.Comments
 	file         *ooxml.PackageFile
-	authorIndex  map[hash.Code]int
-	commentIndex map[hash.Code]int
+	authorIndex  index.Index
+	commentIndex index.Index
 }
 
 //newComments creates an object that implements comments functionality
 func newComments(sheet *sheetInfo) *comments {
 	return &comments{
-		sheet:        sheet,
-		authorIndex:  make(map[hash.Code]int),
-		commentIndex: make(map[hash.Code]int),
+		sheet: sheet,
 	}
 }
 
@@ -72,12 +70,16 @@ func (c *comments) initIfRequired() {
 
 //build author and comment indexes
 func (c *comments) buildIndexes() {
-	for id, f := range c.ml.Authors {
-		c.authorIndex[hash.Key(f).Hash()] = id
+	for id, a := range c.ml.Authors {
+		if err := c.authorIndex.Add(a, id); err != nil {
+			panic(err)
+		}
 	}
 
-	for id, f := range c.ml.CommentList {
-		c.commentIndex[hash.Key(f.Ref.String()).Hash()] = id
+	for id, r := range c.ml.CommentList {
+		if err := c.commentIndex.Add(r.Ref, id); err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -89,12 +91,12 @@ func (c *comments) addDefaults() {
 }
 
 //Add adds a new comment info for bounds
-func (c *comments) Add(bounds types.Bounds, info interface{}) error {
+func (c *comments) Add(ref types.CellRef, info interface{}) error {
 	c.initIfRequired()
 
 	//check if there is comment already for these bounds
-	commentKey := hash.Key(bounds.String()).Hash()
-	if _, ok := c.commentIndex[commentKey]; ok {
+	bounds := types.RefFromIndexes(ref.ToIndexes()).ToBounds()
+	if c.commentIndex.Has(bounds) {
 		return fmt.Errorf("there is already comment for ref %s", bounds.String())
 	}
 
@@ -113,24 +115,24 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 	cml := &ml.Comment{}
 
 	//resolve id of author
-	authorKey := hash.Key(object.Author).Hash()
-	if id, ok := c.authorIndex[authorKey]; ok {
+	author := types.Text(object.Author)
+	if id, ok := c.authorIndex.Get(author); ok {
 		cml.AuthorID = id
 	} else {
 		nextID := len(c.ml.Authors)
-		c.ml.Authors = append(c.ml.Authors, types.Text(object.Author))
-		c.authorIndex[authorKey] = nextID
+		c.ml.Authors = append(c.ml.Authors, author)
+		_ = c.authorIndex.Add(author, nextID)
 		cml.AuthorID = nextID
 	}
 
 	cml.Ref = bounds
-	if text, err := toRichText(object.Text...); err != nil {
+	text, _, err := toRichText(object.Text...)
+	if err != nil {
 		return err
-	} else {
-		cml.Text = text
 	}
 
-	c.commentIndex[commentKey] = len(c.ml.CommentList)
+	cml.Text = text
+	_ = c.commentIndex.Add(bounds, len(c.ml.CommentList))
 	c.ml.CommentList = append(c.ml.CommentList, cml)
 	c.file.MarkAsUpdated()
 
@@ -138,20 +140,26 @@ func (c *comments) Add(bounds types.Bounds, info interface{}) error {
 }
 
 //Remove removes comment info for bounds
-func (c *comments) Remove(bounds types.Bounds) {
+func (c *comments) Remove(ref types.CellRef) {
 	c.initIfRequired()
 	c.file.MarkAsUpdated()
 
-	key := hash.Key(bounds.String()).Hash()
-	if id, ok := c.commentIndex[key]; ok {
-		c.ml.CommentList[id] = c.ml.CommentList[len(c.ml.CommentList)-1]
-		c.ml.CommentList[len(c.ml.CommentList)-1] = nil //prevent memory leaks
-		c.ml.CommentList = c.ml.CommentList[:len(c.ml.CommentList)-1]
-
-		//remove VML drawings
+	bounds := types.RefFromIndexes(ref.ToIndexes()).ToBounds()
+	if id, ok := c.commentIndex.Get(bounds); ok {
+		c.ml.CommentList = append(c.ml.CommentList[:id], c.ml.CommentList[id+1:]...)
 		c.sheet.drawingsVML.removeComment(bounds)
-
-		//clean up indexes
-		delete(c.commentIndex, key)
+		c.commentIndex.Remove(bounds)
 	}
+}
+
+//Get returns a resolved comment info for provided ref or nil if there is no any comment
+func (c *comments) Get(ref types.CellRef) *ml.StringItem {
+	c.initIfRequired()
+
+	bounds := types.RefFromIndexes(ref.ToIndexes()).ToBounds()
+	if idx, ok := c.commentIndex.Get(bounds); ok {
+		return c.ml.CommentList[idx].Text
+	}
+
+	return nil
 }

@@ -6,6 +6,7 @@ package primitives
 
 import (
 	"encoding/xml"
+	"github.com/plandem/ooxml/index"
 	"github.com/plandem/ooxml/ml"
 	"strings"
 	"unicode"
@@ -13,6 +14,11 @@ import (
 
 //Text is textual type that can have leading/trailing whitespace or newlines that must be preserved
 type Text string
+
+//Hash builds hash code for all required values of Text to use as unique index
+func (t Text) Hash() index.Code {
+	return index.Hash(string(t))
+}
 
 //MarshalXML marshal Text
 func (t *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

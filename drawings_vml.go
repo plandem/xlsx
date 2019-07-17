@@ -10,9 +10,9 @@ import (
 	"github.com/plandem/ooxml"
 	"github.com/plandem/ooxml/drawing/vml"
 	"github.com/plandem/ooxml/drawing/vml/css"
+	"github.com/plandem/ooxml/index"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal"
-	"github.com/plandem/xlsx/internal/hash"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
 	"github.com/plandem/xlsx/types/comment"
@@ -32,7 +32,7 @@ type drawingsVML struct {
 	updated             bool
 	nextShapeId         int
 	nextShapeIdMax      int
-	shapeIndex          map[hash.Code]int
+	shapeIndex          index.Index
 }
 
 //capacity of chunk. vml file store shapes in chunks
@@ -49,8 +49,7 @@ var (
 
 func newDrawingsVML(sheet *sheetInfo) *drawingsVML {
 	return &drawingsVML{
-		sheet:      sheet,
-		shapeIndex: make(map[hash.Code]int),
+		sheet: sheet,
 	}
 }
 
@@ -64,21 +63,22 @@ func (d *drawingsVML) resolveChunks() {
 		//only non loaded existing files will return stream, otherwise chunks info can be gathered from existing ml info
 		if stream, err := d.file.ReadStream(); err == nil {
 			//locate chunks info
-			for next, hasNext := stream.StartIterator(nil); hasNext; {
-				hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
-					if start.Name.Local == "shapelayout" {
-						shapeLayout := &vml.ShapeLayout{}
-						if err := decoder.DecodeElement(shapeLayout, start); err != nil {
-							_ = stream.Close()
-							panic(err)
-						}
+			for {
+				t, _ := stream.Token()
+				if t == nil {
+					break
+				}
 
-						idMap = shapeLayout.IdMap
-						return false
+				if start, ok := t.(xml.StartElement); ok && start.Name.Local == "shapelayout" {
+					shapeLayout := &vml.ShapeLayout{}
+					if err := stream.DecodeElement(shapeLayout, &start); err != nil {
+						_ = stream.Close()
+						panic(err)
 					}
 
-					return true
-				})
+					idMap = shapeLayout.IdMap
+					break
+				}
 			}
 
 			_ = stream.Close()
@@ -87,7 +87,7 @@ func (d *drawingsVML) resolveChunks() {
 		}
 
 		//parse chunks info
-		if idMap.Data != "" {
+		if idMap != nil && idMap.Data != "" {
 			chunks := strings.Split(idMap.Data, ",")
 			for _, s := range chunks {
 				if n, err := strconv.Atoi(strings.TrimSpace(s)); err != nil {
@@ -159,6 +159,10 @@ func (d *drawingsVML) addComment(bounds types.Bounds, info *comment.Info) error 
 	shape.Fill = &vml.Fill{Color2: info.Background}
 	shape.PathSettings = &vml.Path{ConnectType: vml.ConnectTypeNone}
 
+	if len(info.Stroke) != 0 {
+		shape.StrokeColor = info.Stroke
+	}
+
 	if len(info.Shadow) != 0 {
 		shape.Shadow = &vml.Shadow{
 			Color:    info.Shadow,
@@ -199,7 +203,10 @@ func (d *drawingsVML) addComment(bounds types.Bounds, info *comment.Info) error 
 		shape.ClientData.Visible = sharedML.TriStateBlankTrue(sharedML.TriStateTrue)
 	}
 
-	d.shapeIndex[hash.Vml(shape).Hash()] = len(d.ml.Shape)
+	if err := d.shapeIndex.Add(shape, len(d.ml.Shape)); err != nil {
+		return err
+	}
+
 	d.ml.Shape = append(d.ml.Shape, shape)
 	d.file.MarkAsUpdated()
 	d.updated = true
@@ -219,14 +226,9 @@ func (d *drawingsVML) removeComment(bounds types.Bounds) {
 		Row:    bounds.FromRow,
 	}
 
-	key := hash.Vml(shape).Hash()
-	if id, ok := d.shapeIndex[key]; ok {
-		d.ml.Shape[id] = d.ml.Shape[len(d.ml.Shape)-1]
-		d.ml.Shape[len(d.ml.Shape)-1] = nil //prevent memory leaks
-		d.ml.Shape = d.ml.Shape[:len(d.ml.Shape)-1]
-
-		//clean up indexes
-		delete(d.shapeIndex, key)
+	if id, ok := d.shapeIndex.Get(shape); ok {
+		d.ml.Shape = append(d.ml.Shape[:id], d.ml.Shape[id+1:]...)
+		d.shapeIndex.Remove(shape)
 	}
 }
 
@@ -356,6 +358,6 @@ func (d *drawingsVML) attachFileIfRequired() {
 //build indexes for shapes
 func (d *drawingsVML) buildIndexes() {
 	for id, s := range d.ml.Shape {
-		d.shapeIndex[hash.Vml(s).Hash()] = id
+		_ = d.shapeIndex.Add(s, id)
 	}
 }

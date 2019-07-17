@@ -7,20 +7,20 @@ vendor: init
 	dep ensure -update
 
 lint:
-	golint ./...
-
-bench:
-	go test -run=^$$ -bench=Libs
-
-bench-sheet:
-	go test -run=^$$ -bench=Spreadsheet
+	goreportcard-cli -v
 
 test:
 	go test -v ./... -cover
 
-docs-build:
-	vuepress build docs
+test-docs:
+	go test -v ./docs
 
-docs-dev:
-	vuepress dev docs
+docs-vendor:
+	yarn --cwd ./docs install
+
+docs-build: docs-vendor
+	yarn --cwd ./docs build
+
+docs-dev: docs-vendor
+	yarn --cwd ./docs dev
 

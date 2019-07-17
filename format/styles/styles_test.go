@@ -64,7 +64,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.VAlign(FontVAlignBaseline),
+		Font.Effect(FontEffectBaseline),
 		Font.Scheme(FontSchemeMinor),
 		NumberFormatID(8),
 		Protection.Hidden,
@@ -78,6 +78,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 	require.NotNil(t, number)
 	require.NotNil(t, protection)
 	require.NotNil(t, border)
+	require.Nil(t, namedInfo)
 
 	require.Equal(t, &ml.CellAlignment{
 		Vertical:        VAlignBottom,
@@ -142,7 +143,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 		Color:     color.New("FFFF00FF"),
 		Family:    FontFamilyDecorative,
 		Underline: UnderlineTypeSingle,
-		VAlign:    FontVAlignBaseline,
+		Effect:    FontEffectBaseline,
 		Scheme:    FontSchemeMinor,
 	}, font)
 
@@ -319,7 +320,7 @@ func TestStyleFormat_Settings_Font(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.VAlign(FontVAlignBaseline),
+		Font.Effect(FontEffectBaseline),
 		Font.Scheme(FontSchemeMinor),
 	)
 
@@ -344,7 +345,7 @@ func TestStyleFormat_Settings_Font(t *testing.T) {
 		Color:     color.New("FFFF00FF"),
 		Family:    FontFamilyDecorative,
 		Underline: UnderlineTypeSingle,
-		VAlign:    FontVAlignBaseline,
+		Effect:    FontEffectBaseline,
 		Scheme:    FontSchemeMinor,
 	}, font)
 }
@@ -417,7 +418,7 @@ func TestFontMarshal(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.VAlign(FontVAlignBaseline),
+		Font.Effect(FontEffectBaseline),
 		Font.Scheme(FontSchemeMinor),
 	))
 

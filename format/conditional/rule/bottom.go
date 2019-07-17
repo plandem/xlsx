@@ -15,6 +15,7 @@ type bottomRule struct {
 	baseRule
 }
 
+//Bottom is helper object to set specific options for rule
 var Bottom bottomRule
 
 func (x bottomRule) initIfRequired(r *Info) {

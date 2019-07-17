@@ -21,9 +21,9 @@ type SharedStrings struct {
 
 //StringItem is a direct mapping of XSD CT_Rst
 type StringItem struct {
-	Text       primitives.Text `xml:"t,omitempty"` //optional
-	RichText   *[]*RichText    `xml:"r,omitempty"` //optional
-	RPh        *[]*ml.Reserved `xml:"rPh,omitempty"`
+	Text       primitives.Text `xml:"t,omitempty"`   //optional
+	RichText   []*RichText     `xml:"r,omitempty"`   //optional
+	RPh        []*ml.Reserved  `xml:"rPh,omitempty"` //optional
 	PhoneticPr *ml.Reserved    `xml:"phoneticPr,omitempty"`
 }
 
@@ -48,6 +48,6 @@ type RichFont struct {
 	Color     *Color                     `xml:"color,omitempty"`
 	Size      ml.PropertyDouble          `xml:"sz,omitempty"`
 	Underline primitives.UnderlineType   `xml:"u,omitempty"`
-	VAlign    primitives.FontVAlignType  `xml:"vertAlign,omitempty"`
+	Effect    primitives.FontEffectType  `xml:"vertAlign,omitempty"`
 	Scheme    primitives.FontSchemeType  `xml:"scheme,omitempty"`
 }

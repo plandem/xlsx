@@ -14,6 +14,7 @@ type noErrorsRule struct {
 	baseRule
 }
 
+//NoErrors is helper object to set specific options for rule
 var NoErrors noErrorsRule
 
 func (x noErrorsRule) initIfRequired(r *Info) {

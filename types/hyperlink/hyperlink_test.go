@@ -280,19 +280,27 @@ func TestHyperlinkOption_Formatting(t *testing.T) {
 	link := New(
 		ToMail("spam@spam.it", "My subject"),
 	)
-	require.Equal(t, styles.DefaultDirectStyle, link.Styles())
+	require.Equal(t, nil, link.format)
 
-	link.Set(Styles(1))
+	link.Set(Styles(styles.DirectStyleID(1)))
 	require.IsType(t, &Info{}, link)
 	require.Equal(t, &Info{
 		hyperlink: &ml.Hyperlink{
 			RID: "mailto:spam@spam.it?subject=My subject",
 		},
-		styleID:  1,
+		format:   styles.DirectStyleID(1),
 		linkType: hyperlinkTypeEmail,
 	}, link)
 
-	require.Equal(t, styles.DirectStyleID(1), link.Styles())
+	link.Set(Styles(styles.New(styles.Font.Bold)))
+	require.IsType(t, &Info{}, link)
+	require.Equal(t, &Info{
+		hyperlink: &ml.Hyperlink{
+			RID: "mailto:spam@spam.it?subject=My subject",
+		},
+		format:   styles.New(styles.Font.Bold),
+		linkType: hyperlinkTypeEmail,
+	}, link)
 }
 
 func TestHyperlinkOption_ToBookmark(t *testing.T) {

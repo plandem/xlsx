@@ -14,6 +14,7 @@ type timePeriodRule struct {
 	baseRule
 }
 
+//TimePeriod is helper object to set specific options for rule
 var TimePeriod timePeriodRule
 
 func (x timePeriodRule) initIfRequired(r *Info) {

@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"github.com/plandem/xlsx"
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/types/options"
+	colOptions "github.com/plandem/xlsx/types/options/column"
+	rowOptions "github.com/plandem/xlsx/types/options/row"
+	sheetOptions "github.com/plandem/xlsx/types/options/sheet"
 	"log"
 	"os"
 	"strings"
@@ -297,23 +299,23 @@ func Example_formatting() {
 	)
 
 	// Add formatting to xlsx
-	styleId := xl.AddStyles(redBold)
+	styleID := xl.AddStyles(redBold)
 
 	sheet := xl.Sheet(0)
 
 	// Set formatting for cell
-	sheet.CellByRef("N28").SetStyles(styleId)
+	sheet.CellByRef("N28").SetStyles(styleID)
 
 	// Set DEFAULT formatting for row. Affects cells not yet allocated in the row.
 	// In other words, this style applies to new cells.
-	sheet.Row(9).SetStyles(styleId)
+	sheet.Row(9).SetStyles(styleID)
 
 	// Set DEFAULT formatting for col. Affects cells not yet allocated in the col.
 	// In other words, this style applies to new cells.
-	sheet.Col(3).SetStyles(styleId)
+	sheet.Col(3).SetStyles(styleID)
 
 	//set formatting for all cells in range
-	sheet.RangeByRef("D10:H13").SetStyles(styleId)
+	sheet.RangeByRef("D10:H13").SetStyles(styleID)
 }
 
 // Demonstrates how to set options of rows/cols/sheets
@@ -328,26 +330,26 @@ func Example_options() {
 	sheet := xl.Sheet(0)
 
 	// set options for row
-	rowOptions := options.NewRowOptions(
-		options.Row.Hidden(true),
-		options.Row.Height(10.0),
-		options.Row.Collapsed(true),
+	ro := rowOptions.New(
+		rowOptions.Hidden(true),
+		rowOptions.Height(10.0),
+		rowOptions.Collapsed(true),
 	)
-	sheet.Row(9).SetOptions(rowOptions)
+	sheet.Row(9).SetOptions(ro)
 
 	// set options for col
-	colOptions := options.NewColumnOptions(
-		options.Column.Hidden(true),
-		options.Column.Width(10.0),
-		options.Column.Collapsed(true),
+	co := colOptions.New(
+		colOptions.Hidden(true),
+		colOptions.Width(10.0),
+		colOptions.Collapsed(true),
 	)
-	sheet.Col(3).SetOptions(colOptions)
+	sheet.Col(3).SetOptions(co)
 
 	// set options for sheet
-	sheetOptions := options.NewSheetOptions(
-		options.Sheet.Visibility(options.VeryHidden),
+	so := sheetOptions.New(
+		sheetOptions.Visibility(sheetOptions.VisibilityVeryHidden),
 	)
-	sheet.SetOptions(sheetOptions)
+	sheet.SetOptions(so)
 }
 
 // Demonstrates how to append cols/rows/sheets.
@@ -580,8 +582,8 @@ func Example_gettersAndSetters() {
 	now, _ := time.Parse("02 Jan 06 15:04 MST", time.RFC822)
 
 	//set values by typed method
-	sheet.CellByRef("A1").SetString("string")
-	sheet.CellByRef("B1").SetInlineString("inline string")
+	sheet.CellByRef("A1").SetText("string")
+	sheet.CellByRef("B1").SetInlineText("inline string")
 	sheet.CellByRef("C1").SetBool(true)
 	sheet.CellByRef("D1").SetInt(12345)
 	sheet.CellByRef("E1").SetFloat(123.123)
@@ -589,6 +591,7 @@ func Example_gettersAndSetters() {
 	sheet.CellByRef("G1").SetDate(now)
 	sheet.CellByRef("H1").SetTime(now)
 	sheet.CellByRef("I1").SetDeltaTime(now)
+	sheet.CellByRef("K1").SetValueWithFormat(-1234, "")
 
 	//set values by unified method
 	sheet.CellByRef("A2").SetValue("string")
@@ -596,6 +599,7 @@ func Example_gettersAndSetters() {
 	sheet.CellByRef("C2").SetValue(12345)
 	sheet.CellByRef("D2").SetValue(123.123)
 	sheet.CellByRef("E2").SetValue(now)
+
 
 	//get raw values that were set via typed setter
 	fmt.Println(sheet.CellByRef("A1").Value())
@@ -607,6 +611,7 @@ func Example_gettersAndSetters() {
 	fmt.Println(sheet.CellByRef("G1").Value())
 	fmt.Println(sheet.CellByRef("H1").Value())
 	fmt.Println(sheet.CellByRef("I1").Value())
+	fmt.Println(sheet.CellByRef("K1").Value())
 
 	//get raw values that were set that via general setter
 	fmt.Println(sheet.CellByRef("A2").Value())
@@ -640,6 +645,7 @@ func Example_gettersAndSetters() {
 	//2006-01-02T15:04:00
 	//2006-01-02T15:04:00
 	//2006-01-02T15:04:00
+	//-1234
 	//string
 	//1
 	//12345

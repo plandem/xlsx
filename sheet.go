@@ -7,7 +7,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format/conditional"
 	"github.com/plandem/xlsx/types"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/sheet"
 )
 
 const errorNotSupported = "not supported"
@@ -79,7 +79,7 @@ type Sheet interface {
 	//SetName sets a name for sheet
 	SetName(name string)
 	//Set sets options for sheet
-	SetOptions(o *options.SheetOptions)
+	SetOptions(o *options.Info)
 	//SetActive sets the sheet as active
 	SetActive()
 	//Close frees allocated by sheet resources

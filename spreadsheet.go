@@ -108,13 +108,26 @@ func (xl *Spreadsheet) Sheet(i int, options ...sheetMode) Sheet {
 }
 
 //AddSheet adds a new sheet with name to document
-func (xl *Spreadsheet) AddSheet(name string) Sheet {
+func (xl *Spreadsheet) AddSheet(name string, options ...sheetMode) Sheet {
+	mode := sheetModeWrite
+	for _, m := range options {
+		mode |= m
+	}
+
 	if si := newSheetInfo(fmt.Sprintf("xl/worksheets/sheet%d.xml", len(xl.workbook.ml.Sheets)+1), xl); si != nil {
-		sheet := &sheetReadWrite{si}
-		si.sheet = sheet
-		si.sheetMode = sheetModeRead | sheetModeWrite
-		sheet.afterCreate(name)
-		return sheet
+		if (mode & SheetModeStream) != 0 {
+			sheet := &sheetWriteStream{sheetInfo: si}
+			si.sheet = sheet
+			si.sheetMode = mode
+			sheet.afterCreate(name)
+			return sheet
+		} else {
+			sheet := &sheetReadWrite{si}
+			si.sheet = sheet
+			si.sheetMode = mode | sheetModeRead
+			sheet.afterCreate(name)
+			return sheet
+		}
 	}
 
 	return nil

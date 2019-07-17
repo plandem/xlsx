@@ -14,6 +14,7 @@ type uniqueRule struct {
 	baseRule
 }
 
+//Unique is helper object to set specific options for rule
 var Unique uniqueRule
 
 func (x uniqueRule) initIfRequired(r *Info) {

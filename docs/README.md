@@ -1,6 +1,0 @@
-# Initial page
-
-test
-
-
-

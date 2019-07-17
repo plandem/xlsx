@@ -27,12 +27,14 @@ func TestToRichFont(t *testing.T) {
 }
 
 func TestToRichText(t *testing.T) {
-	text, err := toRichText("1", "2", "3", styles.New(
-		styles.Font.Color("#FF3344"),
-	))
+	s := styles.New(
+		styles.Alignment.HAlign(styles.HAlignCenter),
+	)
+
+	text, cellStyles, err := toRichText("1", "2", "3", s)
 	require.Nil(t, err)
 	require.Equal(t, &ml.StringItem{
-		RichText: &[]*ml.RichText{
+		RichText: []*ml.RichText{
 			{
 				Text: "1",
 			},
@@ -44,8 +46,9 @@ func TestToRichText(t *testing.T) {
 			},
 		},
 	}, text)
+	require.Equal(t, s, cellStyles)
 
-	text, err = toRichText(styles.New(
+	text, cellStyles, err = toRichText(styles.New(
 		styles.Font.Color("#FF1122"),
 	), "1", styles.New(
 		styles.Font.Size(8),
@@ -54,7 +57,7 @@ func TestToRichText(t *testing.T) {
 
 	require.Nil(t, err)
 	require.Equal(t, &ml.StringItem{
-		RichText: &[]*ml.RichText{
+		RichText: []*ml.RichText{
 			{
 				Text: "1",
 				Font: &ml.RichFont{
@@ -70,8 +73,9 @@ func TestToRichText(t *testing.T) {
 			},
 		},
 	}, text)
+	require.Nil(t, cellStyles)
 
-	text, err = toRichText("1", "2", "3", styles.New(
+	text, cellStyles, err = toRichText("1", "2", "3", styles.New(
 		styles.Font.Color("#FF3344"),
 	), styles.New(
 		styles.Font.Color("#FF3344"),
@@ -79,16 +83,20 @@ func TestToRichText(t *testing.T) {
 
 	require.NotNil(t, err)
 	require.Nil(t, text)
+	require.Nil(t, cellStyles)
 }
 
 func TestFromRichText(t *testing.T) {
-	text, err := toRichText("1", "2", "3", styles.New(
-		styles.Font.Color("#FF3344"),
-	))
+	s := styles.New(
+		styles.Alignment.HAlign(styles.HAlignCenter),
+	)
+
+	text, cellStyles, err := toRichText("1", "2", "3", s)
 	require.Nil(t, err)
 	require.Equal(t, "123", fromRichText(text))
+	require.Equal(t, s, cellStyles)
 
-	text, err = toRichText(styles.New(
+	text, cellStyles, err = toRichText(styles.New(
 		styles.Font.Color("#FF1122"),
 	), "1", styles.New(
 		styles.Font.Size(8),
@@ -97,6 +105,6 @@ func TestFromRichText(t *testing.T) {
 
 	require.Nil(t, err)
 	require.Equal(t, "12", fromRichText(text))
-
 	require.Equal(t, "", fromRichText(nil))
+	require.Nil(t, cellStyles)
 }

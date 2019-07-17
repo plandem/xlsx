@@ -7,7 +7,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/column"
 )
 
 //Col is a higher level object that wraps ml.Col with functionality. Inherits functionality of Range
@@ -22,7 +22,7 @@ func (c *Col) Cell(rowIndex int) *Cell {
 }
 
 //SetOptions sets options for column
-func (c *Col) SetOptions(o *options.ColumnOptions) {
+func (c *Col) SetOptions(o *options.Info) {
 	if o.Width > 0 {
 		c.ml.Width = o.Width
 		c.ml.CustomWidth = true

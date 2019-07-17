@@ -10,6 +10,7 @@ import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
+	"strconv"
 	"testing"
 )
 
@@ -18,24 +19,24 @@ func TestFontFamily(t *testing.T) {
 		Property primitives.FontFamilyType `xml:"property,omitempty"`
 	}
 
-	list := map[string]primitives.FontFamilyType{
-		"":   primitives.FontFamilyType(0),
-		"1":  styles.FontFamilyRoman,
-		"2":  styles.FontFamilySwiss,
-		"3":  styles.FontFamilyModern,
-		"4":  styles.FontFamilyScript,
-		"5":  styles.FontFamilyDecorative,
-		"6":  primitives.FontFamilyType(6), //officially 6-14 - reserved
-		"25": primitives.FontFamilyType(25),
+	list := map[primitives.FontFamilyType]string{
+		primitives.FontFamilyType(0):  "",
+		styles.FontFamilyRoman:        strconv.Itoa(int(styles.FontFamilyRoman)),
+		styles.FontFamilySwiss:        strconv.Itoa(int(styles.FontFamilySwiss)),
+		styles.FontFamilyModern:       strconv.Itoa(int(styles.FontFamilyModern)),
+		styles.FontFamilyScript:       strconv.Itoa(int(styles.FontFamilyScript)),
+		styles.FontFamilyDecorative:   strconv.Itoa(int(styles.FontFamilyDecorative)),
+		primitives.FontFamilyType(6):  strconv.Itoa(6), //officially 6-14 - reserved
+		primitives.FontFamilyType(25): strconv.Itoa(25),
 	}
 
-	for s, v := range list {
+	for v, s := range list {
 		t.Run(s, func(tt *testing.T) {
 			entity := Element{Property: v}
 			encoded, err := xml.Marshal(&entity)
 
 			require.Empty(tt, err)
-			if s == "" {
+			if v == 0 {
 				require.Equal(tt, `<Element></Element>`, string(encoded))
 			} else {
 				require.Equal(tt, fmt.Sprintf(`<Element><property val="%s"></property></Element>`, s), string(encoded))

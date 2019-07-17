@@ -15,6 +15,7 @@ type formulaRule struct {
 	baseRule
 }
 
+//Formula is helper object to set specific options for rule
 var Formula formulaRule
 
 func (x formulaRule) initIfRequired(r *Info) {

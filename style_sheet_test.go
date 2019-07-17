@@ -15,11 +15,11 @@ import (
 func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 	require.NotNil(t, xl)
 
-	require.Equal(t, 1, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 1, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 0, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 1, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 0, xl.styleSheet.numberIndex.Count())
 
 	//add font
 	style := styles.New(
@@ -29,11 +29,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef := xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(1), styleRef)
-	require.Equal(t, 2, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 0, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 2, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 0, xl.styleSheet.numberIndex.Count())
 
 	//add fill
 	style.Set(
@@ -43,11 +43,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef = xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(2), styleRef)
-	require.Equal(t, 3, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 0, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 3, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 0, xl.styleSheet.numberIndex.Count())
 
 	//add built-in number
 	style.Set(
@@ -56,11 +56,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef = xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(3), styleRef)
-	require.Equal(t, 4, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 0, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 4, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 0, xl.styleSheet.numberIndex.Count())
 
 	//add custom number
 	style.Set(
@@ -69,11 +69,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef = xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(4), styleRef)
-	require.Equal(t, 5, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 1, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 1, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 5, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.numberIndex.Count())
 
 	//add border
 	style.Set(
@@ -83,11 +83,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef = xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(5), styleRef)
-	require.Equal(t, 6, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 1, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 6, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.numberIndex.Count())
 
 	//add alignment
 	style.Set(
@@ -97,11 +97,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef = xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(6), styleRef)
-	require.Equal(t, 7, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 1, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 7, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.numberIndex.Count())
 
 	//add protection
 	style.Set(
@@ -111,11 +111,11 @@ func addNewStyles(xl *Spreadsheet, t *testing.T) styles.DirectStyleID {
 
 	styleRef = xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(7), styleRef)
-	require.Equal(t, 8, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 1, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 8, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.numberIndex.Count())
 
 	return styleRef
 }
@@ -139,11 +139,11 @@ func addExistingStyles(xl *Spreadsheet, t *testing.T) {
 
 	styleRef := xl.AddStyles(style)
 	require.Equal(t, styles.DirectStyleID(7), styleRef)
-	require.Equal(t, 14, len(xl.styleSheet.directStyleIndex))
-	require.Equal(t, 2, len(xl.styleSheet.borderIndex))
-	require.Equal(t, 3, len(xl.styleSheet.fillIndex))
-	require.Equal(t, 2, len(xl.styleSheet.fontIndex))
-	require.Equal(t, 1, len(xl.styleSheet.numberIndex))
+	require.Equal(t, 14, xl.styleSheet.directStyleIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.borderIndex.Count())
+	require.Equal(t, 3, xl.styleSheet.fillIndex.Count())
+	require.Equal(t, 2, xl.styleSheet.fontIndex.Count())
+	require.Equal(t, 1, xl.styleSheet.numberIndex.Count())
 }
 
 func checkStyles(xl *Spreadsheet, t *testing.T) {

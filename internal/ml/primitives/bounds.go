@@ -6,6 +6,7 @@ package primitives
 
 import (
 	"encoding/xml"
+	"github.com/plandem/ooxml/index"
 )
 
 //Bounds is implementation of Ref
@@ -85,6 +86,11 @@ func (b Bounds) String() string {
 //IsEmpty return true if type was not initialized
 func (b Bounds) IsEmpty() bool {
 	return b == Bounds{}
+}
+
+//Hash builds hash code for all required values of Bounds to use as unique index
+func (b Bounds) Hash() index.Code {
+	return index.Hash(b.String())
 }
 
 //MarshalXMLAttr marshal Bounds

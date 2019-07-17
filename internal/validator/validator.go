@@ -11,6 +11,7 @@ import (
 	"unicode/utf8"
 )
 
+//FindNamedMatches uses FindStringSubmatch to match and transform result into map
 func FindNamedMatches(pattern *regexp.Regexp, str string) map[string]string {
 	match := pattern.FindStringSubmatch(str)
 	results := make(map[string]string)

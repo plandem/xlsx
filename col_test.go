@@ -6,7 +6,7 @@ package xlsx
 
 import (
 	"github.com/plandem/xlsx/format/styles"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/column"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -21,12 +21,12 @@ func TestCol(t *testing.T) {
 	sheet := xl.Sheet(0)
 	c := sheet.Col(5)
 
-	o := options.NewColumnOptions(
-		options.Column.Width(0),
-		options.Column.OutlineLevel(10),
-		options.Column.Hidden(true),
-		options.Column.Phonetic(true),
-		options.Column.Collapsed(true),
+	o := options.New(
+		options.Width(0),
+		options.OutlineLevel(10),
+		options.Hidden(true),
+		options.Phonetic(true),
+		options.Collapsed(true),
 	)
 
 	c.SetOptions(o)
@@ -39,8 +39,8 @@ func TestCol(t *testing.T) {
 	require.Equal(t, c.ml.CustomWidth, false)
 	require.Equal(t, c.ml.Style, styles.DirectStyleID(0))
 
-	o = options.NewColumnOptions(
-		options.Column.Width(100.0),
+	o = options.New(
+		options.Width(100.0),
 	)
 
 	c.SetOptions(o)

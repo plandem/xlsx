@@ -5,7 +5,6 @@
 package hyperlink
 
 import (
-	"errors"
 	"fmt"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/format/styles"
@@ -17,12 +16,15 @@ import (
 	"strings"
 )
 
+//Info hold advanced settings of hyperlink
 type Info struct {
 	hyperlink *ml.Hyperlink
-	styleID   styles.DirectStyleID
-	linkType  hyperlinkType
+	format    interface{}
+
+	linkType hyperlinkType
 }
 
+//Option is helper type to set options for hyperlink
 type Option func(o *Info)
 
 type hyperlinkType byte
@@ -50,32 +52,33 @@ func (i *Info) Set(options ...Option) {
 	}
 }
 
+//nolint
 //Validate validates hyperlink info and return error in case of invalid settings
 func (i *Info) Validate() error {
 	switch i.linkType {
 	case hyperlinkTypeUnknown:
 		if len(i.hyperlink.Location) == 0 {
-			return errors.New("unknown type of hyperlink")
+			return fmt.Errorf("unknown type of hyperlink")
 		}
 	case hyperlinkTypeWeb:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
-			return errors.New(fmt.Sprintf("url exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+			return fmt.Errorf("url exceeded maximum allowed length (%d chars)", internal.UrlLimit)
 		}
 
 		if len(i.hyperlink.RID) <= 3 {
-			return errors.New("url is too short")
+			return fmt.Errorf("url is too short")
 		}
 
 		if strings.Contains(string(i.hyperlink.RID), "#") {
-			return errors.New("url contains a pound sign (#)")
+			return fmt.Errorf("url contains a pound sign (#)")
 		}
 
 		if !validator.IsURL(string(i.hyperlink.RID)) {
-			return errors.New("url is not valid")
+			return fmt.Errorf("url is not valid")
 		}
 	case hyperlinkTypeEmail:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
-			return errors.New(fmt.Sprintf("email exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+			return fmt.Errorf("email exceeded maximum allowed length (%d chars)", internal.UrlLimit)
 		}
 
 		if !validator.IsEmail(string(i.hyperlink.RID)) {
@@ -83,28 +86,23 @@ func (i *Info) Validate() error {
 				break
 			}
 
-			return errors.New("email is not valid")
+			return fmt.Errorf("email is not valid")
 		}
 	case hyperlinkTypeFile:
 		if len(i.hyperlink.RID) > internal.UrlLimit {
-			return errors.New(fmt.Sprintf("link to file exceeded maximum allowed length (%d chars)", internal.UrlLimit))
+			return fmt.Errorf("link to file exceeded maximum allowed length (%d chars)", internal.UrlLimit)
 		}
 
 		if len(i.hyperlink.RID) <= 3 {
-			return errors.New("filename is too short")
+			return fmt.Errorf("filename is too short")
 		}
 
 		if strings.Contains(string(i.hyperlink.RID), "#") {
-			return errors.New("filename contains a pound sign (#)")
+			return fmt.Errorf("filename contains a pound sign (#)")
 		}
 	}
 
 	return nil
-}
-
-//Styles returns style that will be used by hyperlink
-func (i *Info) Styles() styles.DirectStyleID {
-	return i.styleID
 }
 
 //String returns text version of hyperlink info
@@ -119,18 +117,21 @@ func (i *Info) String() string {
 	return target
 }
 
-func Styles(styleID styles.DirectStyleID) Option {
+//Styles sets style format to requested DirectStyleID or styles.Info
+func Styles(s interface{}) Option {
 	return func(i *Info) {
-		i.styleID = styleID
+		i.format = s
 	}
 }
 
+//Tooltip adds a tooltip information for hyperlink
 func Tooltip(tip string) Option {
 	return func(i *Info) {
 		i.hyperlink.Tooltip = tip
 	}
 }
 
+//Display adds a display information for hyperlink
 func Display(display string) Option {
 	return func(i *Info) {
 		i.hyperlink.Display = display
@@ -285,12 +286,12 @@ func ToTarget(target string) Option {
 }
 
 //private method used by hyperlinks manager to unpack Info
-func from(info *Info) (hyperlink *ml.Hyperlink, styleID styles.DirectStyleID, err error) {
+func from(info *Info) (hyperlink *ml.Hyperlink, format interface{}, err error) {
 	if err = info.Validate(); err != nil {
 		return
 	}
 
-	styleID = info.styleID
+	format = info.format
 	hyperlink = info.hyperlink
 	return
 }

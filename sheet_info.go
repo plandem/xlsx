@@ -13,7 +13,7 @@ import (
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
-	"github.com/plandem/xlsx/types/options"
+	"github.com/plandem/xlsx/types/options/sheet"
 	"math"
 	"path/filepath"
 	"reflect"
@@ -144,11 +144,9 @@ func (s *sheetInfo) SetName(name string) {
 }
 
 //SetOptions sets options for sheet
-func (s *sheetInfo) SetOptions(o *options.SheetOptions) {
-	if o.Visibility >= options.Visible && o.Visibility <= options.VeryHidden {
-		s.workbook.ml.Sheets[s.index].State = o.Visibility
-		s.workbook.file.MarkAsUpdated()
-	}
+func (s *sheetInfo) SetOptions(o *options.Info) {
+	s.workbook.ml.Sheets[s.index].State = o.Visibility
+	s.workbook.file.MarkAsUpdated()
 }
 
 //SetActive sets the sheet as active
@@ -179,6 +177,12 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	//we can't use dimension of bounds, because it depends on fromCol, fromRow, but in case of sheet we need maximum dimension to fit content
 	cols, rows = s.ml.Dimension.Bounds.ToCol+1, s.ml.Dimension.Bounds.ToRow+1
 	return
+}
+
+//CellByRef returns a cell for ref
+func (s *sheetInfo) CellByRef(cellRef types.CellRef) *Cell {
+	cid, rid := cellRef.ToIndexes()
+	return s.sheet.Cell(cid, rid)
 }
 
 //Range returns a range for indexes

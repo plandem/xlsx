@@ -71,21 +71,21 @@ func (f *fontOption) Size(size float64) Option {
 	}
 }
 
-func (f *fontOption) Underline(ut primitives.UnderlineType) Option {
+func (f *fontOption) Underline(underline primitives.UnderlineType) Option {
 	return func(s *Info) {
-		s.styleInfo.Font.Underline = ut
+		s.styleInfo.Font.Underline = underline
 	}
 }
 
-func (f *fontOption) VAlign(va primitives.FontVAlignType) Option {
+func (f *fontOption) Effect(effect primitives.FontEffectType) Option {
 	return func(s *Info) {
-		s.styleInfo.Font.VAlign = va
+		s.styleInfo.Font.Effect = effect
 	}
 }
 
-func (f *fontOption) Scheme(sn primitives.FontSchemeType) Option {
+func (f *fontOption) Scheme(scheme primitives.FontSchemeType) Option {
 	return func(s *Info) {
-		s.styleInfo.Font.Scheme = sn
+		s.styleInfo.Font.Scheme = scheme
 	}
 }
 

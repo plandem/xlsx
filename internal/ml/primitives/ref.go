@@ -44,7 +44,7 @@ func RefFromCellRefs(from CellRef, to CellRef) Ref {
 	return Ref(string(from) + ":" + string(to))
 }
 
-//RefFromCellRefs returns Ref for a CellRef of 0-based indexes
+//RefFromIndexes returns Ref for a CellRef of 0-based indexes
 func RefFromIndexes(colIndex, rowIndex int) Ref {
 	return Ref(CellRefFromIndexes(colIndex, rowIndex))
 }
