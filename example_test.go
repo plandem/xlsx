@@ -600,7 +600,6 @@ func Example_gettersAndSetters() {
 	sheet.CellByRef("D2").SetValue(123.123)
 	sheet.CellByRef("E2").SetValue(now)
 
-
 	//get raw values that were set via typed setter
 	fmt.Println(sheet.CellByRef("A1").Value())
 	fmt.Println(sheet.CellByRef("B1").Value())

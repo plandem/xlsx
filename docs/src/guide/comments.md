@@ -24,12 +24,12 @@ As was shown, the simplest way to add comment is to use string version. At the s
 	sheet.CellByRef("B2").SetValue("Any comments?")
 	sheet.CellByRef("B2").SetComment("No comment!")
 ```
-![](./comments.png)
+![](~@images/comments.png)
 
 ### Custom comment
 While with string version of comment you can add comments really easy, sometimes we need additional settings like width, height, author or even rich text. For these cases you can use special type and configure comment as you wish.
 
-![](./comments-custom.png)
+![](~@images/comments-custom.png)
 
 #### Example
 

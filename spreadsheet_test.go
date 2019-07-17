@@ -22,7 +22,7 @@ func TestSpreadsheet_Sheet(t *testing.T) {
 	sheet := xl.Sheet(0, SheetModeStream|SheetModeMultiPhase)
 	assert.Equal(t, sheetModeRead|SheetModeStream|SheetModeMultiPhase, sheet.mode())
 
-	require.Panics(t, func(){
+	require.Panics(t, func() {
 		xl.Sheet(0, SheetModeStream|SheetModeIgnoreDimension)
 	})
 

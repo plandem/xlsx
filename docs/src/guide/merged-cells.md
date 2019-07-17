@@ -3,7 +3,7 @@
 
 Short example is better any words
 
-![](./merged-cells.png)
+![](~@images/merged-cells.png)
 
 <<< @/src/code/merged_cells_test.go
 

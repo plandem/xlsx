@@ -1,4 +1,5 @@
 const mdList = require('markdown-it-task-lists');
+const path = require('path');
 
 module.exports = {
     base: '/xlsx2go/',
@@ -6,6 +7,9 @@ module.exports = {
     description: 'Fast and Reliable way to work with xlsx in Golang',
     markdown: {
         extendMarkdown: md => md.use(mdList)
+    },
+    chainWebpack: (config, isServer) => {
+        config.resolve.alias.set('@images', path.resolve(__dirname, "./public"))
     },
     themeConfig: {
         logo: '/logo.png',
