@@ -179,6 +179,12 @@ func (s *sheetInfo) Dimension() (cols int, rows int) {
 	return
 }
 
+//CellByRef returns a cell for ref
+func (s *sheetInfo) CellByRef(cellRef types.CellRef) *Cell {
+	cid, rid := cellRef.ToIndexes()
+	return s.sheet.Cell(cid, rid)
+}
+
 //Range returns a range for indexes
 func (s *sheetInfo) Range(fromCol, fromRow, toCol, toRow int) *Range {
 	return newRange(s.sheet, fromCol, toCol, fromRow, toRow)

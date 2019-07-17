@@ -63,21 +63,22 @@ func (d *drawingsVML) resolveChunks() {
 		//only non loaded existing files will return stream, otherwise chunks info can be gathered from existing ml info
 		if stream, err := d.file.ReadStream(); err == nil {
 			//locate chunks info
-			for next, hasNext := stream.StartIterator(nil); hasNext; {
-				hasNext = next(func(decoder *xml.Decoder, start *xml.StartElement) bool {
-					if start.Name.Local == "shapelayout" {
-						shapeLayout := &vml.ShapeLayout{}
-						if err := decoder.DecodeElement(shapeLayout, start); err != nil {
-							_ = stream.Close()
-							panic(err)
-						}
+			for {
+				t, _ := stream.Token()
+				if t == nil {
+					break
+				}
 
-						idMap = shapeLayout.IdMap
-						return false
+				if start, ok := t.(xml.StartElement); ok && start.Name.Local == "shapelayout" {
+					shapeLayout := &vml.ShapeLayout{}
+					if err := stream.DecodeElement(shapeLayout, &start); err != nil {
+						_ = stream.Close()
+						panic(err)
 					}
 
-					return true
-				})
+					idMap = shapeLayout.IdMap
+					break
+				}
 			}
 
 			_ = stream.Close()
@@ -86,7 +87,7 @@ func (d *drawingsVML) resolveChunks() {
 		}
 
 		//parse chunks info
-		if idMap.Data != "" {
+		if idMap != nil && idMap.Data != "" {
 			chunks := strings.Split(idMap.Data, ",")
 			for _, s := range chunks {
 				if n, err := strconv.Atoi(strings.TrimSpace(s)); err != nil {

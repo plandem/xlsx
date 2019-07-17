@@ -60,12 +60,6 @@ func (s *sheetReadWrite) Cell(colIndex, rowIndex int) *Cell {
 	return &Cell{ml: data, sheet: s.sheetInfo}
 }
 
-//CellByRef returns a cell for ref
-func (s *sheetReadWrite) CellByRef(cellRef types.CellRef) *Cell {
-	cid, rid := cellRef.ToIndexes()
-	return s.Cell(cid, rid)
-}
-
 //Row returns a row for 0-based index
 func (s *sheetReadWrite) Row(index int) *Row {
 	s.expandIfRequired(0, index)

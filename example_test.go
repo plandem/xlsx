@@ -583,8 +583,6 @@ func Example_gettersAndSetters() {
 
 	//set values by typed method
 	sheet.CellByRef("A1").SetText("string")
-	sheet.CellByRef("A1").SetValueWithFormat(-1234, "")
-
 	sheet.CellByRef("B1").SetInlineText("inline string")
 	sheet.CellByRef("C1").SetBool(true)
 	sheet.CellByRef("D1").SetInt(12345)
@@ -593,6 +591,7 @@ func Example_gettersAndSetters() {
 	sheet.CellByRef("G1").SetDate(now)
 	sheet.CellByRef("H1").SetTime(now)
 	sheet.CellByRef("I1").SetDeltaTime(now)
+	sheet.CellByRef("K1").SetValueWithFormat(-1234, "")
 
 	//set values by unified method
 	sheet.CellByRef("A2").SetValue("string")
@@ -600,6 +599,7 @@ func Example_gettersAndSetters() {
 	sheet.CellByRef("C2").SetValue(12345)
 	sheet.CellByRef("D2").SetValue(123.123)
 	sheet.CellByRef("E2").SetValue(now)
+
 
 	//get raw values that were set via typed setter
 	fmt.Println(sheet.CellByRef("A1").Value())
@@ -611,6 +611,7 @@ func Example_gettersAndSetters() {
 	fmt.Println(sheet.CellByRef("G1").Value())
 	fmt.Println(sheet.CellByRef("H1").Value())
 	fmt.Println(sheet.CellByRef("I1").Value())
+	fmt.Println(sheet.CellByRef("K1").Value())
 
 	//get raw values that were set that via general setter
 	fmt.Println(sheet.CellByRef("A2").Value())
@@ -644,6 +645,7 @@ func Example_gettersAndSetters() {
 	//2006-01-02T15:04:00
 	//2006-01-02T15:04:00
 	//2006-01-02T15:04:00
+	//-1234
 	//string
 	//1
 	//12345

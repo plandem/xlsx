@@ -1,4 +1,4 @@
-# XLSX 
+# Xlsx2Go
 [![Build Status](https://travis-ci.org/plandem/xlsx.svg?branch=master)](https://travis-ci.org/plandem/xlsx)
 [![Code Coverage](https://codecov.io/gh/plandem/xlsx/branch/master/graph/badge.svg)](https://codecov.io/gh/plandem/xlsx) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/plandem/xlsx)](https://goreportcard.com/report/github.com/plandem/xlsx)
@@ -7,6 +7,9 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fplandem%2Fxlsx.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fplandem%2Fxlsx?ref=badge_shield)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/gayvoronsky)
 
+**Note:** Github repository was renamed from `xlsx` to `xlsx2go` to make it more easier to distinct existing xlsx libraries. Previous address will be auto redirected, package will be named as before - xlsx.   
+
+ 
 ```go
 package main
 

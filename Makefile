@@ -9,12 +9,6 @@ vendor: init
 lint:
 	goreportcard-cli -v
 
-bench:
-	go test -run=^$$ -bench=Libs
-
-bench-sheet:
-	go test -run=^$$ -bench=Spreadsheet
-
 test:
 	go test -v ./... -cover
 

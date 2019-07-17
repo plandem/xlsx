@@ -12,7 +12,7 @@ Xlsx2Go supports only limited set of features during sheet streaming.
 :::
 
 ### Reading sheet
-To stream sheet, you should open it in `Stream` mode. After that you can access cells in sheet in a normal way.
+To stream in sheet, you should open it in `Stream` mode. After that you can access cells in sheet in a normal way.
 
 ::: note N.B.
 Sheets that were opened as stream, should be closed to free allocated resources.
@@ -39,3 +39,20 @@ By default, there is no access to merged cells, hyperlinks and conditional forma
 
 #### Example 
 <<< @/src/code/stream_read_test.go
+
+### Writing sheet
+To stream out sheet, you should create it with `Stream` mode. After that you can access cells in sheet in a normal way.
+
+::: danger N.B.
+Sheets that were created as stream, should be closed to flush last chunks of data.
+:::
+
+```go
+	sheet := xl.AddSheet("new sheet", xlsx.SheetModeStream)
+	
+	//close sheet to free allocated resources
+	defer sheet.Close()
+```
+
+#### Example 
+<<< @/src/code/stream_write_test.go
