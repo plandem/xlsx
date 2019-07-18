@@ -38,6 +38,10 @@ While you can modify created styles, you should keep in mind, that modifying wil
 	sheet.CellByRef("A2").SetStyles(ss)
 ```
 
+::: note Predefined values
+Xlsx2Go defined all built-in values to use for styling. For more information, check [API documentation](https://godoc.org/github.com/plandem/xlsx/format/styles#pkg-constants)
+::: 
+
 ### Font
 ::: warning
 Excel can only display installed fonts, that's why using standard fonts(e.g.: `Calibri`, `Times New Roman` or `Courier New`) is highly recommended.
@@ -46,7 +50,7 @@ Excel can only display installed fonts, that's why using standard fonts(e.g.: `C
 ::: note
 The default font for cell is `Calibri` (Excel 2007+)
 :::
-<<< @/src/code/merged_cells_test.go
+<<< @/src/code/styles_font_test.go
 
 ### Fill
 
