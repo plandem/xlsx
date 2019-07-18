@@ -36,7 +36,7 @@ func main() {
 ```
 
 ### Open the existing file
-To open XLSX file using filename or file handler
+To open XLSX file using filename or io.Reader
 ```go
 	xl, err := xlsx.Open("./foo.xlsx")
 	if err != nil {
@@ -54,7 +54,7 @@ To update the existing XLSX file
 	}
 ```
 
-To save a new XLSX file or under different name
+To save XLSX file under different name or to io.Writer
 ```go
 	if err := xl.SaveAs("./foo.xlsx"); err != nil {
 		fmt.Println(err)
