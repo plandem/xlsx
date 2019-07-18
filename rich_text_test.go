@@ -7,6 +7,7 @@ package xlsx
 import (
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/types"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -31,7 +32,16 @@ func TestToRichText(t *testing.T) {
 		styles.Alignment.HAlign(styles.HAlignCenter),
 	)
 
-	text, cellStyles, err := toRichText("1", "2", "3", s)
+	text, cellStyles, err := toRichText(
+		//normal strings
+		"1", "2", "3",
+		//fmt.Stringer
+		types.BoundsFromIndexes(0, 0, 1, 1),
+		//custom type with underlying type as string
+		types.CellRefFromIndexes(2, 2),
+		//cell styles
+		s,
+	)
 	require.Nil(t, err)
 	require.Equal(t, &ml.StringItem{
 		RichText: []*ml.RichText{
@@ -43,6 +53,12 @@ func TestToRichText(t *testing.T) {
 			},
 			{
 				Text: "3",
+			},
+			{
+				Text: "A1:B2",
+			},
+			{
+				Text: "C3",
 			},
 		},
 	}, text)

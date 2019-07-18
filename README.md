@@ -87,9 +87,8 @@ func main() {
 
 # Roadmap
 - [ ] sheet: copy
-- [x] sheet: read as stream
 - [ ] sheet: custom filters
-- [x] sheet: write as stream
+- [x] sheet: streaming
 - [x] merged cells: merge/split for ranges, cols, rows
 - [x] hyperlinks: for cells, ranges, cols, rows
 - [x] range: copy

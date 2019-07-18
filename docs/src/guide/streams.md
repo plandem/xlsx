@@ -43,16 +43,13 @@ By default, there is no access to merged cells, hyperlinks and conditional forma
 ### Writing sheet
 To stream out sheet, you should create it with `Stream` mode. After that you can access cells in sheet in a normal way.
 
-::: danger N.B.
-Sheets that were created as stream, should be closed to flush last chunks of data.
-:::
-
 ```go
-	sheet := xl.AddSheet("new sheet", xlsx.SheetModeStream)
-	
-	//close sheet to free allocated resources
-	defer sheet.Close()
+	sheet := xl.AddSheet("new sheet", xlsx.SheetModeStream)	
 ```
+
+::: note N.B.
+Sheets that were created as stream, will auto close self during save phase, so no need to close it manually.
+:::
 
 #### Example 
 <<< @/src/code/stream_write_test.go

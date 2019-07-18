@@ -5,20 +5,18 @@ module.exports = {
     base: '/xlsx2go/',
     title: 'Xlsx2Go',
     description: 'Fast and Reliable way to work with xlsx in Golang',
-    markdown: {
-        extendMarkdown: md => md.use(mdList)
-    },
-    chainWebpack: (config, isServer) => {
-        config.resolve.alias.set('@images', path.resolve(__dirname, "./public"))
-    },
     themeConfig: {
         logo: '/logo.png',
         repo: 'plandem/xlsx',
         repoLabel: 'GitHub',
-        editLinks: true,
-        editLinkText: 'Help to improve this page!',
+        editLinks: false,
+        // editLinkText: 'Help to improve this page!',
         lastUpdated: 'Last Updated',
         displayAllHeaders: true,
+        // algolia: {
+        //     apiKey: '<API_KEY>',
+        //     indexName: '<INDEX_NAME>'
+        // },
         nav: [
             {text: 'Home', link: '/'},
             {text: 'Guide', link: '/guide/'},
@@ -51,6 +49,12 @@ module.exports = {
                 path: '/faq/',
             }
         ]
+    },
+    markdown: {
+        extendMarkdown: md => md.use(mdList)
+    },
+    chainWebpack: (config, isServer) => {
+        config.resolve.alias.set('@images', path.resolve(__dirname, "./public"))
     },
     plugins: [
         '@vuepress/back-to-top',
