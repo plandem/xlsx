@@ -5,6 +5,7 @@
 package xlsx_test
 
 import (
+	"bytes"
 	"github.com/plandem/xlsx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -71,6 +72,14 @@ func TestSaving(t *testing.T) {
 	xl.AddSheet("new sheet")
 	err = xl.SaveAs("./test_files/tmp.xlsx")
 	assert.Nil(t, err)
+
+	//save to io.Writer
+	xl, err = xlsx.Open("./test_files/example_simple.xlsx")
+	require.NotNil(t, xl)
+	require.Nil(t, err)
+	require.IsType(t, &xlsx.Spreadsheet{}, xl)
+	err = xl.SaveAs(bytes.NewBuffer(nil))
+	require.Nil(t, err)
 
 	//save under differ name
 	xl, err = xlsx.Open("./test_files/example_simple.xlsx")
