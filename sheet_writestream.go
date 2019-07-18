@@ -34,7 +34,7 @@ func (s *sheetWriteStream) expandIfRequired(colIndex, rowIndex int) {
 
 	//expand current row, if required
 	if s.currentRow != nil && len(s.currentRow.Cells) < nextWidth {
-		s.currentRow.Cells = append(s.currentRow.Cells, make([]*ml.Cell, nextWidth - curWidth)...)
+		s.currentRow.Cells = append(s.currentRow.Cells, make([]*ml.Cell, nextWidth-curWidth)...)
 	}
 
 	//if size is fit to current, then ignore
@@ -42,7 +42,7 @@ func (s *sheetWriteStream) expandIfRequired(colIndex, rowIndex int) {
 		return
 	}
 
-	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, nextWidth - 1, nextHeight - 1)}
+	s.ml.Dimension = &ml.SheetDimension{Bounds: types.BoundsFromIndexes(0, 0, nextWidth-1, nextHeight-1)}
 }
 
 func (s *sheetWriteStream) Cell(colIndex, rowIndex int) *Cell {
@@ -88,7 +88,7 @@ func (s *sheetWriteStream) saveCurrentRow() {
 	}
 
 	if !isRowEmpty(s.currentRow) {
-		if err := s.stream.EncodeElement(s.currentRow, xml.StartElement{Name: xml.Name{ Local: "row"}}); err != nil {
+		if err := s.stream.EncodeElement(s.currentRow, xml.StartElement{Name: xml.Name{Local: "row"}}); err != nil {
 			panic(err)
 		}
 	}
@@ -138,7 +138,7 @@ func (s *sheetWriteStream) afterCreate(name string) {
 
 	var err error
 
-	if s.stream, err = s.file.WriteStream(true); err == nil {
+	if s.stream, err = s.file.WriteStream(true, s.finalize); err == nil {
 		if err = s.stream.EncodeToken(s.worksheet); err == nil {
 			s.sheetData = xml.StartElement{Name: xml.Name{
 				Local: "sheetData",
@@ -153,23 +153,20 @@ func (s *sheetWriteStream) afterCreate(name string) {
 	}
 }
 
-//Close frees allocated by sheet resources
-func (s *sheetWriteStream) Close() {
+func (s *sheetWriteStream) finalize() error {
 	s.saveCurrentRow()
 
 	//close sheetData
 	if err := s.stream.EncodeToken(s.sheetData.End()); err != nil {
-		panic(err)
+		return err
 	}
 
 	//close worksheet
 	if err := s.stream.EncodeToken(s.worksheet.End()); err != nil {
-		panic(err)
+		return err
 	}
 
-	if err := s.stream.Close(); err != nil {
-		panic(err)
-	}
+	return nil
 }
 
 func (s *sheetWriteStream) Rows() RowIterator {

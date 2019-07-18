@@ -5,12 +5,12 @@
 package xlsx
 
 import (
-	"errors"
 	"fmt"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+	"reflect"
 
 	// to link unexported
 	_ "unsafe"
@@ -35,26 +35,39 @@ func toRichText(parts ...interface{}) (*ml.StringItem, *styles.Info, error) {
 		richText := make([]*ml.RichText, 0, len(parts))
 		fontPart := true
 
+		attachText := func(i int, v string) {
+			length += len(v)
+
+			if !fontPart || i == 0 {
+				//previous part was string or it's first part - add new block with a string and 'default format'
+				richText = append(richText, &ml.RichText{
+					Text: primitives.Text(v),
+				})
+			} else {
+				//previous part was a format, so attach a string to prev block
+				richText[len(richText)-1].Text = primitives.Text(v)
+			}
+
+			fontPart = false
+		}
+
 		for i, p := range parts {
 			switch v := p.(type) {
-			case string:
-				length += len(v)
-
-				if !fontPart || i == 0 {
-					//previous part was string or it's first part - add new block with a string and 'default format'
-					richText = append(richText, &ml.RichText{
-						Text: primitives.Text(v),
-					})
+			default:
+				if v != nil && reflect.TypeOf(v).Kind() == reflect.String {
+					attachText(i, reflect.ValueOf(v).String())
 				} else {
-					//previous part was a format, so attach a string to prev block
-					richText[len(richText)-1].Text = primitives.Text(v)
+					return nil, nil, fmt.Errorf("unsupported type `%s` for rich text part", reflect.TypeOf(v).Name())
 				}
+			case fmt.Stringer:
+				attachText(i, v.String())
 
-				fontPart = false
+			case string:
+				attachText(i, v)
 
 			case *styles.Info:
 				if fontPart && i > 0 {
-					return nil, nil, errors.New("two styles in row is not allowed")
+					return nil, nil, fmt.Errorf("two styles in row is not allowed")
 				}
 
 				richText = append(richText, &ml.RichText{

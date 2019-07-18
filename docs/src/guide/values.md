@@ -12,6 +12,10 @@ Working with cells' values is dead simple and in most cases it will be more than
 
 	// get raw value
 	var val string = sheet.CellByRef("A1").Value()
+	
+	// get string presentation of value
+    val = sheet.CellByRef("A1").String()
+
 ```
 ::: tip Unification 
 Xlsx2Go will automagically detect type of value and call required typed getter/setter. Read below about typed values.
@@ -71,7 +75,7 @@ Technically, any date or time related value is stored as number with additional 
 ### Texts
 Excel uses mechanism to reduce required memory while working with texts, due to fact that some text values can be repeated as is multiply times. So when string will be used more than once, Excel stores it as `Shared String` and in that case does not matter how many times user used that string, only one will be stored in memory and cell will hold only reference to that string. But for some cases, user wants to enforce Excel to store text directly in cell and for these cases Excel stores text as `Inline String`.
 
-Xlsx2Go supports both types and user user should decide by own, what type to use.  
+Xlsx2Go supports both types and user should decide by own, what type to use.  
 ```go
 	// set text as `Shared String`
 	sheet.CellByRef("A1").SetText("string")

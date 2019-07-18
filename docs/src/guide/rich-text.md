@@ -29,6 +29,6 @@ Excel has built-in limits for cell's text value. Check [Excel Limits](/guide/lim
 :::
 
 ### Example
-![](/rich-text.png)
+![](~@images/rich-text.png)
 
 <<< @/src/code/rich_text_test.go
