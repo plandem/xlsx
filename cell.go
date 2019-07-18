@@ -115,8 +115,8 @@ func (c *Cell) Bool() (bool, error) {
 	return false, errTypeMismatch
 }
 
-//SetGeneral sets the value as general type
-func (c *Cell) SetGeneral(value string) {
+//setGeneral sets the value as general type
+func (c *Cell) setGeneral(value string) {
 	c.ml.Type = types.CellTypeGeneral
 	c.ml.Value = value
 	c.ml.Formula = nil
@@ -290,7 +290,7 @@ func (c *Cell) SetValue(value interface{}) {
 	case nil:
 		c.Reset()
 	default:
-		c.SetGeneral(fmt.Sprintf("%v", value))
+		c.setGeneral(fmt.Sprintf("%v", value))
 	}
 }
 
