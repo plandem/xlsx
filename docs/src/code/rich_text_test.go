@@ -62,7 +62,7 @@ func Example_richText() {
 	sheet.CellByRef("B8").SetText(
 		"E=mc",
 		styles.New(
-			styles.Font.Effect(styles.FontEffectSuperscript),
+			styles.Font.Superscript,
 		),
 		"2",
 		styles.New(

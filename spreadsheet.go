@@ -121,13 +121,13 @@ func (xl *Spreadsheet) AddSheet(name string, options ...sheetMode) Sheet {
 			si.sheetMode = mode
 			sheet.afterCreate(name)
 			return sheet
-		} else {
-			sheet := &sheetReadWrite{si}
-			si.sheet = sheet
-			si.sheetMode = mode | sheetModeRead
-			sheet.afterCreate(name)
-			return sheet
 		}
+
+		sheet := &sheetReadWrite{si}
+		si.sheet = sheet
+		si.sheetMode = mode | sheetModeRead
+		sheet.afterCreate(name)
+		return sheet
 	}
 
 	return nil

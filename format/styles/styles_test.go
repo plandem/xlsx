@@ -8,6 +8,7 @@ import (
 	"encoding/xml"
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -64,7 +65,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.Effect(FontEffectBaseline),
+		Font.Superscript,
 		Font.Scheme(FontSchemeMinor),
 		NumberFormatID(8),
 		Protection.Hidden,
@@ -143,7 +144,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 		Color:     color.New("FFFF00FF"),
 		Family:    FontFamilyDecorative,
 		Underline: UnderlineTypeSingle,
-		Effect:    FontEffectBaseline,
+		Effect:    primitives.FontEffectSuperscript,
 		Scheme:    FontSchemeMinor,
 	}, font)
 
@@ -320,7 +321,7 @@ func TestStyleFormat_Settings_Font(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.Effect(FontEffectBaseline),
+		Font.Superscript,
 		Font.Scheme(FontSchemeMinor),
 	)
 
@@ -345,7 +346,7 @@ func TestStyleFormat_Settings_Font(t *testing.T) {
 		Color:     color.New("FFFF00FF"),
 		Family:    FontFamilyDecorative,
 		Underline: UnderlineTypeSingle,
-		Effect:    FontEffectBaseline,
+		Effect:    primitives.FontEffectSuperscript,
 		Scheme:    FontSchemeMinor,
 	}, font)
 }
@@ -418,12 +419,12 @@ func TestFontMarshal(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.Effect(FontEffectBaseline),
+		Font.Superscript,
 		Font.Scheme(FontSchemeMinor),
 	))
 
 	encoded, _ = xml.Marshal(font)
-	require.Equal(t, `<Font><name val="Calibri"></name><family val="5"></family><b val="true"></b><i val="true"></i><strike val="true"></strike><shadow val="true"></shadow><condense val="true"></condense><extend val="true"></extend><color indexed="6"></color><sz val="10"></sz><u val="single"></u><vertAlign val="baseline"></vertAlign><scheme val="minor"></scheme></Font>`, string(encoded))
+	require.Equal(t, `<Font><name val="Calibri"></name><family val="5"></family><b val="true"></b><i val="true"></i><strike val="true"></strike><shadow val="true"></shadow><condense val="true"></condense><extend val="true"></extend><color indexed="6"></color><sz val="10"></sz><u val="single"></u><vertAlign val="superscript"></vertAlign><scheme val="minor"></scheme></Font>`, string(encoded))
 }
 
 func TestFillMarshal(t *testing.T) {

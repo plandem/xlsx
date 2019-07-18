@@ -41,6 +41,14 @@ func (f *fontOption) Strikeout(s *Info) {
 	s.styleInfo.Font.Strike = true
 }
 
+func (f *fontOption) Superscript(s *Info) {
+	s.styleInfo.Font.Effect = primitives.FontEffectSuperscript
+}
+
+func (f *fontOption) Subscript(s *Info) {
+	s.styleInfo.Font.Effect = primitives.FontEffectSubscript
+}
+
 func (f *fontOption) Shadow(s *Info) {
 	s.styleInfo.Font.Shadow = true
 }
@@ -74,12 +82,6 @@ func (f *fontOption) Size(size float64) Option {
 func (f *fontOption) Underline(underline primitives.UnderlineType) Option {
 	return func(s *Info) {
 		s.styleInfo.Font.Underline = underline
-	}
-}
-
-func (f *fontOption) Effect(effect primitives.FontEffectType) Option {
-	return func(s *Info) {
-		s.styleInfo.Font.Effect = effect
 	}
 }
 

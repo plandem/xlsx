@@ -8,6 +8,7 @@ import (
 	"github.com/plandem/ooxml/index"
 	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -183,11 +184,11 @@ func TestFont_Hash(t *testing.T) {
 	require.Nil(t, idx.Add(&ml.Font{Color: &ml.Color{RGB: "112233"}}, 1))
 	require.Nil(t, idx.Add(&ml.Font{Size: 2.2}, 1))
 	require.Nil(t, idx.Add(&ml.Font{Underline: styles.UnderlineTypeDoubleAccounting}, 1))
-	require.Nil(t, idx.Add(&ml.Font{Effect: styles.FontEffectSubscript}, 1))
+	require.Nil(t, idx.Add(&ml.Font{Effect: primitives.FontEffectSubscript}, 1))
 	require.Nil(t, idx.Add(&ml.Font{Scheme: styles.FontSchemeMajor}, 1))
 	require.Nil(t, idx.Add(&ml.Font{
 		Scheme:    styles.FontSchemeMajor,
-		Effect:    styles.FontEffectSubscript,
+		Effect:    primitives.FontEffectSubscript,
 		Underline: styles.UnderlineTypeDoubleAccounting,
 		Size:      2.2,
 		Color:     &ml.Color{RGB: "112233"},
@@ -298,7 +299,7 @@ func TestDiffStyle_Hash(t *testing.T) {
 	require.Nil(t, idx.Add(&ml.DiffStyle{
 		Font: &ml.Font{
 			Scheme:    styles.FontSchemeMajor,
-			Effect:    styles.FontEffectSubscript,
+			Effect:    primitives.FontEffectSubscript,
 			Underline: styles.UnderlineTypeDoubleAccounting,
 			Size:      2.2,
 			Color:     &ml.Color{RGB: "112233"},

@@ -19,6 +19,7 @@ import (
 //go:linkname toRichFont github.com/plandem/xlsx/format/styles.toRichFont
 func toRichFont(f *styles.Info) *ml.RichFont
 
+//nolint
 func toRichText(parts ...interface{}) (*ml.StringItem, *styles.Info, error) {
 	si := &ml.StringItem{}
 	length := 0
