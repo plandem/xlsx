@@ -62,6 +62,6 @@ module.exports = {
         '@vuepress/nprogress',
         ['container', {type: 'right', defaultTitle: ''}],
         ['container', {type: 'note', defaultTitle: ''}],
-        // ['@vuepress/google-analytics', {'ga': 'UA-00000000-0'}],
+        ['@vuepress/google-analytics', {'ga': 'UA-122513-16'}],
     ],
 };
