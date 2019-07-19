@@ -13,10 +13,10 @@ module.exports = {
         // editLinkText: 'Help to improve this page!',
         lastUpdated: 'Last Updated',
         displayAllHeaders: true,
-        // algolia: {
-        //     apiKey: '<API_KEY>',
-        //     indexName: '<INDEX_NAME>'
-        // },
+        algolia: {
+            apiKey: '3e97b85acaa0479ed415ab8ecdaf55d6',
+            indexName: 'xlsx2go'
+        },
         nav: [
             {text: 'Home', link: '/'},
             {text: 'Guide', link: '/guide/'},
