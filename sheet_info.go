@@ -10,6 +10,7 @@ import (
 	"github.com/plandem/ooxml"
 	sharedML "github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/format/conditional"
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/plandem/xlsx/internal"
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/types"
@@ -287,4 +288,30 @@ func (s *sheetInfo) AfterMarshalXML(content []byte) []byte {
 	}
 
 	return content
+}
+
+func (s *sheetInfo) resolveStyleID(st interface{}) styles.DirectStyleID {
+	if st == nil {
+		return 0
+	}
+
+	if styleID, ok := st.(styles.DirectStyleID); ok {
+		return styleID
+	}
+
+	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
+	if (s.mode() & sheetModeWrite) == 0 {
+		panic(errorNotSupportedWrite)
+	}
+
+	var format *styles.Info
+	if f, ok := st.(styles.Info); ok {
+		format = &f
+	} else if f, ok := st.(*styles.Info); ok {
+		format = f
+	} else {
+		panic("only DirectStyleID or styles.Info supported as styles for cell")
+	}
+
+	return s.workbook.doc.styleSheet.addStyle(format)
 }

@@ -316,40 +316,13 @@ func (c *Cell) Styles() styles.DirectStyleID {
 
 //SetStyles sets style format to requested DirectStyleID or styles.Info
 func (c *Cell) SetStyles(s interface{}) {
-	if styleID, ok := s.(styles.DirectStyleID); ok {
-		c.ml.Style = styleID
-		return
-	}
-
-	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
-	if (c.sheet.mode() & sheetModeWrite) == 0 {
-		panic(errorNotSupportedWrite)
-	}
-
-	var format *styles.Info
-	if f, ok := s.(styles.Info); ok {
-		format = &f
-	} else if f, ok := s.(*styles.Info); ok {
-		format = f
-	} else {
-		panic("only DirectStyleID or styles.Info supported as styles for cell")
-	}
-
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(format)
-	c.ml.Style = styleID
+	c.ml.Style = c.sheet.resolveStyleID(s)
 }
 
 //SetValueWithFormat is helper function that internally works as SetValue and SetStyles with NumberFormat
 func (c *Cell) SetValueWithFormat(value interface{}, formatCode string) {
-	//we can update styleSheet only when sheet is in write mode, to prevent pollution of styleSheet with fake values
-	if (c.sheet.mode() & sheetModeWrite) == 0 {
-		panic(errorNotSupportedWrite)
-	}
-
-	styleID := c.sheet.workbook.doc.styleSheet.addStyle(styles.New(styles.NumberFormat(formatCode)))
-
+	c.ml.Style = c.sheet.resolveStyleID(styles.New(styles.NumberFormat(formatCode)))
 	c.SetValue(value)
-	c.ml.Style = styleID
 }
 
 //Hyperlink returns resolved hyperlink.Info if there is any hyperlink or nil otherwise

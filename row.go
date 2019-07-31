@@ -28,6 +28,10 @@ func (r *Row) SetOptions(o *options.Info) {
 		r.ml.CustomHeight = true
 	}
 
+	if o.Format != nil {
+		r.SetStyles(o.Format)
+	}
+
 	r.ml.OutlineLevel = o.OutlineLevel
 	r.ml.Hidden = o.Hidden
 	r.ml.Collapsed = o.Collapsed
@@ -40,9 +44,9 @@ func (r *Row) Styles() styles.DirectStyleID {
 }
 
 //SetStyles sets default style for the row. Affects cells not yet allocated in the row. In other words, this style applies to new cells.
-func (r *Row) SetStyles(styleID styles.DirectStyleID) {
+func (r *Row) SetStyles(s interface{}) {
 	r.ml.CustomFormat = true
-	r.ml.Style = styleID
+	r.ml.Style = r.sheet.info().resolveStyleID(s)
 }
 
 //CopyTo copies row cells into another row with rIdx index.
