@@ -12,6 +12,7 @@ type Info struct {
 	Phonetic     bool
 	Hidden       bool
 	Width        float32
+	Format       interface{}
 }
 
 //Option is helper type to set options for comment
@@ -65,5 +66,12 @@ func Hidden(hidden bool) Option {
 func Width(width float32) Option {
 	return func(i *Info) {
 		i.Width = width
+	}
+}
+
+//Styles sets style format to requested DirectStyleID or styles.Info
+func Styles(s interface{}) Option {
+	return func(i *Info) {
+		i.Format = s
 	}
 }

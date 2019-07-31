@@ -25,7 +25,7 @@ func init() {
 	}
 
 	builtIn = map[int]*builtInFormat{
-		0x00: {ml.NumberFormat{ID: 0x00, Code: `@`}, General},
+		0x00: {ml.NumberFormat{ID: 0x00, Code: `General`}, General},
 		0x01: {ml.NumberFormat{ID: 0x01, Code: `0`}, Integer},
 		0x02: {ml.NumberFormat{ID: 0x02, Code: `0.00`}, Float},
 		0x03: {ml.NumberFormat{ID: 0x03, Code: `#,##0`}, Float},

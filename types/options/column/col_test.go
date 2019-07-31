@@ -5,6 +5,7 @@
 package options
 
 import (
+	"github.com/plandem/xlsx/format/styles"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -16,6 +17,7 @@ func TestColumnOptions(t *testing.T) {
 		Phonetic(true),
 		Width(45.5),
 		Collapsed(true),
+		Styles(styles.DirectStyleID(1)),
 	)
 
 	require.IsType(t, &Info{}, o)
@@ -25,6 +27,7 @@ func TestColumnOptions(t *testing.T) {
 		Phonetic:     true,
 		Width:        45.5,
 		Collapsed:    true,
+		Format:       styles.DirectStyleID(1),
 	}, o)
 
 	o = New(

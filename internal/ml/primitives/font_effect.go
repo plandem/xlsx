@@ -12,6 +12,13 @@ import (
 //FontEffectType is a type to encode XSD ST_VerticalAlignRun
 type FontEffectType ml.Property
 
+//List of all possible values for FontEffectType
+const (
+	FontEffectBaseline    FontEffectType = "baseline"
+	FontEffectSuperscript FontEffectType = "superscript"
+	FontEffectSubscript   FontEffectType = "subscript"
+)
+
 //MarshalXML marshal FontEffectType
 func (t *FontEffectType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return (*ml.Property)(t).MarshalXML(e, start)

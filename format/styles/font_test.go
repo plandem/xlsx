@@ -7,6 +7,7 @@ package styles
 import (
 	"github.com/plandem/xlsx/internal/color"
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/primitives"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -24,7 +25,7 @@ func TestFont(t *testing.T) {
 		Font.Family(FontFamilyDecorative),
 		Font.Color("#FF00FF"),
 		Font.Underline(UnderlineTypeSingle),
-		Font.Effect(FontEffectBaseline),
+		Font.Superscript,
 		Font.Scheme(FontSchemeMinor),
 	)
 
@@ -42,7 +43,7 @@ func TestFont(t *testing.T) {
 			Color:     color.New("FFFF00FF"),
 			Family:    FontFamilyDecorative,
 			Underline: UnderlineTypeSingle,
-			Effect:    FontEffectBaseline,
+			Effect:    primitives.FontEffectSuperscript,
 			Scheme:    FontSchemeMinor,
 		}
 	}), style)

@@ -28,6 +28,10 @@ func (c *Col) SetOptions(o *options.Info) {
 		c.ml.CustomWidth = true
 	}
 
+	if o.Format != nil {
+		c.SetStyles(o.Format)
+	}
+
 	c.ml.OutlineLevel = o.OutlineLevel
 	c.ml.Hidden = o.Hidden
 	c.ml.Collapsed = o.Collapsed
@@ -40,8 +44,8 @@ func (c *Col) Styles() styles.DirectStyleID {
 }
 
 //SetStyles sets default style for the column. Affects cells not yet allocated in the column. In other words, this style applies to new cells.
-func (c *Col) SetStyles(styleID styles.DirectStyleID) {
-	c.ml.Style = styleID
+func (c *Col) SetStyles(s interface{}) {
+	c.ml.Style = c.sheet.info().resolveStyleID(s)
 }
 
 //CopyTo copies col cells into another col with cIdx index.

@@ -94,7 +94,7 @@ Keep in mind, that text can be a simple string, as well as full featured rich te
 Check [Rich Text](/guide/rich-text.md) for more information about rich texts.
 :::
 
-### Custom Formats
+### Number Formats
 In some cases we want to set value, but also use format how to display that value.
  
 ```go
@@ -102,61 +102,6 @@ In some cases we want to set value, but also use format how to display that valu
 	sheet.CellByRef("A1").SetValueWithFormat(12345.12345, "0.00")
 ```
 
-#### Format Codes
-::: tip
-Xlsx2Go supports default Excel codes and will try to detect/convert to proper internal code, as well as custom codes - use it as is without worrying.
+::: tip Format Codes
+Check [Number Format](/guide/number_format.md) for more information about codes for number format.
 :::
-
-::: note General type
-* `@`
-:::
-
-::: note Integer number type		
-* `0`
-* `0%`
-* `(#,##0_);(#,##0)`
-* `(#,##0_);[RED](#,##0)`
-:::		
-
-::: note Float number type
-* `0.00`
-* `#,##0`
-* `#,##0.00`
-* `($#,##0_);($#,##0)`
-* `($#,##0_);[RED]($#,##0)`
-* `($#,##0.00_);($#,##0.00_)`
-* `($#,##0.00_);[RED]($#,##0.00_)`
-* `0.00%`
-* `0.00E+00`
-* `# ?/?`
-* `# ??/??`
-* `(#,##0.00);(#,##0.00)`
-* `(#,##0.00);[RED](#,##0.00)`
-* `_(*#,##0_);_(*(#,##0);_(*"-"_);_(@_)`
-* `_($*#,##0_);_($*(#,##0);_(*"-"_);_(@_)`
-* `_(*#,##0.00_);_(*(#,##0.00);_(*"-"??_);_(@_)`
-* `_($*#,##0.00_);_($*(#,##0.00);_(*"-"??_);_(@_)`
-* `##0.0E+0`
-:::
-
-::: note Date type
-* `m-d-yy`
-* `d-mmm-yy`
-* `d-mmm`
-* `mmm-yy`	
-:::		
-
-::: note Time type
-* `h:mm AM/PM`
-* `h:mm:ss AM/PM`
-* `h:mm`
-* `h:mm:ss`	 
-:::		 
-
-::: note DeltaTime type
-* `m-d-yy h:mm`
-* `mm:ss`
-* `[h]:mm:ss`
-* `mm:ss.0`
-:::
-
