@@ -1,6 +1,8 @@
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-test/deep v1.0.2/go.mod h1:wGDj63lr65AM2AQyKZd/NYHGb0R+1RLqB8NKt3aSFNA=
+github.com/plandem/ooxml v0.0.0-20190815025427-79aa95ade100 h1:HsqBfcBC/xOvFERKFikX24xkBm3Mmrewc1JH7+kb2js=
+github.com/plandem/ooxml v0.0.0-20190815025427-79aa95ade100/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/plandem/ooxml v1.1.0 h1:A5wWAcTleoqSF8W5qGL6TJf5oa7TXm5S+0+HtHKEMZo=
 github.com/plandem/ooxml v1.1.0/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/plandem/ooxml v1.1.1 h1:YfCx3WOfyrIJBajs9V3PU4DVpgLvZDrQsH6Q0v0bwIs=
@@ -13,6 +15,8 @@ github.com/plandem/ooxml v1.1.5 h1:zznd4br73V7chsGoRV1H/kCJNOMLq8wqi3N6+TtBxLE=
 github.com/plandem/ooxml v1.1.5/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/plandem/ooxml v1.1.6 h1:f3NfHzeBvuWWYipzMHY194R7K3UWVgnbmkovt6Gxwy4=
 github.com/plandem/ooxml v1.1.6/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
+github.com/plandem/ooxml v1.1.7-0.20190815015056-239ac9c525bb h1:GzZKqo5yTz8g7cGkNCE2yZ5e4G4ZJPoi5p/AqK39yQI=
+github.com/plandem/ooxml v1.1.7-0.20190815015056-239ac9c525bb/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

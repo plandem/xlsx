@@ -6,8 +6,8 @@ package drawing
 
 import (
 	"encoding/xml"
+	drawingML "github.com/plandem/ooxml/drawing/ml"
 	"github.com/plandem/ooxml/ml"
-	drawingML "github.com/plandem/xlsx/internal/ml/drawing/ml"
 )
 
 //AnchorList is special type to hold all anchors with preserving order
