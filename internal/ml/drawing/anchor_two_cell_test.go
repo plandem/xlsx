@@ -40,15 +40,15 @@ func TestTwoCellAnchor(t *testing.T) {
 			</xdr:to>
 			<xdr:clientData></xdr:clientData>
 			<xdr:graphicFrame macro="">
+				<xdr:xfrm>
+					<a:off x="111" y="222"></a:off>
+					<a:ext cx="333" cy="444"></a:ext>
+				</xdr:xfrm>
 				<a:graphic>
 					<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart">
 						<c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId1"></c:chart>
 					</a:graphicData>
 				</a:graphic>
-				<xdr:xfrm>
-					<a:off x="111" y="222"></a:off>
-					<a:ext cx="333" cy="444"></a:ext>
-				</xdr:xfrm>
 			</xdr:graphicFrame>
 		</xdr:twoCellAnchor>
 	</xdr:entity>

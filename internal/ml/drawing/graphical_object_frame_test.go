@@ -26,15 +26,19 @@ func TestGraphicalObjectFrame(t *testing.T) {
 	data := strings.NewReplacer("\t", "", "\n", "").Replace(`
 	<xdr:entity xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
 		<xdr:graphicFrame macro="">
+			<xdr:nvGraphicFramePr>
+				<xdr:cNvPr id="2" name="Chart 1"></xdr:cNvPr>
+				<xdr:cNvGraphicFramePr></xdr:cNvGraphicFramePr>
+			</xdr:nvGraphicFramePr>
+			<xdr:xfrm>
+				<a:off x="1" y="2"></a:off>
+				<a:ext cx="3" cy="4"></a:ext>
+			</xdr:xfrm>
 			<a:graphic>
 				<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart">
 					<c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId1"></c:chart>
 				</a:graphicData>
 			</a:graphic>
-			<xdr:xfrm>
-				<a:off x="1" y="2"></a:off>
-				<a:ext cx="3" cy="4"></a:ext>
-			</xdr:xfrm>
 		</xdr:graphicFrame>
 	</xdr:entity>
 `)
@@ -45,6 +49,13 @@ func TestGraphicalObjectFrame(t *testing.T) {
 	require.Nil(t, err)
 
 	frame := &drawing.GraphicalObjectFrame{
+		NonVisual: &drawing.GraphicalObjectFrameNonVisual{
+			DrawingProperties: &dml.NonVisualDrawingProperties{
+				ID: 2,
+				Name: "Chart 1",
+			},
+			FrameProperties: &dml.NonVisualGraphicFrameProperties{},
+		},
 		Graphic: &dml.GraphicalObject{
 			Data: &dml.GraphicalObjectData{
 				Uri: "http://schemas.openxmlformats.org/drawingml/2006/chart",
