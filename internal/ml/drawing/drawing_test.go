@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
+	"github.com/plandem/ooxml/drawing/dml/chart"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/drawing"
 	"github.com/stretchr/testify/require"
@@ -112,31 +113,51 @@ func TestDrawing(t *testing.T) {
 	}, (*drw.AnchorList)[1])
 
 	//third
-	require.IsType(t, &drawing.AbsoluteAnchor{}, (*drw.AnchorList)[2])
-	absAnchor := (*drw.AnchorList)[2].(*drawing.AbsoluteAnchor)
-	require.Equal(t, dml.PositiveSize2D{
-		Height: 8671719,
-		Width:  6290469,
-	}, absAnchor.Size)
-
-	require.Equal(t, ml.ReservedAttributes{
-		Attrs: []xml.Attr{
-			{
-				Name: xml.Name{Local: "macro"},
-			},
+	absAnchor := &drawing.AbsoluteAnchor{
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+			Local: "absoluteAnchor",
 		},
-	}, absAnchor.GraphicFrame.ReservedAttributes)
-
-	require.Equal(t, &dml.Transform2D{
-		Offset: &dml.Point2D{
+		Point: dml.Point2D{
 			X: 0,
 			Y: 0,
 		},
-		Size: &dml.PositiveSize2D{
-			Height: 0,
-			Width:  0,
+		Size: dml.PositiveSize2D{
+			Height: 8671719,
+			Width:  6290469,
 		},
-	}, absAnchor.GraphicFrame.Transform)
+	}
+
+	absAnchor.GraphicFrame = &drawing.GraphicalObjectFrame{
+		Graphic: &dml.GraphicalObject{
+			Data: &dml.GraphicalObjectData{
+				Uri: "http://schemas.openxmlformats.org/drawingml/2006/chart",
+				Chart: &chart.Ref{
+					RID: "rId1",
+				},
+			},
+		},
+		Transform: &dml.Transform2D{
+			Offset: &dml.Point2D{
+				X: 0,
+				Y: 0,
+			},
+			Size: &dml.PositiveSize2D{
+				Height: 0,
+				Width:  0,
+			},
+		},
+		ReservedAttributes: ml.ReservedAttributes{
+			Attrs: []xml.Attr{
+				{
+					Name: xml.Name{
+						Local: "macro",
+					},
+				},
+			},
+		},
+	}
+	require.Equal(t, absAnchor, (*drw.AnchorList)[2])
 
 	//encode data should be same as original
 	encode, err := xml.Marshal(drw)

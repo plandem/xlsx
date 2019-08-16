@@ -15,6 +15,8 @@ github.com/plandem/ooxml v0.0.0-20190816031400-ee342ec5abec h1:gskQUiEC5lJXHRdKb
 github.com/plandem/ooxml v0.0.0-20190816031400-ee342ec5abec/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/plandem/ooxml v0.0.0-20190816035646-303f97470d1a h1:cKsjJ49vFu3Z01KVnzdj8GBFm5POXU4o/1DSyhTAFm4=
 github.com/plandem/ooxml v0.0.0-20190816035646-303f97470d1a/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
+github.com/plandem/ooxml v0.0.0-20190816141728-74e4dc933fd3 h1:DK/pPCzDyffv+nt142DEpsdmXKc32VlPMOqH+pZlt68=
+github.com/plandem/ooxml v0.0.0-20190816141728-74e4dc933fd3/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/plandem/ooxml v1.1.0 h1:A5wWAcTleoqSF8W5qGL6TJf5oa7TXm5S+0+HtHKEMZo=
 github.com/plandem/ooxml v1.1.0/go.mod h1:6ZGylBk9B60EDlMS2DjcXt5laACXuY2huRgQME1KX2A=
 github.com/plandem/ooxml v1.1.1 h1:YfCx3WOfyrIJBajs9V3PU4DVpgLvZDrQsH6Q0v0bwIs=

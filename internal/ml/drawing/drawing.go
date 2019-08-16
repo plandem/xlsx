@@ -13,7 +13,7 @@ import (
 //Drawing is a direct mapping of XSD CT_Drawing
 type Drawing struct {
 	XMLName    xml.Name    `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing wsDr"`
-	DMLName    ml.DMLName  `xml:",attr"`
+	DMLName    dml.Name    `xml:",attr"`
 	AnchorList *AnchorList `xml:",any"`
 }
 
