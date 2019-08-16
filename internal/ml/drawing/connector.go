@@ -4,7 +4,15 @@
 
 package drawing
 
-import "github.com/plandem/ooxml/ml"
+import (
+	"github.com/plandem/ooxml/drawing/dml"
+	"github.com/plandem/ooxml/ml"
+)
 
 //Connector is a direct mapping of XSD CT_Connector
-type Connector = ml.Reserved
+type Connector struct {
+	NonVisual *ConnectorNonVisual  `xml:"nvCxnSpPr"`
+	Shape     *dml.ShapeProperties `xml:"spPr"`
+	Style     *dml.ShapeStyle      `xml:"style"`
+	ml.ReservedAttributes
+}

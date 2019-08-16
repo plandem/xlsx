@@ -12,9 +12,9 @@ import (
 
 //Drawing is a direct mapping of XSD CT_Drawing
 type Drawing struct {
-	XMLName    xml.Name    `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing wsDr"`
-	DMLName    dml.Name    `xml:",attr"`
-	AnchorList *AnchorList `xml:",any"`
+	XMLName xml.Name    `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing wsDr"`
+	DMLName dml.Name    `xml:",attr"`
+	Items   *AnchorList `xml:",any"`
 }
 
 //ClientData is a direct mapping of XSD CT_AnchorClientData
@@ -38,10 +38,10 @@ type Marker struct {
 }
 
 type object struct {
-	Shape        *Shape                `xml:"sp,omitempty"`
-	Group        *GroupShape           `xml:"grpSp,omitempty"`
-	GraphicFrame *GraphicalObjectFrame `xml:"graphicFrame,omitempty"`
-	Connector    *Connector            `xml:"cxnSp,omitempty"`
-	Picture      *Picture              `xml:"pic,omitempty"`
-	Relation     *Ref                  `xml:"contentPart,omitempty"`
+	Shape     *Shape     `xml:"sp,omitempty"`
+	Group     *Group     `xml:"grpSp,omitempty"`
+	Frame     *Frame     `xml:"graphicFrame,omitempty"`
+	Connector *Connector `xml:"cxnSp,omitempty"`
+	Picture   *Picture   `xml:"pic,omitempty"`
+	Relation  *Ref       `xml:"contentPart,omitempty"`
 }

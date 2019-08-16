@@ -18,7 +18,7 @@ func TestGraphicalObjectFrameNonVisual(t *testing.T) {
 	type Entity struct {
 		XMLName   xml.Name                               `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing entity"`
 		DMLName   dml.Name                               `xml:",attr"`
-		NonVisual *drawing.GraphicalObjectFrameNonVisual `xml:"nvGraphicFramePr"`
+		NonVisual *drawing.FrameNonVisual `xml:"nvGraphicFramePr"`
 	}
 
 	data := strings.NewReplacer("\t", "", "\n", "").Replace(`
@@ -35,7 +35,7 @@ func TestGraphicalObjectFrameNonVisual(t *testing.T) {
 	err := decoder.DecodeElement(entity, nil)
 	require.Nil(t, err)
 
-	object := &drawing.GraphicalObjectFrameNonVisual{
+	object := &drawing.FrameNonVisual{
 		DrawingProperties: &dml.NonVisualDrawingProperties{
 			ID: 2,
 			Name: "Chart 1",

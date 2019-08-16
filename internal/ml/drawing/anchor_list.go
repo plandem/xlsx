@@ -24,33 +24,25 @@ func (a *AnchorList) Add(anchor interface{}) {
 	*a = append(*a, anchor)
 }
 
-//UnmarshalXML unmarshal Anchor
+//UnmarshalXML unmarshal AnchorList
 func (a *AnchorList) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var anchor interface{}
+
 	switch start.Name.Local {
 	case anchorAbsolute:
-		anchor := &AbsoluteAnchor{}
-		if err := d.DecodeElement(anchor, &start); err != nil {
-			return err
-		}
-
-		a.Add(anchor)
+		anchor = &AbsoluteAnchor{}
 	case anchorOneCellAnchor:
-		anchor := &OneCellAnchor{}
-		if err := d.DecodeElement(anchor, &start); err != nil {
-			return err
-		}
-
-		a.Add(anchor)
+		anchor = &OneCellAnchor{}
 	case anchorTwoCellAnchor:
-		anchor := &TwoCellAnchor{}
-		if err := d.DecodeElement(anchor, &start); err != nil {
-			return err
-		}
-
-		a.Add(anchor)
+		anchor = &TwoCellAnchor{}
 	default:
 		return fmt.Errorf(errorUnknownAnchor, start)
 	}
 
+	if err := d.DecodeElement(anchor, &start); err != nil {
+		return err
+	}
+
+	a.Add(anchor)
 	return nil
 }

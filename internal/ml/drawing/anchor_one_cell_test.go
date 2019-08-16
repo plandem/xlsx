@@ -71,7 +71,7 @@ func TestOneCellAnchor(t *testing.T) {
 		},
 	}
 
-	anchor.GraphicFrame = &drawing.GraphicalObjectFrame{
+	anchor.Frame = &drawing.Frame{
 		Graphic: &dml.GraphicalObject{
 			Data: &dml.GraphicalObjectData{
 				Uri: "http://schemas.openxmlformats.org/drawingml/2006/chart",

@@ -9,11 +9,10 @@ import (
 	"github.com/plandem/ooxml/ml"
 )
 
-//GraphicalObjectFrame is a direct mapping of XSD CT_GraphicalObjectFrame
-type GraphicalObjectFrame struct {
-	NonVisual *GraphicalObjectFrameNonVisual `xml:"nvGraphicFramePr"`
+//Frame is a direct mapping of XSD CT_GraphicalObjectFrame
+type Frame struct {
+	NonVisual *FrameNonVisual `xml:"nvGraphicFramePr"`
 	Transform *dml.Transform2D               `xml:"xfrm"`
 	Graphic   *dml.GraphicalObject           `xml:"graphic"`
 	ml.ReservedAttributes
-	ml.ReservedElements
 }
