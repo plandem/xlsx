@@ -19,6 +19,6 @@ type Frame struct {
 
 //FrameNonVisual is a direct mapping of XSD CT_GraphicalObjectFrameNonVisual
 type FrameNonVisual struct {
-	DrawingProperties *dml.NonVisualCommonProperties      `xml:"cNvPr"`
-	FrameProperties   *dml.NonVisualFrameProperties `xml:"cNvGraphicFramePr"`
+	DrawingProperties *dml.NonVisualCommonProperties `xml:"cNvPr"`
+	FrameProperties   *dml.NonVisualFrameProperties  `xml:"cNvGraphicFramePr"`
 }

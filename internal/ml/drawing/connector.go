@@ -19,6 +19,6 @@ type Connector struct {
 
 //ConnectorNonVisual is a direct mapping of XSD CT_ConnectorNonVisual
 type ConnectorNonVisual struct {
-	DrawingProperties   *dml.NonVisualCommonProperties   `xml:"cNvPr"`
+	DrawingProperties   *dml.NonVisualCommonProperties    `xml:"cNvPr"`
 	ConnectorProperties *dml.NonVisualConnectorProperties `xml:"cNvCxnSpPr"`
 }
