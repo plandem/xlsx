@@ -19,6 +19,7 @@ const (
 	errorUnknownAnchor  = "unknown type of anchor: %s"
 )
 
+//Add another anchor to list
 func (a *AnchorList) Add(anchor interface{}) {
 	*a = append(*a, anchor)
 }
