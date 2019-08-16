@@ -13,6 +13,12 @@ import (
 type Connector struct {
 	NonVisual *ConnectorNonVisual  `xml:"nvCxnSpPr"`
 	Shape     *dml.ShapeProperties `xml:"spPr"`
-	Style     *dml.ShapeStyle      `xml:"style"`
+	Style     *dml.ShapeStyle      `xml:"style,omitempty"`
 	ml.ReservedAttributes
+}
+
+//ConnectorNonVisual is a direct mapping of XSD CT_ConnectorNonVisual
+type ConnectorNonVisual struct {
+	DrawingProperties   *dml.NonVisualCommonProperties   `xml:"cNvPr"`
+	ConnectorProperties *dml.NonVisualConnectorProperties `xml:"cNvCxnSpPr"`
 }
