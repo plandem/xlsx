@@ -7,6 +7,7 @@ package drawing_test
 import (
 	"bytes"
 	"encoding/xml"
+	"github.com/plandem/ooxml/drawing/dml"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/drawing"
 	"github.com/stretchr/testify/require"
@@ -53,8 +54,8 @@ func TestDrawing(t *testing.T) {
 					</a:graphicData>
 				</a:graphic>
 				<xdr:xfrm>
-					<a:off x="0" y="0"/>
-					<a:ext cx="0" cy="0"/>
+					<a:off x="0" y="0"></a:off>
+					<a:ext cx="0" cy="0"></a:ext>
 				</xdr:xfrm>
 			</xdr:graphicFrame>
 		</xdr:absoluteAnchor>
@@ -74,40 +75,48 @@ func TestDrawing(t *testing.T) {
 
 	//first
 	require.Equal(t, &drawing.TwoCellAnchor{
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+			Local: "twoCellAnchor",
+		},
 		From: drawing.Marker{
 			Row:       1,
 			Col:       4,
-			OffsetRow: "0",
-			OffsetCol: "19050",
+			OffsetRow: dml.Coordinate(0),
+			OffsetCol: dml.Coordinate(19050),
 		},
 		To: drawing.Marker{
 			Row:       14,
 			Col:       9,
-			OffsetRow: "101600",
-			OffsetCol: "463550",
+			OffsetRow: dml.Coordinate(101600),
+			OffsetCol: dml.Coordinate(463550),
 		},
 	}, (*drw.AnchorList)[0])
 
 	//second
 	require.Equal(t, &drawing.OneCellAnchor{
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+			Local: "oneCellAnchor",
+		},
 		From: drawing.Marker{
 			Row:       1,
 			Col:       4,
-			OffsetRow: "0",
-			OffsetCol: "19050",
+			OffsetRow: dml.Coordinate(0),
+			OffsetCol: dml.Coordinate(19050),
 		},
-		Size: drawing.Size{
-			Width:  8671719,
-			Height: 6290469,
+		Size: dml.PositiveSize2D{
+			Height: 8671719,
+			Width:  6290469,
 		},
 	}, (*drw.AnchorList)[1])
 
 	//third
 	require.IsType(t, &drawing.AbsoluteAnchor{}, (*drw.AnchorList)[2])
 	absAnchor := (*drw.AnchorList)[2].(*drawing.AbsoluteAnchor)
-	require.Equal(t, drawing.Size{
-		Width:  8671719,
-		Height: 6290469,
+	require.Equal(t, dml.PositiveSize2D{
+		Height: 8671719,
+		Width:  6290469,
 	}, absAnchor.Size)
 
 	require.Equal(t, ml.ReservedAttributes{
@@ -118,20 +127,19 @@ func TestDrawing(t *testing.T) {
 		},
 	}, absAnchor.GraphicFrame.ReservedAttributes)
 
-	require.Equal(t, ml.ReservedElements{
-		Nodes: []ml.Reserved{
-			{
-				XMLName: xml.Name{
-					Local: "xfrm",
-					Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-				},
-				InnerXML: `<a:off x="0" y="0"/><a:ext cx="0" cy="0"/>`,
-			},
+	require.Equal(t, &dml.Transform2D{
+		Offset: &dml.Point2D{
+			X: 0,
+			Y: 0,
 		},
-	}, absAnchor.GraphicFrame.ReservedElements)
+		Size: &dml.PositiveSize2D{
+			Height: 0,
+			Width:  0,
+		},
+	}, absAnchor.GraphicFrame.Transform)
 
 	//encode data should be same as original
 	encode, err := xml.Marshal(drw)
 	require.Nil(t, err)
-	require.Equal(t, data, string(encode))
+	require.Equal(t, strings.NewReplacer("xdr:", "", ":xdr", "").Replace(data), string(encode))
 }
