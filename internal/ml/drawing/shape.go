@@ -20,6 +20,6 @@ type Shape struct {
 
 //ShapeNonVisual is a direct mapping of XSD CT_ShapeNonVisual
 type ShapeNonVisual struct {
-	DrawingProperties *dml.NonVisualCommonProperties `xml:"cNvPr"`
-	ShapeProperties   *dml.NonVisualShapeProperties  `xml:"cNvSpPr"`
+	CommonProperties *dml.NonVisualCommonProperties `xml:"cNvPr"`
+	ShapeProperties  *dml.NonVisualShapeProperties  `xml:"cNvSpPr"`
 }

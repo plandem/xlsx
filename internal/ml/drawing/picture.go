@@ -11,7 +11,7 @@ import (
 
 //Picture is a direct mapping of XSD CT_Picture
 type Picture struct {
-	NonVisual *PictureNonVisual       `xml:"nvSpPr"`
+	NonVisual *PictureNonVisual       `xml:"nvPicPr"`
 	BlipFill  *dml.BlipFillProperties `xml:"blipFill"`
 	Shape     *dml.ShapeProperties    `xml:"spPr"`
 	Style     *dml.ShapeStyle         `xml:"style,omitempty"`
@@ -20,6 +20,6 @@ type Picture struct {
 
 //PictureNonVisual is a direct mapping of XSD CT_PictureNonVisual
 type PictureNonVisual struct {
-	DrawingProperties *dml.NonVisualCommonProperties  `xml:"cNvPr"`
-	ShapeProperties   *dml.NonVisualPictureProperties `xml:"cNvPicPr"`
+	CommonProperties  *dml.NonVisualCommonProperties  `xml:"cNvPr"`
+	PictureProperties *dml.NonVisualPictureProperties `xml:"cNvPicPr"`
 }

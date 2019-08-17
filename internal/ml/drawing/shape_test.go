@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
-	"github.com/plandem/ooxml/drawing/dml/chart"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/drawing"
 	"github.com/stretchr/testify/require"
@@ -16,30 +15,64 @@ import (
 	"testing"
 )
 
-func TestFrame(t *testing.T) {
+func TestShape(t *testing.T) {
 	type Entity struct {
 		XMLName xml.Name       `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing entity"`
 		DMLName dml.Name       `xml:",attr"`
-		Frame   *drawing.Frame `xml:"graphicFrame"`
+		Shape   *drawing.Shape `xml:"sp"`
 	}
 
 	data := strings.NewReplacer("\t", "", "\n", "").Replace(`
 	<xdr:entity xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
-		<xdr:graphicFrame macro="">
-			<xdr:nvGraphicFramePr>
-				<xdr:cNvPr id="2" name="Chart 1"></xdr:cNvPr>
-				<xdr:cNvGraphicFramePr></xdr:cNvGraphicFramePr>
-			</xdr:nvGraphicFramePr>
-			<xdr:xfrm>
-				<a:off x="1" y="2"></a:off>
-				<a:ext cx="3" cy="4"></a:ext>
-			</xdr:xfrm>
-			<a:graphic>
-				<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart">
-					<c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId1"></c:chart>
-				</a:graphicData>
-			</a:graphic>
-		</xdr:graphicFrame>
+		<xdr:sp macro="" textlink="">
+			<xdr:nvSpPr>
+				<xdr:cNvPr id="2" name="Rectangle 1"></xdr:cNvPr>
+				<xdr:cNvSpPr></xdr:cNvSpPr>
+			</xdr:nvSpPr>
+			<xdr:spPr>
+				<a:xfrm>
+					<a:off x="657225" y="1009650"></a:off>
+					<a:ext cx="5322093" cy="561974"></a:ext>
+				</a:xfrm>
+				<a:prstGeom prst="rect">
+					<a:avLst></a:avLst>
+				</a:prstGeom>
+			</xdr:spPr>
+			<xdr:style>
+				<a:lnRef idx="2">
+					<a:schemeClr val="accent6"></a:schemeClr>
+				</a:lnRef>
+				<a:fillRef idx="1">
+					<a:schemeClr val="lt1"></a:schemeClr>
+				</a:fillRef>
+				<a:effectRef idx="0">
+					<a:schemeClr val="accent6"></a:schemeClr>
+				</a:effectRef>
+				<a:fontRef idx="minor">
+					<a:schemeClr val="dk1"></a:schemeClr>
+				</a:fontRef>
+			</xdr:style>
+			<xdr:txBody>
+				<a:bodyPr rtlCol="0" anchor="t"></a:bodyPr>
+				<a:lstStyle></a:lstStyle>
+				<a:p>
+					<a:pPr algn="l"></a:pPr>
+					<a:r>
+						<a:rPr lang="en-US" sz="1100" b="0" baseline="0">
+							<a:solidFill>
+								<a:sysClr val="windowText" lastClr="000000"></a:sysClr>
+							</a:solidFill>
+						</a:rPr>
+						<a:t>All results within normal limit</a:t>
+					</a:r>
+					<a:endParaRPr lang="en-US" sz="1200" b="0">
+						<a:solidFill>
+							<a:sysClr val="windowText" lastClr="000000"></a:sysClr>
+						</a:solidFill>
+					</a:endParaRPr>
+				</a:p>
+			</xdr:txBody>
+		</xdr:sp>
 	</xdr:entity>
 `)
 
@@ -48,37 +81,32 @@ func TestFrame(t *testing.T) {
 	err := decoder.DecodeElement(entity, nil)
 	require.Nil(t, err)
 
-	object := &drawing.Frame{
-		NonVisual: &drawing.FrameNonVisual{
+	object := &drawing.Shape{
+		NonVisual: &drawing.ShapeNonVisual{
 			CommonProperties: &dml.NonVisualCommonProperties{
 				ID:   2,
-				Name: "Chart 1",
+				Name: "Rectangle 1",
 			},
-			FrameProperties: &dml.NonVisualFrameProperties{},
+			ShapeProperties: &dml.NonVisualShapeProperties{},
 		},
-		Graphic: &dml.GraphicalObject{
-			Data: &dml.GraphicalObjectData{
-				Uri: "http://schemas.openxmlformats.org/drawingml/2006/chart",
-				Chart: &chart.Ref{
-					RID: "rId1",
-				},
-			},
+		Shape: &dml.ShapeProperties{
+			//Transform:        nil,
+			//LineProperties:   nil,
+			//Mode:             "",
+			//ReservedElements: ml.ReservedElements{},
 		},
-		Transform: &dml.Transform2D{
-			Offset: &dml.Point2D{
-				X: 1,
-				Y: 2,
-			},
-			Size: &dml.PositiveSize2D{
-				Height: 3,
-				Width:  4,
-			},
-		},
+		Style: &dml.ShapeStyle{},
+		Text:  &dml.TextBody{},
 		ReservedAttributes: ml.ReservedAttributes{
 			Attrs: []xml.Attr{
 				{
 					Name: xml.Name{
 						Local: "macro",
+					},
+				},
+				{
+					Name: xml.Name{
+						Local: "textlink",
 					},
 				},
 			},
@@ -90,7 +118,7 @@ func TestFrame(t *testing.T) {
 			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
 			Local: "entity",
 		},
-		Frame: object,
+		Shape: object,
 	}, entity)
 
 	//encode data should be same as original
@@ -99,19 +127,19 @@ func TestFrame(t *testing.T) {
 	require.Equal(t, strings.NewReplacer("xdr:", "", ":xdr", "").Replace(data), string(encode))
 }
 
-func TestFrameNonVisual(t *testing.T) {
+func TestShapeNonVisual(t *testing.T) {
 	type Entity struct {
 		XMLName   xml.Name                `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing entity"`
 		DMLName   dml.Name                `xml:",attr"`
-		NonVisual *drawing.FrameNonVisual `xml:"nvGraphicFramePr"`
+		NonVisual *drawing.ShapeNonVisual `xml:"nvSpPr"`
 	}
 
 	data := strings.NewReplacer("\t", "", "\n", "").Replace(`
 	<xdr:entity xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
-		<xdr:nvGraphicFramePr>
-			<xdr:cNvPr id="2" name="Chart 1"></xdr:cNvPr>
-			<xdr:cNvGraphicFramePr></xdr:cNvGraphicFramePr>
-		</xdr:nvGraphicFramePr>
+		<xdr:nvSpPr>
+			<xdr:cNvPr id="2" name="Rectangle 1"></xdr:cNvPr>
+			<xdr:cNvSpPr></xdr:cNvSpPr>
+		</xdr:nvSpPr>
 	</xdr:entity>
 `)
 
@@ -120,12 +148,12 @@ func TestFrameNonVisual(t *testing.T) {
 	err := decoder.DecodeElement(entity, nil)
 	require.Nil(t, err)
 
-	object := &drawing.FrameNonVisual{
+	object := &drawing.ShapeNonVisual{
 		CommonProperties: &dml.NonVisualCommonProperties{
 			ID:   2,
-			Name: "Chart 1",
+			Name: "Rectangle 1",
 		},
-		FrameProperties: &dml.NonVisualFrameProperties{},
+		ShapeProperties: &dml.NonVisualShapeProperties{},
 	}
 
 	require.Equal(t, &Entity{

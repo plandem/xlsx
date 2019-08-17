@@ -17,6 +17,6 @@ type Group struct {
 
 //GroupNonVisual is a direct mapping of XSD CT_GroupShapeNonVisual
 type GroupNonVisual struct {
-	DrawingProperties *dml.NonVisualCommonProperties `xml:"cNvPr"`
-	GroupProperties   *dml.NonVisualGroupProperties  `xml:"cNvGrpSpPr"`
+	CommonProperties *dml.NonVisualCommonProperties `xml:"cNvPr"`
+	GroupProperties  *dml.NonVisualGroupProperties  `xml:"cNvGrpSpPr"`
 }
