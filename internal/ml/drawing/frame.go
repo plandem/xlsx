@@ -5,12 +5,14 @@
 package drawing
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
 	"github.com/plandem/ooxml/ml"
 )
 
 //Frame is a direct mapping of XSD CT_GraphicalObjectFrame
 type Frame struct {
+	XMLName   xml.Name             `xml:"graphicFrame"`
 	NonVisual *FrameNonVisual      `xml:"nvGraphicFramePr"`
 	Transform *dml.Transform2D     `xml:"xfrm"`
 	Graphic   *dml.GraphicalObject `xml:"graphic"`

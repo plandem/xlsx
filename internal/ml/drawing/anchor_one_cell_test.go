@@ -72,6 +72,10 @@ func TestOneCellAnchor(t *testing.T) {
 	}
 
 	anchor.Frame = &drawing.Frame{
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+			Local: "graphicFrame",
+		},
 		Graphic: &dml.GraphicalObject{
 			Data: &dml.GraphicalObjectData{
 				Uri: "http://schemas.openxmlformats.org/drawingml/2006/chart",

@@ -5,12 +5,14 @@
 package drawing
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
 	"github.com/plandem/ooxml/ml"
 )
 
 //Connector is a direct mapping of XSD CT_Connector
 type Connector struct {
+	XMLName   xml.Name             `xml:"cxnSp"`
 	NonVisual *ConnectorNonVisual  `xml:"nvCxnSpPr"`
 	Shape     *dml.ShapeProperties `xml:"spPr"`
 	Style     *dml.ShapeStyle      `xml:"style,omitempty"`

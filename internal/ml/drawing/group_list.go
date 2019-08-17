@@ -50,6 +50,5 @@ func (g *GroupList) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 
 	g.Add(item)
-
 	return nil
 }

@@ -5,12 +5,14 @@
 package drawing
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
 	"github.com/plandem/ooxml/ml"
 )
 
 //Picture is a direct mapping of XSD CT_Picture
 type Picture struct {
+	XMLName   xml.Name                `xml:"pic"`
 	NonVisual *PictureNonVisual       `xml:"nvPicPr"`
 	BlipFill  *dml.BlipFillProperties `xml:"blipFill"`
 	Shape     *dml.ShapeProperties    `xml:"spPr"`

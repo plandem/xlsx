@@ -82,6 +82,10 @@ func TestShape(t *testing.T) {
 	require.Nil(t, err)
 
 	object := &drawing.Shape{
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+			Local: "sp",
+		},
 		NonVisual: &drawing.ShapeNonVisual{
 			CommonProperties: &dml.NonVisualCommonProperties{
 				ID:   2,
@@ -89,14 +93,6 @@ func TestShape(t *testing.T) {
 			},
 			ShapeProperties: &dml.NonVisualShapeProperties{},
 		},
-		Shape: &dml.ShapeProperties{
-			//Transform:        nil,
-			//LineProperties:   nil,
-			//Mode:             "",
-			//ReservedElements: ml.ReservedElements{},
-		},
-		Style: &dml.ShapeStyle{},
-		Text:  &dml.TextBody{},
 		ReservedAttributes: ml.ReservedAttributes{
 			Attrs: []xml.Attr{
 				{
@@ -113,55 +109,159 @@ func TestShape(t *testing.T) {
 		},
 	}
 
+	//add shape
+	object.Shape = &dml.ShapeProperties{
+		Transform: &dml.Transform2D{
+			Offset: &dml.Point2D{
+				X: 657225,
+				Y: 1009650,
+			},
+			Size: &dml.PositiveSize2D{
+				Height: 5322093,
+				Width:  561974,
+			},
+		},
+	}
+
+	object.Shape.PresetGeometry = &dml.PresetGeometry2D{
+		Type: "rect",
+		ReservedElements: ml.ReservedElements{
+			Nodes: []ml.Reserved{
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "avLst",
+					},
+				},
+			},
+		},
+	}
+
+	//add style
+	object.Style = &dml.ShapeStyle{
+		ReservedElements: ml.ReservedElements{
+			Nodes: []ml.Reserved{
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "lnRef",
+					},
+					InnerXML: `<a:schemeClr val="accent6"></a:schemeClr>`,
+					ReservedAttributes: ml.ReservedAttributes{
+						Attrs: []xml.Attr{
+							{
+								Name: xml.Name{
+									Local: "idx",
+								},
+								Value: "2",
+							},
+						},
+					},
+				},
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "fillRef",
+					},
+					InnerXML: `<a:schemeClr val="lt1"></a:schemeClr>`,
+					ReservedAttributes: ml.ReservedAttributes{
+						Attrs: []xml.Attr{
+							{
+								Name: xml.Name{
+									Local: "idx",
+								},
+								Value: "1",
+							},
+						},
+					},
+				},
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "effectRef",
+					},
+					InnerXML: `<a:schemeClr val="accent6"></a:schemeClr>`,
+					ReservedAttributes: ml.ReservedAttributes{
+						Attrs: []xml.Attr{
+							{
+								Name: xml.Name{
+									Local: "idx",
+								},
+								Value: "0",
+							},
+						},
+					},
+				},
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "fontRef",
+					},
+					InnerXML: `<a:schemeClr val="dk1"></a:schemeClr>`,
+					ReservedAttributes: ml.ReservedAttributes{
+						Attrs: []xml.Attr{
+							{
+								Name: xml.Name{
+									Local: "idx",
+								},
+								Value: "minor",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	//add text
+	object.Text = &dml.TextBody{
+		ReservedElements: ml.ReservedElements{
+			Nodes: []ml.Reserved{
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "bodyPr",
+					},
+					ReservedAttributes: ml.ReservedAttributes{
+						Attrs: []xml.Attr{
+							{
+								Name: xml.Name{
+									Local: "rtlCol",
+								},
+								Value: "0",
+							},
+							{
+								Name: xml.Name{
+									Local: "anchor",
+								},
+								Value: "t",
+							},
+						},
+					},
+				},
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "lstStyle",
+					},
+				},
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+						Local: "p",
+					},
+					InnerXML: `<a:pPr algn="l"></a:pPr><a:r><a:rPr lang="en-US" sz="1100" b="0" baseline="0"><a:solidFill><a:sysClr val="windowText" lastClr="000000"></a:sysClr></a:solidFill></a:rPr><a:t>All results within normal limit</a:t></a:r><a:endParaRPr lang="en-US" sz="1200" b="0"><a:solidFill><a:sysClr val="windowText" lastClr="000000"></a:sysClr></a:solidFill></a:endParaRPr>`,
+				},
+			},
+		},
+	}
+
 	require.Equal(t, &Entity{
 		XMLName: xml.Name{
 			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
 			Local: "entity",
 		},
 		Shape: object,
-	}, entity)
-
-	//encode data should be same as original
-	encode, err := xml.Marshal(entity)
-	require.Nil(t, err)
-	require.Equal(t, strings.NewReplacer("xdr:", "", ":xdr", "").Replace(data), string(encode))
-}
-
-func TestShapeNonVisual(t *testing.T) {
-	type Entity struct {
-		XMLName   xml.Name                `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing entity"`
-		DMLName   dml.Name                `xml:",attr"`
-		NonVisual *drawing.ShapeNonVisual `xml:"nvSpPr"`
-	}
-
-	data := strings.NewReplacer("\t", "", "\n", "").Replace(`
-	<xdr:entity xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
-		<xdr:nvSpPr>
-			<xdr:cNvPr id="2" name="Rectangle 1"></xdr:cNvPr>
-			<xdr:cNvSpPr></xdr:cNvSpPr>
-		</xdr:nvSpPr>
-	</xdr:entity>
-`)
-
-	decoder := xml.NewDecoder(bytes.NewReader([]byte(data)))
-	entity := &Entity{}
-	err := decoder.DecodeElement(entity, nil)
-	require.Nil(t, err)
-
-	object := &drawing.ShapeNonVisual{
-		CommonProperties: &dml.NonVisualCommonProperties{
-			ID:   2,
-			Name: "Rectangle 1",
-		},
-		ShapeProperties: &dml.NonVisualShapeProperties{},
-	}
-
-	require.Equal(t, &Entity{
-		XMLName: xml.Name{
-			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-			Local: "entity",
-		},
-		NonVisual: object,
 	}, entity)
 
 	//encode data should be same as original

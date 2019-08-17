@@ -5,12 +5,14 @@
 package drawing
 
 import (
+	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
 	"github.com/plandem/ooxml/ml"
 )
 
 //Shape is a direct mapping of XSD CT_Shape
 type Shape struct {
+	XMLName   xml.Name             `xml:"sp"`
 	NonVisual *ShapeNonVisual      `xml:"nvSpPr"`
 	Shape     *dml.ShapeProperties `xml:"spPr"`
 	Style     *dml.ShapeStyle      `xml:"style,omitempty"`

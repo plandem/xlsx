@@ -56,6 +56,10 @@ func TestPicture(t *testing.T) {
 	require.Nil(t, err)
 
 	object := &drawing.Picture{
+		XMLName: xml.Name{
+			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+			Local: "pic",
+		},
 		NonVisual: &drawing.PictureNonVisual{
 			CommonProperties: &dml.NonVisualCommonProperties{
 				ID:          2,
@@ -123,56 +127,6 @@ func TestPicture(t *testing.T) {
 			Local: "entity",
 		},
 		Picture: object,
-	}, entity)
-
-	//encode data should be same as original
-	encode, err := xml.Marshal(entity)
-	require.Nil(t, err)
-	require.Equal(t, strings.NewReplacer("xdr:", "", ":xdr", "").Replace(data), string(encode))
-}
-
-func TestPictureNonVisual(t *testing.T) {
-	type Entity struct {
-		XMLName   xml.Name                  `xml:"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing entity"`
-		DMLName   dml.Name                  `xml:",attr"`
-		NonVisual *drawing.PictureNonVisual `xml:"nvPicPr"`
-	}
-
-	data := strings.NewReplacer("\t", "", "\n", "").Replace(`
-	<xdr:entity xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
-		<xdr:nvPicPr>
-			<xdr:cNvPr id="2" name="Picture 1" descr="python.png"></xdr:cNvPr>
-			<xdr:cNvPicPr>
-				<a:picLocks noChangeAspect="true"></a:picLocks>
-			</xdr:cNvPicPr>
-		</xdr:nvPicPr>
-	</xdr:entity>
-`)
-
-	decoder := xml.NewDecoder(bytes.NewReader([]byte(data)))
-	entity := &Entity{}
-	err := decoder.DecodeElement(entity, nil)
-	require.Nil(t, err)
-
-	object := &drawing.PictureNonVisual{
-		CommonProperties: &dml.NonVisualCommonProperties{
-			ID:          2,
-			Name:        "Picture 1",
-			Description: "python.png",
-		},
-		PictureProperties: &dml.NonVisualPictureProperties{
-			Locking: &dml.PictureLocking{},
-		},
-	}
-
-	object.PictureProperties.Locking.NoChangeAspect = true
-
-	require.Equal(t, &Entity{
-		XMLName: xml.Name{
-			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-			Local: "entity",
-		},
-		NonVisual: object,
 	}, entity)
 
 	//encode data should be same as original
