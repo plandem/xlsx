@@ -110,7 +110,7 @@ func TestShape(t *testing.T) {
 	}
 
 	//add shape
-	object.Shape = &dml.ShapeProperties{
+	object.Shape = &dml.Shape{
 		Transform: &dml.Transform2D{
 			Offset: &dml.Point2D{
 				X: 657225,

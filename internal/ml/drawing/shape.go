@@ -14,7 +14,7 @@ import (
 type Shape struct {
 	XMLName   xml.Name             `xml:"sp"`
 	NonVisual *ShapeNonVisual      `xml:"nvSpPr"`
-	Shape     *dml.ShapeProperties `xml:"spPr"`
+	Shape     *dml.Shape `xml:"spPr"`
 	Style     *dml.ShapeStyle      `xml:"style,omitempty"`
 	Text      *dml.TextBody        `xml:"txBody,omitempty"`
 	ml.ReservedAttributes

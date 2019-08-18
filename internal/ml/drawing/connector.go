@@ -12,10 +12,10 @@ import (
 
 //Connector is a direct mapping of XSD CT_Connector
 type Connector struct {
-	XMLName   xml.Name             `xml:"cxnSp"`
-	NonVisual *ConnectorNonVisual  `xml:"nvCxnSpPr"`
-	Shape     *dml.ShapeProperties `xml:"spPr"`
-	Style     *dml.ShapeStyle      `xml:"style,omitempty"`
+	XMLName   xml.Name            `xml:"cxnSp"`
+	NonVisual *ConnectorNonVisual `xml:"nvCxnSpPr"`
+	Shape     *dml.Shape          `xml:"spPr"`
+	Style     *dml.ShapeStyle     `xml:"style,omitempty"`
 	ml.ReservedAttributes
 }
 

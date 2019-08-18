@@ -11,10 +11,10 @@ import (
 
 //Group is a direct mapping of XSD CT_GroupShape
 type Group struct {
-	XMLName   xml.Name             `xml:"grpSp"`
-	NonVisual *GroupNonVisual      `xml:"nvGrpSpPr"`
-	Group     *dml.GroupProperties `xml:"grpSpPr"`
-	Items     *GroupList           `xml:",any"`
+	XMLName   xml.Name        `xml:"grpSp"`
+	NonVisual *GroupNonVisual `xml:"nvGrpSpPr"`
+	Group     *dml.Group      `xml:"grpSpPr"`
+	Items     *GroupList      `xml:",any"`
 }
 
 //GroupNonVisual is a direct mapping of XSD CT_GroupShapeNonVisual

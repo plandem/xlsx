@@ -12,15 +12,15 @@ import (
 
 //Frame is a direct mapping of XSD CT_GraphicalObjectFrame
 type Frame struct {
-	XMLName   xml.Name             `xml:"graphicFrame"`
-	NonVisual *FrameNonVisual      `xml:"nvGraphicFramePr"`
-	Transform *dml.Transform2D     `xml:"xfrm"`
-	Graphic   *dml.GraphicalObject `xml:"graphic"`
+	XMLName   xml.Name          `xml:"graphicFrame"`
+	NonVisual *FrameNonVisual   `xml:"nvGraphicFramePr"`
+	Transform *dml.Transform2D  `xml:"xfrm"`
+	Graphic   *dml.GraphicFrame `xml:"graphic"`
 	ml.ReservedAttributes
 }
 
 //FrameNonVisual is a direct mapping of XSD CT_GraphicalObjectFrameNonVisual
 type FrameNonVisual struct {
-	CommonProperties *dml.NonVisualCommonProperties `xml:"cNvPr"`
-	FrameProperties  *dml.NonVisualFrameProperties  `xml:"cNvGraphicFramePr"`
+	CommonProperties *dml.NonVisualCommonProperties       `xml:"cNvPr"`
+	FrameProperties  *dml.NonVisualGraphicFrameProperties `xml:"cNvGraphicFramePr"`
 }

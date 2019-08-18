@@ -75,7 +75,7 @@ func TestPicture(t *testing.T) {
 	object.NonVisual.PictureProperties.Locking.NoChangeAspect = true
 
 	//add blip
-	object.BlipFill = &dml.BlipFillProperties{
+	object.BlipFill = &dml.BlipFill{
 		Blip: &dml.Blip{
 			Embed: "rId1",
 		},
@@ -93,7 +93,7 @@ func TestPicture(t *testing.T) {
 	}
 
 	//add shape
-	object.Shape = &dml.ShapeProperties{
+	object.Shape = &dml.Shape{
 		Transform: &dml.Transform2D{
 			Offset: &dml.Point2D{
 				X: 2047875,

@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"github.com/plandem/ooxml/drawing/dml"
-	"github.com/plandem/ooxml/drawing/dml/chart"
 	"github.com/plandem/ooxml/ml"
 	"github.com/plandem/xlsx/internal/ml/drawing"
 	"github.com/stretchr/testify/require"
@@ -76,10 +75,10 @@ func TestOneCellAnchor(t *testing.T) {
 			Space: "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
 			Local: "graphicFrame",
 		},
-		Graphic: &dml.GraphicalObject{
-			Data: &dml.GraphicalObjectData{
+		Graphic: &dml.GraphicFrame{
+			Data: &dml.GraphicFrameData{
 				Uri: "http://schemas.openxmlformats.org/drawingml/2006/chart",
-				Chart: &chart.Ref{
+				Chart: &dml.ChartRef{
 					RID: "rId1",
 				},
 			},
