@@ -12,11 +12,11 @@ import (
 
 //Shape is a direct mapping of XSD CT_Shape
 type Shape struct {
-	XMLName   xml.Name             `xml:"sp"`
-	NonVisual *ShapeNonVisual      `xml:"nvSpPr"`
-	Shape     *dml.Shape `xml:"spPr"`
-	Style     *dml.ShapeStyle      `xml:"style,omitempty"`
-	Text      *dml.TextBody        `xml:"txBody,omitempty"`
+	XMLName   xml.Name        `xml:"sp"`
+	NonVisual *ShapeNonVisual `xml:"nvSpPr"`
+	Shape     *dml.Shape      `xml:"spPr"`
+	Style     *dml.ShapeStyle `xml:"style,omitempty"`
+	Text      *dml.TextBody   `xml:"txBody,omitempty"`
 	ml.ReservedAttributes
 }
 

@@ -121,16 +121,17 @@ func TestShape(t *testing.T) {
 				Width:  561974,
 			},
 		},
-	}
-
-	object.Shape.PresetGeometry = &dml.PresetGeometry2D{
-		Type: "rect",
-		ReservedElements: ml.ReservedElements{
-			Nodes: []ml.Reserved{
-				{
-					XMLName: xml.Name{
-						Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
-						Local: "avLst",
+		Geometry: dml.Geometry{
+			Preset: &dml.PresetGeometry2D{
+				Type: "rect",
+				ReservedElements: ml.ReservedElements{
+					Nodes: []ml.Reserved{
+						{
+							XMLName: xml.Name{
+								Space: "http://schemas.openxmlformats.org/drawingml/2006/main",
+								Local: "avLst",
+							},
+						},
 					},
 				},
 			},
