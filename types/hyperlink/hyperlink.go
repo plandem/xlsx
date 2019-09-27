@@ -286,7 +286,7 @@ func ToTarget(target string) Option {
 }
 
 //private method used by hyperlinks manager to unpack Info
-func from(info *Info) (hyperlink *ml.Hyperlink, format interface{}, err error) {
+func From(info *Info) (hyperlink *ml.Hyperlink, format interface{}, err error) {
 	if err = info.Validate(); err != nil {
 		return
 	}
@@ -297,7 +297,7 @@ func from(info *Info) (hyperlink *ml.Hyperlink, format interface{}, err error) {
 }
 
 //private method used by hyperlinks manager to pack Info
-func to(link *ml.Hyperlink, target string, styleID styles.DirectStyleID) *Info {
+func To(link *ml.Hyperlink, target string, styleID styles.DirectStyleID) *Info {
 	//normalize location
 	location := link.Location
 	if len(location) > 0 && location[0] != '#' {

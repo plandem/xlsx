@@ -16,8 +16,9 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname toRichFont github.com/plandem/xlsx/format/styles.toRichFont
-func toRichFont(f *styles.Info) *ml.RichFont
+//
+////go:linkname toRichFont github.com/plandem/xlsx/format/styles.toRichFont
+//func toRichFont(f *styles.Info) *ml.RichFont
 
 //nolint
 func toRichText(parts ...interface{}) (*ml.StringItem, *styles.Info, error) {
@@ -72,7 +73,7 @@ func toRichText(parts ...interface{}) (*ml.StringItem, *styles.Info, error) {
 				}
 
 				richText = append(richText, &ml.RichText{
-					Font: toRichFont(v),
+					Font: styles.ToRichFont(v),
 				})
 
 				fontPart = true

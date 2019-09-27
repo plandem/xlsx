@@ -18,7 +18,7 @@ func TestToRichFont(t *testing.T) {
 		styles.Font.Color("#FF1122"),
 	)
 
-	font := toRichFont(style)
+	font := styles.ToRichFont(style)
 	require.IsType(t, &ml.RichFont{}, font)
 
 	require.Equal(t, &ml.RichFont{

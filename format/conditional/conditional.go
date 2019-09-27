@@ -15,8 +15,9 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname fromRule github.com/plandem/xlsx/format/conditional/rule.fromRule
-func fromRule(info *rule.Info) (*ml.ConditionalRule, *styles.Info)
+//
+////go:linkname fromRule github.com/plandem/xlsx/format/conditional/rule.fromRule
+//func fromRule(info *rule.Info) (*ml.ConditionalRule, *styles.Info)
 
 //Info is objects that holds combined information about cell conditional format
 type Info struct {
@@ -56,7 +57,7 @@ func (f *Info) Validate() error {
 	}
 
 	for i, r := range f.rules {
-		rInfo, _ := fromRule(r)
+		rInfo, _ := rule.FromRule(r)
 		if rInfo.Type == 0 {
 			return fmt.Errorf("conditional rule#%d: no type", i)
 		}
@@ -92,14 +93,14 @@ func AddRule(options ...rule.Option) Option {
 	return func(cf *Info) {
 		r := rule.New(options...)
 
-		rInfo, _ := fromRule(r)
+		rInfo, _ := rule.FromRule(r)
 		rInfo.Priority = len(cf.rules) + 1
 		cf.rules = append(cf.rules, r)
 	}
 }
 
 //private method used to unpack Info
-func from(f *Info) (*ml.ConditionalFormatting, []*styles.Info) {
+func From(f *Info) (*ml.ConditionalFormatting, []*styles.Info) {
 	if len(f.rules) == 0 {
 		return nil, nil
 	}
@@ -108,7 +109,7 @@ func from(f *Info) (*ml.ConditionalFormatting, []*styles.Info) {
 	allStyles := make([]*styles.Info, len(f.rules))
 
 	for i, r := range f.rules {
-		rInfo, sInfo := fromRule(r)
+		rInfo, sInfo := rule.FromRule(r)
 
 		allRules[i] = rInfo
 		allStyles[i] = sInfo

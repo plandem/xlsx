@@ -59,7 +59,7 @@ func (s *Info) Set(options ...Option) {
 
 //nolint
 //private method used by stylesheet manager to unpack Info
-func from(f *Info) (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border, namedInfo *ml.NamedStyleInfo) {
+func From(f *Info) (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, numFormat *ml.NumberFormat, protection *ml.CellProtection, border *ml.Border, namedInfo *ml.NamedStyleInfo) {
 	style := f.styleInfo
 	named := f.namedInfo
 
@@ -176,7 +176,7 @@ func from(f *Info) (font *ml.Font, fill *ml.Fill, alignment *ml.CellAlignment, n
 }
 
 //private method used by to convert Info to ml.RichFont
-func toRichFont(f *Info) *ml.RichFont {
+func ToRichFont(f *Info) *ml.RichFont {
 	style := f.styleInfo
 
 	//copy non-empty font
