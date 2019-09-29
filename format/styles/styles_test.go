@@ -72,7 +72,7 @@ func TestStyleFormat_Settings(t *testing.T) {
 		Protection.Locked,
 	)
 
-	font, fill, alignment, number, protection, border, namedInfo = from(style)
+	font, fill, alignment, number, protection, border, namedInfo = From(style)
 	require.NotNil(t, font)
 	require.NotNil(t, fill)
 	require.NotNil(t, alignment)
@@ -172,7 +172,7 @@ func TestStyleFormat_Settings_Alignment(t *testing.T) {
 		Alignment.ReadingOrder(4),
 	)
 
-	font, fill, alignment, number, protection, border, namedInfo := from(style)
+	font, fill, alignment, number, protection, border, namedInfo := From(style)
 	require.Nil(t, font)
 	require.Nil(t, fill)
 	require.NotNil(t, alignment)
