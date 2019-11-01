@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Rich Text | Xlsx2Go</title>
+    <meta name="description" content="Fast and Reliable way to work with xlsx in Golang">
+    
+    
+    <link rel="preload" href="/xlsx/assets/css/0.styles.cf43dc97.css" as="style"><link rel="preload" href="/xlsx/assets/js/app.ec061189.js" as="script"><link rel="preload" href="/xlsx/assets/js/3.ac6e1e77.js" as="script"><link rel="preload" href="/xlsx/assets/js/7.7fa38d45.js" as="script"><link rel="prefetch" href="/xlsx/assets/js/10.f98f3d66.js"><link rel="prefetch" href="/xlsx/assets/js/11.12ccd6e3.js"><link rel="prefetch" href="/xlsx/assets/js/12.c3d18274.js"><link rel="prefetch" href="/xlsx/assets/js/13.8d04bffb.js"><link rel="prefetch" href="/xlsx/assets/js/14.54293b8f.js"><link rel="prefetch" href="/xlsx/assets/js/15.e3e1791e.js"><link rel="prefetch" href="/xlsx/assets/js/16.9e2fb8af.js"><link rel="prefetch" href="/xlsx/assets/js/17.7461aa81.js"><link rel="prefetch" href="/xlsx/assets/js/18.2e60ca10.js"><link rel="prefetch" href="/xlsx/assets/js/19.f6a078b7.js"><link rel="prefetch" href="/xlsx/assets/js/20.78f21eda.js"><link rel="prefetch" href="/xlsx/assets/js/21.f96bcf35.js"><link rel="prefetch" href="/xlsx/assets/js/22.798718c6.js"><link rel="prefetch" href="/xlsx/assets/js/23.5337806b.js"><link rel="prefetch" href="/xlsx/assets/js/24.27074952.js"><link rel="prefetch" href="/xlsx/assets/js/4.1c518a87.js"><link rel="prefetch" href="/xlsx/assets/js/5.323d2607.js"><link rel="prefetch" href="/xlsx/assets/js/6.fa332cba.js"><link rel="prefetch" href="/xlsx/assets/js/8.cdaa1b8e.js"><link rel="prefetch" href="/xlsx/assets/js/9.62881055.js"><link rel="prefetch" href="/xlsx/assets/js/vendors~docsearch.3888787f.js">
+    <link rel="stylesheet" href="/xlsx/assets/css/0.styles.cf43dc97.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/xlsx/" class="home-link router-link-active"><img src="/xlsx/logo.png" alt="Xlsx2Go" class="logo"> <span class="site-name can-hide">Xlsx2Go</span></a> <div class="links"><form id="search-form" role="search" class="algolia-search-wrapper search-box"><input id="algolia-search-input" class="search-query"></form> <nav class="nav-links can-hide"><div class="nav-item"><a href="/xlsx/" class="nav-link">Home</a></div><div class="nav-item"><a href="/xlsx/guide/" class="nav-link router-link-active">Guide</a></div><div class="nav-item"><a href="https://godoc.org/github.com/plandem/xlsx" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  API
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <a href="https://github.com/plandem/xlsx" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/xlsx/" class="nav-link">Home</a></div><div class="nav-item"><a href="/xlsx/guide/" class="nav-link router-link-active">Guide</a></div><div class="nav-item"><a href="https://godoc.org/github.com/plandem/xlsx" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  API
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <a href="https://github.com/plandem/xlsx" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Guide</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/xlsx/guide/" class="sidebar-link">Introduction</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/xlsx/guide/#license" class="sidebar-link">License</a></li></ul></li><li><a href="/xlsx/guide/getting-started.html" class="sidebar-link">Getting Started</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/access.html" class="sidebar-link">Access</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/iterate.html" class="sidebar-link">Iterate</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/values.html" class="sidebar-link">Values</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/merged-cells.html" class="sidebar-link">Merged Cells</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/rich-text.html" class="active sidebar-link">Rich Text</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/hyperlinks.html" class="sidebar-link">Hyperlinks</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/comments.html" class="sidebar-link">Comments</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/styles-formatting.html" class="sidebar-link">Styles Formatting</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/conditional-formatting.html" class="sidebar-link">Conditional Formatting</a></li><li><a href="/xlsx/guide/copy.html" class="sidebar-link">Copying</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/streams.html" class="sidebar-link">Streaming</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/xlsx/guide/filters.html" class="sidebar-link">Filters</a></li><li><a href="/xlsx/guide/limits.html" class="sidebar-link">Limits</a></li></ul></section></li><li><a href="/xlsx/faq/" class="sidebar-link">F.A.Q.</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="rich-text"><a href="#rich-text" aria-hidden="true" class="header-anchor">#</a> Rich Text</h1> <p></p><div class="table-of-contents"><ul><li><a href="#example">Example</a></li></ul></div><p></p> <p>Rich text is text with multiply style formatting. The rule of thumb is to break the string into parts and put a style object before the part that you want to format. String parts that don’t have a style are given a default styles.</p> <p>For example to get 'This is text with <strong>bold</strong> part':</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// unformatted string</span>
+<span class="token string">'This is text with bold part'</span>
+
+<span class="token comment">// break it into parts</span>
+<span class="token string">'This is text with '</span><span class="token punctuation">,</span> <span class="token string">'bold'</span><span class="token punctuation">,</span> <span class="token string">' part'</span>
+
+<span class="token comment">// add styles before the parts that should be formatted</span>
+<span class="token string">'This is text with '</span><span class="token punctuation">,</span> styles<span class="token punctuation">,</span> <span class="token string">'bold'</span><span class="token punctuation">,</span> <span class="token string">' part'</span>
+</code></pre></div><div class="danger custom-block"><p>Excel does not allow the use of two consecutive formats in a rich text or an empty string part.</p></div> <div class="tip custom-block"><p class="custom-block-title">Styling Limits</p> <p>In Excel, only the font properties of the styles are applied to the string parts in a rich text. Other features such as border, background, text wrap and alignment must be applied to the cell. You can add <code>last argument</code> with <code>styles for cell</code></p></div> <div class="warning custom-block"><p class="custom-block-title">Text limits</p> <p>Excel has built-in limits for cell's text value. Check <a href="/xlsx/guide/limits.html">Excel Limits</a> for more information about built-in limits</p></div> <h3 id="example"><a href="#example" aria-hidden="true" class="header-anchor">#</a> Example</h3> <p><img src="/xlsx/assets/img/rich-text.9f747187.png" alt=""></p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> code
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;github.com/plandem/xlsx&quot;</span>
+	<span class="token string">&quot;github.com/plandem/xlsx/format/styles&quot;</span>
+	<span class="token string">&quot;github.com/plandem/xlsx/types/options/column&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">Example_richText</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	xl <span class="token operator">:=</span> xlsx<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	sheet <span class="token operator">:=</span> xl<span class="token punctuation">.</span><span class="token function">AddSheet</span><span class="token punctuation">(</span><span class="token string">&quot;&quot;</span><span class="token punctuation">)</span>
+	sheet<span class="token punctuation">.</span><span class="token function">Col</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">SetOptions</span><span class="token punctuation">(</span>
+		options<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			options<span class="token punctuation">.</span><span class="token function">Width</span><span class="token punctuation">(</span><span class="token number">48</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+	<span class="token punctuation">)</span>
+
+	<span class="token comment">//Text with bold and italic parts</span>
+	sheet<span class="token punctuation">.</span><span class="token function">CellByRef</span><span class="token punctuation">(</span><span class="token string">&quot;B2&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">SetText</span><span class="token punctuation">(</span>
+		<span class="token string">&quot;Text with &quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Font<span class="token punctuation">.</span>Bold<span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;bold&quot;</span><span class="token punctuation">,</span>
+		<span class="token string">&quot; and &quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Font<span class="token punctuation">.</span>Italic<span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;italic&quot;</span><span class="token punctuation">,</span>
+		<span class="token string">&quot; parts&quot;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">)</span>
+
+	<span class="token comment">//Text with red and green parts</span>
+	sheet<span class="token punctuation">.</span><span class="token function">CellByRef</span><span class="token punctuation">(</span><span class="token string">&quot;B4&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">SetText</span><span class="token punctuation">(</span>
+		<span class="token string">&quot;Text with &quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Font<span class="token punctuation">.</span><span class="token function">Color</span><span class="token punctuation">(</span><span class="token string">&quot;#ff0000&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;red&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot; and &quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Font<span class="token punctuation">.</span><span class="token function">Color</span><span class="token punctuation">(</span><span class="token string">&quot;#00ff00&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;green&quot;</span><span class="token punctuation">,</span>
+		<span class="token string">&quot; parts&quot;</span><span class="token punctuation">,</span>
+	<span class="token punctuation">)</span>
+
+	<span class="token comment">//Centered text with underlined part</span>
+	sheet<span class="token punctuation">.</span><span class="token function">CellByRef</span><span class="token punctuation">(</span><span class="token string">&quot;B6&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">SetText</span><span class="token punctuation">(</span>
+		<span class="token string">&quot;Centered text with &quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Font<span class="token punctuation">.</span><span class="token function">Underline</span><span class="token punctuation">(</span>styles<span class="token punctuation">.</span>UnderlineTypeSingle<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;underlined&quot;</span><span class="token punctuation">,</span>
+		<span class="token string">&quot; part&quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Alignment<span class="token punctuation">.</span><span class="token function">HAlign</span><span class="token punctuation">(</span>styles<span class="token punctuation">.</span>HAlignCenter<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+	<span class="token punctuation">)</span>
+
+	<span class="token comment">//E=mc2</span>
+	sheet<span class="token punctuation">.</span><span class="token function">CellByRef</span><span class="token punctuation">(</span><span class="token string">&quot;B8&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">SetText</span><span class="token punctuation">(</span>
+		<span class="token string">&quot;E=mc&quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Font<span class="token punctuation">.</span>Superscript<span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;2&quot;</span><span class="token punctuation">,</span>
+		styles<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>
+			styles<span class="token punctuation">.</span>Alignment<span class="token punctuation">.</span><span class="token function">HAlign</span><span class="token punctuation">(</span>styles<span class="token punctuation">.</span>HAlignRight<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">)</span><span class="token punctuation">,</span>
+	<span class="token punctuation">)</span>
+
+	xl<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span><span class="token string">&quot;./foo.xlsx&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">7/17/2019, 7:27:15 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/xlsx/guide/merged-cells.html" class="prev">
+          Merged Cells
+        </a></span> <span class="next"><a href="/xlsx/guide/hyperlinks.html">
+          Hyperlinks
+        </a>
+        →
+      </span></p></div> </main></div><div class="global-ui"><!----></div></div>
+    <script src="/xlsx/assets/js/app.ec061189.js" defer></script><script src="/xlsx/assets/js/3.ac6e1e77.js" defer></script><script src="/xlsx/assets/js/7.7fa38d45.js" defer></script>
+  </body>
+</html>
