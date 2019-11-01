@@ -75,7 +75,7 @@ func main() {
 ```
 
 ## Documentation
-* [Guide](https://plandem.github.io/xlsx2go/)
+* [Guide](https://plandem.github.io/xlsx/)
 * [API Documentation](https://godoc.org/github.com/plandem/xlsx)
 * [Benchmarks](https://github.com/plandem/xlsx-benchmarks)
 
