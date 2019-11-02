@@ -54,7 +54,7 @@ func (xl *Spreadsheet) SheetNames() []string {
 }
 
 //SheetByName returns a sheet by name with required open mode options
-func (xl *Spreadsheet) SheetByName(name string, options ...sheetMode) Sheet {
+func (xl *Spreadsheet) SheetByName(name string, options ...SheetMode) Sheet {
 	for id := range xl.sheets {
 		if name == xl.workbook.ml.Sheets[id].Name {
 			return xl.Sheet(id, options...)
@@ -65,7 +65,7 @@ func (xl *Spreadsheet) SheetByName(name string, options ...sheetMode) Sheet {
 }
 
 //Sheet returns a sheet by 0-based index with required open mode options
-func (xl *Spreadsheet) Sheet(i int, options ...sheetMode) Sheet {
+func (xl *Spreadsheet) Sheet(i int, options ...SheetMode) Sheet {
 	if i >= len(xl.sheets) {
 		return nil
 	}
@@ -108,7 +108,7 @@ func (xl *Spreadsheet) Sheet(i int, options ...sheetMode) Sheet {
 }
 
 //AddSheet adds a new sheet with name to document
-func (xl *Spreadsheet) AddSheet(name string, options ...sheetMode) Sheet {
+func (xl *Spreadsheet) AddSheet(name string, options ...SheetMode) Sheet {
 	mode := sheetModeWrite
 	for _, m := range options {
 		mode |= m

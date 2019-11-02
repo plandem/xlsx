@@ -33,7 +33,7 @@ type sheetInfo struct {
 	filters       *filters
 	relationships *ooxml.Relationships
 	sheet         Sheet
-	sheetMode     sheetMode
+	sheetMode     SheetMode
 	isInitialized bool
 	index         int
 }
@@ -125,7 +125,7 @@ func newSheetInfo(f interface{}, doc *Spreadsheet) *sheetInfo {
 }
 
 //some private methods used objects that use Sheet implementation and have no access to internal information
-func (s *sheetInfo) mode() sheetMode {
+func (s *sheetInfo) mode() SheetMode {
 	return s.sheetMode
 }
 

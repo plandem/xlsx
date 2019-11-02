@@ -14,12 +14,12 @@ const errorNotSupported = "not supported"
 const errorNotSupportedWrite = "not supported in read-only mode"
 const errorNotSupportedStream = "not supported in stream mode"
 
-type sheetMode byte
+type SheetMode byte
 
 //List of all possible open modes for Sheet. Mode applies only once, except SheetModeStream and few modes can be combined. E.g.: SheetModeStream, SheetModeMultiPhase
 const (
-	sheetModeUnknown sheetMode = 0
-	sheetModeRead    sheetMode = 1 << iota
+	sheetModeUnknown SheetMode = 0
+	sheetModeRead    SheetMode = 1 << iota
 	sheetModeWrite
 	SheetModeStream          //In stream mode only forward reading/writing is allowed
 	SheetModeMultiPhase      //Sheet will be iterated two times: first one to load meta information (e.g. merged cells) and another one for sheet data. Only for SheetModeStream mode.
@@ -86,6 +86,6 @@ type Sheet interface {
 	Close()
 
 	//private methods to use by internals only
-	mode() sheetMode
+	mode() SheetMode
 	info() *sheetInfo
 }
