@@ -22,7 +22,7 @@ docs-build: docs-vendor
 	yarn --cwd ./docs build
 
 docs-publish: docs-build
-	cd ./docs/src/.vuepress/dist; git init; git add -A; git commit -m 'deploy'; git push -f git@github.com:plandem/xlsx2go.git master:gh-pages;
+	cd ./docs/src/.vuepress/dist; git init; git add -A; git commit -m 'deploy'; git push -f git@github.com:plandem/xlsx.git master:gh-pages;
 
 docs-dev: docs-vendor
 	yarn --cwd ./docs dev

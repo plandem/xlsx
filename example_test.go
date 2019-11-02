@@ -334,6 +334,9 @@ func Example_options() {
 		rowOptions.Hidden(true),
 		rowOptions.Height(10.0),
 		rowOptions.Collapsed(true),
+		rowOptions.Styles(styles.New(
+			styles.Alignment.VAlign(styles.VAlignJustify),
+		)),
 	)
 	sheet.Row(9).SetOptions(ro)
 
@@ -342,6 +345,9 @@ func Example_options() {
 		colOptions.Hidden(true),
 		colOptions.Width(10.0),
 		colOptions.Collapsed(true),
+		colOptions.Styles(styles.New(
+			styles.Alignment.HAlign(styles.HAlignJustify),
+		)),
 	)
 	sheet.Col(3).SetOptions(co)
 

@@ -139,8 +139,8 @@ type MergeCell struct {
 //SheetView is a direct mapping of XSD CT_SheetView
 type SheetView struct {
 	Pane                     *ml.Reserved       `xml:"pane,omitempty"`
-	Selection                *ml.Reserved       `xml:"selection,omitempty"`
-	PivotSelection           *ml.Reserved       `xml:"pivotSelection,omitempty"`
+	Selection                []*ml.Reserved     `xml:"selection,omitempty"`
+	PivotSelection           []*ml.Reserved     `xml:"pivotSelection,omitempty"`
 	ExtLst                   *ml.Reserved       `xml:"extLst,omitempty"`
 	WindowProtection         bool               `xml:"windowProtection,attr,omitempty"`
 	ShowFormulas             bool               `xml:"showFormulas,attr,omitempty"`
