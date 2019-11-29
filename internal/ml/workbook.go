@@ -22,7 +22,7 @@ type Workbook struct {
 	Sheets              []*Sheet              `xml:"sheets>sheet"`
 	FunctionGroups      *ml.Reserved          `xml:"functionGroups,omitempty"`
 	ExternalReferences  ExternalReferenceList `xml:"externalReferences"`
-	DefinedNames        *ml.Reserved          `xml:"definedNames,omitempty"`
+	DefinedNames        DefinedNameList       `xml:"definedNames"`
 	CalcPr              *ml.Reserved          `xml:"calcPr,omitempty"`
 	OleSize             *ml.Reserved          `xml:"oleSize,omitempty"`
 	CustomWorkbookViews *ml.Reserved          `xml:"customWorkbookViews,omitempty"`
@@ -96,4 +96,24 @@ type Sheet struct {
 //ExternalReference is a direct mapping of XSD CT_ExternalReference
 type ExternalReference struct {
 	RID ml.RID `xml:"id,attr,omitempty"`
+}
+
+//DefinedName is a direct mapping of XSD CT_DefinedName
+type DefinedName struct {
+	Name              string           `xml:"name,attr"`
+	Formula           string           `xml:",chardata"`
+	Comment           string           `xml:"comment,attr,omitempty"`
+	CustomMenu        string           `xml:"customMenu,attr,omitempty"`
+	Description       string           `xml:"description,attr,omitempty"`
+	Help              string           `xml:"help,attr,omitempty"`
+	StatusBar         string           `xml:"statusBar,attr,omitempty"`
+	ShortcutKey       string           `xml:"shortcutKey,attr,omitempty"`
+	Hidden            bool             `xml:"hidden,attr,omitempty"`
+	Function          bool             `xml:"function,attr,omitempty"`
+	VbProcedure       bool             `xml:"vbProcedure,attr,omitempty"`
+	Xlm               bool             `xml:"xlm,attr,omitempty"`
+	PublishToServer   bool             `xml:"publishToServer,attr,omitempty"`
+	WorkbookParameter bool             `xml:"workbookParameter,attr,omitempty"`
+	LocalSheetId      ml.OptionalIndex `xml:"localSheetId,attr,omitempty"`
+	FunctionGroupId   ml.OptionalIndex `xml:"functionGroupId,attr,omitempty"`
 }

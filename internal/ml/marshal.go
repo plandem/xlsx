@@ -84,6 +84,11 @@ type ExternalReferenceList struct {
 	Items []*ExternalReference `xml:"workbookView,omitempty"`
 }
 
+//DefinedNameList is a direct mapping of XSD CT_DefinedNames
+type DefinedNameList struct {
+	Items []*DefinedName `xml:"definedName,omitempty"`
+}
+
 //MarshalXML marshal DiffStyleList
 func (r *DiffStyleList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Count = len(r.Items); r.Count > 0 {
@@ -209,3 +214,13 @@ func (r *AutoFilter) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	return nil
 }
+
+//MarshalXML marshal DefinedNameList
+func (r *DefinedNameList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if len(r.Items) > 0 {
+		return e.EncodeElement(*r, start)
+	}
+
+	return nil
+}
+
