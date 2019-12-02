@@ -74,6 +74,8 @@ type Sheet interface {
 	AddFilter(colIndex int, settings ...interface{}) error
 	//DeleteFilter deletes a filter from column with 0-based colIndex
 	DeleteFilter(colIndex int)
+	//DefineName creates a name for sheet scope and provided value
+	DefineName(name, value string) error
 	//Name returns name of sheet
 	Name() string
 	//SetName sets a name for sheet

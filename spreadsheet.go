@@ -22,6 +22,7 @@ type Spreadsheet struct {
 	relationships *ooxml.Relationships
 	sharedStrings *sharedStrings
 	styleSheet    *styleSheet
+	definedNames  *defineNames
 }
 
 //newSpreadsheet creates an object that implements XLSX functionality
@@ -39,6 +40,7 @@ func newSpreadsheet(pkg *ooxml.PackageInfo) (interface{}, error) {
 		xlDoc.readSpreadsheet()
 	}
 
+	xlDoc.definedNames = newDefinedNames(xlDoc)
 	return xlDoc, nil
 }
 
@@ -169,6 +171,11 @@ func (xl *Spreadsheet) AddStyles(style *styles.Info) styles.DirectStyleID {
 //ResolveStyles returns style formatting for styleID or nil if there is no any styles with such styleID
 func (xl *Spreadsheet) ResolveStyles(styleID styles.DirectStyleID) *styles.Info {
 	return xl.workbook.doc.styleSheet.resolveDirectStyle(styleID)
+}
+
+//DefineName define a name for global scope and provided value
+func (xl *Spreadsheet) DefineName(name, value string) error {
+	return xl.definedNames.Add(name, value, -1)
 }
 
 //IsValid validates document and return error if there is any error. Using right before saving.

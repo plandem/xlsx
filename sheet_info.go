@@ -241,6 +241,11 @@ func (s *sheetInfo) DeleteFilter(colIndex int) {
 	s.filters.Remove(colIndex)
 }
 
+//DefineName creates a name for sheet scope and provided value
+func (s *sheetInfo) DefineName(name, value string) error {
+	return s.workbook.doc.definedNames.Add(name, value, s.index)
+}
+
 //Close frees allocated by sheet resources
 func (s *sheetInfo) Close() {
 
