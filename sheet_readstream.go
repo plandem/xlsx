@@ -86,6 +86,13 @@ func (s *sheetReadStream) Row(index int) *Row {
 
 func (s *sheetReadStream) loadRow(start *xml.StartElement) bool {
 	if start.Name.Local == "row" {
+          defer func(){
+            if err := recover(); err != nil{ 
+                s.currentRow = nil
+	        return false
+                 }
+              }()
+
 		row := &ml.Row{}
 		_ = s.stream.DecodeElement(row, start)
 
@@ -96,7 +103,7 @@ func (s *sheetReadStream) loadRow(start *xml.StartElement) bool {
 			//add cell info
 			if !isCellEmpty(c) {
 				iCellCol, _ := c.Ref.ToIndexes()
-				cells[iCellCol] = c
+				cells[iCellCol] = c  //对于不规则的表会抛异常,cells数组越界(流氏读取,出现表头字段数小于行的单元格数时)
 			}
 		}
 
