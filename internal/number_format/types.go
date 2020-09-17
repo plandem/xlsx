@@ -32,6 +32,18 @@ const (
 //LastReservedID is id of last built-in/reserved format
 const LastReservedID = 163
 
+var dateFormatParts = map[string]string{
+	"d":    "02",
+	"m":    "01",
+	"mmm":  "Jan",
+	"yy":   "06",
+	"yyyy": "2006",
+	"h":    "03",
+	"H":    "15",
+	":mm":  ":04",
+	"ss":   "05",
+}
+
 //New create and return ml.NumberFormat type for provided values, respecting built-in number formats
 func New(id int, code string) ml.NumberFormat {
 	return Normalize(ml.NumberFormat{ID: id, Code: code})
@@ -94,6 +106,25 @@ func Default(t Type) (int, string) {
 
 //Format tries to format value into required format code
 func Format(value, code string, t primitives.CellType) string {
+	if strings.ContainsAny(code, "dmyhH") {
+		return formatDate(value, code)
+	}
+
 	//TODO: implement formatting based on code and type
 	return value
 }
+
+func formatDate(value, code string) string {
+	dateFormat := code
+	for k, v := range dateFormatParts {
+		dateFormat = strings.ReplaceAll(dateFormat, k, v)
+	}
+
+	dateValue, err := convert.ToDate(value)
+	if err != nil {
+		return value
+	}
+
+	return dateValue.Format(dateFormat)
+}
+
