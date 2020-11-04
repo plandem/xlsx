@@ -6,6 +6,8 @@ package number
 
 import (
 	"github.com/plandem/xlsx/internal/ml"
+	"github.com/plandem/xlsx/internal/ml/primitives"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -43,4 +45,28 @@ func TestNumberFormat(t *testing.T) {
 
 	//custom ID was provided
 	require.Equal(t, ml.NumberFormat(ml.NumberFormat{ID: 1000, Code: ""}), New(1000, ""))
+}
+
+func TestDateFormat(t *testing.T) {
+	value := "36892.521"
+	var testCases = []struct {
+		code     string
+		expected string
+	}{
+		{"d/m/yyyy", "01/01/2001"},
+		{"d-mmm-yy", "01-Jan-01"},
+		{"d-mmm", "01-Jan"},
+		{"mmm-yy", "Jan-01"},
+		{"h:mm AM/PM", "12:30 PM"},
+		{"h:mm:ss AM/PM", "12:30:14 PM"},
+		{"h:mm", "12:30"},
+		{"h:mm:ss", "12:30:14"},
+		{"m/d/yy H:mm", "01/01/01 12:30"},
+	}
+	for _, test := range testCases {
+		t.Run(test.code, func(t *testing.T) {
+			result := Format(value, test.code, primitives.CellType(0))
+			assert.Equal(t, test.expected, result)
+		})
+	}
 }
