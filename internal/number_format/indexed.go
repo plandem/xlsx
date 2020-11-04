@@ -39,7 +39,7 @@ func init() {
 		0x0b: {ml.NumberFormat{ID: 0x0b, Code: `0.00E+00`}, Float},
 		0x0c: {ml.NumberFormat{ID: 0x0c, Code: `# ?/?`}, Float},
 		0x0d: {ml.NumberFormat{ID: 0x0d, Code: `# ??/??`}, Float},
-		0x0e: {ml.NumberFormat{ID: 0x0e, Code: `m-d-yy`}, Date},
+		0x0e: {ml.NumberFormat{ID: 0x0e, Code: `d/m/yyyy`}, Date},
 		0x0f: {ml.NumberFormat{ID: 0x0f, Code: `d-mmm-yy`}, Date},
 		0x10: {ml.NumberFormat{ID: 0x10, Code: `d-mmm`}, Date},
 		0x11: {ml.NumberFormat{ID: 0x11, Code: `mmm-yy`}, Date},
@@ -47,7 +47,7 @@ func init() {
 		0x13: {ml.NumberFormat{ID: 0x13, Code: `h:mm:ss AM/PM`}, Time},
 		0x14: {ml.NumberFormat{ID: 0x14, Code: `h:mm`}, Time},
 		0x15: {ml.NumberFormat{ID: 0x15, Code: `h:mm:ss`}, Time},
-		0x16: {ml.NumberFormat{ID: 0x16, Code: `m-d-yy h:mm`}, DateTime},
+		0x16: {ml.NumberFormat{ID: 0x16, Code: `m/d/yy H:mm`}, DateTime},
 		//...
 		0x25: {ml.NumberFormat{ID: 0x25, Code: `(#,##0_);(#,##0)`}, Integer},
 		0x26: {ml.NumberFormat{ID: 0x26, Code: `(#,##0_);[RED](#,##0)`}, Integer},

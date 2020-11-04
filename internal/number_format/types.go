@@ -5,8 +5,11 @@
 package number
 
 import (
+	"strings"
+
 	"github.com/plandem/xlsx/internal/ml"
 	"github.com/plandem/xlsx/internal/ml/primitives"
+	"github.com/plandem/xlsx/internal/number_format/convert"
 )
 
 //Type of underlying value of built-in number format
@@ -31,6 +34,27 @@ const (
 
 //LastReservedID is id of last built-in/reserved format
 const LastReservedID = 163
+
+const dateFormatChars = "dmyhH"
+
+type dateFormatMapping struct {
+	excelFormat string
+	goFormat    string
+}
+
+// the order of the mapping matters
+var dateFormatParts = []dateFormatMapping{
+	{"d",    "02"},
+	{"mmm",  "Jan"},
+	{"mm",  "04"},
+	{"m",   "01"},
+	{"yyyy", "2006"},
+	{"yy",   "06"},
+	{"h",    "03"},
+	{"H",    "15"},
+	{"ss",   "05"},
+	{"AM/PM",   "PM"},
+}
 
 //New create and return ml.NumberFormat type for provided values, respecting built-in number formats
 func New(id int, code string) ml.NumberFormat {
@@ -94,6 +118,24 @@ func Default(t Type) (int, string) {
 
 //Format tries to format value into required format code
 func Format(value, code string, t primitives.CellType) string {
+	if strings.ContainsAny(code, dateFormatChars) {
+		return formatDate(value, code)
+	}
+
 	//TODO: implement formatting based on code and type
 	return value
+}
+
+func formatDate(value, code string) string {
+	dateFormat := code
+	for _, mapping := range dateFormatParts {
+		dateFormat = strings.ReplaceAll(dateFormat, mapping.excelFormat, mapping.goFormat)
+	}
+
+	dateValue, err := convert.ToDate(value)
+	if err != nil {
+		return value
+	}
+
+	return dateValue.UTC().Format(dateFormat)
 }
